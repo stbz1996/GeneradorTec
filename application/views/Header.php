@@ -7,3 +7,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<meta charset="utf-8">
 	<title> <?= $pageName ?> </title>
 </head>
+<body>
