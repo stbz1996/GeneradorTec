@@ -11,6 +11,7 @@
 	);
 ?>
 <body>
+	<?= $string ?>
 	<?= form_label('Usuario ', 'user') ?>
 	<?= form_input($user) ?>
 
