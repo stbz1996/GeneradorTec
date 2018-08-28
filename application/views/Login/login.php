@@ -1,22 +1,50 @@
-<?= form_open("/Login/LoginRespuesta") ?>
+<?= form_open("/Login/checkAdmin") ?>
 
 <?php
 	$user = array(
-		'name' => 'usuario',
-		'placeholder' => 'Digite su usuario'
+		'name' => 'inputEmail',
+		'placeholder' => 'Usuario',
+		'class' => 'form-control',
+		'type' => 'text',
+		'id' => 'inputEmail',
+		'minlength' => '4',
+		'maxlength' => '10'
 	);
+
 	$password = array(
-		'name' => 'contrasena',
-		'placeholder' => 'Digite su contraseña'
+		'name' => 'inputPassword',
+		'placeholder' => 'Contraseña',
+		'class' => 'form-control',
+		'type' => 'password',
+		'id' => 'inputPassword',
+		'minlength' => '4',
+		'maxlength' => '10'
+	);	
+
+	$button = array(
+		'name' => 'submitButton',
+		'value' => 'Iniciar Sesión',
+		'class' => 'btn btn-primary'
 	);
 ?>
-<body>
-	<?= form_label('Usuario ', 'user') ?>
-	<?= form_input($user) ?>
 
-	<?= form_label('Contraseña ', 'password') ?>
-	<?= form_input($password) ?>
 
-	<?= form_submit('', 'Iniciar Sesión') ?>
-	<?= form_close() ?>
+<body id="LoginForm">
+	<div class="container">
+		<div class="login-form">
+			<div class="main-div">
+		    	<div class="panel">
+		   			<h2>Administración</h2>
+		   			<p>Por favor ingrese el usuario y la contraseña</p>
+		   		</div>
+		    	<form id="Login">
+		        	<div class="form-group"> <?= form_input($user) ?> </div>
+		        	<div class="form-group"> <?= form_input($password) ?> </div>
+		        	<?= form_submit($button) ?>
+		   		</form>
+		   		<p class="botto-text"> <?= $message ?> </p>
+    		</div>
+		</div>
+	</div>
 </body>
+<?= form_close() ?> 
