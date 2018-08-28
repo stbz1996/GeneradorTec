@@ -59,8 +59,9 @@ class Login extends CI_Controller {
 			foreach ($data['dataAdmin']->result() as $admin)
 			{
 				$sendData['message'] = $admin->userName;
+				$sendData['pageName'] = "Generador TEC";
 			}
-			$this->load->view("Header");
+			$this->load->view("Header", $sendData);
 			$this->load->view("HomePage/homePage", $sendData);
 			$this->load->view("Footer");
 		} 
