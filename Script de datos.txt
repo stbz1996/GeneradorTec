@@ -1,0 +1,118 @@
+Planes
+INSERT INTO `Plan`(`name`, `state`, `idCareer`) VALUES ('411 - Ingeniería en computación', 1, 1)
+
+Bloques 
+INSERT INTO `Block`(`description`, `state`, `idPlan`) VALUES ('I Semestre', 1, 1);
+INSERT INTO `Block`(`description`, `state`, `idPlan`) VALUES ('II Semestre', 1, 1);
+INSERT INTO `Block`(`description`, `state`, `idPlan`) VALUES ('III Semestre', 1, 1);
+INSERT INTO `Block`(`description`, `state`, `idPlan`) VALUES ('IV Semestre', 1, 1);
+INSERT INTO `Block`(`description`, `state`, `idPlan`) VALUES ('V Semestre', 1, 1);
+INSERT INTO `Block`(`description`, `state`, `idPlan`) VALUES ('VI Semestre', 1, 1);
+INSERT INTO `Block`(`description`, `state`, `idPlan`) VALUES ('VII Semestre', 1, 1);
+INSERT INTO `Block`(`description`, `state`, `idPlan`) VALUES ('VIII Semestre', 1, 1);
+
+cursos
+	ver el tema de grupos 
+INSERT INTO `Course`(`code`, `name`, `state`, `isCareer`, `courseGroups`, `lessonNumber`, `idBlock`) VALUES ('CI0202', 'Ingles Básico', 1, 0, 0, 4, 1)
+
+
+Grupos
+INSERT INTO `ClassGroup`(`number`) VALUES (40);
+INSERT INTO `ClassGroup`(`number`) VALUES (41);
+INSERT INTO `ClassGroup`(`number`) VALUES (42);
+INSERT INTO `ClassGroup`(`number`) VALUES (43);
+INSERT INTO `ClassGroup`(`number`) VALUES (44);
+INSERT INTO `ClassGroup`(`number`) VALUES (45);
+
+
+Horarios (Faltan los de la noche)
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('7:30', '8:20', 'Lunes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('8:30', '9:20', 'Lunes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('9:30', '10:20', 'Lunes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('10:30', '11:20', 'Lunes');
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('7:30', '8:20', 'Martes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('8:30', '9:20', 'Martes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('9:30', '10:20', 'Martes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('10:30', '11:20', 'Martes');
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('7:30', '8:20', 'Miercoles');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('8:30', '9:20', 'Miercoles');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('9:30', '10:20', 'Miercoles');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('10:30', '11:20', 'Miercoles');
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('7:30', '8:20', 'Jueves');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('8:30', '9:20', 'Jueves');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('9:30', '10:20', 'Jueves');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('10:30', '11:20', 'Jueves');
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('7:30', '8:20', 'Viernes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('8:30', '9:20', 'Viernes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('9:30', '10:20', 'Viernes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('10:30', '11:20', 'Viernes');
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('7:30', '8:20', 'Sabado');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('8:30', '9:20', 'Sabado');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('9:30', '10:20', 'Sabado');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('10:30', '11:20', 'Sabado');
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('1:00', '1:50', 'Lunes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('2:00', '2:50', 'Lunes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('3:00', '3:50', 'Lunes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('4:00', '4:50', 'Lunes');
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('1:00', '1:50', 'Martes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('2:00', '2:50', 'Martes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('3:00', '3:50', 'Martes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('4:00', '4:50', 'Martes');
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('1:00', '1:50', 'Miercoles');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('2:00', '2:50', 'Miercoles');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('3:00', '3:50', 'Miercoles');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('4:00', '4:50', 'Miercoles');
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('1:00', '1:50', 'Jueves');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('2:00', '2:50', 'Jueves');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('3:00', '3:50', 'Jueves');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('4:00', '4:50', 'Jueves');
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('1:00', '1:50', 'Viernes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('2:00', '2:50', 'Viernes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('3:00', '3:50', 'Viernes');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('4:00', '4:50', 'Viernes');
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('1:00', '1:50', 'Sabado');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('2:00', '2:50', 'Sabado');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('3:00', '3:50', 'Sabado');
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('4:00', '4:50', 'Sabado');
+
+
+Periodos
+INSERT INTO `Period`(`number`, `year`) VALUES (1, 2019);
+INSERT INTO `Period`(`number`, `year`) VALUES (2, 2019);
+
+
+Prioridad
+
+INSERT INTO `Professor`(`name`, `lastName`, `state`, `email`, `workLoad`, `idCareer`) 
+VALUES ('ADRIANA','ALVAREZ FIGUEROA',  1, 'adriana.alvarezf@gmail.com', 0, 1);
+INSERT INTO `Professor`(`name`, `lastName`, `state`, `email`, `workLoad`, `idCareer`) 
+VALUES ('MAURICIO','AVILES CISNEROS',  1, 'maviles@itcr.ac.cr',         0, 1);
+INSERT INTO `Professor`(`name`, `lastName`, `state`, `email`, `workLoad`, `idCareer`) 
+VALUES ('CARLOS','ALVAREZ GONZALEZ',   1, 'calvarezgcr@gmail.com',      0, 1);
+INSERT INTO `Professor`(`name`, `lastName`, `state`, `email`, `workLoad`, `idCareer`) 
+VALUES ('JOSÉ','CASTRO MORA',          1, 'jose.r.castro@gmail.com',    0, 1);
+INSERT INTO `Professor`(`name`, `lastName`, `state`, `email`, `workLoad`, `idCareer`) 
+VALUES ('EDUARDO','CANESSA MONTERO',   1, 'edcanessa@itcr.ac.cr',       0, 1);
+INSERT INTO `Professor`(`name`, `lastName`, `state`, `email`, `workLoad`, `idCareer`) 
+VALUES ('LUIS CARLOS','LOAIZA CANET',  1, 'luisloaiza58@gmail.com',     0, 1);
+INSERT INTO `Professor`(`name`, `lastName`, `state`, `email`, `workLoad`, `idCareer`) 
+VALUES ('LUIS','MONTOYA POITEVIEN',    1, 'lmontoya@itcr.ac.cr',        0, 1);
+INSERT INTO `Professor`(`name`, `lastName`, `state`, `email`, `workLoad`, `idCareer`) 
+VALUES ('FRANCISCO','TORRES ROJAS',    1, 'torresrojas@gmail.com',      0, 1);
+INSERT INTO `Professor`(`name`, `lastName`, `state`, `email`, `workLoad`, `idCareer`) 
+VALUES ('ERICK','HERNANDEZ BONILLA',   1, '',                           0, 1);
+INSERT INTO `Professor`(`name`, `lastName`, `state`, `email`, `workLoad`, `idCareer`) 
+VALUES ('BYRON','ROJAS BURGOS',       1, 'byronarb@gmail.com',         0, 1);
+
+
