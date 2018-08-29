@@ -8,8 +8,8 @@ class HomePage_controller extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->library('session');
-		//$this->load->helper("form");
-		//$this->load->model("");
+		$this->load->helper("form");
+		$this->load->model("HomePage_model");
 	}
 
 	/***************************************************
@@ -18,11 +18,25 @@ class HomePage_controller extends CI_Controller {
 	***************************************************/
 	function index()
 	{
-		$sendData['userName'] = $this->session->flashdata('userName');
 		$sendData['pageName'] = 'Generador';
-
+		$sendData['userName'] = $this->session->flashdata('userName');
 		$this->load->view("Header", $sendData);
-		$this->load->view("HomePage/homePage", $sendData);
+		$this->load->view("HomePage/homePage");
+		//$this->call_generateLinks();
 		$this->load->view("Footer");
 	}
+
+
+
+	function call_generateLinks(){
+		// Receive data from model 
+		$data['profesors'] = $this->HomePage_model->findProfesors(); 
+		if ($data['profesors'] == false)
+		{
+			$data['profesors'] = 'No hay registros';
+		} 
+		$this->load->view("HomePage/generarLinks", $data);
+	}
+
+
 }
