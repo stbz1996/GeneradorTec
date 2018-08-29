@@ -1,4 +1,4 @@
-<?= form_open("/Login/checkAdmin") ?>
+<?= form_open("/Login_controller/checkAdmin") ?>
 
 <?php
 	$user = array(
