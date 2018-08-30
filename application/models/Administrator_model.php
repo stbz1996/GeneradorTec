@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Login_model extends CI_Model {
+class Administrator_model extends CI_Model {
 
 	function __construct()
 	{
@@ -9,14 +9,16 @@ class Login_model extends CI_Model {
 		$this->load->database();
 	}
 
-	function checkAdmin($data)
+
+	
+	function validCredentials($userName, $password)
 	{
 		$this->db->select('userName');
 		$this->db->from('Administrator');
-		$this->db->where('userName', $data['user']);
-		$this->db->where('password', $data['password']);
+		$this->db->where('userName', $userName);
+		$this->db->where('password', $password);
 		$query = $this->db->get();		
-		if ($query->num_rows() > 0) return $query;
+		if ($query->num_rows() > 0) return true;
 		else return false;
 	}
 }

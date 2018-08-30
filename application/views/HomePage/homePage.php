@@ -1,5 +1,24 @@
-<div>
-	Este es el home page 
-</div>
+<main class="page-content">
+	<div class="container-fluid">
+		<div class="row">
 
-<!-- That part calls tha modal to generate links -->
+			<div>
+              	<h1>Titulo grande</h1>
+               	<p>Explicacion de lo que hay en la página</p>
+            </div>
+
+            <hr>
+
+            <div>
+            	Aqui el contenido
+            </div>
+
+            <hr>
+
+            <div>
+            	Aqui los botones
+            </div>
+
+		</div>
+    </div>
+</main>

@@ -1,4 +1,4 @@
-<?= form_open("/Login_controller/checkAdmin") ?>
+<?= form_open("/System_controller/isHeAdmin") ?>
 
 <?php
 	$user = array(
@@ -24,7 +24,8 @@
 	$button = array(
 		'name' => 'submitButton',
 		'value' => 'Iniciar Sesión',
-		'class' => 'btn btn-primary'
+		'class' => 'btn btn-primary',
+		'id' => 'buttonid'
 	);
 ?>
 

@@ -1,14 +1,14 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Login_controller extends CI_Controller {
+class System_controller extends CI_Controller {
 
 	function __construct()
 	{
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->helper("form");
-		$this->load->model("Login_model");
+		$this->load->model("Administrator_model");
 	}
 
 
@@ -30,11 +30,10 @@ class Login_controller extends CI_Controller {
 	***************************************************/
 	function call_login($pageName, $message)
 	{
-		$data["pageName"] = $pageName;
 		$data["message"] = $message; 
-		$this->load->view("Header", $data);
+		$this->load->view("Login/Header");
 		$this->load->view("Login/login", $data);
-		$this->load->view("Footer");
+		$this->load->view("Login/Footer");
 	}
 
 
@@ -43,24 +42,19 @@ class Login_controller extends CI_Controller {
 	passwors of an admin are registered in BD and takes 
 	the user to the HomePage if credential isregistered.   
 	***************************************************/
-	function checkAdmin()
+	function isHeAdmin()
 	{
-		// Sent data to model
-		$data = array(
-			'user' =>  $this->input->post('inputEmail'),
-			'password' => $this->input->post('inputPassword')
-		); 
-		
+		// Get data from view
+		$user = $this->input->post('inputEmail');
+		$password = $this->input->post('inputPassword');
+
 		// Receive data from model 
-		$data['dataAdmin'] = $this->Login_model->checkAdmin($data);
+		$result = $this->Administrator_model->validCredentials($user, $password);
 
 		// Valid data from errors 
-		if ($data['dataAdmin'] != false)
+		if ($result == true)
 		{
-			foreach ($data['dataAdmin']->result() as $admin)
-			{
-				$this->save_username_in_session($admin->userName);
-			}
+			$this->save_username_in_session($user);
 			$this->call_home_page();
 		} 
 		else 
@@ -84,6 +78,6 @@ class Login_controller extends CI_Controller {
 	***************************************************/
 	function call_home_page()
 	{
-		redirect('HomePage_controller/index/');
+		redirect('Administrator_controller/index/');
 	}
 }

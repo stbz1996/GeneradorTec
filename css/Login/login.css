@@ -1,9 +1,8 @@
 #LoginForm{ 
 	background-image:url("http://fotorecurso.com/images/2016/04/29/fondo-azul-blue-cuadros-fotorecurso.jpg"); 
-	background-repeat:no-repeat; 
+  background-repeat:no-repeat; 
 	background-position:center; 
 	background-size:cover; 
-	padding:10px;
 }
 
 .panel h2{ 
@@ -45,8 +44,7 @@
 }
 
 .login-form  .btn.btn-primary {
-  background: #f0ad4e none repeat scroll 0 0;
-  border-color: #f0ad4e;
+  background: #27AE60 none repeat scroll 0 0;
   color: #ffffff;
   font-size: 14px;
   width: 100%;
@@ -54,6 +52,10 @@
   line-height: 50px;
   padding: 0;
 }
+#buttonid:hover{
+  background: #27AE40 none repeat scroll 0 0;
+}
+
 
 .botto-text {
   color: red;
@@ -61,6 +63,7 @@
   margin: auto;
   margin-top: 20px;
 }
+
 
 .login-form .btn.btn-primary.reset {
   background: #ff9900 none repeat scroll 0 0;
