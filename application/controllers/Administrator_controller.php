@@ -9,7 +9,7 @@ class Administrator_controller extends CI_Controller {
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->helper("form");
-		//$this->load->model("HomePage_model");
+		$this->load->model("Profesors_model");
 	}
 
 	/***************************************************
@@ -20,7 +20,7 @@ class Administrator_controller extends CI_Controller {
 	{
 		//$sendData['userName'] = $this->session->flashdata('userName');
 		$this->load->view("HomePage/Header");
-		$this->load->view("HomePage/homePage");
+		//$this->load->view("HomePage/homePage");
 		//$this->call_generateLinks();
 		$this->load->view("HomePage/Footer");
 	}
@@ -29,11 +29,13 @@ class Administrator_controller extends CI_Controller {
 
 	function call_generateLinks(){
 		// Receive data from model 
-		$data['profesors'] = $this->HomePage_model->findProfesors(); 
+		$data['profesors'] = $this->Profesors_model->findProfesors(); 
 		if ($data['profesors'] == false)
 		{
 			$data['profesors'] = 'No hay registros';
-		} 
+		}
+		$this->load->view("HomePage/Header");
 		$this->load->view("HomePage/generarLinks", $data);
+		$this->load->view("HomePage/Footer");
 	}
 }

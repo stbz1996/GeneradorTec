@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class HomePage_model extends CI_Model {
+class Profesors_model extends CI_Model {
 
 	function __construct()
 	{
@@ -14,6 +14,7 @@ class HomePage_model extends CI_Model {
 		$this->db->select('idProfessor');
 		$this->db->select('name');
 		$this->db->select('lastName');
+		$this->db->select('email');
 		$this->db->from('Professor');
 		$this->db->where('state', 1);
 		$query = $this->db->get();		
