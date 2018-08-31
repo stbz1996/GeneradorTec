@@ -9,9 +9,7 @@ class Administrator_model extends CI_Model {
 		$this->load->database();
 	}
 
-
-	
-	function validCredentials($userName, $password)
+	public function validCredentials($userName, $password)
 	{
 		$this->db->select('userName');
 		$this->db->from('Administrator');
@@ -20,6 +18,30 @@ class Administrator_model extends CI_Model {
 		$query = $this->db->get();		
 		if ($query->num_rows() > 0) return true;
 		else return false;
+	}
+
+	/****************************************
+	- The function returns all admin registered in the database
+	****************************************/
+	public function getAllAdmin()
+	{
+		/* Return all the admin in the system.*/
+		$query = $this->db->get('Administrator');
+		if ($query->num_rows() > 0){
+			return $query;
+		}else{
+			return false;
+		}
+	}
+
+	/****************************************
+	- Insert an Admin to the database
+	- It just need the username and a password.
+	****************************************/
+	public function insertAdmin($username, $password)
+	{
+		$Admin = array('userName' => $username, 'password' => $password);
+		$this->db->insert('Administrator', $Admin);
 	}
 }
 
