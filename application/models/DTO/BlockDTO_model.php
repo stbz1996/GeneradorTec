@@ -1,6 +1,6 @@
 <?php
 
-class Block{
+class BlockDTO_model{
 	/****************************************
 	Variables
 	****************************************/
@@ -27,6 +27,11 @@ class Block{
 	public function setDescription($pDescription)
 	{
 		$this->description = $pDescription;
+	}
+
+	public function setState($pState)
+	{
+		$this->state = $pState;
 	}
 
 	public function changeState(){

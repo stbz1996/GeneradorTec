@@ -1,6 +1,6 @@
 <?php
 
-class Schedule{
+class ScheduleDTO_model{
 	/****************************************
 	Variables
 	****************************************/

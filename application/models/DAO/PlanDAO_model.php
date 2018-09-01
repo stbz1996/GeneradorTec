@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Plan_model extends CI_Model {
+class PlanDAO_model extends CI_Model{
 
 	function __construct()
 	{
@@ -34,7 +34,7 @@ class Plan_model extends CI_Model {
 	/****************************************
 	- Insert the new plan in the database.
 	****************************************/
-	public function insertPlan($Plan)
+	public function insert($Plan)
 	{
 		$newPlan = array(
 			'idPlan' => $Plan->idPlan, 
@@ -48,7 +48,7 @@ class Plan_model extends CI_Model {
 	/****************************************
 	- Edit all the changes in the database.
 	****************************************/
-	public function editPlan($Plan)
+	public function edit($Plan)
 	{
 		$changes = array(
 			'name' => $Plan->idPlan, 
@@ -62,10 +62,12 @@ class Plan_model extends CI_Model {
 	/****************************************
 	- Get all the plan in the database
 	****************************************/
-	public function showPlan()
+	public function show($idCareer)
 	{
-		/* Return all the plans in the system.*/
-		$query = $this->db->get('Plan');
+		$this->db->select('*');
+		$this->db->from('Plan');
+		$this->db->where('idCareer', $idCareer);
+		$query = $this->db->get();
 		if ($query->num_rows() > 0){
 			return $query;
 		}else{
@@ -76,7 +78,7 @@ class Plan_model extends CI_Model {
 	/****************************************
 	- Delete the plan in the database.
 	****************************************/
-	public function deletePlan($Plan)
+	public function delete($Plan)
 	{
 		// Búsqueda recursiva
 	}

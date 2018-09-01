@@ -1,6 +1,6 @@
 <?php
 
-class Form{
+class FormDTO_model{
 	/****************************************
 	Variables
 	****************************************/
@@ -29,6 +29,11 @@ class Form{
 	public function setHashCode($pHashCode)
 	{
 		$this->hashCode = $pHashCode;
+	}
+
+	public function setState($pState)
+	{
+		$this->state = $pState;
 	}
 
 	public function changeState(){

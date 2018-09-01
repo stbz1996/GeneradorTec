@@ -1,5 +1,5 @@
 <?php
-    class coursesModel extends CI_Model
+    class CourseDAO_Model extends CI_Model
     {
         public function __construct()
         {

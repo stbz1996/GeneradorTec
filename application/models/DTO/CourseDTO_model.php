@@ -1,6 +1,6 @@
 <?php
 
-class Course{
+class CourseDTO_model{
 	/****************************************
 	Variables
 	****************************************/
@@ -40,6 +40,11 @@ class Course{
 	public function setName($pName)
 	{
 		$this->name = $pName;
+	}
+
+	public function setState($pState)
+	{
+		$this->state = $pState;
 	}
 
 	public function changeState(){

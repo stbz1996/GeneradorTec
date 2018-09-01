@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Administrator_model extends CI_Model {
+class AdministratorDAO_model extends CI_Model{
+
 
 	function __construct()
 	{
@@ -21,9 +22,29 @@ class Administrator_model extends CI_Model {
 	}
 
 	/****************************************
+	- Insert an Admin to the database
+	- It just need the username and a password.
+	****************************************/
+	public function insert($Admin)
+	{
+		$newAdmin = array('userName' => $Admin->getUser(), 'password' => $Admin->getPassword());
+		$this->db->insert('Administrator', $newAdmin);
+	}
+
+	public function edit($Admin)
+	{
+
+	}
+
+	public function delete($Admin)
+	{
+
+	}
+
+	/****************************************
 	- The function returns all admin registered in the database
 	****************************************/
-	public function getAllAdmin()
+	public function show($Admin)
 	{
 		/* Return all the admin in the system.*/
 		$query = $this->db->get('Administrator');
@@ -34,24 +55,9 @@ class Administrator_model extends CI_Model {
 		}
 	}
 
-	/****************************************
-	- Insert an Admin to the database
-	- It just need the username and a password.
-	****************************************/
-	public function insertAdmin($username, $password)
-	{
-		$Admin = array('userName' => $username, 'password' => $password);
-		$this->db->insert('Administrator', $Admin);
-	}
+
 }
 
-// insertar
-		/* 
-		$this->db->insert('Administrator', array('userName'=>$data['user'], 'password'=>$data['password'])); 
-		*/ 
-		/*
-		$query = $this->db->get_where('Administrator', array('userName'=>$data['user'], 'password'=>$data['password'])); 
-		*/
 ?>
 
 

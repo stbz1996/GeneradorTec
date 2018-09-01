@@ -1,6 +1,6 @@
 <?php
 
-class Activity{
+class ActivityDTO_model{
 	/****************************************
 	Variables
 	****************************************/

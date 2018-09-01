@@ -6,16 +6,16 @@ class Form_controller extends CI_Controller {
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->model("Form_model");
+		$this->load->model("DAO/FormDAO_model");
 	}
 
 	function index()
 	{
-		$this->Form_model->setIdProfessor(1);
+		$this->FormDAO_model->setIdProfessor(1);
 		//$this->executeStoredProcedures();
 		//$data['dueDate'] = $this->Form_model->get("dueDate");
 		//$data['dueDate'] = date("d/m/Y", strtotime($this->Form_model->spGetInformation()->row()->dueDate));
-		$result = $this->Form_model->GetInitialInformation()->row();
+		$result = $this->FormDAO_model->GetInitialInformation()->row();
 
 
 		$data['dueDate'] = $result->dueDate;
@@ -33,7 +33,7 @@ class Form_controller extends CI_Controller {
 
 	function executeStoredProcedures()
 	{
-		$this->Form_model->getInitialInformation();
+		$this->FormDAO_model->getInitialInformation();
 	}
 
 

@@ -8,7 +8,7 @@ class System_controller extends CI_Controller {
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->helper("form");
-		$this->load->model("Administrator_model");
+		$this->load->model("DAO/AdministratorDAO_model");
 	}
 
 
@@ -49,7 +49,7 @@ class System_controller extends CI_Controller {
 		$password = $this->input->post('inputPassword');
 
 		// Receive data from model 
-		$result = $this->Administrator_model->validCredentials($user, $password);
+		$result = $this->AdministratorDAO_model->validCredentials($user, $password);
 
 		// Valid data from errors 
 		if ($result == true)

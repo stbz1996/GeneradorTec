@@ -8,60 +8,15 @@ class Administrator_controller extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->library('session');
+		$this->load->library('Administrator_Logic');
 		$this->load->helper("form");
-		$this->load->model("Profesors_model");
-		$this->load->model("Administrator_model");
-		$this->load->model("coursesModel");
-	}
-
-	/****************************************
-	- Compare the user's name with the new username.
-	- $data -> is an array of users in the database.
-	- Returns (true/false) if the user is registered.
-	****************************************/
-	private function compareUser($data, $newUser)
-	{
-		for($i = 0; $i < count($data); $i++)
-		{
-			$tempName = $data[$i]->userName;
-
-			if (strtolower($tempName) == strtolower($newUser))
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/****************************************
-	- Get all the users in the database and call function compareUser.
-	- Returns the result of compareUser.
-	****************************************/
-	private function isUserInDatabase($newUser)
-	{
-		$query = array();
-		$data = array();
-		$state = false;
-		/* Get all the Admin registers in the database. */
-		$query = $this->Administrator_model->getAllAdmin();
-
-		// If there are not admins.
-		if (!$query){
-			echo "<script>alert('Hay un problema con su solicitud');</script>";
-			return false;
-		}
-
-		$data = $query->result();
-
-		$state = $this->compareUser($data, $newUser);
-
-		/* If the new admin username is registered in the database*/
-		if (!$state){
-			echo "<script>alert('El usuario ya está registrado en el sistema.');</script>";
-			return false;
-		}
-
-		return true;
+		$this->load->model("DAO/ProfessorDAO_model");
+		$this->load->model("DAO/AdministratorDAO_model");
+		$this->load->model("DAO/PlanDAO_model");
+		$this->load->model("DAO/CourseDAO_model");
+		$this->load->model("DTO/AdministratorDTO_model");
+		$this->load->model("DTO/PlanDTO_model");
+		$this->administrator_logic = new Administrator_Logic();
 	}
 
 	/***************************************************
@@ -72,14 +27,43 @@ class Administrator_controller extends CI_Controller {
 	{
 		//$sendData['userName'] = $this->session->flashdata('userName');
 		$this->load->view("HomePage/Header");
-		//$this->load->view("HomePage/homePage");
+		$this->load->view("HomePage/homePage");
 		//$this->call_generateLinks();
 		$this->load->view("HomePage/Footer");
 	}
 
-	function call_generateLinks(){
+
+	public function Plans()
+	{
+		/* Get the plans from the database */
+ 		$query = $this->PlanDAO_model->show(1);
+
+		$data['plans'] = $this->administrator_logic->getPlans($query);
+
+		$this->load->view("PlanPage/Header");
+		$this->load->view("PlanPage/HomePlan", $data);
+		$this->load->view("PlanPage/Footer");
+	}
+
+	public function editPlan()
+	{
+		// Edito el plan.
+	}
+
+	public function deletePlan()
+	{
+		// Borro los planes.
+	}
+
+	public function changeStatePlan()
+	{
+
+	}
+
+
+	public function call_generateLinks(){
 		// Receive data from model 
-		$data['profesors'] = $this->Profesors_model->findProfesors(); 
+		$data['profesors'] = $this->ProfessorDAO_model->findProfesors(); 
 		if ($data['profesors'] == false)
 		{
 			$data['profesors'] = 'No hay registros';
@@ -106,24 +90,23 @@ class Administrator_controller extends CI_Controller {
 	****************************************/
 	public function getAdminData()
 	{
-		$newUser = "";
-		$password = "";
 		$autentification = "";
 		$state = false;
+		$Admin = new AdministratorDTO_model();
 
-		$newUser = $this->input->post('inputUsername');
-		$password = $this->input->post('inputPassword');
+		$Admin->setUser($this->input->post('inputUsername'));
+		$Admin->setPassword($this->input->post('inputPassword'));
 		$autentification = $this->input->post('inputPasswordAgain');
 
 		// If the password are different.
-		if ($password != $autentification)
+		if ($Admin->getPassword() != $autentification)
 		{
 			echo "<script>alert('Las contraseñas no coinciden');</script>";
 			redirect('Administrator_controller/addAdmin', 'refresh');
 			return;
 		}
-
-		$state = $this->isUserInDatabase($newUser);
+		$query = $this->AdministratorDAO_model->show($Admin);
+		$state = $this->administrator_logic->isUserInDatabase($query, $Admin);
 
 		if (!$state)
 		{
@@ -131,10 +114,10 @@ class Administrator_controller extends CI_Controller {
 			return;
 		}
 
-		$this->Administrator_model->insertAdmin($newUser, $password);
+		$this->AdministratorDAO_model->insert($Admin);
 
-		echo "<script>alert('Se ha agregado a la base de datos.');</script>";
 		redirect('Administrator_controller/index/');
+		echo "<script>alert('Se ha agregado a la base de datos.');</script>";
 	}
 
 	/****************************************
@@ -142,7 +125,7 @@ class Administrator_controller extends CI_Controller {
 	****************************************/
 	public function Courses()
 	{
-		$data['courses'] = $this->coursesModel->getCourses();
+		$data['courses'] = $this->CourseDAO_model->getCourses();
 
 		$this->load->view("./HomePage/Header");
 		$this->load->view("Admin/Courses", $data);

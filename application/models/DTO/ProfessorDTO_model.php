@@ -1,6 +1,6 @@
 <?php
 
-class Professor{
+class ProfessorDTO_model{
 	/****************************************
 	Variables
 	****************************************/
@@ -41,6 +41,11 @@ class Professor{
 		$this->lastName = $pLastName;
 	}
 
+	public function setState($pState)
+	{
+		$this->state = $pState;
+	}
+	
 	public function changeState(){
 		if ($this->state)
 		{

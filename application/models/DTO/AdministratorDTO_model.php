@@ -1,6 +1,6 @@
 <?php
 
-class Administrator{
+class AdministratorDTO_model{
 	/****************************************
 	Variables
 	****************************************/
@@ -29,7 +29,7 @@ class Administrator{
 
 	public function setPassword($pPassword)
 	{
-		$this->user = $pUser;
+		$this->password = $pPassword;
 	}
 
 	public function getId()

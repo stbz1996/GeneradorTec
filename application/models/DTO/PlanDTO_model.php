@@ -1,6 +1,6 @@
 <?php
 
-class Plan{
+class PlanDTO_model{
 	/****************************************
 	Variables
 	****************************************/
@@ -27,6 +27,11 @@ class Plan{
 	public function setName($pName)
 	{
 		$this->name = $pName;
+	}
+
+	public function setState($pState)
+	{
+		$this->state = $pState;
 	}
 
 	public function changeState(){
