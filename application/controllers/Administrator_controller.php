@@ -11,6 +11,7 @@ class Administrator_controller extends CI_Controller {
 		$this->load->helper("form");
 		$this->load->model("Profesors_model");
 		$this->load->model("Administrator_model");
+		$this->load->model("coursesModel");
 	}
 
 	/****************************************
@@ -134,5 +135,17 @@ class Administrator_controller extends CI_Controller {
 
 		echo "<script>alert('Se ha agregado a la base de datos.');</script>";
 		redirect('Administrator_controller/index/');
+	}
+
+	/****************************************
+	- Get all courses. Show the view.
+	****************************************/
+	public function Courses()
+	{
+		$data['courses'] = $this->coursesModel->getCourses();
+
+		$this->load->view("./HomePage/Header");
+		$this->load->view("Admin/Courses", $data);
+		$this->load->view("./HomePage/Footer");
 	}
 }

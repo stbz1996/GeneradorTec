@@ -386,3 +386,11 @@
 .mCSB_inside>.mCSB_container {
     margin-right: 0px;
 }
+
+
+/*----------------  Cursos   --------------- */
+.course{
+    background-color: #1d1d1d;
+    color: #F1F0ED;
+    margin: .1rem;
+}
