@@ -14,8 +14,7 @@
 			<div class="titles">
               	<h1>Generación automática de links</h1>
               	<ul>
-					<li type="disc"> Los profesores seleccionados recibirán el link de acceso al formuario respectivo.</li>
-					<li type="disc"> Si un profesor es desmarcado, será desactivado.</li>
+					<li type="disc"> Aquí se muestran los profesores activos a los que se les enviará en link para el periodo seleccionado.</li>
 				</ul>
                	<p></p>
             </div>
@@ -27,14 +26,20 @@
 	            <?= form_open("/Administrator_controller/xxxxxx") ?>
 				<form> 
 					<div class="modal-body">
-						<table>
+						<table class="profesorsTable">
+							<tr>
+								<td class="indicationsTable">ID</td>
+							    <td class="indicationsTable">Profesor</td>
+							    <td class="indicationsTable">Correo</td>
+							    <td class="indicationsTable">Link</td>
+							</tr>
 							<?php 
 								foreach ($profesors->result() as $p) { ?>
 									<tr>
-										<td><?= $p->idProfessor ?></td>
-									    <td><?= $p->name." ".$p->lastName ?></td>
-									    <td><?= $p->email ?></td>
-									    <td><?= "Check" ?></td>
+										<td class="numberTable"><?= $p->idProfessor ?></td>
+									    <td class="profesorTable"><?= $p->name." ".$p->lastName ?></td>
+									    <td class="emailTable"><?= $p->email ?></td>
+									    <td class="linkTable"><?= "xxxxxxxxxxxxxxx" ?></td>
 									</tr>
 							<?php } ?>
 						</table>

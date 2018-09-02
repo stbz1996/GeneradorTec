@@ -9,6 +9,7 @@ class PlanDAO_model extends CI_Model{
 		$this->load->database();
 	}
 
+
 	/****************************************
 	- Activate the plan.
 	****************************************/
@@ -20,6 +21,7 @@ class PlanDAO_model extends CI_Model{
 		$this->db->update('Plan', $changes);
 	}
 
+
 	/****************************************
 	- Desactivate the plan. 
 	****************************************/
@@ -30,6 +32,7 @@ class PlanDAO_model extends CI_Model{
 		$this->db->where('idPlan', $Plan->idPlan);
 		$this->db->update('Plan', $changes);
 	}
+
 
 	/****************************************
 	- Insert the new plan in the database.
@@ -45,6 +48,7 @@ class PlanDAO_model extends CI_Model{
 		$this->db->insert('Plan', $newPlan);
 	}
 
+
 	/****************************************
 	- Edit all the changes in the database.
 	****************************************/
@@ -58,6 +62,7 @@ class PlanDAO_model extends CI_Model{
 		$this->db->where('idPlan', $Plan->idPlan);
 		$this->db->update('Plan', $changes);
 	}
+
 
 	/****************************************
 	- Get all the plan in the database
@@ -74,6 +79,7 @@ class PlanDAO_model extends CI_Model{
 			return false;
 		}
 	}
+
 
 	/****************************************
 	- Delete the plan in the database.

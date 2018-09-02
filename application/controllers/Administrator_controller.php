@@ -14,10 +14,17 @@ class Administrator_controller extends CI_Controller {
 		$this->load->model("DAO/AdministratorDAO_model");
 		$this->load->model("DAO/PlanDAO_model");
 		$this->load->model("DAO/CourseDAO_model");
+
+		$this->load->model("DAO/PeriodDAO_model");
+		$this->load->model("DAO/FormDAO_model");
+		$this->load->model("DTO/PeriodDTO");
+		$this->load->model("DTO/ProfessorDTO");
+
 		$this->load->model("DTO/AdministratorDTO_model");
 		$this->load->model("DTO/PlanDTO_model");
 		$this->administrator_logic = new Administrator_Logic();
 	}
+
 
 	/***************************************************
 	That function is the first function that is called. 
@@ -45,6 +52,7 @@ class Administrator_controller extends CI_Controller {
 		$this->load->view("PlanPage/Footer");
 	}
 
+
 	public function editPlan()
 	{
 		// Edito el plan.
@@ -61,17 +69,38 @@ class Administrator_controller extends CI_Controller {
 	}
 
 
-	public function call_generateLinks(){
-		// Receive data from model 
-		$data['profesors'] = $this->ProfessorDAO_model->findProfesors(); 
-		if ($data['profesors'] == false)
+	/****************************************
+	- That function create the links for the 
+	  professors
+	****************************************/
+	public function generateLinks(){
+		// INFORMATION REQUIRED
+		$period = $this->PeriodDAO_model->findActivePeriod(new PeriodDTO()); 
+
+		// Find the profesors information
+		$data['profesors'] = $this->ProfessorDAO_model->findProfesors();
+
+		if ($data['profesors'] != false)
 		{
-			$data['profesors'] = 'No hay registros';
+			// por cada dato del profesor y con el periodo
+				// creo la instancia de formulario
+				// pregunto el formularioDAO
+				// si hay un formulario con ese idProfesor y con ese idPeriodo
+					// no creo nada
+				// si no lo hay
+					// lleno completamente el formulario
+					// envio el formulario para que sea creado junto con el hash
 		}
+		else{
+			echo "<script>alert('No hay profesores activos');</script>";
+		}
+
+		// Load the view
 		$this->load->view("HomePage/Header");
 		$this->load->view("HomePage/generarLinks", $data);
 		$this->load->view("HomePage/Footer");
 	}
+
 
 	/****************************************
 	- Add a new admin. Show the view.

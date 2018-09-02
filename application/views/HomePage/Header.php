@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <?php
     // Here we can define the links to the controlles
-    $link_to_generateLinks = base_url()."/index.php/Administrator_controller/call_generateLinks";
+    $link_to_generateLinks = base_url()."/index.php/Administrator_controller/generateLinks";
     $linkToCourses = base_url()."/index.php/Administrator_controller/Courses";
 ?>
 

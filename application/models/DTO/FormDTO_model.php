@@ -81,8 +81,6 @@ class FormDTO_model{
 	}
 
 	/* Finish the setters and getters */
-
-
 }
 
 ?>
