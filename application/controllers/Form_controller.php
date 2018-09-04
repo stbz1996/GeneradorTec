@@ -37,6 +37,9 @@ class Form_controller extends CI_Controller {
 
 	function index()
 	{
+		//$cod = $_GET['p'];
+
+		//echo "<script>alert('$cod');</script>";
 		$idProfessor = $this->Form->getIdProfessor();
 		$idForm = $this->Form->getIdForm();
 

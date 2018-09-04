@@ -81,7 +81,6 @@
           <td><input type="number" name="porcentWork1" class="textnum" min="0" max="100" value="0"></td>
         </tr>
       </table>
-      <td><input type="button" name="add" id="add" class="btn_add" value="+" /></td>
       
       <!--<input type="number" id="activity_porcent" min="0" value="0" class="textnum">-->
       
@@ -98,6 +97,7 @@
       </div>-->
     </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
+    <input type="button" name="add" id="add" class="btn_add action-button" value="+" />
     <input type="button" name="next" class="next action-button" value="Siguiente" />
   </fieldset>
 
