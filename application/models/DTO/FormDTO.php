@@ -97,11 +97,6 @@ class FormDTO{
 	{
 		return $this->idProfessor;
 	}
-
-	public function getIdPeriod()
-	{
-		return $this->idPeriod;
-	}
 	/* Finish the setters and getters */
 }
 

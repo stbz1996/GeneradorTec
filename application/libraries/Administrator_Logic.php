@@ -151,7 +151,7 @@ class Administrator_Logic{
  	{
  		$professorDAO_model = new ProfessorDAO_model();
  		return $professorDAO_model->findProfessors();
-
+	}
 
  	/****************************************
 	- Convert the data to the database an array.
@@ -177,6 +177,7 @@ class Administrator_Logic{
  		return $blocks;
  	}
 
+
  	public function printPlans()
  	{
  		for($i = 0; $i < count($this->plans); $i++)
@@ -185,6 +186,7 @@ class Administrator_Logic{
  			print_r($this->plans[$i]->getName());
  		}
  	}
+
 
  	public function getSpecificPlan($idPlan)
  	{
