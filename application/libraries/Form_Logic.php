@@ -44,7 +44,6 @@ class Form_Logic{
 		$miliseconds = ((float)$usec + (float)$sec);
 		$date = getdate();
 		$hash = $miliseconds.$date["year"].$date["mon"].$date["mday"].$date["minutes"];
-    	echo "<script>alert('$hash');</script>";
     	return $hash;
 	}
 }
