@@ -9,7 +9,7 @@ class Form_controller extends CI_Controller {
 	{
 		parent::__construct();
 
-		$idProfessor = 1;
+		$idProfessor = 5;
 
 		$this->load->helper("form");
 		$this->load->helper("url");
@@ -17,6 +17,8 @@ class Form_controller extends CI_Controller {
 		$this->load->model("DAO/FormDAO_model");
 		$this->load->model("DTO/FormDTO");
 
+		$this->load->model("DAO/ActivityDAO_model");
+		$this->load->model("DTO/ActivityDTO");
 
 		$this->Form_Logic = new Form_Logic();
 		$this->Form = new FormDTO();
@@ -34,6 +36,9 @@ class Form_controller extends CI_Controller {
 
 	function index()
 	{
+		//$cod = $_GET['p'];
+
+		//echo "<script>alert('$cod');</script>";
 		$idProfessor = $this->Form->getIdProfessor();
 		$idForm = $this->Form->getIdForm();
 
@@ -47,6 +52,7 @@ class Form_controller extends CI_Controller {
 		$data['periodNumber'] = $result->number;
 		$data['periodYear'] = $result->year;
 		$data['formState'] = $this->Form->getState();
+
 
 		$this->load->view("Forms/Header");
 		$this->load->view("Forms/Content", $data);
@@ -101,6 +107,16 @@ class Form_controller extends CI_Controller {
 		$this->Form_Logic->validateWorkload($idProfessor, $workload);
 	}
 
+	function insertActivities()
+	{
+		$descriptions = array('Coordinador Carrera', 'Proyecto Investigación', 'Coordinador Práctica');
+		$workPorcents = array(30, 20, 30);
+		
+		for ($i = 0; $i < 3; $i++ ) {
+			$this->Form_Logic->validateInsertActivity($descriptions[$i], 3, $workPorcents[$i]);
+		}
+		
+	}
 
 
 }

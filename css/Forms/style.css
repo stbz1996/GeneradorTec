@@ -76,8 +76,16 @@ body {
 	font-size: 13px;
 }
 
-#msform input [type=text]{
-	width: 50%;
+#msform .textbox{
+	width: 40%;
+}
+
+#msform .textnum{
+	width: 100px;
+}
+
+#msform .btn_add{
+	width: 40%;
 }
 
 /*buttons*/
@@ -92,9 +100,11 @@ body {
 	padding: 10px 5px;
 	margin: 10px 5px;
 }
+
 #msform .action-button:hover, #msform .action-button:focus {
 	box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
 }
+
 
 
 

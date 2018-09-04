@@ -3,6 +3,7 @@
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
+var count_activities = 1;
 
 $(".next").click(function(){
 	if(animating) return false;
@@ -80,8 +81,31 @@ $(".previous").click(function(){
 });
 
 
+$(document).on('click', '.btn_add', function(){
+	count_activities ++;
+	$('#dynamic_field').append('<tr id="row'+count_activities+
+		'"><td><input type="text" name="name[]" id="name" placeholder="Ingrese actividad" /></td><td><input type="number" name="name2[]" min="0" value="0" class="textnum"></td><td><input type="button" name="remove" id="'+
+		count_activities+'" class="btn_remove" value="-" /></td></tr>');
+
+});
+
+$(document).on('click', '.btn_remove', function(){
+	var button_id = $(this).attr("id");
+	$("#row"+button_id+"").remove();
+	count_activities --;
+});
+/*
+$(".add").click(function(){
+	$('#dynamic_field').append('<tr><td><input type="text" name="name[]" id="name" placeholder="Ingrese actividad" /></td><td><input type="button" name="add" id="add" value="+" /></td></tr>');
+
+});*/
+
+
+
 
 // We have to send or save the form here  
 $(".submit").click(function(){
 	return false;
-})
+});
+
+

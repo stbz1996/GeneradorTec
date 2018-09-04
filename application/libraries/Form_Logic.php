@@ -21,6 +21,7 @@ class Form_Logic{
 	{
 		$form = new FormDAO_model();
 		$result = $form->getInitialInformation($idForm, $idProfessor);
+
 		return $result;	
 	}
 	
@@ -65,7 +66,21 @@ class Form_Logic{
 	{
 		$form = new FormDAO_model();
 		$form->updateWorkload($idProfessor, $workload);
+	}
 
+	function validateInsertActivity($description, $idForm, $workPorcent)
+	{ 
+		try {
+			$activityDTO = new ActivityDTO_model();
+			$activityDTO->setDescription($description);
+			$activityDTO->setIdForm($idForm);
+			$activityDTO->setWorkPorcent($workPorcent);
+
+			$activityDAO = new ActivityDAO_model();
+			$activityDAO->insertActivity($activityDTO);
+		} catch (Exception $e) {
+			return false;
+		}
 	}
 
 	public function createForm($pIdPeriod, $pDueDate, $pIdProfessor)

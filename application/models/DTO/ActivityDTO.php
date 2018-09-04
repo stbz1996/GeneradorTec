@@ -6,8 +6,8 @@ class ActivityDTO{
 	****************************************/
 	private $idActivity;
 	private $description;
-	private $workPorcent;
 	private $idForm;
+	private $workPorcent;
 
 	function __construct()
 	{
