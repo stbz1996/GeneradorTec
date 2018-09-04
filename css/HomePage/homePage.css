@@ -1,7 +1,24 @@
-.titles{
-	
+/* --- Table of generate links --- */
+.profesorsTable{
+	width: 100%;
 }
-
-.forms{
-	background: blue;
+.indicationsTable{
+	font-weight: bold;
 }
+.profesorsTable tr td{
+	padding-top: 0.5%;
+	padding-bottom: 0.5%;
+}
+.numberTable{
+	width: 5%;
+}
+.profesorTable{
+	width: 27%;
+}
+.emailTable{
+	width: 23%;
+}
+.linkTable{
+	width: 45%;
+}
+/* ------------- */

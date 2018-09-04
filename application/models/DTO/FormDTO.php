@@ -1,6 +1,6 @@
 <?php
 
-class FormDTO_model{
+class FormDTO{
 	/****************************************
 	Variables
 	****************************************/
@@ -21,7 +21,12 @@ class FormDTO_model{
 		$this->idPeriod = 0;
 	}
 
+
 	/* Setters and Getters */
+	public function setPeriod($pIdPeriod)
+	{
+		$this->idPeriod = $pIdPeriod;
+	}
 
 	public function setIdForm($pIdForm)
 	{
@@ -57,6 +62,12 @@ class FormDTO_model{
 		$this->idProfessor = $pIdProfessor;
 	}
 
+
+	public function getIdPeriod()
+	{
+		return $this->idPeriod;
+	}
+
 	public function setIdPeriod($pIdPeriod)
 	{
 		$this->idPeriod = $pIdPeriod;
@@ -86,14 +97,7 @@ class FormDTO_model{
 	{
 		return $this->idProfessor;
 	}
-
-	public function getIdPeriod()
-	{
-		return $this->idPeriod;
-	}
 	/* Finish the setters and getters */
-
-
 }
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-class ProfessorDTO_model{
+class ProfessorDTO{
 	/****************************************
 	Variables
 	****************************************/

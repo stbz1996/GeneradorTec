@@ -1,6 +1,6 @@
 <?php
 
-class PeriodDTO_model{
+class PeriodDTO{
 	/****************************************
 	Variables
 	****************************************/

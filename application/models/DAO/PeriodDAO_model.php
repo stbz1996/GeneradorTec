@@ -1,0 +1,49 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class PeriodDAO_model extends CI_Model {
+
+	function __construct()
+	{
+		parent::__construct();
+		$this->load->database();
+	}
+
+
+
+	/****************************************
+	Returns the active period 
+	****************************************/
+	function findActivePeriod($PeriodDTO, $pCarrer)
+	{
+		$this->db->select('idPeriod');
+		$this->db->from('Career');
+		$this->db->where('idCareer', $pCarrer->getId());
+		$query = $this->db->get();
+		
+		if ($query->num_rows() > 0) {
+			$idPeriod = $query->row()->idPeriod;
+			$PeriodDTO->setIdPeriod($idPeriod);
+		}
+		else{
+			$PeriodDTO->setIdPeriod(0);
+		}
+
+		return $PeriodDTO;
+	}
+
+
+	public function findPeriods()
+ 	{
+ 		$this->db->select('*');
+		$this->db->from('Period');
+		$query = $this->db->get();
+		
+		if ($query->num_rows() > 0) return $query;
+		else return false;
+ 	}
+
+
+
+
+}
