@@ -15,11 +15,11 @@ class Form_controller extends CI_Controller {
 		$this->load->helper("url");
 		$this->load->library('Form_Logic');
 		$this->load->model("DAO/FormDAO_model");
-		$this->load->model("DTO/FormDTO_model");
+		$this->load->model("DTO/FormDTO");
 
 
 		$this->Form_Logic = new Form_Logic();
-		$this->Form = new FormDTO_model();
+		$this->Form = new FormDTO();
 
 		$result = $this->Form_Logic->validateForm($idProfessor)->row();
 		$this->Form->setIdForm($result->idForm);

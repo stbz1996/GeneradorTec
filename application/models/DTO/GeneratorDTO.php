@@ -1,6 +1,6 @@
 <?php
 
-class GeneratorDTO_model{
+class GeneratorDTO{
 	/****************************************
 	Variables
 	****************************************/

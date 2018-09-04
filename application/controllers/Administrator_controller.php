@@ -25,12 +25,14 @@ class Administrator_controller extends CI_Controller {
 		$this->load->model("DAO/CourseDAO_model");
 		$this->load->model("DAO/PeriodDAO_model");
 		$this->load->model("DAO/FormDAO_model");
+
 		$this->load->model("DTO/PeriodDTO");
 		$this->load->model("DTO/ProfessorDTO");
 		$this->load->model("DTO/FormDTO");
 		$this->load->model("DTO/CareerDTO");
-		$this->load->model("DTO/AdministratorDTO_model");
-		$this->load->model("DTO/PlanDTO_model");
+		$this->load->model("DTO/AdministratorDTO");
+		$this->load->model("DTO/PlanDTO");
+
 		$this->administrator_logic = new Administrator_Logic();
 		$this->form_Logic = new Form_Logic();
 	}

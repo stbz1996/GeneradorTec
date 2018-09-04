@@ -1,6 +1,6 @@
 <?php
 
-class CourseDTO_model{
+class CourseDTO{
 	/****************************************
 	Variables
 	****************************************/
