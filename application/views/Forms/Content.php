@@ -3,14 +3,18 @@
 
   $button = array(
     'name' => 'submitButton',
-    'value' => 'Nuevo Administrador'
+    'value' => 'Submit'
   );
+
+  $linkWorkload = base_url()."index.php/Form_controller/getDataFromView";
 
 ?>
 
+<!--<a href="<?= $linkWorkload ?>"> <i class="fa fa-calendar"></i> <span>Generar Links</span> </a>-->
 
 <!-- multistep form -->
 <form id="msform" action="Form_controller/getDataFromView" method="post">
+  
   <input type="Submit" name="Submit" value="Submit">
   <!-- progressbar -->
   <ul id="progressbar">
@@ -27,12 +31,21 @@
     <h2 class="fs-title">Información</h2>
     <h3 class="fs-subtitle">Último día para enviar formulario: <?= $dueDate ?></h3>
     <div>
-      Profesor: <?= $professorFirstName?> <?= $professorLastName ?><br/><br/>
-      Carrera: <?= $careerName ?><br/><br/>
-      Periodo actual: <?= $periodNumber ?> Semestre, <?= $periodYear ?><br/><br/>
-      Estado: <?= $formState ?> <br/><br/>
+      <div>
+        Profesor: <?= $professorFirstName?> <?= $professorLastName ?>
+      </div>
+      <div>
+      Carrera: <?= $careerName ?>
+      </div>
+      <div>
+      Periodo actual: <?= $periodNumber ?> Semestre, <?= $periodYear ?>
+      </div>
+      <div>
+      Estado: <?= $formState ?>
+      </div>
     </div>
     <input type="button" name="next" class="next action-button" value="Siguiente" />
+    
   </fieldset>
   
   <fieldset>
@@ -50,7 +63,8 @@
     </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input type="button" name="next" class="next action-button" value="Siguiente" />
-    <input type='submit' name='submit' class="submit action-button" value='Submit' />
+    <!--<input type='submit' name='submit' class="submit action-button" value='Submit' />-->
+    
   </fieldset>
 
   <fieldset>
@@ -59,18 +73,29 @@
 
     <div>
       <!--TODO: Do it dynamic-->
-      Actividades:<br/><br/>
-      Actividad 1:
-      <input type="text" name="activity1">
-      <input type="number" name="activityVal1" min="0" value="0"><br/>
+      <div>
+      <!--Actividad 1:-->
+      <table id="dynamic_field" name="dynamic_field">
+        <tr>
+          <td><input type="text" name="name1" id="name" placeholder="Ingrese actividad" /></td>
+          <td><input type="number" name="porcentWork1" class="textnum" min="0" max="100" value="0"></td>
+        </tr>
+      </table>
+      <td><input type="button" name="add" id="add" class="btn_add" value="+" /></td>
       
+      <!--<input type="number" id="activity_porcent" min="0" value="0" class="textnum">-->
+      
+      </div>
+      <!--<div>
       Actividad 2:
-      <input type="text" name="activity2">
-      <input type="number" name="activityVal2" min="0" value="0"><br/>
-
+      <input type="text" name="activity2" class="textbox">
+      <input type="number" name="activityVal2" min="0" value="0" class="textnum">
+      </div>
+      <div>
       Actividad 3:
-      <input type="text" name="activity3">
-      <input type="number" name="activityVal3" min="0" value="0">
+      <input type="text" name="activity3" class="textbox">
+      <input type="number" name="activityVal3" min="0" value="0" class="textnum">
+      </div>-->
     </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input type="button" name="next" class="next action-button" value="Siguiente" />

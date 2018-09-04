@@ -92,8 +92,8 @@ class FormDAO_model extends CI_Model
 	*****************************************/
 	function updateWorkload($idProfessor, $workload)
 	{
-		$this->db->set('Professor.workLoad', $workload, false);
-		$this->db->where('Professor.idProfessor', $idProfessor);
+		$this->db->set('Professor.workLoad', (string)$workload, false);
+		$this->db->where('Professor.idProfessor', (string)$idProfessor);
 		$this->db->update('Professor');
 	}
 }
