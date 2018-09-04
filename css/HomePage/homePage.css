@@ -1,6 +1,33 @@
+
+.message{
+	text-align: center;
+	font-weight: bold;
+	width: 100%;
+}
+
+
+.containerDate{
+	text-align: left;
+	width: 40%;
+
+}
+
+.dateInput{
+	width: 30%;
+	padding: 1%;
+	border-radius: 5px; 
+}
+.form-control{
+	width: 30%;
+	
+}
+
+
+
+
 /* --- Table of generate links --- */
 .profesorsTable{
-	width: 100%;
+	width: 55%;
 }
 .indicationsTable{
 	font-weight: bold;
@@ -10,15 +37,12 @@
 	padding-bottom: 0.5%;
 }
 .numberTable{
-	width: 5%;
+	width: 7%;
 }
 .profesorTable{
-	width: 27%;
+	width: 30%;
 }
 .emailTable{
-	width: 23%;
-}
-.linkTable{
-	width: 45%;
+	width: 25%;
 }
 /* ------------- */

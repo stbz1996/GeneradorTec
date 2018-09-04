@@ -9,11 +9,13 @@ class ProfessorDAO_model extends CI_Model {
 		$this->load->database();
 	}
 
-	function findProfessors(){
+	function findProfessors($idCareer)
+	{
 		$this->db->select('*');
 		$this->db->from('Professor');
-		$query = $this->db->get();
-		
+		$this->db->where('idCareer', $idCareer);
+		try{ $query = $this->db->get(); }
+		catch (Exception $e){ return false; }
 		if ($query->num_rows() > 0) return $query;
 		else return false;
 	}

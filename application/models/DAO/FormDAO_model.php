@@ -91,7 +91,8 @@ class FormDAO_model extends CI_Model
 		$this->db->from('Form');
 		$this->db->where('idProfessor', $pForm->getIdProfessor());
 		$this->db->where('idPeriod', $pForm->getIdPeriod());
-		$query = $this->db->get();		
+		try{ $query = $this->db->get(); }
+		catch (Exception $e){ return false; }		
 		if ($query->num_rows() > 0) return true;
 		else return false;
 	}
@@ -106,10 +107,9 @@ class FormDAO_model extends CI_Model
 			'idProfessor' => $form->getIdProfessor() ,
 			'idPeriod'    => $form->getIdPeriod()
 		);
-
-		$this->db->insert('Form', $newForm);	
-
-		return 1;
+		try{ $query = $this->db->insert('Form', $newForm); }
+		catch (Exception $e){ return false; }
+		return true;
 	}
 
 
