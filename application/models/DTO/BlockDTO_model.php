@@ -5,14 +5,14 @@ class BlockDTO_model{
 	Variables
 	****************************************/
 	private $idBlock;
-	private $description;
+	private $name;
 	private $state;
 	private $idPlan;
 
 	function __construct()
 	{
 		$this->idBlock = 0;
-		$this->description = "";
+		$this->name = "";
 		$this->state = false;
 		$this->idPlan = 0;
 	}
@@ -24,9 +24,9 @@ class BlockDTO_model{
 		$this->idBlock = $pIdBlock;
 	}
 
-	public function setDescription($pDescription)
+	public function setName($pName)
 	{
-		$this->description = $pDescription;
+		$this->name = $pName;
 	}
 
 	public function setState($pState)
@@ -53,9 +53,9 @@ class BlockDTO_model{
 		return $this->idBlock;
 	}
 
-	public function getDescription()
+	public function getName()
 	{
-		return $this->description;
+		return $this->name;
 	}
 
 	public function getState()

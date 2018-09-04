@@ -1,7 +1,17 @@
 
+<?php
+
+  $button = array(
+    'name' => 'submitButton',
+    'value' => 'Nuevo Administrador'
+  );
+
+?>
+
+
 <!-- multistep form -->
-<form id="msform">
-  
+<form id="msform" action="Form_controller/getDataFromView" method="post">
+  <input type="Submit" name="Submit" value="Submit">
   <!-- progressbar -->
   <ul id="progressbar">
     <li class="active">Información</li>
@@ -15,12 +25,12 @@
   <!-- fieldsets -->
   <fieldset>
     <h2 class="fs-title">Información</h2>
-    <h3 class="fs-subtitle">Último día para enviar formulario: <?= $dueDate; ?></h3>
+    <h3 class="fs-subtitle">Último día para enviar formulario: <?= $dueDate ?></h3>
     <div>
-      Profesor: <?= $professorFirstName?> <?= $professorLastName; ?><br/><br/>
-      Carrera: <?= $careerName; ?><br/><br/>
+      Profesor: <?= $professorFirstName?> <?= $professorLastName ?><br/><br/>
+      Carrera: <?= $careerName ?><br/><br/>
       Periodo actual: <?= $periodNumber ?> Semestre, <?= $periodYear ?><br/><br/>
-      Estado: <?= $formState; ?> <br/><br/>
+      Estado: <?= $formState ?> <br/><br/>
     </div>
     <input type="button" name="next" class="next action-button" value="Siguiente" />
   </fieldset>
@@ -29,9 +39,9 @@
     <h2 class="fs-title">Carga</h2>
     <h3 class="fs-subtitle"> Debe seleccionar la posible carga de trabajo para el siguiente periodo*, influirá en el mínimo de cursos posibles a asignar en ese periodo. <br/><br/>
     *Nota: Se puede agregar literalmente "siguiente periodo" o agregar el periodo que sigue, ejm: I semestre del 2019.</h3>
+    
     <div>
-      <select>
-        <option value="0">0% (0 cursos)</option>
+      <select name="workload_options">
         <option value="25">25% (1 curso)</option>
         <option value="50">50% (2 cursos)</option>
         <option value="75">75% (3 cursos)</option>
@@ -40,6 +50,7 @@
     </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input type="button" name="next" class="next action-button" value="Siguiente" />
+    <input type='submit' name='submit' class="submit action-button" value='Submit' />
   </fieldset>
 
   <fieldset>

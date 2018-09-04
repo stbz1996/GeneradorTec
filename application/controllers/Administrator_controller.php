@@ -4,27 +4,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Administrator_controller extends CI_Controller {
 
+
+	var $data = array();
+
 	function __construct()
 	{
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('Administrator_Logic');
-		$this->load->library('Form_Logic');
 
+		$this->load->helper("functions_helper");
+
+		$this->load->library('Form_Logic');
 		$this->load->helper("form");
 		$this->load->model("DAO/ProfessorDAO_model");
 		$this->load->model("DAO/AdministratorDAO_model");
+		$this->load->model("DAO/CareerDAO_model");
 		$this->load->model("DAO/PlanDAO_model");
+		$this->load->model("DAO/BlockDAO_model");
 		$this->load->model("DAO/CourseDAO_model");
-
 		$this->load->model("DAO/PeriodDAO_model");
 		$this->load->model("DAO/FormDAO_model");
 		$this->load->model("DTO/PeriodDTO");
 		$this->load->model("DTO/ProfessorDTO");
 		$this->load->model("DTO/FormDTO");
 		$this->load->model("DTO/CareerDTO");
-		
-
 		$this->load->model("DTO/AdministratorDTO_model");
 		$this->load->model("DTO/PlanDTO_model");
 		$this->administrator_logic = new Administrator_Logic();
@@ -45,23 +49,91 @@ class Administrator_controller extends CI_Controller {
 		$this->load->view("HomePage/Footer");
 	}
 
+	public function Careers()
+	{
+		/* Get the careers from the database */
+ 		$query = $this->CareerDAO_model->show();
 
-	public function Plans()
+		$data['listElement'] = $this->administrator_logic->getArrayCareers($query);
+		$data['iters'] = getBreadCrumbHome();
+		$data['actual'] = "Carreras";
+		$data['ADD'] = getAddressCareers();
+		$data['STATE'] = stateNoValid();
+
+		$this->load->view("PlanPage/Header");
+		$this->load->view("PlanPage/HomePlan", $data);
+		$this->load->view("PlanPage/Footer");	
+	}
+
+
+	public function Plans($id = null, $name = null)
 	{
 		/* Get the plans from the database */
- 		$query = $this->PlanDAO_model->show(1);
+ 		$query = $this->PlanDAO_model->show($id);
+ 		if ($name == null){
+ 			$data['actual'] = "planes";
+ 		}else{
+ 			$data['actual'] = urldecode($name);
+ 		}
 
-		$data['plans'] = $this->administrator_logic->getPlans($query);
+		$data['listElement'] = $this->administrator_logic->getArrayPlans($query);
+		$data['iters'] = getBreadCrumbCareer();
+		$data['ADD'] = getAddressPlans();
+		$data['STATE'] = stateValid();
 
 		$this->load->view("PlanPage/Header");
 		$this->load->view("PlanPage/HomePlan", $data);
 		$this->load->view("PlanPage/Footer");
 	}
 
-
-	public function editPlan()
+	public function addPlan()
 	{
-		// Edito el plan.
+		// Comunico a la bd.
+		$data = array(
+			'name' => $this->input->post('inputName'),
+			'state' => false,
+			'idCareer' => 1
+		);
+
+        $insert = $this->PlanDAO_model->insert($data);
+        validateModal();
+	}
+
+	public function editPlan($idPlan = null, $name = null)
+	{
+		if (!$idPlan){
+			return;
+		}
+
+		$data['pastName'] = $name;
+		$data['id'] = $idPlan;
+		// Cargo la vista...
+
+		$this->load->view("Admin/Header");
+		$this->load->view("PlanPage/EditPlan",$data);
+		$this->load->view("Admin/Footer");
+	}
+
+	/* Esto se va a eliminar cuando Randy logré sus respectivos avances.*/
+	public function editPlan2()
+	{
+		// Comunico a la BD con el nuevo nombre.
+		$newName = $this->input->post('newName');
+		$id = $this->input->post('id');
+		print_r($newName);
+		print_r($id);
+		if (!$newName){
+			return;
+		}
+
+		$Plan = new PlanDTO_model();
+		$Plan->setIdPlan($id);
+		$Plan->setName($newName);
+		$Plan->setState(true);
+		$Plan->setIdCareer(1);
+		$query = $this->PlanDAO_model->edit($Plan);
+
+		redirect('Administrator_controller/Plans');
 	}
 
 	public function deletePlan()
@@ -73,6 +145,48 @@ class Administrator_controller extends CI_Controller {
 	{
 
 	}
+
+	public function Blocks($id = null, $name = null)
+	{
+		/* Get the blocks from the database */
+ 		$query = $this->BlockDAO_model->show($id);
+ 		if ($name == null){
+ 			$data['actual'] = "Bloques";
+ 		}else{
+ 			$data['actual'] = urldecode($name);
+ 		}
+
+		$data['listElement'] = $this->administrator_logic->getArrayBlocks($query);
+		$data['iters'] = getBreadCrumbPlan();
+		$data['ADD'] = getAddressBlocks();
+		$data['STATE'] = stateMoveValid();
+
+		$this->load->view("PlanPage/Header");
+		$this->load->view("PlanPage/HomePlan", $data);
+		$this->load->view("PlanPage/Footer", $data);
+	}
+
+	public function addBlock()
+	{
+		// Comunico a la bd.
+
+	}
+
+	public function editBlock($idBlock = null, $name = null)
+	{
+		// Edit the description of the block.
+	}
+
+
+	public function deleteBlock()
+	{
+		// Borro los planes.
+	}
+
+	public function changeStateBlock()
+	{
+
+	} 
 
 
 

@@ -11,7 +11,6 @@ class FormDTO{
 	private $idProfessor;
 	private $idPeriod;
 
-
 	function __construct()
 	{
 		$this->idForm = 0;
@@ -63,14 +62,20 @@ class FormDTO{
 		$this->idProfessor = $pIdProfessor;
 	}
 
+
 	public function getIdPeriod()
 	{
 		return $this->idPeriod;
 	}
 
-	public function getId()
+	public function setIdPeriod($pIdPeriod)
 	{
-		return $this->idCareer;
+		$this->idPeriod = $pIdPeriod;
+	}
+
+	public function getIdForm()
+	{
+		return $this->idForm;
 	}
 
 	public function getHashCode()
@@ -93,6 +98,10 @@ class FormDTO{
 		return $this->idProfessor;
 	}
 
+	public function getIdPeriod()
+	{
+		return $this->idPeriod;
+	}
 	/* Finish the setters and getters */
 }
 
