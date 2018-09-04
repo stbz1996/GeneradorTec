@@ -12,21 +12,38 @@ class PeriodDAO_model extends CI_Model {
 
 
 	/****************************************
-	Returns all the periods in the system.
+	Returns the active period 
 	****************************************/
-	function findActivePeriod($PeriodDTO)
+	function findActivePeriod($PeriodDTO, $pCarrer)
 	{
-		/*$this->db->select('idProfessor');
-		$this->db->select('name');
-		$this->db->select('lastName');
-		$this->db->select('email');
-		$this->db->from('Professor');
-		$this->db->where('state', 1);
-		$query = $this->db->get();		
-		if ($query->num_rows() > 0) return $query;
-		else return false;
-		*/
-		$PeriodDTO->setIdPeriod(1);
+		$this->db->select('idPeriod');
+		$this->db->from('Career');
+		$this->db->where('idCareer', $pCarrer->getId());
+		$query = $this->db->get();
+		
+		if ($query->num_rows() > 0) {
+			$idPeriod = $query->row()->idPeriod;
+			$PeriodDTO->setIdPeriod($idPeriod);
+		}
+		else{
+			$PeriodDTO->setIdPeriod(0);
+		}
+
 		return $PeriodDTO;
 	}
+
+
+	public function findPeriods()
+ 	{
+ 		$this->db->select('*');
+		$this->db->from('Period');
+		$query = $this->db->get();
+		
+		if ($query->num_rows() > 0) return $query;
+		else return false;
+ 	}
+
+
+
+
 }

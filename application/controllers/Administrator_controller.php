@@ -9,6 +9,8 @@ class Administrator_controller extends CI_Controller {
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('Administrator_Logic');
+		$this->load->library('Form_Logic');
+
 		$this->load->helper("form");
 		$this->load->model("DAO/ProfessorDAO_model");
 		$this->load->model("DAO/AdministratorDAO_model");
@@ -19,10 +21,14 @@ class Administrator_controller extends CI_Controller {
 		$this->load->model("DAO/FormDAO_model");
 		$this->load->model("DTO/PeriodDTO");
 		$this->load->model("DTO/ProfessorDTO");
+		$this->load->model("DTO/FormDTO");
+		$this->load->model("DTO/CareerDTO");
+		
 
 		$this->load->model("DTO/AdministratorDTO_model");
 		$this->load->model("DTO/PlanDTO_model");
 		$this->administrator_logic = new Administrator_Logic();
+		$this->form_Logic = new Form_Logic();
 	}
 
 
@@ -69,27 +75,63 @@ class Administrator_controller extends CI_Controller {
 	}
 
 
+
 	/****************************************
 	- That function create the links for the 
 	  professors
 	****************************************/
-	public function generateLinks(){
-		// INFORMATION REQUIRED
-		$period = $this->PeriodDAO_model->findActivePeriod(new PeriodDTO()); 
+	public function LoadGenerateLinksView()
+	{
+		// ************************************
+		$idCareer = 1;
+		// ************************************
+		$data['profesors'] = $this->administrator_logic->findProfessors();
+		$data['periods'] = $this->administrator_logic->findPeriods();
+		
+		if ($data['profesors'] == false)
+		{
+			echo "<script>alert('No hay profesores activos');</script>";
+		}
+		if ($data['periods'] == false)
+		{
+			echo "<script>alert('No hay periodos');</script>";
+		}
+		
+		// Load the view
+		$this->load->view("HomePage/Header");
+		$this->load->view("HomePage/generarLinks", $data);
+		$this->load->view("HomePage/Footer");
+	}
 
-		// Find the profesors information
-		$data['profesors'] = $this->ProfessorDAO_model->findProfesors();
 
+	public function generateLinks()
+	{
+		// Get data from form 
+		//*************************************
+		$idCareer = 1;
+		//*************************************
+		$date = $this->input->post('date');
+		$period = $this->input->post('period');
+		$data = explode("-", $date);
+		$data['profesors'] = $this->administrator_logic->findProfessors();
+		$date = getdate();
+		$sendDate = $data[0]."-".$data[1]."-".$data[2];
+
+		// Check if the forms are registered or not
 		if ($data['profesors'] != false)
 		{
-			// por cada dato del profesor y con el periodo
-				// creo la instancia de formulario
-				// pregunto el formularioDAO
-				// si hay un formulario con ese idProfesor y con ese idPeriodo
-					// no creo nada
-				// si no lo hay
-					// lleno completamente el formulario
-					// envio el formulario para que sea creado junto con el hash
+			foreach ($data['profesors']->result() as $p)
+			{ 
+				$result = $this->form_Logic->lookForSpecificForm($p->idProfessor, $period);
+				// Create the form 
+				if ($result == false) 
+				{
+					$result = $this->form_Logic->createForm($period, $sendDate, $p->idProfessor);
+					if ($result == false) {
+						echo "<script>alert('No se pudo crear el formulario');</script>";
+					}
+				}
+			}
 		}
 		else{
 			echo "<script>alert('No hay profesores activos');</script>";
@@ -99,6 +141,7 @@ class Administrator_controller extends CI_Controller {
 		$this->load->view("HomePage/Header");
 		$this->load->view("HomePage/generarLinks", $data);
 		$this->load->view("HomePage/Footer");
+		
 	}
 
 

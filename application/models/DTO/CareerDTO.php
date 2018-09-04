@@ -1,6 +1,6 @@
 <?php
 
-class CareerDTO_model{
+class CareerDTO{
 	/****************************************
 	Variables
 	****************************************/

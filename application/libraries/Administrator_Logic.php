@@ -4,7 +4,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Administrator_Logic{
 
 	function __construct()
-	{}
+	{
+
+	}
 
 	/****************************************
 	- Compare the user's name with the new username.
@@ -79,6 +81,29 @@ class Administrator_Logic{
 
  		return $plans;
  	}
+
+
+ 	
+
+ 	
+ 	/*********************************************************************
+	That function returns the list of periods in DB
+ 	*********************************************************************/
+ 	public function findPeriods()
+ 	{
+ 		$periodDAO_model = new PeriodDAO_model();
+ 		return $periodDAO_model->findPeriods();
+ 	}
+
+ 	/*********************************************************************
+	That function returns the list of profesors in DB
+ 	*********************************************************************/
+ 	public function findProfessors()
+ 	{
+ 		$professorDAO_model = new ProfessorDAO_model();
+ 		return $professorDAO_model->findProfessors();
+ 	}
+
 }
 
 ?>

@@ -63,6 +63,38 @@ class FormDAO_model extends CI_Model
 			return false;
 		}
 	}
+
+	/************************************************
+	That function check if there is a form with the 
+	respective idProfesor and IdPeriod
+	************************************************/
+	public function lookForSpecificForm($pForm)
+	{
+		$this->db->select('idForm');
+		$this->db->from('Form');
+		$this->db->where('idProfessor', $pForm->getIdProfessor());
+		$this->db->where('idPeriod', $pForm->getIdPeriod());
+		$query = $this->db->get();		
+		if ($query->num_rows() > 0) return true;
+		else return false;
+	}
+
+
+	public function createForm($form)
+	{
+		$newForm = array(
+			'hashcode'    => $form->getHashCode() , 
+			'state'       => $form->getState() , 
+			'dueDate'     => $form->getDueDate() , 
+			'idProfessor' => $form->getIdProfessor() ,
+			'idPeriod'    => $form->getIdPeriod()
+		);
+
+		$this->db->insert('Form', $newForm);	
+
+		return 1;
+	}
+
 }
 
 

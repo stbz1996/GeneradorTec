@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <?php
     // Here we can define the links to the controlles
-    $link_to_generateLinks = base_url()."/index.php/Administrator_controller/generateLinks";
+    $link_to_generateLinks = base_url()."/index.php/Administrator_controller/LoadGenerateLinksView";
     $linkToCourses = base_url()."/index.php/Administrator_controller/Courses";
 ?>
 
@@ -25,7 +25,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/custom.css">
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/custom-themes.css">
     <link rel="shortcut icon" type="image/png" href="<?=base_url()?>img/favicon.png" />
-
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/homePage.css" />
 </head>
 

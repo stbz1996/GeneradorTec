@@ -23,8 +23,18 @@
             
             <!-- Shows the informatión of the profesors -->
             <div class="forms">
-	            <?= form_open("/Administrator_controller/xxxxxx") ?>
-				<form> 
+	            <?= form_open("/Administrator_controller/generateLinks") ?>
+				<form>
+					<div><input type="date" name="date" min="2018-03-25" max="2018-05-25"></div> 
+					<div class="container">
+					    <p>xxxxxxxx</p>
+						<select class="form-control" name="period">
+						<?php 
+						foreach ($periods->result() as $p) { ?>
+							<option value=<?= $p->idPeriod ?>> <?= $p->number.' - '.$p->year ?> </option>
+						<?php } ?>
+					    </select>
+					</div>
 					<div class="modal-body">
 						<table class="profesorsTable">
 							<tr>
