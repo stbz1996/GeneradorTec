@@ -7,6 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     // Here we can define the links to the controlles
     $link_to_generateLinks = base_url()."/index.php/Administrator_controller/LoadGenerateLinksView";
     $linkToCourses = base_url()."/index.php/Administrator_controller/Courses";
+    $linkToScheduleHours = base_url()."/index.php/Administrator_controller/showScheduleSelector";
 ?>
 
 
@@ -25,8 +26,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/custom.css">
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/custom-themes.css">
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/homePage.css" />
+
+    <link rel="stylesheet" href="<?=base_url()?>css/HomePage/selectHours.css" />
+
     <link rel="shortcut icon" type="image/png" href="<?=base_url()?>img/favicon.png" />
 </head>
+
 
 <body>
     <div class="page-wrapper chiller-theme toggled">
@@ -66,9 +71,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="<?= $linkToScheduleHours ?>">
                                 <i class="fa fa-book"></i>
-                                <span>Columna #4</span>
+                                <span>Horarios</span>
                             </a>
                         </li>
                     </ul>

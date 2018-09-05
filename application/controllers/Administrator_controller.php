@@ -268,7 +268,15 @@ class Administrator_controller extends CI_Controller
 	}
 
 
-
+	/***********************************************************
+	Load the information about the schedules in DB and show
+	in the view the active an deactive schedules
+	***********************************************************/
+	public function showScheduleSelector()
+	{
+		// Debo pedir los horarios habilitados 
+		$this->callView("SchedulePage", "");
+	}
 
 
 
