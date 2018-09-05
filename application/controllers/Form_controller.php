@@ -85,11 +85,38 @@ class Form_controller extends CI_Controller {
 	*****************************************/
 	function getDataFromView()
 	{
+		/*
+		User story 2
+
 		$workload = $this->input->post('workload_options');
 		$idProfessor = $this->Form->getIdProfessor();
 		
-		$this->insertWorkload($idProfessor, $workload);		
-		
+		$this->insertWorkload($idProfessor, $workload);
+
+		*/
+
+		/* User story 3*/
+
+
+
+		/*$activitiesDescription = $this->input->post('activityDescription');
+
+		if ($activitiesDescription) 
+		{
+			$activitiesWorkPorcent = $this->input->post('workPorcent');
+			$idForm = $this->Form->getIdForm();
+			$this->insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
+		}
+		else
+		{
+			echo "<script>alert(0)</script>";
+		}*/
+
+		$activitiesDescription = $this->input->post('activityDescription');
+		$activitiesWorkPorcent = $this->input->post('workPorcent');
+		$idForm = $this->Form->getIdForm();
+
+		$this->insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
 	}
 
 	/****************************************
@@ -107,14 +134,22 @@ class Form_controller extends CI_Controller {
 		$this->Form_Logic->validateWorkload($idProfessor, $workload);
 	}
 
-	function insertActivities()
+	function insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent)
 	{
-		$descriptions = array('Coordinador Carrera', 'Proyecto Investigación', 'Coordinador Práctica');
-		$workPorcents = array(30, 20, 30);
+		//$descriptions = array('Coordinador Carrera', 'Proyecto Investigación', 'Coordinador Práctica');
+		//$workPorcents = array(30, 20, 30);
 		
-		for ($i = 0; $i < 3; $i++ ) {
-			$this->Form_Logic->validateInsertActivity($descriptions[$i], 3, $workPorcents[$i]);
+		$totalActivities = sizeof($activitiesDescription);
+
+		for($i = 0; $i < $totalActivities; $i++)
+		{	
+			$activityDescription = $activitiesDescription[$i];
+			$activityWorkPorcent = $activitiesWorkPorcent[$i];
+			$this->Form_Logic->validateInsertActivity($idForm, $activityDescription, $activityWorkPorcent);
 		}
+		/*for ($i = 0; $i < 3; $i++ ) {
+			$this->Form_Logic->validateInsertActivity($descriptions[$i], 3, $workPorcents[$i]);
+		}*/
 		
 	}
 

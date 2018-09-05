@@ -68,10 +68,10 @@ class Form_Logic{
 		$form->updateWorkload($idProfessor, $workload);
 	}
 
-	function validateInsertActivity($description, $idForm, $workPorcent)
+	function validateInsertActivity($idForm, $description, $workPorcent)
 	{ 
 		try {
-			$activityDTO = new ActivityDTO_model();
+			$activityDTO = new ActivityDTO();
 			$activityDTO->setDescription($description);
 			$activityDTO->setIdForm($idForm);
 			$activityDTO->setWorkPorcent($workPorcent);
