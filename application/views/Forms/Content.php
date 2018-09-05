@@ -72,14 +72,15 @@
     <h3 class="fs-subtitle"> Ingrese las actividades que considera le reducen la carga de trabajo, esto afectará la carga que brindo en la sección anterior. </h3>
 
     <div>
+      <input type="button" name="add" id="add" class="btn_add action-button" value="Agregar Actividad" />
       <!--TODO: Do it dynamic-->
       <div>
       <!--Actividad 1:-->
       <table id="dynamic_field" name="dynamic_field">
-        <tr>
+        <!--<tr>
           <td><input type="text" name="name1" id="name" placeholder="Ingrese actividad" /></td>
           <td><input type="number" name="porcentWork1" class="textnum" min="0" max="100" value="0"></td>
-        </tr>
+        </tr>-->
       </table>
       
       <!--<input type="number" id="activity_porcent" min="0" value="0" class="textnum">-->
@@ -97,7 +98,6 @@
       </div>-->
     </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
-    <input type="button" name="add" id="add" class="btn_add action-button" value="+" />
     <input type="button" name="next" class="next action-button" value="Siguiente" />
   </fieldset>
 
