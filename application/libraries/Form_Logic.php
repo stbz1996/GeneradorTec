@@ -30,17 +30,16 @@ class Form_Logic{
 	*information of professor's form. 		*
 	*										*
 	*Input:									*
-	*	-$idForm: Integer, id of form. 		*
 	*	-$idProfessor: Integer, id of profe-*
 	*	ssor. 								*
 	*										*
 	*Result: 								*
 	*	Query with form's information 		*
 	*****************************************/
-	function validateForm($idProfessor)
+	function validateForm($hashCode)
 	{
 		$form = new FormDAO_model();
-		$result = $form->getForm($idProfessor);
+		$result = $form->getForm($hashCode);
 
 		if($result)
 		{
