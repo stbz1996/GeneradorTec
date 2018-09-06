@@ -14,7 +14,7 @@ class FormDTO{
 	function __construct()
 	{
 		$this->idForm = 0;
-		$this->hashCode = "";
+		$this->hashCode = 0;
 		$this->state = false;
 		$this->dueDate = 0;
 		$this->idProfessor = 0;

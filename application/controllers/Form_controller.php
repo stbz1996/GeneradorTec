@@ -23,41 +23,60 @@ class Form_controller extends CI_Controller {
 		$this->Form_Logic = new Form_Logic();
 		$this->Form = new FormDTO();
 
-		$result = $this->Form_Logic->validateForm($idProfessor)->row();
-		$this->Form->setIdForm($result->idForm);
-		//$this->form->setHashCode($result->hashCode);
-		$this->Form->setState($result->state);
-		$this->Form->setDueDate($result->dueDate);
-		$this->Form->setIdProfessor($idProfessor);
-		$this->Form->setIdPeriod($result->idPeriod);
+		
 
 
 	}
 
 	function index()
 	{
+		//Get hashcode of link (p = value)
+		$hashCode = $_GET['p'];
+
+		//Get form by hashcode
+		$queryForm = $this->Form_Logic->validateForm($hashCode);
+
+		//Verify if form exist
+		if($queryForm)
+		{
+			$newForm = $queryForm->row();
+			//Setting Form
+			$this->Form->setIdForm($newForm->idForm);
+			$this->Form->setHashCode($hashCode);
+			$this->Form->setState($newForm->state);
+			$this->Form->setDueDate($newForm->dueDate);
+			$this->Form->setIdProfessor($newForm->idProfessor);
+			$this->Form->setIdPeriod($newForm->idPeriod);
+
+			//Get initial information of professor
+			$idProfessor = $this->Form->getIdProfessor();
+			$idForm = $this->Form->getIdForm();
+
+			$initialInformation = $this->showInitialInformation($idForm, $idProfessor)->row();
+			
+			//Assign information to show it in Form
+			$data['dueDate'] = $this->Form->getDueDate();
+			$data['professorFirstName'] = $initialInformation->professorName;
+			$data['professorLastName'] = $initialInformation->lastName;
+			$data['careerName'] = $initialInformation->careerName;
+			$data['periodNumber'] = $initialInformation->number;
+			$data['periodYear'] = $initialInformation->year;
+			$data['formState'] = $this->Form->getState();
+
+			$this->load->view("Forms/Header");
+			$this->load->view("Forms/Content", $data);
+			$this->load->view("Forms/Footer");
+
+		}
+
+		else
+		{
+			echo "Error: No se encontró información";
+		}
+	
 		//$cod = $_GET['p'];
 
 		//echo "<script>alert('$cod');</script>";
-		$idProfessor = $this->Form->getIdProfessor();
-		$idForm = $this->Form->getIdForm();
-
-		$result = $this->showInitialInformation($idForm, $idProfessor)->row();
-		//$result = $this->FormDAO_model->GetInitialInformation()->row();
-		
-		$data['dueDate'] = $this->Form->getDueDate();
-		$data['professorFirstName'] = $result->professorName;
-		$data['professorLastName'] = $result->lastName;
-		$data['careerName'] = $result->careerName;
-		$data['periodNumber'] = $result->number;
-		$data['periodYear'] = $result->year;
-		$data['formState'] = $this->Form->getState();
-
-
-		$this->load->view("Forms/Header");
-		$this->load->view("Forms/Content", $data);
-		$this->load->view("Forms/Footer");
-
 	}
 
 
