@@ -36,13 +36,8 @@ class BlockDAO_model extends CI_Model{
 	****************************************/
 	public function insert($Block)
 	{
-		$newBlock = array(
-			'idBlock' => $Block->getId(), 
-			'name' => $Block->getName(), 
-			'state' => $Block->getState(), 
-			'idPlan' => $Block->getIdPlan()
-		);
-		$this->db->insert('Block', $newBlock);
+		$this->db->insert('Block', $Block);
+		return $this->db->insert_id();
 	}
 
 	/****************************************
@@ -51,12 +46,12 @@ class BlockDAO_model extends CI_Model{
 	public function edit($Block)
 	{
 		$changes = array(
-			'name' => $Block->getName(), 
-			'state' => $Block->getState(), 
-			'idBlock' => $Block->getIdPlan()
+			'name' => $Block['name'], 
+			'state' => $Block['state'], 
+			'idPlan' => $Block['idPlan'] 
 		);
-		$this->db->where('idBlock', $Block->getId());
-		$this->db->update('Block', $changes);
+		$this->db->where('idBlock', $Block['idBlock']);
+		return $this->db->update('Block', $changes);
 	}
 
 	/****************************************
@@ -76,11 +71,24 @@ class BlockDAO_model extends CI_Model{
 	}
 
 	/****************************************
-	- Delete the plan in the database.
+	- Get a unique block from the database
+	****************************************/
+	public function get($id)
+    {
+        $this->db->from('Block');
+        $this->db->where('idBlock', $id);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+	/****************************************
+	- Delete the block in the database.
 	****************************************/
 	public function delete($Block)
 	{
-		// Búsqueda recursiva
+		$this->db->where('idBlock', $Block['id']);
+        return $this->db->delete('Block');
 	}
+
 
 }

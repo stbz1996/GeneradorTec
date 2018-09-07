@@ -1,5 +1,37 @@
 <?php
 
+/******************************************************************************
+	This helper has:
+
+		- The BreadCrumb information.
+			* Home
+			* Home / Careers
+			* Home / Careers / Plans
+			* Home / Careers / Plans / Courses
+
+		- Address of all the pages in CRUD operations.
+			* Get all elements
+			* Change the state
+			* Edit the information
+			* Get only a instance
+			* Add a new one
+
+		- The sessions (in this case career, information respective to the actual position).
+			* Actual Career selected
+			* Actual Career and Plan selected
+			* Actual Career, Plan and block selected.
+
+		- The state of valid operations. (Probably dropped in the future).
+			* Valid (Insert, Drop, Get, Select) - No Valid (Move)
+			* Valid (Get) - No Valid (Insert, Drop, Select, Move)
+			* Valid (Insert, Drop, Get, Select, Move) - No valid ()
+
+		- The confirmation of javascript operations in the modal.
+			* validate Modal -> no need extra information.
+			* validate Modal Array -> need extra information.
+			
+******************************************************************************/
+
 function getBreadCrumbHome()
 {
 	$breadCrumb = array(
@@ -95,13 +127,41 @@ function getBreadCrumbCourse()
 	return $breadCrumb;
 }
 
+function getCareerSessions($id, $name){
+	$array = array(
+			'idCareer' => $id,
+			'nameCareer' => $name,
+			'idPlan' => '0',
+			'namePlan' => '',
+			'idBlock' => '0',
+			'nameBlock' => '',
+			'idCourse' => '0',
+			'nameCourse' => '0'
+	);
+	return $array;
+}
+
+function getPlanSessions($session, $id, $name){
+	$array = array(
+			'idCareer' => $session->userdata('idCareer'),
+			'nameCareer' => $session->userdata('nameCareer'),
+			'idPlan' => $id,
+			'namePlan' => $name,
+			'idBlock' => '0',
+			'nameBlock' => '',
+			'idCourse' => '0',
+			'nameCourse' => '0'
+	);
+	return $array;
+}
+
 function getAddressCareers()
 {
 	$address = array(
 		'ADDRESS_1' => "index.php/Administrator_controller/Plans",
 		'ADDRESS_2' => "index.php/Administrator_controller/changeStateCareer",
-		'ADDRESS_3' => "index.php/Administrator_controller/editCareer",
-		'ADDRESS_4' => "index.php/Administrator_controller/deleteCareer",
+		'ADDRESS_3' => "index.php/Administrator_controller/getCareer/",
+		'ADDRESS_4' => "index.php/Administrator_controller/deleteCareer/",
 		'ADDRESS_5' => "index.php/Administrator_controller/addCareer"
 	);
 	return $address;
@@ -112,8 +172,8 @@ function getAddressPlans()
 	$address = array(
 		'ADDRESS_1' => "index.php/Administrator_controller/Blocks",
 		'ADDRESS_2' => "index.php/Administrator_controller/changeStatePlan",
-		'ADDRESS_3' => "index.php/Administrator_controller/editPlan",
-		'ADDRESS_4' => "index.php/Administrator_controller/deletePlan",
+		'ADDRESS_3' => "index.php/Administrator_controller/getPlan/",
+		'ADDRESS_4' => "index.php/Administrator_controller/deletePlan/",
 		'ADDRESS_5' => "index.php/Administrator_controller/addPlan"
 	);
 	return $address;
@@ -124,8 +184,8 @@ function getAddressBlocks()
 	$address = array(
 		'ADDRESS_1' => "index.php/Administrator_controller/Courses",
 		'ADDRESS_2' => "index.php/Administrator_controller/changeStateBlock",
-		'ADDRESS_3' => "index.php/Administrator_controller/editBlock",
-		'ADDRESS_4' => "index.php/Administrator_controller/deleteBlock",
+		'ADDRESS_3' => "index.php/Administrator_controller/getBlock/",
+		'ADDRESS_4' => "index.php/Administrator_controller/deleteBlock/",
 		'ADDRESS_5' => "index.php/Administrator_controller/addBlock"
 	);
 	return $address;
@@ -136,8 +196,8 @@ function getAddressCourses()
 	$address = array(
 		'ADDRESS_1' => "index.php/Administrator_controller/Groups",
 		'ADDRESS_2' => "index.php/Administrator_controller/changeStateCourse",
-		'ADDRESS_3' => "index.php/Administrator_controller/editCourse",
-		'ADDRESS_4' => "index.php/Administrator_controller/deleteCourse",
+		'ADDRESS_3' => "index.php/Administrator_controller/editCourse/",
+		'ADDRESS_4' => "index.php/Administrator_controller/deleteCourse/",
 		'ADDRESS_5' => "index.php/Administrator_controller/addCourse"
 	);
 	return $address;
@@ -186,6 +246,11 @@ function stateMoveValid()
 function validateModal()
 {
 	echo json_encode(array("status" => TRUE));
+}
+
+function validateArrayModal($data)
+{
+	echo json_encode($data);
 }
 
 ?>

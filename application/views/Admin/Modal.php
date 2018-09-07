@@ -1,4 +1,4 @@
-    </div>
+</div>
     <!-- page-wrapper -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -23,7 +23,10 @@
 
 				<div class="modal-body form">
 					<form action="#" id="form" class="form-horizontal">
-					<input type="hidden" value="" name="idPlan"/>
+					<input type="hidden" value="<?= $VAR['idThis'] ?>" name="idThis"/>
+					<input type="hidden" value="<?= $VAR['nameThis'] ?>" name="nameThis"/>
+					<input type="hidden" value="<?= $VAR['idParent'] ?>" name="idParent"/>
+					<input type="hidden" value="<?= $VAR['nameParent'] ?>" name="nameParent"/>
 
 					<div class="form-body">
 
@@ -39,6 +42,8 @@
 				</div>
 
 				<div class="modal-footer">
+
+
 					<button type="button" id="btnSave" onclick='save("<?php echo base_url().$ADD['ADDRESS_5']?>")' class="btn btn-primary">Guardar</button>
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
 				</div>
@@ -48,5 +53,3 @@
 		</div><!-- /.modal-dialog -->
 
 	</div>
-</body>
-</html>

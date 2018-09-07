@@ -13,23 +13,27 @@ class PlanDAO_model extends CI_Model{
 	/****************************************
 	- Activate the plan.
 	****************************************/
-	private function activatePlan($Plan)
+	public function changeState($Plan)
 	{
-		$Plan->setState(true);
-		$changes = array('state' => $Plan->getState());
-		$this->db->where('idPlan', $Plan->getId());
-		$this->db->update('Plan', $changes);
-	}
+		$this->db->select('state');
+		$this->db->from('Plan');
+		$this->db->where('idPlan', $Plan['idPlan']);
+		$query = $this->db->get();		
+        if ($query->num_rows() <= 0)
+        {
+        	return;
+        }
 
+        $data = $query->result();
 
-	/****************************************
-	- Desactivate the plan. 
-	****************************************/
-	private function desactivatePlan($Plan)
-	{
-		$Plan->setState(false);
-		$changes = array('state' => $Plan->getState());
-		$this->db->where('idPlan', $Plan->getId());
+        print_r($data);
+
+        if ($data['state']){
+        	$changes = array ('state' => false);
+        }else{
+        	$changes = array ('state' => true);
+        }
+		$this->db->where('idPlan', $Plan['idPlan']);
 		$this->db->update('Plan', $changes);
 	}
 
@@ -39,15 +43,8 @@ class PlanDAO_model extends CI_Model{
 	****************************************/
 	public function insert($Plan)
 	{
-		/*
-		$newPlan = array(
-			'idPlan' => $Plan->getId(), 
-			'name' => $Plan->getName(), 
-			'state' => $Plan->getState(), 
-			'idCareer' => $Plan->getIdCareer()
-		);
-		*/
 		$this->db->insert('Plan', $Plan);
+        return $this->db->insert_id();
 	}
 
 
@@ -57,12 +54,12 @@ class PlanDAO_model extends CI_Model{
 	public function edit($Plan)
 	{
 		$changes = array(
-			'name' => $Plan->getName(), 
-			'state' => $Plan->getState(), 
-			'idCareer' => $Plan->getIdCareer()
+			'name' => $Plan['name'], 
+			'state' => $Plan['state'], 
+			'idCareer' => $Plan['idCareer']
 		);
-		$this->db->where('idPlan', $Plan->getId());
-		$this->db->update('Plan', $changes);
+		$this->db->where('idPlan', $Plan['idPlan']);
+		return $this->db->update('Plan', $changes);
 	}
 
 
@@ -87,13 +84,25 @@ class PlanDAO_model extends CI_Model{
 		}
 	}
 
+	/****************************************
+	- Get a unique plan from the database
+	****************************************/
+	public function get($id)
+    {
+        $this->db->from('Plan');
+        $this->db->where('idPlan', $id);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
 
 	/****************************************
 	- Delete the plan in the database.
 	****************************************/
 	public function delete($Plan)
 	{
-		// Búsqueda recursiva
+		$this->db->where('idPlan', $Plan['id']);
+        return $this->db->delete('Plan');
 	}
 
 }

@@ -7,6 +7,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     // Here we can define the links to the controlles
     $link_to_generateLinks = base_url()."/index.php/Administrator_controller/LoadGenerateLinksView";
     $linkToCourses = base_url()."/index.php/Administrator_controller/Courses";
+    $linkToAdd = base_url()."/index.php/Administrator_controller/AddAdmin";
+    $linkToCareers = base_url()."/index.php/Administrator_controller/Careers";
 ?>
 
 
@@ -60,15 +62,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </a>
                         </li>
                         <li>
-                            <a href="<?= $linkToCourses ?>">
+                            <a href="<?= $linkToCareers ?>">
                                 <i class="fa fa-folder"></i>
-                                <span>Cursos</span>
+                                <span>Editar Información</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
-                                <i class="fa fa-book"></i>
-                                <span>Columna #4</span>
+                            <a href="<?= $linkToAdd ?>">
+                                <i class="fa fa-address-book"></i>
+                                <span>Agregar Administrador</span>
                             </a>
                         </li>
                     </ul>
