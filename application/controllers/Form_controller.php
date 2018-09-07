@@ -13,67 +13,78 @@ class Form_controller extends CI_Controller {
 
 		$this->load->helper("form");
 		$this->load->helper("url");
+
+		$this->load->library('session');
 		$this->load->library('Form_Logic');
+
 		$this->load->model("DAO/FormDAO_model");
 		$this->load->model("DTO/FormDTO");
 
 		$this->load->model("DAO/ActivityDAO_model");
 		$this->load->model("DTO/ActivityDTO");
 
-		$this->Form_Logic = new Form_Logic();
+		$this->load->model("DAO/CourseDAO_model");
+		$this->load->model("DTO/CourseDTO");
+
 		$this->Form = new FormDTO();
-
-		
-
-
+		$this->Form_Logic = new Form_Logic();
 	}
 
 	function index()
 	{
+
 		//Get hashcode of link (p = value)
 		$hashCode = $_GET['p'];
 
+		/*
+		To store in webpage
+
+		$this->session->set_userdata('idHash' , $hashCode);
+
+		*/
+		/*
+		To consult hashcode
+		$_SESSION['idHash'];
+		*/
 		//Get form by hashcode
 		$queryForm = $this->Form_Logic->validateForm($hashCode);
+		$newForm = $queryForm->row();
+		
+		//Setting Form
+		$this->Form->setIdForm($newForm->idForm);
+		$this->Form->setHashCode($hashCode);
+		$this->Form->setState($newForm->state);
+		$this->Form->setDueDate($newForm->dueDate);
+		$this->Form->setIdProfessor($newForm->idProfessor);
+		$this->Form->setIdPeriod($newForm->idPeriod);
 
-		//Verify if form exist
-		if($queryForm)
-		{
-			$newForm = $queryForm->row();
-			//Setting Form
-			$this->Form->setIdForm($newForm->idForm);
-			$this->Form->setHashCode($hashCode);
-			$this->Form->setState($newForm->state);
-			$this->Form->setDueDate($newForm->dueDate);
-			$this->Form->setIdProfessor($newForm->idProfessor);
-			$this->Form->setIdPeriod($newForm->idPeriod);
+		$this->session->set_userdata('form', $this->Form);
 
-			//Get initial information of professor
-			$idProfessor = $this->Form->getIdProfessor();
-			$idForm = $this->Form->getIdForm();
+		//Get initial information of professor
+		$idProfessor = $this->Form->getIdProfessor();
+		$idForm = $this->Form->getIdForm();
 
-			$initialInformation = $this->showInitialInformation($idForm, $idProfessor)->row();
-			
-			//Assign information to show it in Form
-			$data['dueDate'] = $this->Form->getDueDate();
-			$data['professorFirstName'] = $initialInformation->professorName;
-			$data['professorLastName'] = $initialInformation->lastName;
-			$data['careerName'] = $initialInformation->careerName;
-			$data['periodNumber'] = $initialInformation->number;
-			$data['periodYear'] = $initialInformation->year;
-			$data['formState'] = $this->Form->getState();
+		$initialInformation = $this->showInitialInformation($idForm, $idProfessor)->row();
 
-			$this->load->view("Forms/Header");
-			$this->load->view("Forms/Content", $data);
-			$this->load->view("Forms/Footer");
+		//Assign information to show it in Form
+		$data['dueDate'] = $this->Form->getDueDate();
+		$data['professorFirstName'] = $initialInformation->professorName;
+		$data['professorLastName'] = $initialInformation->lastName;
+		$data['careerName'] = $initialInformation->careerName;
+		$data['periodNumber'] = $initialInformation->number;
+		$data['periodYear'] = $initialInformation->year;
+		$data['formState'] = $this->Form->getState();
 
-		}
+		/*  USER STORY 4  */
+		$data['plans'] = $this->showPlans();
+		$data['courses'] = $this->showCareerCourses($data['plans']);
 
-		else
-		{
-			echo "Error: No se encontró información";
-		}
-	
+		/*END USER STORY 4*/
+
+		$this->load->view("Forms/Header");
+		$this->load->view("Forms/Content", $data);
+		$this->load->view("Forms/Footer");
+		
 		//$cod = $_GET['p'];
 
 		//echo "<script>alert('$cod');</script>";
@@ -104,9 +115,10 @@ class Form_controller extends CI_Controller {
 	*****************************************/
 	function getDataFromView()
 	{
-		/*
-		User story 2
+		/* USER STORY 2 */
 
+
+		/*
 		$workload = $this->input->post('workload_options');
 		$idProfessor = $this->Form->getIdProfessor();
 		
@@ -114,28 +126,22 @@ class Form_controller extends CI_Controller {
 
 		*/
 
-		/* User story 3*/
+		/* USER STORY 3*/
 
-
-
-		/*$activitiesDescription = $this->input->post('activityDescription');
+		/*
+		$activitiesDescription = $this->input->post('activityDescription');
 
 		if ($activitiesDescription) 
 		{
+			$idForm = $_SESSION['idForm'];
 			$activitiesWorkPorcent = $this->input->post('workPorcent');
-			$idForm = $this->Form->getIdForm();
 			$this->insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
 		}
 		else
 		{
 			echo "<script>alert(0)</script>";
-		}*/
-
-		$activitiesDescription = $this->input->post('activityDescription');
-		$activitiesWorkPorcent = $this->input->post('workPorcent');
-		$idForm = $this->Form->getIdForm();
-
-		$this->insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
+		}
+		*/
 	}
 
 	/****************************************
@@ -170,6 +176,12 @@ class Form_controller extends CI_Controller {
 			$this->Form_Logic->validateInsertActivity($descriptions[$i], 3, $workPorcents[$i]);
 		}*/
 		
+	}
+
+	function showCareerCourses()
+	{
+		return $this->Form_Logic->getCareerCourses();
+
 	}
 
 

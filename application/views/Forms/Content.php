@@ -13,7 +13,7 @@
 <!--<a href="<?= $linkWorkload ?>"> <i class="fa fa-calendar"></i> <span>Generar Links</span> </a>-->
 
 <!-- multistep form -->
-<form id="msform" action="Form_controller/getDataFromView" method="post">
+<form id="msform" action="getDataFromView" method="post">
   
   <input type="Submit" name="Submit" value="Submit">
   <!-- progressbar -->
@@ -104,6 +104,31 @@
   <fieldset>
     <h2 class="fs-title">Cursos</h2>
     <h3 class="fs-subtitle"></h3>
+
+    <div class="list-courses">
+      <table>
+        <tbody>
+          <?php 
+          $countCourses = count($courses);
+          for ($i = 0; $i < $countCourses ; $i++) { ?>
+            <tr>
+              <td><?= $courses[$i]->getCode()?> </td>
+              <td><?= $courses[$i]->getName() ?> </td>
+              <td><input type="checkbox" class="cbox" value="first_checkbox" /></td>
+              <td><input type="hidden" name="state"></td>
+            </tr>
+          <?php }?>
+        </tbody>
+      </table>   
+
+      <!--<?php foreach($courses as $course) {
+          echo $course->getCode()." ";
+          echo $course->getName()." ";
+          echo "</br>";
+        }
+      ?>  -->    
+    </div>
+
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input type="button" name="next" class="next action-button" value="Siguiente" />
   </fieldset>
