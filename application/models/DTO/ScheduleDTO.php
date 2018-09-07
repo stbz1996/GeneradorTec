@@ -8,6 +8,7 @@ class ScheduleDTO{
 	private $initialTime;
 	private $finishTime;
 	private $day;
+	private $state;
 
 	function __construct()
 	{
@@ -15,6 +16,7 @@ class ScheduleDTO{
 		$this->initialTime = 0;
 		$this->finishTime = 0;
 		$this->day = 0;
+		$this->state = 0;
 	}
 
 	/* Setters and Getters */
@@ -39,6 +41,11 @@ class ScheduleDTO{
 		$this->day = $pDay;
 	}
 
+	public function setState($pState)
+	{
+		$this->state = $pState;
+	}
+
 	public function getId()
 	{
 		return $this->idSchedule;
@@ -57,6 +64,11 @@ class ScheduleDTO{
 	public function getDay()
 	{
 		return $this->day;
+	}
+
+	public function getState()
+	{
+		return $this->state;
 	}
 
 	/* Finish the setters and getters */

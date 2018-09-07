@@ -265,6 +265,34 @@ class Administrator_Logic{
  		return $this->plans;
  	}
 
+
+ 	/**************************************************************
+	This function returns all the schedules regitered in the sistem
+ 	***************************************************************/
+ 	public function getAllSchedules()
+ 	{
+ 		$schedules = new ScheduleDAO_model(); 
+ 		$allSchedules = $schedules->getAllSchedules(); 	
+ 		foreach ($allSchedules->result() as $schedule) {
+ 			$arr['id'] = $schedule->idSchedule;
+ 			$arr['dayName'] = $schedule->dayName;
+ 			$arr['initialTime'] = $schedule->initialTime;
+ 			$arr['finishTime'] = $schedule->finishTime;
+ 			$arr['state'] = $schedule->state;
+  			$res[] = $arr;
+ 		}
+ 		return $res;
+ 	}
+
+ 	public function updateSchedule($schedule)
+ 	{
+ 		$scheduleDAO_model = new ScheduleDAO_model();
+ 		$scheduleDAO_model->updateScheduleState($schedule);
+ 	}
+
+
+
+
 }
 
 ?>

@@ -12,6 +12,7 @@ class Administrator_controller extends CI_Controller
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('Administrator_Logic');
+		$this->load->library('logicControllerView/scheduleRelations');
 
 		$this->load->helper("form");
 
@@ -24,6 +25,9 @@ class Administrator_controller extends CI_Controller
 		$this->load->model("DAO/CourseDAO_model");
 		$this->load->model("DAO/PeriodDAO_model");
 		$this->load->model("DAO/FormDAO_model");
+
+		$this->load->model("DTO/ScheduleDTO");		
+		$this->load->model("DAO/ScheduleDAO_model");
 
 		$this->load->model("DTO/PeriodDTO");
 		$this->load->model("DTO/ProfessorDTO");
@@ -274,12 +278,70 @@ class Administrator_controller extends CI_Controller
 	***********************************************************/
 	public function showScheduleSelector()
 	{
-		// Debo pedir los horarios habilitados 
-		$this->callView("SchedulePage", "");
+		// The schedules are loaded
+		$schedules = $this->administrator_logic->getAllSchedules();
+
+		$hoursRepresentationForView = array(1=>"7:30am - 8:20am", 2=>"8:30am - 9:20am", 3=>"9:30am - 10:20am", 4=>"10:30am - 11:20am", 5=>"1:00pm - 1:50pm", 6=>"2:00pm - 2:50pm", 7=>"3:00pm - 3:50pm", 8=>"4:00pm - 4:50pm", 9=>"4:50pm - 5:30pm", 10=>"5:30pm - 6:20pm", 11=>"6:20pm - 7:10pm", 12=>"7:25pm - 8:15pm", 13=>"8:15pm - 9:05pm", 14=>"9:05pm - 9:55pm"); 
+
+
+		$relations = new scheduleRelations();
+
+		$scheduleCounter = 0;
+		foreach ($schedules as $schedule) {
+			$hour = $relations->getHourRepresentation($schedule['initialTime']); 
+			$day = $relations->getDayRepresentation($schedule['dayName']);
+			// To accord with the hour and the day, we sent information 
+			$dataToView[$hour][$day]['id']    = $schedule['id'];
+			$dataToView[$hour][$day]['state'] = $schedule['state']; 
+			$scheduleCounter += 1;
+		}
+
+		// That varible is used to count the number of schedules in BD
+		$this->session->set_userdata('scheduleCounter' , $scheduleCounter);
+		$data['hours'] = $relations->getHoursRepresentationForView();
+		$data['days'] = $dataToView;
+		$data['schedules'] = $schedules;
+		$this->callView("SchedulePage", $data);
 	}
 
 
+	/***********************************************************
+	Load the information about the schedules in DB and show
+	in the view the active an deactive schedules
+	***********************************************************/
+	public function saveScheduleInformation()
+	{
+		// All schedules on DB 
+		$schedules = $this->administrator_logic->getAllSchedules();
+		
+		////////////////////////////////////////////////////////////////////////////////
+		// Use that Method if the schedules was not being deleted never, so, it 
+		// takes the ids from 1 to n but in order, 1,2,3...,n. If the id x was deleted
+		// the algoritm does not work well 
+		$scheduleCounter = $_SESSION['scheduleCounter'];
+		for ($i = 1; $i <= $scheduleCounter; $i++) { 
+			$state = $this->input->post('Inp-'.$i);
+			$schedule = new ScheduleDTO();
+			$schedule->setIdSchedule($i);
+			$schedule->setState($state);
+			$this->administrator_logic->updateSchedule($schedule);
+		}
+		////////////////////////////////////////////////////////////////////////////////
 
+		/*
+		foreach ($schedules as $schedule) 
+		{
+			$idSchedule = $schedule['id'];
+			$state = $this->input->post('Inp-'.$idSchedule);	
+			// Create the object 
+			$schedule = new ScheduleDTO();
+			$schedule->setIdSchedule($idSchedule);
+			$schedule->setState($state);
+			$this->administrator_logic->updateSchedule($schedule);
+		}
+		*/
+		$this->showScheduleSelector();
+	}
 
 
 

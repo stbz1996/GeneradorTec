@@ -33,7 +33,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 
 
-<body>
+<body onload="fillSchedulesStates()">
     <div class="page-wrapper chiller-theme toggled">
         <nav id="sidebar" class="sidebar-wrapper">
             <div class="sidebar-content">
