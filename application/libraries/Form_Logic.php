@@ -17,7 +17,7 @@ class Form_Logic{
 	*Result: 								*
 	*	Query with the necessary information*
 	*****************************************/
-	function validateInformation($idForm, $idProfessor)
+	public function validateInformation($idForm, $idProfessor)
 	{
 		$form = new FormDAO_model();
 		$result = $form->getInitialInformation($idForm, $idProfessor);
@@ -30,17 +30,16 @@ class Form_Logic{
 	*information of professor's form. 		*
 	*										*
 	*Input:									*
-	*	-$idForm: Integer, id of form. 		*
 	*	-$idProfessor: Integer, id of profe-*
 	*	ssor. 								*
 	*										*
 	*Result: 								*
 	*	Query with form's information 		*
 	*****************************************/
-	function validateForm($idProfessor)
+	public function validateForm($hashCode)
 	{
 		$form = new FormDAO_model();
-		$result = $form->getForm($idProfessor);
+		$result = $form->getForm($hashCode);
 
 		if($result)
 		{
@@ -62,16 +61,16 @@ class Form_Logic{
 	*	-$workload: Integer, possible work- *
 	*	load of professor. 					*
 	*****************************************/
-	function validateWorkload($idProfessor, $workload)
+	public function validateWorkload($idProfessor, $workload)
 	{
 		$form = new FormDAO_model();
 		$form->updateWorkload($idProfessor, $workload);
 	}
 
-	function validateInsertActivity($description, $idForm, $workPorcent)
+	public function validateInsertActivity($idForm, $description, $workPorcent)
 	{ 
 		try {
-			$activityDTO = new ActivityDTO_model();
+			$activityDTO = new ActivityDTO();
 			$activityDTO->setDescription($description);
 			$activityDTO->setIdForm($idForm);
 			$activityDTO->setWorkPorcent($workPorcent);
@@ -120,6 +119,34 @@ class Form_Logic{
 		$date = getdate();
 		$hash = $miliseconds.$date["year"].$date["mon"].$date["mday"].$date["minutes"];
     	return $hash;
+	}
+
+	public function getCareerCourses()
+	{
+		$courseDTO = new CourseDAO_model();
+		$query = $courseDTO->getCareerCourses();
+
+		$data = array();
+		foreach ($query as $row) {
+			$newCourse = new CourseDTO();
+			$newCourse->setIdCourse($row['idCourse']);
+			$newCourse->setCode($row['code']);
+			$newCourse->setName($row['name']);
+			$newCourse->setLessonNumber($row['lessonNumber']);
+
+			$data[] = $newCourse;
+			/*
+			
+			echo $newCourse->getCode()." ";
+			echo $newCourse->getName()." ";
+			echo $newCourse->getLessonNumber()." ";
+			echo "</br>";
+			
+			*/
+		}
+
+		return $data;
+
 	}
 }
 

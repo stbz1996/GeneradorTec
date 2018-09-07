@@ -57,12 +57,6 @@ body {
 }
 
 
-
-
-
-
-
-
 /*inputs*/
 #msform input, #msform textarea {
 	padding: 15px;
@@ -84,10 +78,6 @@ body {
 	width: 100px;
 }
 
-#msform .btn_add{
-	width: 40%;
-}
-
 /*buttons*/
 #msform .action-button {
 	width: 100px;
@@ -105,12 +95,21 @@ body {
 	box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
 }
 
+#msform .btn_add{
+	width: 22%;
+}
 
+#msform .btn_remove{
+	background: red;
+}
 
+#msform .btn_remove:hover, #msform .btn_remove:focus{
+	box-shadow: 0 0 0 2px white, 0 0 0 3px red;
+}
 
-
-
-
+#msform .cbox{
+	width: 15px;
+}
 
 
 

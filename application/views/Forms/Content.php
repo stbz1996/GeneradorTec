@@ -13,7 +13,7 @@
 <!--<a href="<?= $linkWorkload ?>"> <i class="fa fa-calendar"></i> <span>Generar Links</span> </a>-->
 
 <!-- multistep form -->
-<form id="msform" action="Form_controller/getDataFromView" method="post">
+<form id="msform" action="getDataFromView" method="post">
   
   <input type="Submit" name="Submit" value="Submit">
   <!-- progressbar -->
@@ -72,14 +72,15 @@
     <h3 class="fs-subtitle"> Ingrese las actividades que considera le reducen la carga de trabajo, esto afectará la carga que brindo en la sección anterior. </h3>
 
     <div>
+      <input type="button" name="add" id="add" class="btn_add action-button" value="Agregar Actividad" />
       <!--TODO: Do it dynamic-->
       <div>
       <!--Actividad 1:-->
       <table id="dynamic_field" name="dynamic_field">
-        <tr>
+        <!--<tr>
           <td><input type="text" name="name1" id="name" placeholder="Ingrese actividad" /></td>
           <td><input type="number" name="porcentWork1" class="textnum" min="0" max="100" value="0"></td>
-        </tr>
+        </tr>-->
       </table>
       
       <!--<input type="number" id="activity_porcent" min="0" value="0" class="textnum">-->
@@ -97,13 +98,37 @@
       </div>-->
     </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
-    <input type="button" name="add" id="add" class="btn_add action-button" value="+" />
     <input type="button" name="next" class="next action-button" value="Siguiente" />
   </fieldset>
 
   <fieldset>
     <h2 class="fs-title">Cursos</h2>
     <h3 class="fs-subtitle"></h3>
+
+    <div class="list-courses">
+      <table>
+        <tbody>
+          <?php 
+          $countCourses = count($courses);
+          for ($i = 0; $i < $countCourses ; $i++) { ?>
+            <tr>
+              <td><?= $courses[$i]->getCode()?> </td>
+              <td><?= $courses[$i]->getName() ?> </td>
+              <td><input type="checkbox" class="cbox" value="first_checkbox" /></td>
+              <td><input type="hidden" name="state"></td>
+            </tr>
+          <?php }?>
+        </tbody>
+      </table>   
+
+      <!--<?php foreach($courses as $course) {
+          echo $course->getCode()." ";
+          echo $course->getName()." ";
+          echo "</br>";
+        }
+      ?>  -->    
+    </div>
+
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input type="button" name="next" class="next action-button" value="Siguiente" />
   </fieldset>

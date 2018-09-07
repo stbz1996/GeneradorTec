@@ -4,5 +4,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="<?=base_url()?>js/HomePage/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="<?=base_url()?>js/HomePage/custom.js"></script>
+    <script src="<?=base_url()?>js/HomePage/operations.js"></script>
 </body>
 </html>

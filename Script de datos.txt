@@ -123,6 +123,58 @@ INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('3:00', '
 INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`) VALUES ('4:00', '4:50', 'Sabado');
 
 
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('04:50:00', '05:30:00', 'Lunes'    , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('04:50:00', '05:30:00', 'Martes'   , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('04:50:00', '05:30:00', 'Miercoles', 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('04:50:00', '05:30:00', 'Jueves'   , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('04:50:00', '05:30:00', 'Viernes'  , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('04:50:00', '05:30:00', 'Sabado'   , 1);
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('05:30:00', '06:20:00', 'Lunes'    , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('05:30:00', '06:20:00', 'Martes'   , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('05:30:00', '06:20:00', 'Miercoles', 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('05:30:00', '06:20:00', 'Jueves'   , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('05:30:00', '06:20:00', 'Viernes'  , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('05:30:00', '06:20:00', 'Sabado'   , 1);
+
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('06:20:00', '07:10:00', 'Lunes'    , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('06:20:00', '07:10:00', 'Martes'   , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('06:20:00', '07:10:00', 'Miercoles', 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('06:20:00', '07:10:00', 'Jueves'   , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('06:20:00', '07:10:00', 'Viernes'  , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('06:20:00', '07:10:00', 'Sabado'   , 1);
+
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('07:25:00', '08:15:00', 'Lunes'    , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('07:25:00', '08:15:00', 'Martes'   , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('07:25:00', '08:15:00', 'Miercoles', 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('07:25:00', '08:15:00', 'Jueves'   , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('07:25:00', '08:15:00', 'Viernes'  , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('07:25:00', '08:15:00', 'Sabado'   , 1);
+
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('08:15:00', '09:05:00', 'Lunes'    , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('08:15:00', '09:05:00', 'Martes'   , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('08:15:00', '09:05:00', 'Miercoles', 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('08:15:00', '09:05:00', 'Jueves'   , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('08:15:00', '09:05:00', 'Viernes'  , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('08:15:00', '09:05:00', 'Sabado'   , 1);
+
+
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('09:05:00', '09:55:00', 'Lunes'    , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('09:05:00', '09:55:00', 'Martes'   , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('09:05:00', '09:55:00', 'Miercoles', 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('09:05:00', '09:55:00', 'Jueves'   , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('09:05:00', '09:55:00', 'Viernes'  , 1);
+INSERT INTO `Schedule`(`initialTime`, `finishTime`, `dayName`, `state`) VALUES ('09:05:00', '09:55:00', 'Sabado'   , 1);
+
+
+
+
+
+
+
 Periodos
 INSERT INTO `Period`(`number`, `year`) VALUES (1, 2019);
 INSERT INTO `Period`(`number`, `year`) VALUES (2, 2019);

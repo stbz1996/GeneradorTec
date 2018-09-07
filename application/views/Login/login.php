@@ -1,5 +1,3 @@
-<?= form_open("/System_controller/isHeAdmin") ?>
-
 <?php
 	$user = array(
 		'name' => 'inputEmail',
@@ -38,14 +36,15 @@
 		   			<h2>Administración</h2>
 		   			<p>Por favor ingrese el usuario y la contraseña</p>
 		   		</div>
+		   		<?= form_open("/System_controller/validCredentials") ?>
 		    	<form id="Login">
 		        	<div class="form-group"> <?= form_input($user) ?> </div>
 		        	<div class="form-group"> <?= form_input($password) ?> </div>
 		        	<?= form_submit($button) ?>
 		   		</form>
+		   		<?= form_close() ?> 
 		   		<p class="botto-text"> <?= $message ?> </p>
     		</div>
 		</div>
 	</div>
 </body>
-<?= form_close() ?> 

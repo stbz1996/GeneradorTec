@@ -9,6 +9,7 @@ class System_controller extends CI_Controller {
 		$this->load->library('session');
 		$this->load->helper("form");
 		$this->load->model("DAO/AdministratorDAO_model");
+		$this->load->library('Administrator_Logic');
 	}
 
 
@@ -42,34 +43,34 @@ class System_controller extends CI_Controller {
 	passwors of an admin are registered in BD and takes 
 	the user to the HomePage if credential isregistered.   
 	***************************************************/
-	function isHeAdmin()
+	function validCredentials()
 	{
+		// Conect with logic
+		$administrator_Logic = new Administrator_Logic();
 		// Get data from view
 		$user = $this->input->post('inputEmail');
 		$password = $this->input->post('inputPassword');
-
-		// Receive data from model 
-		$result = $this->AdministratorDAO_model->validCredentials($user, $password);
-
-		// Valid data from errors 
-		if ($result == true)
+		// Check if the admin exist 
+		$idAdmin = $administrator_Logic->validCredentials($user, $password);
+		if ($idAdmin != false)
 		{
-			$this->save_username_in_session($user);
+			// Load he admin carrer
+			$idCareer = $administrator_Logic->findAdminCareer($idAdmin);
+			$this->save_username_in_session($idAdmin, $idCareer, $user);
 			$this->call_home_page();
 		} 
-		else 
-		{
-			$this->call_login("Login", "El usuario o la contraseña son incorrectos");
-		}	
+		else $this->call_login("Login", "El usuario o la contraseña son incorrectos");
 	}
 
 
 	/***************************************************
-	That function load in a variable the username of 
-	the admin is the credential are well.  
+	That function load in session variables the id, 
+	idCarrer and username of the admin 
 	***************************************************/
-	function save_username_in_session($userName){
-		$this->session->set_flashdata('userName', $userName);
+	function save_username_in_session($pIdAdmin, $pIdCarrer, $pUserName){
+		$this->session->set_userdata('idAdmin' , $pIdAdmin);
+		$this->session->set_userdata('idCareer', $pIdCarrer);
+		$this->session->set_userdata('userName', $pUserName);
 	}
 
 
@@ -78,6 +79,6 @@ class System_controller extends CI_Controller {
 	***************************************************/
 	function call_home_page()
 	{
-		redirect('Administrator_controller/index/');
+		redirect('Administrator_controller/index/', $data); 
 	}
 }

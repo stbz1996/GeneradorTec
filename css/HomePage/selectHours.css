@@ -1,0 +1,47 @@
+.mainContainer{
+	width: 99%;
+	font-family: Verdana;
+	overflow: hidden;
+	-webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    box-shadow: 17px 20px 19px -5px black;
+    border-radius: 20px;
+}
+
+.mainContainer div{
+	float: left;
+	width: 100%;
+	overflow: hidden;
+}
+
+.mainContainer div div{
+	float: left;
+	border: 1px black solid;
+	width: 14.28%;
+	overflow: hidden;
+	text-align: center;
+	padding: 0.3%;
+}
+
+.itemf1{
+	background: #2B3A42;
+	color: white;
+	font-weight: bold;
+	font-size: 15px;
+	font-size: 1.25vw;
+}
+
+.itemCol1{
+	background: #2B3A75;
+	color: white;
+	font-size: 0.8vw;
+}
+
+.item{
+	background: white;
+	opacity: 0.8;
+	color: black;
+	font-size: 0.8vw;
+}

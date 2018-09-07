@@ -74,12 +74,33 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 //$active_record = TRUE;
-
+/*
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'db4free.net',
 	'username' => 'usuarioroot',
 	'password' => 'Generador2018',
+	'database' => 'generadortec2018',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);*/
+$db['default'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => 'stbz1996',
 	'database' => 'generadortec2018',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

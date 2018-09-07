@@ -9,6 +9,56 @@ class Administrator_Logic{
 
 	}
 
+
+	/******************************************************************
+	That functions returns the idAdministrator if the administratrator
+	is registered, if no, returns false
+	******************************************************************/
+	public function validCredentials($username, $pasword)
+	{
+		$administratorDAO_model = new AdministratorDAO_model();
+		$result = $administratorDAO_model->checkAdmin($username, $pasword);
+		if ($result != false ) {
+			$admin = $result->row();
+			return $admin->idAdministrator;
+		}
+		return false;
+	}
+
+
+	/*************************************************
+	Returns the idCarrer of an admin o returns false
+	if the query is empty
+	*************************************************/
+	public function findAdminCareer($idAdmin)
+	{
+		$administratorDAO_model = new AdministratorDAO_model();
+		$result = $administratorDAO_model->getAdminCareer($idAdmin);
+		if ($result != false ) {
+			$carrer = $result->row();
+			return $carrer->idCareer;
+		}
+		return false;
+	}
+
+	/*********************************************************************
+	That function returns the list of periods in DB
+ 	*********************************************************************/
+ 	public function findPeriods()
+ 	{
+ 		$periodDAO_model = new PeriodDAO_model();
+ 		return $periodDAO_model->findPeriods();
+ 	}
+
+ 	/*********************************************************************
+	That function returns the list of profesors in DB
+ 	*********************************************************************/
+ 	public function findProfessors($idCareer)
+ 	{
+ 		$professorDAO_model = new ProfessorDAO_model();
+ 		return $professorDAO_model->findProfessors($idCareer);
+	}
+
 	/****************************************
 	- Compare the user's name with the new username.
 	- $data -> is an array of users in the database.
@@ -161,7 +211,6 @@ class Administrator_Logic{
 	- Delete
 	****************************************/ 
 
-
  	/****************************************
 	- Convert the data to the database an array.
 	****************************************/
@@ -236,23 +285,29 @@ class Administrator_Logic{
 	- Delete
 	****************************************/
 
- 	/*********************************************************************
-	That function returns the list of periods in DB
- 	*********************************************************************/
- 	public function findPeriods()
+ 	/**************************************************************
+	This function returns all the schedules regitered in the sistem
+ 	***************************************************************/
+ 	public function getAllSchedules()
  	{
- 		$periodDAO_model = new PeriodDAO_model();
- 		return $periodDAO_model->findPeriods();
+ 		$schedules = new ScheduleDAO_model(); 
+ 		$allSchedules = $schedules->getAllSchedules(); 	
+ 		foreach ($allSchedules->result() as $schedule) {
+ 			$arr['id'] = $schedule->idSchedule;
+ 			$arr['dayName'] = $schedule->dayName;
+ 			$arr['initialTime'] = $schedule->initialTime;
+ 			$arr['finishTime'] = $schedule->finishTime;
+ 			$arr['state'] = $schedule->state;
+  			$res[] = $arr;
+ 		}
+ 		return $res;
  	}
 
- 	/*********************************************************************
-	That function returns the list of profesors in DB
- 	*********************************************************************/
- 	public function findProfessors()
+ 	public function updateSchedule($schedule)
  	{
- 		$professorDAO_model = new ProfessorDAO_model();
- 		return $professorDAO_model->findProfessors();
-	}
+ 		$scheduleDAO_model = new ScheduleDAO_model();
+ 		$scheduleDAO_model->updateScheduleState($schedule);
+ 	}
 
 }
 

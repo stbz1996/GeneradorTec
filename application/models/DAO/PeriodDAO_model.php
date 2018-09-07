@@ -19,7 +19,8 @@ class PeriodDAO_model extends CI_Model {
 		$this->db->select('idPeriod');
 		$this->db->from('Career');
 		$this->db->where('idCareer', $pCarrer->getId());
-		$query = $this->db->get();
+		try{ $query = $this->db->get(); }
+		catch (Exception $e){ return false; }
 		
 		if ($query->num_rows() > 0) {
 			$idPeriod = $query->row()->idPeriod;
@@ -37,7 +38,8 @@ class PeriodDAO_model extends CI_Model {
  	{
  		$this->db->select('*');
 		$this->db->from('Period');
-		$query = $this->db->get();
+		try{ $query = $this->db->get(); }
+		catch (Exception $e){ return false; }
 		
 		if ($query->num_rows() > 0) return $query;
 		else return false;

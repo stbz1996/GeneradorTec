@@ -1,25 +1,46 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class AdministratorDAO_model extends CI_Model{
-
-
+class AdministratorDAO_model extends CI_Model
+{
 	function __construct()
 	{
 		parent::__construct();
 		$this->load->database();
 	}
 
-	public function validCredentials($userName, $password)
+
+	/*************************************************
+	Returns the query if there is an administrator
+	Returns false if there is no an administrator
+	*************************************************/
+	public function checkAdmin($userName, $password)
 	{
-		$this->db->select('userName');
+		$this->db->select('idAdministrator');
 		$this->db->from('Administrator');
 		$this->db->where('userName', $userName);
 		$this->db->where('password', $password);
-		$query = $this->db->get();		
-		if ($query->num_rows() > 0) return true;
+		try{ $query = $this->db->get(); }
+		catch (Exception $e){ return false; }	
+		if ($query->num_rows() > 0) return $query;
 		else return false;
 	}
+
+
+	/*************************************************
+	Returns the query with the idCarrer of an admin
+	*************************************************/
+	public function getAdminCareer($idAdmin)
+	{
+		$this->db->select('idCareer');
+		$this->db->from('AdminXCareer');
+		$this->db->where('idAdministrator', $idAdmin);
+		try{ $query = $this->db->get(); }
+		catch (Exception $e){ return false; }		
+		if ($query->num_rows() > 0) return $query;
+		else return false;
+	}
+
 
 	/****************************************
 	- Insert an Admin to the database
@@ -57,5 +78,3 @@ class AdministratorDAO_model extends CI_Model{
 }
 
 ?>
-
-
