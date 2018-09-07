@@ -76,8 +76,8 @@ class Form_controller extends CI_Controller {
 		$data['formState'] = $this->Form->getState();
 
 		/*  USER STORY 4  */
-		$data['plans'] = $this->showPlans();
-		$data['courses'] = $this->showCareerCourses($data['plans']);
+		//$data['plans'] = $this->showPlans();
+		$data['courses'] = $this->showCareerCourses();
 
 		/*END USER STORY 4*/
 
