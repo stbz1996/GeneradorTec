@@ -30,7 +30,7 @@
 					<input class="dateInput" required type="date" name="date" min="<?php echo date("Y-m-d"); ?>" value="<?php echo date("Y-m-d"); ?>">
 			</div> 
 			<div class="containerDate">
-			    <h4>Seleccione el periodo para los formularios</h4>
+			    <h4>Seleccione el periodo de validez de los formularios</h4>
 				<select class="form-control" name="period" required>
 				<?php 
 					foreach ($periods->result() as $p) { ?>

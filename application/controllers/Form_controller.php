@@ -36,12 +36,12 @@ class Form_controller extends CI_Controller {
 		//Get hashcode of link (p = value)
 		$hashCode = $_GET['p'];
 
-		/*
-		To store in webpage
+		
+		//To store in webpage
 
 		$this->session->set_userdata('idHash' , $hashCode);
 
-		*/
+		
 		/*
 		To consult hashcode
 		$_SESSION['idHash'];
@@ -128,7 +128,7 @@ class Form_controller extends CI_Controller {
 
 		/* USER STORY 3*/
 
-		/*
+		
 		$activitiesDescription = $this->input->post('activityDescription');
 
 		if ($activitiesDescription) 
@@ -141,7 +141,7 @@ class Form_controller extends CI_Controller {
 		{
 			echo "<script>alert(0)</script>";
 		}
-		*/
+		
 	}
 
 	/****************************************

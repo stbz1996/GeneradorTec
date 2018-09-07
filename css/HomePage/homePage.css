@@ -1,3 +1,9 @@
+body{
+	-webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
 .message{
 	text-align: center;
@@ -5,13 +11,10 @@
 	width: 100%;
 }
 
-
 .containerDate{
 	text-align: left;
-	width: 40%;
-
+	width: 60%;
 }
-
 .dateInput{
 	width: 30%;
 	padding: 1%;
@@ -27,7 +30,7 @@
 
 /* --- Table of generate links --- */
 .profesorsTable{
-	width: 55%;
+	width: 65%;
 }
 .indicationsTable{
 	font-weight: bold;
