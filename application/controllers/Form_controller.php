@@ -58,7 +58,7 @@ class Form_controller extends CI_Controller {
 		$this->Form->setIdProfessor($newForm->idProfessor);
 		$this->Form->setIdPeriod($newForm->idPeriod);
 
-		$this->session->set_userdata('form', $this->Form);
+		$this->session->set_userdata('idForm', $this->Form->getIdForm());
 
 		//Get initial information of professor
 		$idProfessor = $this->Form->getIdProfessor();
@@ -139,7 +139,7 @@ class Form_controller extends CI_Controller {
 		}
 		else
 		{
-			echo "<script>alert(0)</script>";
+			echo "<script>No se agregaron actividades</script>";
 		}
 		
 	}

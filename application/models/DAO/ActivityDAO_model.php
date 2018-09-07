@@ -12,7 +12,6 @@ class ActivityDAO_model extends CI_Model
 
 	function insertActivity($activity)
 	{
-		//$holi = 1;
 		$data = array(
 			'description' => $activity->getDescription(),
 			'idForm' => $activity->getIdForm(),
