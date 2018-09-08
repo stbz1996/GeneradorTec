@@ -285,6 +285,74 @@ class Administrator_Logic{
 	- Delete
 	****************************************/
 
+	/****************************************
+	- Convert the data to the database an array.
+	****************************************/
+ 	public function getArrayCourses($id)
+ 	{
+ 		/* Get the blocks from the database */
+ 		$courseDAO_model = new CourseDAO_model();
+
+ 		if ($id == null)
+ 		{
+ 			$query = $courseDAO_model->show();
+ 		}else{
+ 			$query = $courseDAO_model->showById($id);
+ 		}
+ 	
+ 		if (!$query)
+ 		{
+ 			return array();
+ 		}
+
+ 		return $query;
+ 	}
+
+ 	/****************************************
+	- Insert a course in the database.
+	****************************************/
+ 	public function insertCourse($data)
+ 	{
+ 		$courseDAO_model = new CourseDAO_model();
+ 		return $courseDAO_model->insert($data);
+ 	}
+
+ 	/****************************************
+	- Get the information about an unique course.
+	****************************************/
+ 	public function getUniqueCourse($id)
+ 	{
+ 		$courseDAO_model = new CourseDAO_model();
+ 		return $courseDAO_model->get($id);
+ 	}
+
+ 	/****************************************
+	- Edit the information of a course.
+	****************************************/
+ 	public function editCourse($data)
+ 	{
+ 		$courseDAO_model = new CourseDAO_model();
+ 		return $courseDAO_model->edit($data);
+ 	}
+
+ 	/****************************************
+	- Delete the information of a course.
+	****************************************/
+ 	public function deleteCourse($id)
+ 	{
+ 		$courseDAO_model = new CourseDAO_model();
+ 		return $courseDAO_model->delete($id);
+ 	}
+
+ 	/****************************************
+	- Insert a block in the database.
+	****************************************/
+ 	public function changeStateCourse($data)
+ 	{
+ 		$courseDAO_model = new CourseDAO_model();
+ 		return $courseDAO_model->changeState($data);
+ 	}
+
  	/**************************************************************
 	This function returns all the schedules regitered in the sistem
  	***************************************************************/

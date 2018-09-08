@@ -11,14 +11,31 @@ class CourseDAO_model extends CI_Model
         $this->load->database();
     }
 
-    public function getCourses()
+    /****************************************
+    - Get all the courses from the database
+    ****************************************/
+    public function show()
     {
         $this->db->from($this->table);
         $query = $this->db->get();
         return $query->result();
     }
 
-    public function getCourse($id)
+    /****************************************
+    - Get all the courses that belongs to a specific block.
+    ****************************************/
+    public function showById($idBlock)
+    {
+        $this->db->from($this->table);
+        $this->db->where('idBlock', $idBlock);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    /****************************************
+    - Get a unique course from the database
+    ****************************************/
+    public function get($id)
     {
         $this->db->from($this->table);
         $this->db->where('idCourse', $id);
@@ -26,45 +43,39 @@ class CourseDAO_model extends CI_Model
         return $query->row();
     }
 
-    public function addCourse($data)
+    /****************************************
+    - Insert the new course in the database.
+    ****************************************/
+    public function insert($Course)
     {
-        $this->db->insert($this->table, $data);
+        $this->db->insert($this->table, $Course);
         return $this->db->insert_id();
     }
 
-    public function updateCourse($where, $data)
+    /****************************************
+    - Edit all the changes in the database.
+    ****************************************/
+    public function edit($Course)
     {
-        $this->db->update($this->table, $data, $where);
+        $changes = array(
+            'code' => $Course['code'],
+            'name' => $Course['name'],
+            'state' => $Course['state'],
+            'isCareer' => $Course['isCareer'],
+            'lessonNumber' => $Course['lessonNumber'],
+            'idBlock' => $Course['idBlock']
+        );
+        $this->db->where('idCourse', $Course['idCourse']);
+        $this->db->update($this->table, $changes);
         return $this->db->affected_rows();
     }
 
-    public function deleteCourse($id)
+    /****************************************
+    - Delete the block in the database.
+    ****************************************/
+    public function delete($id)
     {
         $this->db->where('idCourse', $id);
         $this->db->delete($this->table);
     }
-        
-    public function getCourses()
-    {
-        $this->db->select('code');
-        $this->db->select('name');
-        $this->db->select('idBlock');
-        $this->db->from('Course');
-        $this->db->where('state', 1);
-        $query = $this->db->get();		
-        if ($query->num_rows() > 0) return $query->result_array();
-        else return false;
-    }
-
-    public function getCareerCourses()
-    {
-        $this->db->select('*');
-        $this->db->from('Course');
-        $this->db->where('isCareer', 1);
-        $this->db->where('state', 1);
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) return $query->result_array();
-        else return false;
-    }
 }
-

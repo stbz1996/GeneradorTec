@@ -1,7 +1,6 @@
-<main class="page-content">
       <script>var base_url = '<?php echo base_url() ?>';</script>
       <div class="container">
-        <h1>Modal Cursos</h1>
+        <h1>Cursos</h1>
 
         <button class="btn btn-primary" onclick="addCourse()"><i class="glyphicon glyphicon-plus"></i> Crear Curso</button>
         <br/><br/>
@@ -11,7 +10,9 @@
             <tr>
               <th>Codigo</th>
               <th>Nombre</th>
-              <th>Activo</th>
+              <th>Estado</th>
+              <th>Lecciones</th>
+              <th>¿Carrera?</th>
               <th></th>
             </tr>
           </thead>
@@ -22,9 +23,11 @@
                 <td><?php echo $course->code;?></td>
                 <td><?php echo $course->name;?></td>
                 <td><?php echo $course->state;?></td>
+                <td><?php echo $course->lessonNumber; ?></td>
+                <td><?php echo $course->isCareer; ?></td>
                 <td>
-                  <button class="btn btn-primary" onclick='editCourse(<?= $course->idCourse?>, "<?=$URL['edit'] ?>")'><i class="glyphicon glyphicon-pencil"></i></button>
-                  <button class="btn btn-danger" onclick="deleteCourse(<?php echo $course->idCourse;?>)"><i class="glyphicon glyphicon-remove"></i></button>
+                  <button class="btn btn-primary" onclick='editCourse("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $course->idCourse ?>)'><i class="glyphicon glyphicon-pencil"></i></button>
+                  <button class="btn btn-danger" onclick='deleteAll("<?=base_url().$ADD['ADDRESS_4']?>", <?= $course->idCourse ?>)'><i class="glyphicon glyphicon-remove"></i></button>
                 </td>
               </tr>
               <?php }?>
@@ -34,20 +37,15 @@
             <tr>
               <th>Codigo</th>
               <th>Nombre</th>
-              <th>Activo</th>
+              <th>Estado</th>
+              <th>Lecciones</th>
+              <th>¿Carrera?</th>
               <th></th>
             </tr>
           </tfoot>
         </table>
 
       </div>
-
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-      <script src="<?php echo base_url('css/bootstrap/js/bootstrap.min.js')?>"></script>
-      <script src="<?php echo base_url('css/datatables/js/jquery.dataTables.min.js')?>"></script>
-      <script src="<?php echo base_url('css/datatables/js/dataTables.bootstrap.js')?>"></script>
-      <script src="<?php echo base_url('js/modal.js')?>"></script>
       
   <!-- Bootstrap modal -->
   <div class="modal fade" id="modal_form" role="dialog">
@@ -81,39 +79,46 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label col-md-3">Bloque</label>
+                  <label class="control-label col-md-3">Estado</label>
                   <div class="col-md-9">
-                    <input name="inputBlock" placeholder="Bloque" class="form-control" type="text">
+                    <input name="inputState" placeholder="Activo" class="form-control" type="hidden">
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label col-md-3">Activo</label>
-                  <div class="col-md-9">
-                    <input name="inputState" placeholder="Activo" class="form-control" type="text">
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="control-label col-md-3">Numero de Lecciones</label>
+                  <label class="control-label col-md-3">Lecciones</label>
                   <div class="col-md-9">
                     <input name="inputLessons" placeholder="Numero de Lecciones" class="form-control" type="text">
                   </div>
                 </div>
                 
                 <div class="form-group">
-                  <label class="control-label col-md-3">Carrera</label>
+                  <label class="control-label col-md-3">¿Carrera?</label>
                   <div class="col-md-9">
                     <input name="inputCareer" placeholder="Carrera" class="form-control" type="text">
                   </div>
                 </div>
-
               </div>
+
+               <div class="form-group">
+                  <label class="control-label col-md-3">Bloque</label>
+                  <div class="col-md-9">
+                    <select class="mdb-select colorful-select dropdown-primary" id="select" name='select'>
+                        <option value="<?= $idParent ?>" selected><?= $actual ?></option>
+                        <?php foreach($blocks as $block){?>
+                          <? if ($idParent != $block->idBlock): ?>
+                            <option value="<?= $block->idBlock?>"><?= $block->name ?></option>
+                          <? endif; ?>
+                        <?php }?>
+                    </select>
+                  </div>
+                </div>
+
             </form>
           </div>
 
           <div class="modal-footer">
-            <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Guardar</button>
+            <button type="button" id="btnSave" onclick="saveCourse()" class="btn btn-primary">Guardar</button>
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
           </div>
 
@@ -126,6 +131,14 @@
   <!-- End Bootstrap modal -->
 
   </main>
+  </div>
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="<?php echo base_url('css/bootstrap/js/bootstrap.min.js')?>"></script>
+  <script src="<?php echo base_url('css/datatables/js/jquery.dataTables.min.js')?>"></script>
+  <script src="<?php echo base_url('css/datatables/js/dataTables.bootstrap.js')?>"></script>
+  <script src="<?php echo base_url('js/modal.js')?>"></script>
+  
   </body>
 </html>

@@ -155,6 +155,20 @@ function getPlanSessions($session, $id, $name){
 	return $array;
 }
 
+function getBlockSessions($session, $id, $name){
+	$array = array(
+			'idCareer' => $session->userdata('idCareer'),
+			'nameCareer' => $session->userdata('nameCareer'),
+			'idPlan' => $session->userdata('idPlan'),
+			'namePlan' => $session->userdata('namePlan'),
+			'idBlock' => $id,
+			'nameBlock' => $name,
+			'idCourse' => '0',
+			'nameCourse' => '0'
+	);
+	return $array;
+}
+
 function getAddressCareers()
 {
 	$address = array(
@@ -196,7 +210,7 @@ function getAddressCourses()
 	$address = array(
 		'ADDRESS_1' => "index.php/Administrator_controller/Groups",
 		'ADDRESS_2' => "index.php/Administrator_controller/changeStateCourse",
-		'ADDRESS_3' => "index.php/Administrator_controller/editCourse/",
+		'ADDRESS_3' => "index.php/Administrator_controller/getCourse/",
 		'ADDRESS_4' => "index.php/Administrator_controller/deleteCourse/",
 		'ADDRESS_5' => "index.php/Administrator_controller/addCourse"
 	);

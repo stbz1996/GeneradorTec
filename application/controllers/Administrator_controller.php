@@ -9,7 +9,7 @@ class Administrator_controller extends CI_Controller
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('Administrator_Logic');
-		$this->load->library('logicControllerView/scheduleRelations');
+		//$this->load->library('logicControllerView/scheduleRelations');
 		$this->load->helper("functions_helper");
 
 		$this->load->helper("form");
@@ -255,58 +255,89 @@ class Administrator_controller extends CI_Controller
 	/****************************************
 	- Get all courses. Show the view.
 	****************************************/
-
-    public function Courses()
+    public function Courses($id = null, $name = null)
     {
-        $data['courses'] = $this->CourseDAO_model->getCourses();
-        $data['URL'] = array('edit' => base_url('index.php/Administrator_controller/ajax_edit/'));
+    	// if there is not a id, take the idCareer, idPlan, and idBlock previous selected.
+		if ($id == null)
+		{
+			$id = $this->session->userdata('idBlock');
+			$name = $this->session->userdata('nameBlock');
+		}else{
+			$array = getBlockSessions($this->session, $id, urldecode($name));
+			$this->session->set_userdata($array);
+		}
+
+		/* These are data that the interface is going to need.*/
+		$data['iters'] = getBreadCrumbBlock(); // Relative position
+		$data['idParent'] = $id; // Id of the plan that the block belongs.
+		$data['actual'] = urldecode($name);   // Actual position
+		$data['ADD'] = getAddressCourses();    // Get address of a block position
+		$data['courses'] = $this->administrator_logic->getArrayCourses($id);
+
+		// Take all the blocks of the database.
+		$data['blocks'] = $this->administrator_logic->getArrayBlocks(null);
+
         $this->load->view('Admin/Header');
+        $this->load->view('Admin/BreadCrumb', $data);
         $this->load->view('Admin/Course', $data);
     }
 
+    /****************************************
+	- Add a new course. 
+		The data is received by javascript.
+	****************************************/
     public function addCourse()
     {
         $data = array(
             'code' => $this->input->post('inputCode'),
             'name' => $this->input->post('inputName'),
-            'state' => $this->input->post('inputState'),
+            'state' => false,
             'isCareer' => $this->input->post('inputCareer'),
             'lessonNumber' => $this->input->post('inputLessons'),
-            'idBlock' => $this->input->post('inputBlock'),
+            'idBlock' => $this->input->post('select'),
         );
 
-        $insert = $this->CourseDAO_model->addCourse($data);
-        echo json_encode(array("status" => TRUE));
+        $insert = $this->administrator_logic->insertCourse($data);
+        validateModal();
     }
 
-    public function ajax_edit($id)
-    {
-        $data = $this->CourseDAO_model->getCourse($id);
-        echo json_encode($data);
-    }
-
-
-    public function updateCourse()
-    {
-        $data = array(
+    /****************************************
+	- Edit the curse.
+		The data is received by javascript.
+	****************************************/
+	public function editCourse()
+	{
+		$data = array(
+			'idCourse' => $this->input->post('inputIdCourse'),
             'code' => $this->input->post('inputCode'),
             'name' => $this->input->post('inputName'),
             'state' => $this->input->post('inputState'),
             'isCareer' => $this->input->post('inputCareer'),
             'lessonNumber' => $this->input->post('inputLessons'),
-            'idBlock' => $this->input->post('inputBlock'),
+            'idBlock' => $this->input->post('select'),
         );
+		$result = $this->administrator_logic->editCourse($data);
+		validateModal();
+	}
 
-        $this->CourseDAO_model->updateCourse(array('idCourse' => $this->input->post('inputIdCourse')), $data);
-        echo json_encode(array("status" => TRUE));
+	/****************************************
+	- Get the information of a course.
+	****************************************/	
+	public function getCourse($id)
+    {
+    	$data = $this->administrator_logic->getUniqueCourse($id);
+    	validateArrayModal($data);
     }
 
+
+    /****************************************
+	- Delete the course selected.
+	****************************************/	
     public function deleteCourse($id)
     {
-        $this->CourseDAO_model->deleteCourse($id);
-        echo json_encode(array("status" => TRUE));
+    	$result = $this->administrator_logic->deleteCourse($id);
+        validateModal();
     }
-
 
 	/****************************************
 	- That function create the links for the 

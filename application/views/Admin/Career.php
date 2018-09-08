@@ -1,3 +1,4 @@
+     
       <script>var base_url = '<?php echo base_url() ?>';</script>
       <div class="container">
         <h1 id="tituloPlanes" class="tituloNumero">Carreras</h1>
@@ -82,5 +83,6 @@
 
   </main>
 
+  </div>
   </body>
 </html>

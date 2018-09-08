@@ -61,7 +61,10 @@ class BlockDAO_model extends CI_Model{
 	{
 		$this->db->select('*');
 		$this->db->from('Block');
-		$this->db->where('idPlan', $idPlan);
+
+		if ($idPlan){
+			$this->db->where('idPlan', $idPlan);
+		}
 		$query = $this->db->get();
 		if ($query->num_rows() > 0){
 			return $query;

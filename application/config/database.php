@@ -98,9 +98,9 @@ $db['default'] = array(
 );*/
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => 'stbz1996',
+	'hostname' => 'db4free.net',
+	'username' => 'usuarioroot',
+	'password' => 'Generador2018',
 	'database' => 'generadortec2018',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

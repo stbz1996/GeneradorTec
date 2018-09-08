@@ -46,9 +46,9 @@ function showErrors(jqXHR, textStatus, errorThrown)
 function addPlan()
 {
     save_method = 'add';
-	$('#form')[0].reset(); // reset form on modals
-	$('#modal_form').modal('show'); // show bootstrap modal
-	$('.modal-title').text('Crear Plan');
+    $('#form')[0].reset(); // reset form on modals
+    $('#modal_form').modal('show'); // show bootstrap modal
+    $('.modal-title').text('Crear Plan');
 }
 
 /****************************************
@@ -57,9 +57,9 @@ function addPlan()
 function addBlock()
 {
     save_method = 'add';
-	$('#form')[0].reset(); // reset form on modals
-	$('#modal_form').modal('show'); // show bootstrap modal
-	$('.modal-title').text('Crear Bloque');
+    $('#form')[0].reset(); // reset form on modals
+    $('#modal_form').modal('show'); // show bootstrap modal
+    $('.modal-title').text('Crear Bloque');
 }
 
 /****************************************
@@ -78,48 +78,14 @@ function addCourse()
 ****************************************/
 function changeState(url, id)
 {
-	$.ajax({
-		url: url,
-		type: "POST",
-		data: $('#formeo' + id).serialize(),
-		dataType: "JSON",
-		success: function(data)
-		{
-			location.reload();// for reload a page
-		},
-		error: function (jqXHR, textStatus, errorThrown)
-		{
-			showErrors(jqXHR, textStatus, errorThrown);
-		}
-	});
-}
-
-/****************************************
-- If button edit course is pressed, load the data from the database.
-****************************************/
-function editCourse(id, url)
-{
-    save_method = 'update';
-    $('#form')[0].reset();
-
-    //Ajax Load data from ajax
     $.ajax({
-        url : url + id,
-        type: "GET",
+        url: url,
+        type: "POST",
+        data: $('#formeo' + id).serialize(),
         dataType: "JSON",
         success: function(data)
         {
-            $('[name="inputIdCourse"]').val(data.idCourse);
-            $('[name="inputCode"]').val(data.code);
-            $('[name="inputName"]').val(data.name);
-            $('[name="inputBlock"]').val(data.idBlock);
-            $('[name="inputState"]').val(data.state);
-            $('[name="inputLessons"]').val(data.lessonNumber);
-            $('[name="inputCareer"]').val(data.isCareer);
-
-            $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
-            $('.modal-title').text('Editar Curso'); // Set title to Bootstrap modal title
-
+            location.reload();// for reload a page
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
@@ -189,6 +155,44 @@ function editBlock(url, id)
     });
 }
 
+/****************************************
+- If button edit course is pressed, load the data from the database.
+****************************************/
+function editCourse(url, id)
+{
+    console.log(url + id);
+    save_method = 'update';
+    $('#form')[0].reset();
+
+    console.log(url + id);
+
+    //Ajax Load data from ajax
+    $.ajax({
+        url : url + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+            console.log(url + id);
+            $('[name="inputIdCourse"]').val(data.idCourse);
+            $('[name="inputCode"]').val(data.code);
+            $('[name="inputName"]').val(data.name);
+            $('[name="inputState"]').val(data.state);
+            $('[name="inputLessons"]').val(data.lessonNumber);
+            $('[name="inputCareer"]').val(data.isCareer);
+
+            $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
+            $('.modal-title').text('Editar Curso'); // Set title to Bootstrap modal title
+
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            console.log("El error está aquí");
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
+
 
 /****************************************
 - Store the data in the database.
@@ -212,6 +216,7 @@ function save(url)
             showErrors(jqXHR, textStatus, errorThrown);
         }
     });
+    console.log($('#form').serialize());
 }
 
 /****************************************
@@ -248,26 +253,22 @@ function saveBlock()
     save(url);
 }
 
-
-function deleteCourse(id)
+/****************************************
+- If the user press save a course, defined the method.
+****************************************/
+function saveCourse()
 {
-    if(confirm('Are you sure delete this data?'))
+    var url;
+
+    if (save_method == "add")
     {
-        // ajax delete data from database
-        $.ajax({
-            url : "course/deleteCourse/" + id,
-            type: "POST",
-            dataType: "JSON",
-            success: function(data)
-            {
-                location.reload();
-            },
-            error: function (jqXHR, textStatus, errorThrown)
-            {
-                showErrors(jqXHR, textStatus, errorThrown);
-            }
-        });
+        url = base_url + "index.php/Administrator_controller/addCourse";
+    }else{
+        url = base_url + "index.php/Administrator_controller/editCourse";
     }
+
+    console.log(url);
+    save(url);
 }
 
 /****************************************

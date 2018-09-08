@@ -1,3 +1,4 @@
+
       <script>var base_url = '<?php echo base_url() ?>';</script>
       <div class="container">
         <h1 id="tituloPlanes" class="tituloNumero">Planes</h1>
@@ -94,6 +95,6 @@
   <script src="<?php echo base_url('css/datatables/js/jquery.dataTables.min.js')?>"></script>
   <script src="<?php echo base_url('css/datatables/js/dataTables.bootstrap.js')?>"></script>
   <script src="<?php echo base_url('js/modal.js')?>"></script>
-
+  </div>
   </body>
 </html>

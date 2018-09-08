@@ -1,3 +1,4 @@
+
       <script>var base_url = '<?php echo base_url() ?>';</script>
       <div class="container">
         <h1 id="tituloPlanes" class="tituloNumero">Bloques</h1>
@@ -10,7 +11,7 @@
             <tr>
               <th>Código</th>
               <th>Nombre</th>
-              <th>Activo</th>
+              <th>Estado</th>
               <th></th>
             </tr>
           </thead>
@@ -34,7 +35,7 @@
             <tr>
               <th>Código</th>
               <th>Nombre</th>
-              <th>Activo</th>
+              <th>Estado</th>
               <th></th>
             </tr>
           </tfoot>
@@ -107,6 +108,7 @@
       <script type="text/javascript" language="javascript" src="<?php echo base_url('css/datatables/js/jquery.dataTables.min.js')?>"></script>
       <script type="text/javascript" language="javascript" src="<?php echo base_url('css/datatables/js/dataTables.bootstrap.js')?>"></script>
       <script type="text/javascript" language="javascript" src="<?php echo base_url('js/modal.js')?>"></script>
+  </div>
 
   </body>
 </html>
