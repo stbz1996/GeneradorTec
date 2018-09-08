@@ -77,3 +77,10 @@ h1#tituloPlanes {
 	text-decoration: none;
 }
 /* ------------- */
+
+.btn span.glyphicon {    			
+	opacity: 0;				
+}
+.btn.active span.glyphicon {				
+	opacity: 1;				
+}

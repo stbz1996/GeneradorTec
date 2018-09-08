@@ -21,7 +21,29 @@
               <tr>
                 <td><?php echo "No code"; ?></td>
                 <td><?php echo $block->name;?></td>
-                <td><?php echo $block->state;?></td>
+                <td>
+                  <div class="btn-group" data-toggle="buttons">
+                  <? if($block->state): ?>
+                      <label class="btn btn-success active" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $block->idBlock ?>)'>
+                        <input type="radio" name="radioActivate" id="option2" autocomplete="off" checked>
+                        <span class="glyphicon glyphicon-ok"></span>
+                      </label>
+                      <label class="btn btn-danger" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $block->idBlock ?>)'>
+                        <input type="radio" name="radioDesactivate" id="option2" autocomplete="off">
+                        <span class="glyphicon glyphicon-ok"></span>
+                      </label>
+                  <? else: ?>
+                      <label class="btn btn-success" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $block->idBlock ?>)'>
+                        <input type="radio" name="radioActivate" id="option2" autocomplete="off" >
+                        <span class="glyphicon glyphicon-ok"></span>
+                      </label>
+                      <label class="btn btn-danger active" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $block->idBlock ?>)'>
+                        <input type="radio" name="radioDesactivate" id="option2" autocomplete="off" checked>
+                        <span class="glyphicon glyphicon-ok"></span>
+                      </label>
+                  <? endif; ?>
+                  </div>
+                </td>
                 <td>
                   <button class="btn btn-primary" onclick='editBlock("<?=base_url($ADD['ADDRESS_3']) ?>",<?= $block->idBlock?>)'><i class="glyphicon glyphicon-pencil"></i></button>
                   <button class="btn btn-danger" onclick='deleteAll("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $block->idBlock;?>)'><i class="glyphicon glyphicon-remove"></i></button>

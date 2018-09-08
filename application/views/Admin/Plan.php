@@ -11,7 +11,7 @@
             <tr>
               <th>Código</th>
               <th>Nombre</th>
-              <th>Activo</th>
+              <th>Estado</th>
               <th></th>
             </tr>
           </thead>
@@ -21,7 +21,29 @@
               <tr>
                 <td><?php echo "No code"; ?></td>
                 <td><?php echo $plan->name;?></td>
-                <td><?php echo $plan->state;?></td>
+                <td>
+                  <div class="btn-group" data-toggle="buttons">
+                  <? if($plan->state): ?>
+                      <label class="btn btn-success active" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $plan->idPlan ?>)'>
+                        <input type="radio" name="radioActivate" id="option2" autocomplete="off" value="<?= $plan->idPlan ?>" checked>
+                        <span class="glyphicon glyphicon-ok"></span>
+                      </label>
+                      <label class="btn btn-danger" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $plan->idPlan ?>)'>
+                        <input type="radio" name="radioDesactivate" id="option2" autocomplete="off" value="<?= $plan->idPlan ?>">
+                        <span class="glyphicon glyphicon-ok"></span>
+                      </label>
+                  <? else: ?>
+                      <label class="btn btn-success" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $plan->idPlan ?>)'>
+                        <input type="radio" name="radioActivate" value="<?= $plan->idPlan ?>" id="option2" autocomplete="off" >
+                        <span class="glyphicon glyphicon-ok"></span>
+                      </label>
+                      <label class="btn btn-danger active" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $plan->idPlan ?>)'>
+                        <input type="radio" name="radioDesactivate" value="<?=$plan->idPlan?>" id="option2" autocomplete="off" checked>
+                        <span class="glyphicon glyphicon-ok"></span>
+                      </label>
+                  <? endif; ?>
+                  </div>
+                </td>
                 <td>
                   <button class="btn btn-primary" onclick='editPlan("<?=base_url($ADD['ADDRESS_3']) ?>",<?= $plan->idPlan?>)'><i class="glyphicon glyphicon-pencil"></i></button>
                   <button class="btn btn-danger" onclick='deleteAll("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $plan->idPlan;?>)'><i class="glyphicon glyphicon-remove"></i></button>
@@ -35,7 +57,7 @@
             <tr>
               <th>Código</th>
               <th>Nombre</th>
-              <th>Activo</th>
+              <th>Estado</th>
               <th></th>
             </tr>
           </tfoot>

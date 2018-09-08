@@ -73,6 +73,49 @@ function addCourse()
     $('.modal-title').text('Crear Curso');
 }
 
+
+/****************************************
+- If something is activated.
+****************************************/
+function activateState(url, id)
+{
+    var value = 1;
+    $.ajax({
+        url: url,
+        type: "POST",
+        data:{id:id, state:value},
+        success: function(data){
+            $('[name="inputState"]').val(value);
+            alert("Activado");
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
+
+/****************************************
+- If something is desactivated.
+****************************************/
+function desactivateState(url, id)
+{
+    var value = 0;
+    $.ajax({
+        url: url,
+        type: "POST",
+        data:{id:id, state:value},
+        success: function(data){
+            $('[name="inputState"]').val(data.state);
+            alert("Desactivado");
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
+
 /****************************************
 - If radio button is changed
 ****************************************/

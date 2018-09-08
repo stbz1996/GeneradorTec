@@ -160,6 +160,12 @@ class Administrator_controller extends CI_Controller
 	public function changeStatePlan()
 	{
 		// Falta...
+		$data = array(
+			'idPlan' => $this->input->post('id'),
+			'state' => $this->input->post('state')
+		);
+		$this->administrator_logic->changeStatePlan($data);
+		validateModal();
 	}
 
 	/****************************************
@@ -248,8 +254,13 @@ class Administrator_controller extends CI_Controller
 	****************************************/
 	public function changeStateBlock()
 	{
-		// Falta...
-	} 
+		$data = array(
+			'idBlock' => $this->input->post('id'),
+			'state' => $this->input->post('state')
+		);
+		$this->administrator_logic->changeStateBlock($data);
+		validateModal();
+	}
 
 
 	/****************************************
@@ -338,6 +349,19 @@ class Administrator_controller extends CI_Controller
     	$result = $this->administrator_logic->deleteCourse($id);
         validateModal();
     }
+
+    /****************************************
+	- Change the state of a course.
+	****************************************/
+	public function changeStateCourse()
+	{
+		$data = array(
+			'idCourse' => $this->input->post('id'),
+			'state' => $this->input->post('state')
+		);
+		$this->administrator_logic->changeStateCourse($data);
+		validateModal();
+	}
 
 	/****************************************
 	- That function create the links for the 

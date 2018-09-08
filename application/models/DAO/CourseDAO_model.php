@@ -78,4 +78,16 @@ class CourseDAO_model extends CI_Model
         $this->db->where('idCourse', $id);
         $this->db->delete($this->table);
     }
+
+    /****************************************
+    - Activate or desactivate the course.
+    ****************************************/
+    public function changeState($Course)
+    {
+        $changes = array(
+            'state' => $Course['state']
+        );
+        $this->db->where('idCourse', $Course['idCourse']);
+        $this->db->update($this->table, $changes);
+    }
 }

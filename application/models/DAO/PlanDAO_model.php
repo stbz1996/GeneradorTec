@@ -11,28 +11,13 @@ class PlanDAO_model extends CI_Model{
 
 
 	/****************************************
-	- Activate the plan.
+	- Activate or desactivate the plan.
 	****************************************/
 	public function changeState($Plan)
 	{
-		$this->db->select('state');
-		$this->db->from('Plan');
-		$this->db->where('idPlan', $Plan['idPlan']);
-		$query = $this->db->get();		
-        if ($query->num_rows() <= 0)
-        {
-        	return;
-        }
-
-        $data = $query->result();
-
-        print_r($data);
-
-        if ($data['state']){
-        	$changes = array ('state' => false);
-        }else{
-        	$changes = array ('state' => true);
-        }
+		$changes = array(
+			'state' => $Plan['state']
+		);
 		$this->db->where('idPlan', $Plan['idPlan']);
 		$this->db->update('Plan', $changes);
 	}

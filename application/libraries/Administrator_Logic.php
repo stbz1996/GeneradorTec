@@ -199,7 +199,7 @@ class Administrator_Logic{
  	public function deletePlan($data)
  	{
  		$planDAO_model = new PlanDAO_model();
- 		return $planDAO_model->delete($data);
+ 		$planDAO_model->delete($data);
  	}
 
  	/****************************************
@@ -345,7 +345,7 @@ class Administrator_Logic{
  	}
 
  	/****************************************
-	- Insert a block in the database.
+	- Change the state of a course.
 	****************************************/
  	public function changeStateCourse($data)
  	{
