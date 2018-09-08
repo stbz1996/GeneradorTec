@@ -10,28 +10,6 @@ class BlockDAO_model extends CI_Model{
 	}
 
 	/****************************************
-	- Activate the plan.
-	****************************************/
-	private function activateBlock($Block)
-	{
-		$Block->setState(true);
-		$changes = array('state' => $Block->getState());
-		$this->db->where('idBlock', $Block->getId());
-		$this->db->update('Block', $changes);
-	}
-
-	/****************************************
-	- Desactivate the plan. 
-	****************************************/
-	private function desactivateBlock($Block)
-	{
-		$Block->setState(false);
-		$changes = array('state' => $Block->getState());
-		$this->db->where('idBlock', $Block->getId());
-		$this->db->update('Block', $changes);
-	}
-
-	/****************************************
 	- Insert the new plan in the database.
 	****************************************/
 	public function insert($Block)
@@ -92,6 +70,19 @@ class BlockDAO_model extends CI_Model{
 		$this->db->where('idBlock', $Block['id']);
         return $this->db->delete('Block');
 	}
+
+	/****************************************
+	- Activate or desactivate the block.
+	****************************************/
+	public function changeState($Block)
+	{
+		$changes = array(
+			'state' => $Block['state']
+		);
+		$this->db->where('idBlock', $Block['idBlock']);
+		$this->db->update('Block', $changes);
+	}
+
 
 
 }

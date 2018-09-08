@@ -26,6 +26,9 @@ class Form_controller extends CI_Controller {
 		$this->load->model("DAO/CourseDAO_model");
 		$this->load->model("DTO/CourseDTO");
 
+		$this->load->model("DAO/PlanDAO_model");
+		$this->load->model("DTO/PlanDTO");
+
 		$this->Form = new FormDTO();
 		$this->Form_Logic = new Form_Logic();
 	}
@@ -42,10 +45,14 @@ class Form_controller extends CI_Controller {
 		$this->session->set_userdata('idHash' , $hashCode);
 
 		*/
+
 		/*
 		To consult hashcode
+		
 		$_SESSION['idHash'];
 		*/
+
+		
 		//Get form by hashcode
 		$queryForm = $this->Form_Logic->validateForm($hashCode);
 		$newForm = $queryForm->row();
@@ -57,6 +64,7 @@ class Form_controller extends CI_Controller {
 		$this->Form->setDueDate($newForm->dueDate);
 		$this->Form->setIdProfessor($newForm->idProfessor);
 		$this->Form->setIdPeriod($newForm->idPeriod);
+
 
 		$this->session->set_userdata('idForm', $this->Form->getIdForm());
 
@@ -75,10 +83,22 @@ class Form_controller extends CI_Controller {
 		$data['periodYear'] = $initialInformation->year;
 		$data['formState'] = $this->Form->getState();
 
+		//Get career id
+		$idCareer = $initialInformation->idCareer;
 		/*  USER STORY 4  */
-		//$data['plans'] = $this->showPlans();
-		$data['courses'] = $this->showCareerCourses();
+		$plans = $this->showCareerPlans($idCareer);
+		$coursesPlan = $this->showPlanCourses($plans);
 
+		for ($i=0; $i < count($coursesPlan) ; $i++) { 
+			if(!count($coursesPlan[$i]))
+			{
+				unset($plans[$i]);
+				unset($coursesPlan[$i]);
+			}
+		}
+
+		$data['plans'] = array_values($plans);
+		$data['courses'] = array_values($coursesPlan);
 		/*END USER STORY 4*/
 
 		$this->load->view("Forms/Header");
@@ -118,14 +138,10 @@ class Form_controller extends CI_Controller {
 		/* USER STORY 2 */
 
 
-		/*
+		
 		$workload = $this->input->post('workload_options');
 		$idProfessor = $this->Form->getIdProfessor();
 		
-		$this->insertWorkload($idProfessor, $workload);
-
-		*/
-
 		/* USER STORY 3*/
 
 		
@@ -135,7 +151,23 @@ class Form_controller extends CI_Controller {
 		{
 			$idForm = $_SESSION['idForm'];
 			$activitiesWorkPorcent = $this->input->post('workPorcent');
-			$this->insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
+
+			//Verify if activity porcent is less than workload
+			$totalWorkPorcent = 0;
+
+			foreach ($activitiesWorkPorcent as $workPorcent) {
+				$totalWorkPorcent += $workPorcent;
+			}
+
+			if($workload >= $totalWorkPorcent)
+			{
+				$this->insertWorkload($idProfessor, $workload);
+				$this->insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
+			}
+			else
+			{
+				echo "<script>alert('No se puede guardar: Carga de trabajo es menor al porcentaje de actividades')</script>";
+			}
 		}
 		else
 		{
@@ -178,10 +210,21 @@ class Form_controller extends CI_Controller {
 		
 	}
 
-	function showCareerCourses()
-	{
-		return $this->Form_Logic->getCareerCourses();
+	function showPlanCourses($plans)
+	{	
+		$data = array();
+		foreach ($plans as $plan) {
+			$idPlan = $plan->getId();
+			$courses = $this->Form_Logic->getPlanCourses($idPlan);
+			$data[] = $courses;
+		}
 
+		return $data;
+	}
+
+	function showCareerPlans($idCareer)
+	{
+		return $this->Form_Logic->getCareerPlans($idCareer);
 	}
 
 

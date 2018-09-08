@@ -22,7 +22,29 @@
               <tr>
                 <td><?php echo $course->code;?></td>
                 <td><?php echo $course->name;?></td>
-                <td><?php echo $course->state;?></td>
+                <td>
+                  <div class="btn-group" data-toggle="buttons">
+                  <? if($course->state): ?>
+                      <label class="btn btn-success active" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
+                        <input type="radio" name="radioActivate" id="option2" autocomplete="off" checked>
+                        <span class="glyphicon glyphicon-ok"></span>
+                      </label>
+                      <label class="btn btn-danger" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
+                        <input type="radio" name="radioDesactivate" id="option2" autocomplete="off">
+                        <span class="glyphicon glyphicon-ok"></span>
+                      </label>
+                  <? else: ?>
+                      <label class="btn btn-success" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
+                        <input type="radio" name="radioActivate" id="option2" autocomplete="off" >
+                        <span class="glyphicon glyphicon-ok"></span>
+                      </label>
+                      <label class="btn btn-danger active" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
+                        <input type="radio" name="radioDesactivate" id="option2" autocomplete="off" checked>
+                        <span class="glyphicon glyphicon-ok"></span>
+                      </label>
+                  <? endif; ?>
+                  </div>
+                </td>
                 <td><?php echo $course->lessonNumber; ?></td>
                 <td><?php echo $course->isCareer; ?></td>
                 <td>
@@ -79,7 +101,6 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="control-label col-md-3">Estado</label>
                   <div class="col-md-9">
                     <input name="inputState" placeholder="Activo" class="form-control" type="hidden">
                   </div>

@@ -78,4 +78,19 @@ class CourseDAO_model extends CI_Model
         $this->db->where('idCourse', $id);
         $this->db->delete($this->table);
     }
+
+    public function getPlanCourses($idPlan)
+    {
+        $this->db->select('idCourse');
+        $this->db->select('code');
+        $this->db->select('Course.name as name');
+        $this->db->select('lessonNumber');
+        $this->db->select('Course.state as state');
+        $this->db->from('Course');
+        $this->db->join('Block', 'Course.idBlock = Block.idBlock');
+        $this->db->where('Block.idPlan', $idPlan);
+        $this->db->where('Course.isCareer', 1);
+        $query = $this->db->get();
+        return $query;
+    }
 }

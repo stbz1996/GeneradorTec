@@ -106,27 +106,25 @@
     <h3 class="fs-subtitle"></h3>
 
     <div class="list-courses">
-      <table>
-        <tbody>
-          <?php 
-          $countCourses = count($courses);
-          for ($i = 0; $i < $countCourses ; $i++) { ?>
-            <tr>
-              <td><?= $courses[$i]->getCode()?> </td>
-              <td><?= $courses[$i]->getName() ?> </td>
-              <td><input type="checkbox" class="cbox" value="first_checkbox" /></td>
-              <td><input type="hidden" name="state"></td>
-            </tr>
-          <?php }?>
-        </tbody>
-      </table>   
 
-      <!--<?php foreach($courses as $course) {
-          echo $course->getCode()." ";
-          echo $course->getName()." ";
-          echo "</br>";
-        }
-      ?>  -->    
+      <?php 
+      $countPlans = count($plans);
+      for($i = 0; $i < $countPlans; $i++) { ?>
+        <table>
+          <?= $plans[$i]->getName() ?>
+          <tbody>
+            <?php 
+            $countCourses = count($courses[$i]);
+            for($j = 0; $j < $countCourses; $j++) {?>
+              <tr>
+                <td><?= $courses[$i][$j]->getCode() ?> </td>
+                <td><?= $courses[$i][$j]->getName() ?> </td>
+                <td><input type="checkbox" class="cbox" value="first_checkbox" /></td>
+              </tr>
+            <?php }?>
+          </tbody>
+        </table>
+      <?php }?>     
     </div>
 
     <input type="button" name="previous" class="previous action-button" value="Anterior" />

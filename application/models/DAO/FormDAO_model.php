@@ -55,10 +55,10 @@ class FormDAO_model extends CI_Model
 
 		$this->db->select('Professor.name as professorName');
 		$this->db->select('Professor.lastName');
+		$this->db->select('Professor.idCareer');
 		$this->db->select('Career.name as careerName');
 		$this->db->select('Period.number');
 		$this->db->select('Period.year');
-
 		$this->db->from('Professor');
 		$this->db->join('Career', 'Professor.idCareer = Career.idCareer');
 
