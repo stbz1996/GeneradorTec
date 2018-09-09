@@ -296,8 +296,8 @@ class Administrator_controller extends CI_Controller
 
 		// Take all the blocks of the database.
 		$data['blocks'] = $this->administrator_logic->getArrayBlocks(null);
-
-        $this->load->view('Admin/Header');
+		
+		$this->load->view('HomePage/Header');
         $this->load->view('HomePage/Admin/BreadCrumb', $data);
         $this->load->view('HomePage/Admin/Course', $data);
         $this->load->view("HomePage/Footer");
@@ -373,6 +373,95 @@ class Administrator_controller extends CI_Controller
 		validateModal();
 	}
 
+	public function Professors($id = null, $name = null)
+    {
+    	// if there is not a id, take the idCareer, idPlan, and idBlock previous selected.
+		if ($id == null)
+		{
+			$id = $this->session->userdata('idCareer');
+			$name = $this->session->userdata('nameCareer');
+		}else{
+			$array = getBlockSessions($this->session, $id, urldecode($name));
+			$this->session->set_userdata($array);
+		}
+
+		/* These are data that the interface is going to need.*/
+		$data['iters'] = getBreadCrumbProfessors(); // Relative position
+		$data['idParent'] = $id; // Id of the plan
+		$data['actual'] = urldecode($name);   // Actual position
+		$data['ADD'] = getAddressProfessors();
+		$data['professors'] = $this->administrator_logic->getArrayProfessors(); //id parametro
+
+		$this->load->view('HomePage/Header');
+        $this->load->view('HomePage/Admin/BreadCrumb', $data);
+        $this->load->view('HomePage/Admin/Professor', $data);
+        $this->load->view("HomePage/Footer");
+    }
+
+
+	/****************************************
+	- Add a new professor. 
+		The data is received by javascript.
+	****************************************/
+	public function addProfessor()
+	{
+		$data = array(
+			'name' => $this->input->post('inputName'),
+			'lastName' => $this->input->post('inputLastName'),
+			'email' => $this->input->post('inputEmail'),
+			'idCareer' => 1 //debe actualizarse a id de carrera
+		);
+
+		$insert = $this->administrator_logic->insertProfessor($data);
+		validateModal();
+	}
+
+	/****************************************
+	- Get the information of a professor.
+	****************************************/	
+	public function getProfessor($id)
+    {
+    	$data = $this->administrator_logic->getUniqueProfessor($id);
+    	validateArrayModal($data);
+    }
+
+	/****************************************
+	- Edit the curse.
+		The data is received by javascript.
+	****************************************/
+	public function editProfessor()
+	{
+		$data = array(
+			'idProfessor' => $this->input->post('inputIdProfessor'),
+            'name' => $this->input->post('inputName'),
+            'lastName' => $this->input->post('inputLastName'),
+            'email' => $this->input->post('inputEmail')
+        );
+		$result = $this->administrator_logic->editProfessor($data);
+		validateModal();
+	}
+
+ 	/****************************************
+	- Delete the selected professor.
+	****************************************/	
+    public function deleteProfessor($id)
+    {
+    	$result = $this->administrator_logic->deleteProfessor($id);
+        validateModal();
+	}
+	
+	/****************************************
+	- Change professor state.
+	****************************************/
+	public function changeStateProfessor()
+	{
+		$data = array(
+			'idProfessor' => $this->input->post('id'),
+			'state' => $this->input->post('state')
+		);
+		$this->administrator_logic->changeStateProfessor($data);
+		validateModal();
+	}
 
 	/****************************************
 	- That function create the links for the 

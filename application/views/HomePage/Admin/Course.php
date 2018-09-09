@@ -1,5 +1,5 @@
 <script>var base_url = '<?php echo base_url() ?>';</script>
-<!-- Los tituloso -->
+<!-- Los titulos -->
 <div>
     <h1>Cursos</h1>
     <p>Explicacion de lo que hay en la página</p>
@@ -73,10 +73,9 @@
             </tr>
         </tfoot>
     </table>
+</div>
 
-      
-      
-  <!-- Bootstrap modal -->
+<!-- Bootstrap modal -->
 <div class="modal fade" id="modal_form" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">

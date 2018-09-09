@@ -8,6 +8,7 @@
 			* Home / Careers
 			* Home / Careers / Plans
 			* Home / Careers / Plans / Courses
+			* Home / Professors
 
 		- Address of all the pages in CRUD operations.
 			* Get all elements
@@ -38,6 +39,17 @@ function getBreadCrumbHome()
 		array ( 
 			'NAME' => "Inicio",
 			'HTML' => "index.php/Administrator_controller"
+		)
+	);
+	return $breadCrumb;
+}
+
+function getBreadCrumbProfessors()
+{
+	$breadCrumb = array(
+		array ( 
+			'NAME' => "Profesores",
+			'HTML' => "index.php/Administrator_controller/Professors"
 		)
 	);
 	return $breadCrumb;
@@ -217,6 +229,19 @@ function getAddressCourses()
 	return $address;
 }
 
+
+function getAddressProfessors()
+{
+	$address = array(
+		'ADDRESS_1' => "index.php/Administrator_controller/Groups",
+		'ADDRESS_2' => "index.php/Administrator_controller/changeStateProfessor",
+		'ADDRESS_3' => "index.php/Administrator_controller/getProfessor/",
+		'ADDRESS_4' => "index.php/Administrator_controller/deleteProfessor/",
+		'ADDRESS_5' => "index.php/Administrator_controller/addProfessor"
+	);
+	return $address;
+}
+
 function stateValid()
 {
 	$state = array(
@@ -229,7 +254,6 @@ function stateValid()
 	);
 	return $state;
 }
-
 
 function stateNoValid()
 {

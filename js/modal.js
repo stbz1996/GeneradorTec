@@ -73,6 +73,16 @@ function addCourse()
     $('.modal-title').text('Crear Curso');
 }
 
+/****************************************
+- If button add professor is pressed, show the modal.
+****************************************/
+function addProfessor()
+{
+    save_method = 'add';
+    $('#form')[0].reset();
+    $('#modal_form').modal('show');
+    $('.modal-title').text('Crear Profesor');
+}
 
 /****************************************
 - If something is activated.
@@ -238,6 +248,39 @@ function editCourse(url, id)
 
 
 /****************************************
+- If button edit professor is pressed, load the data from the database.
+****************************************/
+function editProfessor(url, id)
+{
+    console.log(url + id);
+    save_method = 'update';
+    $('#form')[0].reset();
+
+    //Ajax Load data from ajax
+    $.ajax({
+        url : url + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+            $('[name="inputIdProfessor"]').val(data.idProfessor);
+            $('[name="inputName"]').val(data.name);
+            $('[name="inputLastName"]').val(data.lastName);
+            $('[name="inputEmail"]').val(data.email);
+            $('[name="inputState"]').val(data.state);
+
+            $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
+            $('.modal-title').text('Editar Profesor'); // Set title to Bootstrap modal title
+
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
+
+/****************************************
 - Store the data in the database.
 ****************************************/
 function save(url)
@@ -311,6 +354,23 @@ function saveCourse()
     }
 
     console.log(url);
+    save(url);
+}
+
+/****************************************
+- If the user press save a course, defined the method.
+****************************************/
+function saveProfessor()
+{
+    var url;
+
+    if (save_method == "add")
+    {
+        url = base_url + "index.php/Administrator_controller/addProfessor";
+    }else{
+        url = base_url + "index.php/Administrator_controller/editProfessor";
+    }
+
     save(url);
 }
 

@@ -374,6 +374,90 @@ class Administrator_Logic{
  		return $courseDAO_model->changeState($data);
  	}
 
+	/****************************************
+	- Operations of courses. (Not available for the moment)
+	- Show (All)
+	- Insert
+	- Get (Only unique)
+	- Edit
+	- Delete
+	****************************************/
+
+	/****************************************
+	- Convert the data to the database an array.
+	****************************************/
+	public function getArrayProfessors($id = null)
+	{
+		/* Get the professors from the database */
+		$professorDAO_model = new ProfessorDAO_model();
+
+		if ($id == null)
+		{
+			$query = $professorDAO_model->show();
+		}
+		
+		else
+		{
+			$query = $professorDAO_model->showByCareer($id);
+		}
+	
+		if (!$query)
+		{
+			return array();
+		}
+
+		return $query;
+	}
+
+
+	/****************************************
+   - Insert a professor in the database.
+   ****************************************/
+	public function insertProfessor($data)
+	{
+		$professorDAO_model = new ProfessorDAO_model();
+		return $professorDAO_model->insert($data);
+	}
+
+
+	/****************************************
+   - Get the information about an unique course.
+   ****************************************/
+	public function getUniqueProfessor($id)
+	{
+		$professorDAO_model = new ProfessorDAO_model();
+		return $professorDAO_model->get($id);
+	}
+
+
+	/****************************************
+   - Edit the information of a course.
+   ****************************************/
+	public function editProfessor($data)
+	{
+		$professorDAO_model = new ProfessorDAO_model();
+		return $professorDAO_model->edit($data);
+	}
+
+
+	/****************************************
+   - Delete the information of a course.
+   ****************************************/
+	public function deleteProfessor($id)
+	{
+		$professorDAO_model = new ProfessorDAO_model();
+		return $professorDAO_model->delete($id);
+	}
+
+
+	/****************************************
+   - Change the state of a course.
+   ****************************************/
+	public function changeStateProfessor($data)
+	{
+		$professorDAO_model = new ProfessorDAO_model();
+		return $professorDAO_model->changeState($data);
+	}
 
  	/**************************************************************
 	This function returns all the schedules regitered in the sistem

@@ -10,6 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $linkToScheduleHours = base_url()."/index.php/Administrator_controller/showScheduleSelector";
     $linkToAdd = base_url()."/index.php/Administrator_controller/AddAdmin";
     $linkToCareers = base_url()."/index.php/Administrator_controller/Careers";
+    $linkToProfessors = base_url()."/index.php/Administrator_controller/Professors";
 ?>
 
 
@@ -84,6 +85,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <span>Agregar Administrador</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="<?= $linkToProfessors?>">
+                                <i class="fa fa-address-card"></i>
+                                <span>Profesores</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <!-- sidebar-menu  -->
@@ -93,7 +100,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <main class="page-content">
             <div class="container-fluid">
                 <div class="row">
-
 
         <div class="sidebar-header" id="planHeader">
             <img class="img-responsive" id="image1" src="https://tecdigital.tec.ac.cr/servicios/capacitacion/guia_estudiantes/resources/images/tec.png">
