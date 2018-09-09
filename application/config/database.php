@@ -97,6 +97,7 @@ $db['default'] = array(
 	'save_queries' => TRUE
 );
 
+
 /*
 $db['default'] = array(
 	'dsn'	=> '',
@@ -119,3 +120,4 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );*/
+

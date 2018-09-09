@@ -8,6 +8,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $link_to_generateLinks = base_url()."/index.php/Administrator_controller/LoadGenerateLinksView";
     $linkToCourses = base_url()."/index.php/Administrator_controller/Courses";
     $linkToScheduleHours = base_url()."/index.php/Administrator_controller/showScheduleSelector";
+    $linkToAdd = base_url()."/index.php/Administrator_controller/AddAdmin";
+    $linkToCareers = base_url()."/index.php/Administrator_controller/Careers";
 ?>
 
 
@@ -49,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
 
                 <div class="sidebar-header">
-					<img class="img-responsive" src="https://www.tec.ac.cr/sites/default/files/media/branding/logo-tec.png">
+                    <img class="img-responsive" src="https://www.tec.ac.cr/sites/default/files/media/branding/logo-tec.png">
                 </div>
 
                 <!-- sidebar-menu  -->
@@ -65,15 +67,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </a>
                         </li>
                         <li>
-                            <a href="<?= $linkToCourses ?>">
+                            <a href="<?= $linkToCareers ?>">
                                 <i class="fa fa-folder"></i>
-                                <span>Cursos</span>
+                                <span>Editar Información</span>
                             </a>
                         </li>
                         <li>
                             <a href="<?= $linkToScheduleHours ?>">
                                 <i class="fa fa-book"></i>
                                 <span>Horarios</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= $linkToAdd ?>">
+                                <i class="fa fa-address-book"></i>
+                                <span>Agregar Administrador</span>
                             </a>
                         </li>
                     </ul>

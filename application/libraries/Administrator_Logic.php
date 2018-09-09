@@ -3,12 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Administrator_Logic{
 
-	private $plans;
-	private $actualPlan;
 
 	function __construct()
 	{
-		$this->plans = array();
+
 	}
 
 
@@ -43,6 +41,7 @@ class Administrator_Logic{
 		return false;
 	}
 
+
 	/*********************************************************************
 	That function returns the list of periods in DB
  	*********************************************************************/
@@ -52,6 +51,7 @@ class Administrator_Logic{
  		return $periodDAO_model->findPeriods();
  	}
 
+
  	/*********************************************************************
 	That function returns the list of profesors in DB
  	*********************************************************************/
@@ -60,16 +60,6 @@ class Administrator_Logic{
  		$professorDAO_model = new ProfessorDAO_model();
  		return $professorDAO_model->findProfessors($idCareer);
 	}
-
-
-
-
-
-
-
-
-
-
 
 
 	/****************************************
@@ -120,38 +110,15 @@ class Administrator_Logic{
 		return true;
 	}
 
-	/****************************************
-	- Get all the plans from the database.
-	****************************************/
- 	public function getPlans($query)
- 	{
- 		$plans = array();
- 		$data = array();
- 	
- 		if (!$query)
- 		{
- 			return array();
- 		}
-
- 		$data = $query->result();
- 		for($i = 0; $i < count($data); $i++)
- 		{
- 			$plans[$i] = new PlanDTO_model();
- 			$plans[$i]->setIdPlan($data[$i]->idPlan);
- 			$plans[$i]->setName($data[$i]->name);
- 			$plans[$i]->setState($data[$i]->state);
- 			$plans[$i]->setIdCareer($data[$i]->idCareer);
- 		}
-
- 		$this->plans = $plans;
- 		return $plans;
- 	}
 
  	/****************************************
 	- Convert the data to the database an array.
 	****************************************/
- 	public function getArrayCareers($query)
+ 	public function getArrayCareers()
  	{
+ 		/* Get the careers from the database */
+ 		$careerDAO_model = new careerDAO_model();
+ 		$query = $careerDAO_model->show();
  		$careers = array();
  		$data = array();
  	
@@ -161,20 +128,27 @@ class Administrator_Logic{
  		}
 
  		$data = $query->result();
- 		for($i = 0; $i < count($data); $i++)
- 		{
- 			$careers[$i]['ID'] = $data[$i]->idCareer;
- 			$careers[$i]['NAME'] = $data[$i]->name;
- 		}
-
- 		return $careers;
+ 		return $data;
  	}
+
+
+	/****************************************
+	- Operations of plans.
+	- Show (All)
+	- Insert
+	- Get (Only unique)
+	- Edit
+	- Delete
+	****************************************/ 	
 
  	/****************************************
 	- Convert the data to the database an array.
 	****************************************/
- 	public function getArrayPlans($query)
+ 	public function getArrayPlans($id)
  	{
+ 		/* Get the plans from the database */
+ 		$planDAO_model = new PlanDAO_model();
+ 		$query = $planDAO_model->show($id);
  		$plans = array();
  		$data = array();
  	
@@ -184,25 +158,77 @@ class Administrator_Logic{
  		}
 
  		$data = $query->result();
- 		for($i = 0; $i < count($data); $i++)
- 		{
- 			$plans[$i]['ID'] = $data[$i]->idPlan;
- 			$plans[$i]['NAME'] = $data[$i]->name;
- 			$plans[$i]['STATE'] = $data[$i]->state;
- 		}
-
- 		$this->plans = $plans;
- 		return $plans;
+ 		return $data;
  	}
 
 
- 	
+ 	/****************************************
+	- Insert a plan in the database.
+	****************************************/
+ 	public function insertPlan($data)
+ 	{
+ 		$planDAO_model = new PlanDAO_model();
+ 		return $planDAO_model->insert($data);
+ 	}
+
+
+ 	/****************************************
+	- Get the information about an unique plan.
+	****************************************/
+ 	public function getUniquePlan($id)
+ 	{
+ 		$planDAO_model = new PlanDAO_model();
+ 		return $planDAO_model->get($id);
+ 	}
+
+
+ 	/****************************************
+	- Edit the information of a plan.
+	****************************************/
+ 	public function editPlan($data)
+ 	{
+ 		$planDAO_model = new PlanDAO_model();
+ 		return $planDAO_model->edit($data);
+ 	}
+
+
+ 	/****************************************
+	- Change the state of a plan.
+	****************************************/
+ 	public function changeStatePlan($data)
+ 	{
+ 		$planDAO_model = new PlanDAO_model();
+ 		$planDAO_model->changeState($data);
+ 	}
+
+
+ 	/****************************************
+	- Delete the information of a plan.
+	****************************************/
+ 	public function deletePlan($data)
+ 	{
+ 		$planDAO_model = new PlanDAO_model();
+ 		$planDAO_model->delete($data);
+ 	}
+
+
+ 	/****************************************
+	- Operations of blocks.
+	- Show (All)
+	- Insert
+	- Get (Only unique)
+	- Edit
+	- Delete
+	****************************************/ 
 
  	/****************************************
 	- Convert the data to the database an array.
 	****************************************/
- 	public function getArrayBlocks($query)
+ 	public function getArrayBlocks($id)
  	{
+ 		/* Get the blocks from the database */
+ 		$blockDAO_model = new BlockDAO_model();
+ 		$query = $blockDAO_model->show($id);
  		$blocks = array();
  		$data = array();
  	
@@ -212,57 +238,140 @@ class Administrator_Logic{
  		}
 
  		$data = $query->result();
- 		for($i = 0; $i < count($data); $i++)
+ 		return $data;
+ 	}
+
+
+ 	/****************************************
+	- Insert a block in the database.
+	****************************************/
+ 	public function insertBlock($data)
+ 	{
+ 		$blockDAO_model = new BlockDAO_model();
+ 		return $blockDAO_model->insert($data);
+ 	}
+
+
+ 	/****************************************
+	- Get the information about an unique block.
+	****************************************/
+ 	public function getUniqueBlock($id)
+ 	{
+ 		$blockDAO_model = new BlockDAO_model();
+ 		return $blockDAO_model->get($id);
+ 	}
+
+
+ 	/****************************************
+	- Edit the information of a block.
+	****************************************/
+ 	public function editBlock($data)
+ 	{
+ 		$blockDAO_model = new BlockDAO_model();
+ 		return $blockDAO_model->edit($data);
+ 	}
+
+
+ 	/****************************************
+	- Insert a block in the database.
+	****************************************/
+ 	public function changeStateBlock($data)
+ 	{
+ 		$blockDAO_model = new BlockDAO_model();
+ 		return $blockDAO_model->changeState($data);
+ 	}
+
+
+ 	/****************************************
+	- Delete the information of a block.
+	****************************************/
+ 	public function deleteBlock($data)
+ 	{
+ 		$blockDAO_model = new BlockDAO_model();
+ 		return $blockDAO_model->delete($data);
+ 	}
+
+
+ 	/****************************************
+	- Operations of courses. (Not available for the moment)
+	- Show (All)
+	- Insert
+	- Get (Only unique)
+	- Edit
+	- Delete
+	****************************************/
+
+	/****************************************
+	- Convert the data to the database an array.
+	****************************************/
+ 	public function getArrayCourses($id)
+ 	{
+ 		/* Get the blocks from the database */
+ 		$courseDAO_model = new CourseDAO_model();
+
+ 		if ($id == null)
  		{
- 			$blocks[$i]['ID'] = $data[$i]->idBlock;
- 			$blocks[$i]['NAME'] = $data[$i]->name;
- 			$blocks[$i]['STATE'] = $data[$i]->state;
+ 			$query = $courseDAO_model->show();
+ 		}else{
+ 			$query = $courseDAO_model->showById($id);
+ 		}
+ 	
+ 		if (!$query)
+ 		{
+ 			return array();
  		}
 
- 		return $blocks;
+ 		return $query;
  	}
 
 
- 	public function printPlans()
+ 	/****************************************
+	- Insert a course in the database.
+	****************************************/
+ 	public function insertCourse($data)
  	{
- 		for($i = 0; $i < count($this->plans); $i++)
- 		{
- 			print_r("Plan ");
- 			print_r($this->plans[$i]->getName());
- 		}
+ 		$courseDAO_model = new CourseDAO_model();
+ 		return $courseDAO_model->insert($data);
  	}
 
 
- 	public function getSpecificPlan($idPlan)
+ 	/****************************************
+	- Get the information about an unique course.
+	****************************************/
+ 	public function getUniqueCourse($id)
  	{
- 		for($i = 0; $i < count($this->plans); $i++)
- 		{
- 			if ($this->plans[$i]->getId() == $idPlan)
- 			{
- 				return $this->plans[$i];
- 			}
- 		}
- 		return null;
+ 		$courseDAO_model = new CourseDAO_model();
+ 		return $courseDAO_model->get($id);
  	}
 
- 	public function getActualPlan()
+
+ 	/****************************************
+	- Edit the information of a course.
+	****************************************/
+ 	public function editCourse($data)
  	{
- 		return $this->actualPlan;
+ 		$courseDAO_model = new CourseDAO_model();
+ 		return $courseDAO_model->edit($data);
  	}
 
- 	public function setActualPlan($actual)
+
+ 	/****************************************
+	- Delete the information of a course.
+	****************************************/
+ 	public function deleteCourse($id)
  	{
- 		$this->actualPlan = $actual;
+ 		$courseDAO_model = new CourseDAO_model();
+ 		return $courseDAO_model->delete($id);
  	}
 
- 	public function setAllPlan($allPlans)
- 	{
- 		$this->plans = $allPlans;
- 	}
 
- 	public function getAllPlan()
+ 	/****************************************
+	- Change the state of a course.
+	****************************************/
+ 	public function changeStateCourse($data)
  	{
- 		return $this->plans;
+ 		$courseDAO_model = new CourseDAO_model();
+ 		return $courseDAO_model->changeState($data);
  	}
 
 
@@ -289,9 +398,6 @@ class Administrator_Logic{
  		$scheduleDAO_model = new ScheduleDAO_model();
  		$scheduleDAO_model->updateScheduleState($schedule);
  	}
-
-
-
 
 }
 

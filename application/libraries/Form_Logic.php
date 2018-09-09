@@ -123,8 +123,8 @@ class Form_Logic{
 
 	public function getCareerCourses()
 	{
-		$courseDTO = new CourseDAO_model();
-		$query = $courseDTO->getCareerCourses();
+		$courseDAO = new CourseDAO_model();
+		$query = $courseDAO->getCareerCourses();
 
 		$data = array();
 		foreach ($query as $row) {
@@ -147,6 +147,45 @@ class Form_Logic{
 
 		return $data;
 
+	}
+
+	public function getCareerPlans($pIdCareer)
+	{
+		$planDAO = new PlanDAO_model();
+		$query = $planDAO->show($pIdCareer)->result_array();
+
+		$data = array();
+		foreach ($query as $row) {
+			if($row['state'])
+			{
+				$newPlan = new PlanDTO();
+				$newPlan->setIdPlan($row['idPlan']);
+				$newPlan->setName($row['name']);
+
+				$data[] = $newPlan;
+			}
+		}
+		return $data;
+	}
+
+	public function getPlanCourses($pIdPlan)
+	{
+		$courseDAO = new CourseDAO_model();
+		$query = $courseDAO->getPlanCourses($pIdPlan)->result_array();
+
+		$data = array();
+		foreach ($query as $row) {
+			if($row['state'])
+			{
+				$newCourse = new CourseDTO();
+				$newCourse->setIdCourse($row['idCourse']);
+				$newCourse->setCode($row['code']);
+				$newCourse->setName($row['name']);
+				$newCourse->setLessonNumber($row['lessonNumber']);
+				$data[] = $newCourse;
+			}
+		}
+		return $data;
 	}
 }
 

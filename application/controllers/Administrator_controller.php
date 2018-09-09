@@ -4,15 +4,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Administrator_controller extends CI_Controller 
 {
-	var $data = array();
-
-	
 	function __construct()
 	{
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('Administrator_Logic');
 		$this->load->library('logicControllerView/scheduleRelations');
+		$this->load->helper("functions_helper");
 
 		$this->load->helper("form");
 
@@ -38,9 +36,6 @@ class Administrator_controller extends CI_Controller
 
 		$this->administrator_logic = new Administrator_Logic();
 		$this->form_Logic = new Form_Logic();
-
-
-
 	}
 
 
@@ -64,132 +59,315 @@ class Administrator_controller extends CI_Controller
 	}
 
 
+	/****************************************
+	- Get all careers. Show them.
+	****************************************/
 	public function Careers()
 	{
-		/* Get the careers from the database */
- 		$query = $this->CareerDAO_model->show();
+		$array = getCareerSessions('0', "");
+		$this->session->set_userdata($array);
 
-		$data['listElement'] = $this->administrator_logic->getArrayCareers($query);
 		$data['iters'] = getBreadCrumbHome();
-		$data['actual'] = "Carreras";
+		$data['actual'] = "Careers";
 		$data['ADD'] = getAddressCareers();
-		$data['STATE'] = stateNoValid();
+		$data['careers'] = $this->administrator_logic->getArrayCareers();
 
-		$this->load->view("PlanPage/Header");
-		$this->load->view("PlanPage/HomePlan", $data);
-		$this->load->view("PlanPage/Footer");	
+        $this->load->view('Admin/Header');
+        $this->load->view('Admin/BreadCrumb', $data);
+        $this->load->view('Admin/Career', $data);
 	}
 
 
+	/****************************************
+	- Get all plans. Show the plans.
+	****************************************/
 	public function Plans($id = null, $name = null)
 	{
-		/* Get the plans from the database */
- 		$query = $this->PlanDAO_model->show($id);
- 		if ($name == null){
- 			$data['actual'] = "planes";
- 		}else{
- 			$data['actual'] = urldecode($name);
- 		}
+		// if there is not a id, take the idCareer previous selected.
+		if ($id == null)
+		{
+			$id = $this->session->userdata('idCareer');
+			$name = $this->session->userdata('nameCareer');
+		}else{
+			$array = getCareerSessions($id, urldecode($name));
+			$this->session->set_userdata($array);
+		}
 
-		$data['listElement'] = $this->administrator_logic->getArrayPlans($query);
-		$data['iters'] = getBreadCrumbCareer();
-		$data['ADD'] = getAddressPlans();
-		$data['STATE'] = stateValid();
+		/* These are data that the interface is going to get.*/
+		$data['iters'] = getBreadCrumbCareer(); // Relative position
+		$data['actual'] = urldecode($name);     // Actual position
+		$data['ADD'] = getAddressPlans();       // Address of redirect.
+		$data['plans'] = $this->administrator_logic->getArrayPlans($id);
 
-		$this->load->view("PlanPage/Header");
-		$this->load->view("PlanPage/HomePlan", $data);
-		$this->load->view("PlanPage/Footer");
+        $this->load->view('Admin/Header');
+        $this->load->view('Admin/BreadCrumb', $data);
+        $this->load->view('Admin/Plan', $data);
 	}
 
 
+	/****************************************
+	- Add a new plan
+		The data is received by javascript.
+	****************************************/
 	public function addPlan()
 	{
-		// Comunico a la bd.
 		$data = array(
 			'name' => $this->input->post('inputName'),
 			'state' => false,
-			'idCareer' => 1
+			'idCareer' => $this->session->userdata('idCareer')
 		);
-
-        $insert = $this->PlanDAO_model->insert($data);
+		
+		$result = $this->administrator_logic->insertPlan($data);
         validateModal();
 	}
 
 
-	public function editPlan($idPlan = null, $name = null)
+	/****************************************
+	- Edit a new plan
+		The data is received by javascript.
+	****************************************/
+	public function editPlan()
 	{
-		if (!$idPlan){
-			return;
-		}
-
-		$data['pastName'] = $name;
-		$data['id'] = $idPlan;
-		// Cargo la vista...
-
-		$this->load->view("Admin/Header");
-		$this->load->view("PlanPage/EditPlan",$data);
-		$this->load->view("Admin/Footer");
+		$data = array(
+			'idPlan' => $this->input->post('inputIdPlan'),
+			'name' => $this->input->post('inputName'),
+			'state' => $this->input->post('inputState'),
+			'idCareer' => $this->session->userdata('idCareer')
+		);
+		$result = $this->administrator_logic->editPlan($data);
+		validateModal();
 	}
 
 
+	/****************************************
+	- Get the information of a plan.
+	****************************************/	
+	public function getPlan($id)
+    {
+    	$data = $this->administrator_logic->getUniquePlan($id);
+    	validateArrayModal($data);
+    }
 
 
-
-	public function deletePlan()
+	/****************************************
+	- Delete a plan (only if doesn't have any block reference).
+	****************************************/
+	public function deletePlan($id)
 	{
-		// Borro los planes.
+		$data['id'] = $id;
+		$result = $this->administrator_logic->deletePlan($data);
+		validateModal();
 	}
 
 
+	/****************************************
+	- Change the state of a plan.
+	****************************************/
 	public function changeStatePlan()
 	{
-
+		// Falta...
+		$data = array(
+			'idPlan' => $this->input->post('id'),
+			'state' => $this->input->post('state')
+		);
+		$this->administrator_logic->changeStatePlan($data);
+		validateModal();
 	}
 
-
+	/****************************************
+	- Get all blocks. Show the blocks.
+	****************************************/
 	public function Blocks($id = null, $name = null)
 	{
-		/* Get the blocks from the database */
- 		$query = $this->BlockDAO_model->show($id);
- 		if ($name == null){
- 			$data['actual'] = "Bloques";
- 		}else{
- 			$data['actual'] = urldecode($name);
- 		}
+		// if there is not a id, take the idCareer previous selected.
+		if ($id == null)
+		{
+			$id = $this->session->userdata('idPlan');
+			$name = $this->session->userdata('namePlan');
+		}else{
+			$array = getPlanSessions($this->session, $id, urldecode($name));
+			$this->session->set_userdata($array);
+		}
 
-		$data['listElement'] = $this->administrator_logic->getArrayBlocks($query);
-		$data['iters'] = getBreadCrumbPlan();
-		$data['ADD'] = getAddressBlocks();
-		$data['STATE'] = stateMoveValid();
+		/* These are data that the interface is going to need.*/
+		$data['iters'] = getBreadCrumbPlan(); // Relative position
+		$data['idParent'] = $id; // Id of the plan that the block belongs.
+		$data['actual'] = urldecode($name);   // Actual position
+		$data['ADD'] = getAddressBlocks();    // Get address of a block position
+		$data['blocks'] = $this->administrator_logic->getArrayBlocks($id);
 
-		$this->load->view("PlanPage/Header");
-		$this->load->view("PlanPage/HomePlan", $data);
-		$this->load->view("PlanPage/Footer", $data);
+		// Take all the plans of the database.
+		$data['plans'] = $this->administrator_logic->getArrayPlans(null);
+
+        $this->load->view('Admin/Header');
+        $this->load->view('Admin/BreadCrumb', $data);
+        $this->load->view('Admin/Block', $data);
 	}
-
+	
+	/****************************************
+	- Add a new block. 
+		The data is received by javascript.
+	****************************************/
 	public function addBlock()
 	{
-		// Comunico a la bd.
+		$data = array(
+			'name' => $this->input->post('inputName'),
+			'state' => false,
+			'idPlan' => $this->input->post('select')
+		);
+		$result = $this->administrator_logic->insertBlock($data);
+        validateModal();
 
 	}
 
-	public function editBlock($idBlock = null, $name = null)
+	/****************************************
+	- Edit the block.
+		The data is received by javascript.
+	****************************************/
+	public function editBlock()
 	{
-		// Edit the description of the block.
+		$data = array(
+			'idBlock' => $this->input->post('inputIdBlock'),
+			'name' => $this->input->post('inputName'),
+			'state' => $this->input->post('inputState'),
+			'idPlan' => $this->input->post('select')
+		);
+		$result = $this->administrator_logic->editBlock($data);
+		validateModal();
 	}
 
+	/****************************************
+	- Get the information of a block.
+	****************************************/	
+	public function getBlock($id)
+    {
+    	$data = $this->administrator_logic->getUniqueBlock($id);
+    	validateArrayModal($data);
+    }
 
-	public function deleteBlock()
+    /****************************************
+	- Delete a block (only if doesn't have any block reference).
+	****************************************/
+	public function deleteBlock($id)
 	{
-		// Borro los planes.
+		$data['id'] = $id;
+		$result = $this->administrator_logic->deleteBlock($data);
+		validateModal();
 	}
 
+	/****************************************
+	- Change the state of a block.
+	****************************************/
 	public function changeStateBlock()
 	{
+		$data = array(
+			'idBlock' => $this->input->post('id'),
+			'state' => $this->input->post('state')
+		);
+		$this->administrator_logic->changeStateBlock($data);
+		validateModal();
+	}
 
-	} 
+
+	/****************************************
+	- Get all courses. Show the view.
+	****************************************/
+    public function Courses($id = null, $name = null)
+    {
+    	// if there is not a id, take the idCareer, idPlan, and idBlock previous selected.
+		if ($id == null)
+		{
+			$id = $this->session->userdata('idBlock');
+			$name = $this->session->userdata('nameBlock');
+		}else{
+			$array = getBlockSessions($this->session, $id, urldecode($name));
+			$this->session->set_userdata($array);
+		}
+
+		/* These are data that the interface is going to need.*/
+		$data['iters'] = getBreadCrumbBlock(); // Relative position
+		$data['idParent'] = $id; // Id of the plan that the block belongs.
+		$data['actual'] = urldecode($name);   // Actual position
+		$data['ADD'] = getAddressCourses();    // Get address of a block position
+		$data['courses'] = $this->administrator_logic->getArrayCourses($id);
+
+		// Take all the blocks of the database.
+		$data['blocks'] = $this->administrator_logic->getArrayBlocks(null);
+
+        $this->load->view('Admin/Header');
+        $this->load->view('Admin/BreadCrumb', $data);
+        $this->load->view('Admin/Course', $data);
+    }
+
+    /****************************************
+	- Add a new course. 
+		The data is received by javascript.
+	****************************************/
+    public function addCourse()
+    {
+        $data = array(
+            'code' => $this->input->post('inputCode'),
+            'name' => $this->input->post('inputName'),
+            'state' => false,
+            'isCareer' => $this->input->post('inputCareer'),
+            'lessonNumber' => $this->input->post('inputLessons'),
+            'idBlock' => $this->input->post('select'),
+        );
+
+        $insert = $this->administrator_logic->insertCourse($data);
+        validateModal();
+    }
+
+    /****************************************
+	- Edit the curse.
+		The data is received by javascript.
+	****************************************/
+	public function editCourse()
+	{
+		$data = array(
+			'idCourse' => $this->input->post('inputIdCourse'),
+            'code' => $this->input->post('inputCode'),
+            'name' => $this->input->post('inputName'),
+            'state' => $this->input->post('inputState'),
+            'isCareer' => $this->input->post('inputCareer'),
+            'lessonNumber' => $this->input->post('inputLessons'),
+            'idBlock' => $this->input->post('select'),
+        );
+		$result = $this->administrator_logic->editCourse($data);
+		validateModal();
+	}
+
+	/****************************************
+	- Get the information of a course.
+	****************************************/	
+	public function getCourse($id)
+    {
+    	$data = $this->administrator_logic->getUniqueCourse($id);
+    	validateArrayModal($data);
+    }
 
 
+    /****************************************
+	- Delete the course selected.
+	****************************************/	
+    public function deleteCourse($id)
+    {
+    	$result = $this->administrator_logic->deleteCourse($id);
+        validateModal();
+    }
+
+    /****************************************
+	- Change the state of a course.
+	****************************************/
+	public function changeStateCourse()
+	{
+		$data = array(
+			'idCourse' => $this->input->post('id'),
+			'state' => $this->input->post('state')
+		);
+		$this->administrator_logic->changeStateCourse($data);
+		validateModal();
+	}
 
 	/****************************************
 	- That function create the links for the 
@@ -324,18 +502,6 @@ class Administrator_controller extends CI_Controller
 		$this->showScheduleSelector();
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
 	/****************************************
 	- Add a new admin. Show the view.
 	****************************************/
@@ -382,16 +548,5 @@ class Administrator_controller extends CI_Controller
 		redirect('Administrator_controller/index/');
 		echo "<script>alert('Se ha agregado a la base de datos.');</script>";
 	}
-
-	/****************************************
-	- Get all courses. Show the view.
-	****************************************/
-	public function Courses()
-	{
-		$data['courses'] = $this->CourseDAO_model->getCourses();
-
-		$this->load->view("./HomePage/Header");
-		$this->load->view("Admin/Courses", $data);
-		$this->load->view("./HomePage/Footer");
-	}
 }
+

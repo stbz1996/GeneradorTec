@@ -49,4 +49,42 @@ body{
 .emailTable{
 	width: 25%;
 }
+
+h1#tituloPlanes {
+	margin-left: auto;
+	margin-right: auto;
+	align-content: center;
+}
+
+.tituloNumero {
+	margin-left: auto;
+	margin-right: auto;
+	align-content: center;
+}
+
+#image1.img-responsive{
+	height:50px;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+.style3 {
+	border-top: 1px dashed #8c8b8b;
+}
+
+#planHeader.sidebar-header{
+	margin-top: 20px;
+}
+
+#log.a{
+	text-decoration: none;
+}
 /* ------------- */
+
+.btn span.glyphicon {    			
+	opacity: 0;				
+}
+.btn.active span.glyphicon {				
+	opacity: 1;				
+}

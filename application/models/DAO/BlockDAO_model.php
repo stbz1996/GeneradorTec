@@ -10,39 +10,12 @@ class BlockDAO_model extends CI_Model{
 	}
 
 	/****************************************
-	- Activate the plan.
-	****************************************/
-	private function activateBlock($Block)
-	{
-		$Block->setState(true);
-		$changes = array('state' => $Block->getState());
-		$this->db->where('idBlock', $Block->getId());
-		$this->db->update('Block', $changes);
-	}
-
-	/****************************************
-	- Desactivate the plan. 
-	****************************************/
-	private function desactivateBlock($Block)
-	{
-		$Block->setState(false);
-		$changes = array('state' => $Block->getState());
-		$this->db->where('idBlock', $Block->getId());
-		$this->db->update('Block', $changes);
-	}
-
-	/****************************************
 	- Insert the new plan in the database.
 	****************************************/
 	public function insert($Block)
 	{
-		$newBlock = array(
-			'idBlock' => $Block->getId(), 
-			'name' => $Block->getName(), 
-			'state' => $Block->getState(), 
-			'idPlan' => $Block->getIdPlan()
-		);
-		$this->db->insert('Block', $newBlock);
+		$this->db->insert('Block', $Block);
+		return $this->db->insert_id();
 	}
 
 	/****************************************
@@ -51,12 +24,12 @@ class BlockDAO_model extends CI_Model{
 	public function edit($Block)
 	{
 		$changes = array(
-			'name' => $Block->getName(), 
-			'state' => $Block->getState(), 
-			'idBlock' => $Block->getIdPlan()
+			'name' => $Block['name'], 
+			'state' => $Block['state'], 
+			'idPlan' => $Block['idPlan'] 
 		);
-		$this->db->where('idBlock', $Block->getId());
-		$this->db->update('Block', $changes);
+		$this->db->where('idBlock', $Block['idBlock']);
+		return $this->db->update('Block', $changes);
 	}
 
 	/****************************************
@@ -66,7 +39,10 @@ class BlockDAO_model extends CI_Model{
 	{
 		$this->db->select('*');
 		$this->db->from('Block');
-		$this->db->where('idPlan', $idPlan);
+
+		if ($idPlan){
+			$this->db->where('idPlan', $idPlan);
+		}
 		$query = $this->db->get();
 		if ($query->num_rows() > 0){
 			return $query;
@@ -76,11 +52,37 @@ class BlockDAO_model extends CI_Model{
 	}
 
 	/****************************************
-	- Delete the plan in the database.
+	- Get a unique block from the database
+	****************************************/
+	public function get($id)
+    {
+        $this->db->from('Block');
+        $this->db->where('idBlock', $id);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+	/****************************************
+	- Delete the block in the database.
 	****************************************/
 	public function delete($Block)
 	{
-		// Búsqueda recursiva
+		$this->db->where('idBlock', $Block['id']);
+        return $this->db->delete('Block');
 	}
+
+	/****************************************
+	- Activate or desactivate the block.
+	****************************************/
+	public function changeState($Block)
+	{
+		$changes = array(
+			'state' => $Block['state']
+		);
+		$this->db->where('idBlock', $Block['idBlock']);
+		$this->db->update('Block', $changes);
+	}
+
+
 
 }
