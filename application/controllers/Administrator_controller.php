@@ -132,27 +132,7 @@ class Administrator_controller extends CI_Controller
 	}
 
 
-	/* Esto se va a eliminar cuando Randy logré sus respectivos avances.*/
-	public function editPlan2()
-	{
-		// Comunico a la BD con el nuevo nombre.
-		$newName = $this->input->post('newName');
-		$id = $this->input->post('id');
-		print_r($newName);
-		print_r($id);
-		if (!$newName){
-			return;
-		}
 
-		$Plan = new PlanDTO_model();
-		$Plan->setIdPlan($id);
-		$Plan->setName($newName);
-		$Plan->setState(true);
-		$Plan->setIdCareer(1);
-		$query = $this->PlanDAO_model->edit($Plan);
-
-		redirect('Administrator_controller/Plans');
-	}
 
 
 	public function deletePlan()
@@ -219,7 +199,7 @@ class Administrator_controller extends CI_Controller
 	{
 		$idCareer = $_SESSION['idCareer'];
 		$data['profesors'] = $this->administrator_logic->findProfessors($idCareer);
-		$data['periods'] = $this->administrator_logic->findPeriods(); 
+		$data['periods']   = $this->administrator_logic->findPeriods(); 
 		if ($data['profesors'] == false)
 		{
 			echo "<script>alert('No hay profesores activos');</script>";
@@ -229,6 +209,7 @@ class Administrator_controller extends CI_Controller
 			echo "<script>alert('No hay periodos');</script>";
 		}
 		$this->callView("LinksPage", $data);
+		$this->session->set_userdata('LinksState', "");
 	}
 
 
