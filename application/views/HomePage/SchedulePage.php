@@ -6,9 +6,6 @@
 	);
 ?>
 
-<main class="page-content">
-	<div class="container-fluid">
-		<div class="row">
 			<div class="titles">
               	<h1>Horarios disponibles</h1>
                	<ul>
@@ -59,6 +56,3 @@
 				<?= form_submit($button) ?>
 			</div>
 			<?= form_close() ?>
-		</div>
-    </div>
-</main>

@@ -1,6 +1,16 @@
+<script>var base_url = '<?php echo base_url() ?>';</script>
 
-      <script>var base_url = '<?php echo base_url() ?>';</script>
-      <div class="container">
+<!-- Los tituloso -->
+<div>
+    <h1>Titulo grande</h1>
+    <p>Explicacion de lo que hay en la página</p>
+</div>
+
+<hr>
+
+<!-- Todo el contenido -->
+<div>
+      
         <h1 id="tituloPlanes" class="tituloNumero">Planes</h1>
 
         <button class="btn btn-primary" onclick="addPlan()"><i class="glyphicon glyphicon-plus"></i> Crear Plan</button>
@@ -63,7 +73,7 @@
           </tfoot>
         </table>
 
-      </div>
+      
       
   <!-- Bootstrap modal -->
   <div class="modal fade" id="modal_form" role="dialog">
@@ -108,15 +118,15 @@
 
     </div><!-- /.modal -->
 
-  <!-- End Bootstrap modal -->
-  </main>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="<?php echo base_url('css/bootstrap/js/bootstrap.min.js')?>"></script>
-  <script src="<?php echo base_url('css/datatables/js/jquery.dataTables.min.js')?>"></script>
-  <script src="<?php echo base_url('css/datatables/js/dataTables.bootstrap.js')?>"></script>
-  <script src="<?php echo base_url('js/modal.js')?>"></script>
-  </div>
-  </body>
-</html>
+</div>
+
+<hr>
+
+<!-- Los botones -->
+<div class="modal-footer">
+    Aqui los botones
+</div>
+
+
+

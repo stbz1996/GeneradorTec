@@ -1,8 +1,16 @@
+<script>var base_url = '<?php echo base_url() ?>';</script>
 
-      <script>var base_url = '<?php echo base_url() ?>';</script>
-      <div class="container">
-        <h1 id="tituloPlanes" class="tituloNumero">Bloques</h1>
+<!-- Titles -->
+<div>
+    <h1>Bloques</h1>
+    <p>Explicacion de lo que hay en la página</p>
+</div>
 
+<hr>
+
+<!-- Content -->
+<div>
+    <div class="container">
         <button class="btn btn-primary" onclick="addBlock()"><i class="glyphicon glyphicon-plus"></i> Crear Bloque</button>
         <br/><br/>
         
@@ -118,11 +126,26 @@
         </div><!-- /.modal-content -->
 
       </div><!-- /.modal-dialog -->
-
     </div><!-- /.modal -->
+</div>
+
+<hr>
+
+<!-- Los botones -->
+<div class="modal-footer">
+    Aqui los botones
+</div>
+
+
+
+
+      
+      
+
+
 
   <!-- End Bootstrap modal -->
-
+<!--
   </main>
 
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -130,7 +153,9 @@
       <script type="text/javascript" language="javascript" src="<?php echo base_url('css/datatables/js/jquery.dataTables.min.js')?>"></script>
       <script type="text/javascript" language="javascript" src="<?php echo base_url('css/datatables/js/dataTables.bootstrap.js')?>"></script>
       <script type="text/javascript" language="javascript" src="<?php echo base_url('js/modal.js')?>"></script>
+  
   </div>
 
   </body>
 </html>
+-->

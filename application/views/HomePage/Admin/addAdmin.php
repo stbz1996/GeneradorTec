@@ -31,26 +31,31 @@
 	$button = array(
 		'name' => 'submitButton',
 		'value' => 'Nuevo Administrador',
-		'class' => 'btn btn-primary'
+		'class' => "btn btn-default"
 	);
 ?>
 
-<body id="LoginForm">
-	<div class="container">
-		<div class="login-form">
-			<div class="main-div">
-		    	<div class="panel">
-		   			<h2>Administración</h2>
-		   			<p>Por favor ingrese la información del nuevo administrador: </p>
-		   		</div>
-		    	<form id="Login">
+
+<main class="page-content">
+	<div class="container-fluid">
+		<div class="row">
+			<div>
+              	<h1>Administración</h1>
+		   		<p>Por favor ingrese la información del nuevo administrador: </p>
+            </div>
+            <hr>
+            <div>
+            	<form id="Login">
 		        	<div class="form-group"> <?= form_input($user) ?> </div>
 		        	<div class="form-group"> <?= form_input($password) ?> </div>
 		        	<div class="form-group"> <?= form_input($passwordAgain) ?> </div>
-		        	<?= form_submit($button) ?>
 		   		</form>
-    		</div>
+            </div>
+            
+            <div class="modal-footer">
+            	<?= form_submit($button) ?>
+            </div>
+			<?= form_close() ?> 
 		</div>
-	</div>
-</body>
-<?= form_close() ?> 
+    </div>
+</main>

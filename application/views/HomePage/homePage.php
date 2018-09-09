@@ -1,24 +1,19 @@
-<main class="page-content">
-	<div class="container-fluid">
-		<div class="row">
+<!-- Los tituloso -->
+<div>
+    <h1>Titulo grande</h1>
+    <p>Explicacion de lo que hay en la página</p>
+</div>
 
-			<div>
-              	<h1>Titulo grande</h1>
-               	<p>Explicacion de lo que hay en la página</p>
-            </div>
+<hr>
 
-            <hr>
+<!-- Todo el contenido -->
+<div>
+    Aqui el contenido
+</div>
 
-            <div>
-            	Aqui el contenido
-            </div>
+<hr>
 
-            <hr>
-
-            <div>
-            	Aqui los botones
-            </div>
-
-		</div>
-    </div>
-</main>
+<!-- Los botones -->
+<div class="modal-footer">
+    Aqui los botones
+</div>

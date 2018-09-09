@@ -72,9 +72,10 @@ class Administrator_controller extends CI_Controller
 		$data['ADD'] = getAddressCareers();
 		$data['careers'] = $this->administrator_logic->getArrayCareers();
 
-        $this->load->view('Admin/Header');
-        $this->load->view('Admin/BreadCrumb', $data);
-        $this->load->view('Admin/Career', $data);
+        $this->load->view('HomePage/Header');
+        $this->load->view('HomePage/Admin/BreadCrumb', $data);
+        $this->load->view('HomePage/Admin/Career', $data);
+        $this->load->view('HomePage/Footer');
 	}
 
 
@@ -99,9 +100,10 @@ class Administrator_controller extends CI_Controller
 		$data['ADD'] = getAddressPlans();       // Address of redirect.
 		$data['plans'] = $this->administrator_logic->getArrayPlans($id);
 
-        $this->load->view('Admin/Header');
-        $this->load->view('Admin/BreadCrumb', $data);
-        $this->load->view('Admin/Plan', $data);
+        $this->load->view('HomePage/Header');
+        $this->load->view('HomePage/Admin/BreadCrumb', $data);
+        $this->load->view('HomePage/Admin/Plan', $data);
+        $this->load->view("HomePage/Footer");
 	}
 
 
@@ -199,9 +201,10 @@ class Administrator_controller extends CI_Controller
 		// Take all the plans of the database.
 		$data['plans'] = $this->administrator_logic->getArrayPlans(null);
 
-        $this->load->view('Admin/Header');
-        $this->load->view('Admin/BreadCrumb', $data);
-        $this->load->view('Admin/Block', $data);
+        $this->load->view('HomePage/Header');
+        $this->load->view('HomePage/Admin/BreadCrumb', $data);
+        $this->load->view('HomePage/Admin/Block', $data);
+        $this->load->view("HomePage/Footer");
 	}
 	
 	/****************************************
@@ -295,8 +298,9 @@ class Administrator_controller extends CI_Controller
 		$data['blocks'] = $this->administrator_logic->getArrayBlocks(null);
 
         $this->load->view('Admin/Header');
-        $this->load->view('Admin/BreadCrumb', $data);
-        $this->load->view('Admin/Course', $data);
+        $this->load->view('HomePage/Admin/BreadCrumb', $data);
+        $this->load->view('HomePage/Admin/Course', $data);
+        $this->load->view("HomePage/Footer");
     }
 
     /****************************************
@@ -369,6 +373,7 @@ class Administrator_controller extends CI_Controller
 		validateModal();
 	}
 
+
 	/****************************************
 	- That function create the links for the 
 	  professors
@@ -378,16 +383,23 @@ class Administrator_controller extends CI_Controller
 		$idCareer = $_SESSION['idCareer'];
 		$data['profesors'] = $this->administrator_logic->findProfessors($idCareer);
 		$data['periods']   = $this->administrator_logic->findPeriods(); 
+		
 		if ($data['profesors'] == false)
 		{
 			echo "<script>alert('No hay profesores activos');</script>";
+			$this->index();
 		}
+		
 		if ($data['periods'] == false)
 		{
 			echo "<script>alert('No hay periodos');</script>";
+			$this->index();
 		}
-		$this->callView("LinksPage", $data);
-		$this->session->set_userdata('LinksState', "");
+
+		if ($data['profesors'] == true && $data['periods'] == true) {
+			$this->callView("LinksPage", $data);
+			$this->session->set_userdata('LinksState', "");
+		}
 	}
 
 
@@ -508,10 +520,11 @@ class Administrator_controller extends CI_Controller
 	public function AddAdmin()
 	{
 		$data['pageName'] = "Add a new admin";
-		$this->load->view("Admin/Header");
-		$this->load->view("Admin/addAdmin", $data);
-		$this->load->view("Admin/Footer");
+		$this->load->view("HomePage/Header");
+		$this->load->view("HomePage/Admin/addAdmin", $data);
+		$this->load->view("HomePage/Footer");
 	}
+
 
 	/****************************************
 	- Get the data of the new administrator and compare with the database.

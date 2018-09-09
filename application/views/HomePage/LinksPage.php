@@ -7,9 +7,7 @@
 ?>
 
 
-<main class="page-content">
-	<div class="container-fluid">
-		<div class="row">
+
 			
 			<div class="titles">
               	<h1>Generación automática de links</h1>
@@ -70,6 +68,3 @@
 				</form> 
 				<?= form_close() ?>
 			</div>
-		</div>
-    </div>
-</main>

@@ -89,3 +89,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <!-- sidebar-menu  -->
             </div>
         </nav>
+        
+        <main class="page-content">
+            <div class="container-fluid">
+                <div class="row">
+
+
+        <div class="sidebar-header" id="planHeader">
+            <img class="img-responsive" id="image1" src="https://tecdigital.tec.ac.cr/servicios/capacitacion/guia_estudiantes/resources/images/tec.png">
+        </div><br>
