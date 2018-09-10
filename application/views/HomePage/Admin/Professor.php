@@ -27,7 +27,7 @@
                 <td><?php echo $professor->lastName, "\t", $professor->name;?></td>
                 <td>
                     <div class="btn-group" data-toggle="buttons">
-                    <? if($professor->state): ?>
+                    <?php if($professor->state): ?>
                         <label class="btn btn-success active" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $professor->idProfessor ?>)'>
                         <input type="radio" name="radioActivate" id="option2" autocomplete="off" checked>
                         <span class="glyphicon glyphicon-ok"></span>
@@ -36,7 +36,7 @@
                         <input type="radio" name="radioDesactivate" id="option2" autocomplete="off">
                         <span class="glyphicon glyphicon-ok"></span>
                         </label>
-                    <? else: ?>
+                    <?php else: ?>
                         <label class="btn btn-success" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $professor->idProfessor ?>)'>
                         <input type="radio" name="radioActivate" id="option2" autocomplete="off" >
                         <span class="glyphicon glyphicon-ok"></span>
@@ -45,7 +45,7 @@
                         <input type="radio" name="radioDesactivate" id="option2" autocomplete="off" checked>
                         <span class="glyphicon glyphicon-ok"></span>
                         </label>
-                    <? endif; ?>
+                    <?php endif; ?>
                     </div>
                 </td>
                 <td>
