@@ -41,6 +41,7 @@ class Administrator_Logic{
 		return false;
 	}
 
+
 	/*********************************************************************
 	That function returns the list of periods in DB
  	*********************************************************************/
@@ -50,6 +51,7 @@ class Administrator_Logic{
  		return $periodDAO_model->findPeriods();
  	}
 
+
  	/*********************************************************************
 	That function returns the list of profesors in DB
  	*********************************************************************/
@@ -58,6 +60,7 @@ class Administrator_Logic{
  		$professorDAO_model = new ProfessorDAO_model();
  		return $professorDAO_model->findProfessors($idCareer);
 	}
+
 
 	/****************************************
 	- Compare the user's name with the new username.
@@ -106,6 +109,7 @@ class Administrator_Logic{
 
 		return true;
 	}
+
 
  	/****************************************
 	- Convert the data to the database an array.
@@ -157,6 +161,7 @@ class Administrator_Logic{
  		return $data;
  	}
 
+
  	/****************************************
 	- Insert a plan in the database.
 	****************************************/
@@ -165,6 +170,7 @@ class Administrator_Logic{
  		$planDAO_model = new PlanDAO_model();
  		return $planDAO_model->insert($data);
  	}
+
 
  	/****************************************
 	- Get the information about an unique plan.
@@ -175,6 +181,7 @@ class Administrator_Logic{
  		return $planDAO_model->get($id);
  	}
 
+
  	/****************************************
 	- Edit the information of a plan.
 	****************************************/
@@ -183,6 +190,7 @@ class Administrator_Logic{
  		$planDAO_model = new PlanDAO_model();
  		return $planDAO_model->edit($data);
  	}
+
 
  	/****************************************
 	- Change the state of a plan.
@@ -193,6 +201,7 @@ class Administrator_Logic{
  		$planDAO_model->changeState($data);
  	}
 
+
  	/****************************************
 	- Delete the information of a plan.
 	****************************************/
@@ -201,6 +210,7 @@ class Administrator_Logic{
  		$planDAO_model = new PlanDAO_model();
  		$planDAO_model->delete($data);
  	}
+
 
  	/****************************************
 	- Operations of blocks.
@@ -231,6 +241,7 @@ class Administrator_Logic{
  		return $data;
  	}
 
+
  	/****************************************
 	- Insert a block in the database.
 	****************************************/
@@ -239,6 +250,7 @@ class Administrator_Logic{
  		$blockDAO_model = new BlockDAO_model();
  		return $blockDAO_model->insert($data);
  	}
+
 
  	/****************************************
 	- Get the information about an unique block.
@@ -249,6 +261,7 @@ class Administrator_Logic{
  		return $blockDAO_model->get($id);
  	}
 
+
  	/****************************************
 	- Edit the information of a block.
 	****************************************/
@@ -257,6 +270,7 @@ class Administrator_Logic{
  		$blockDAO_model = new BlockDAO_model();
  		return $blockDAO_model->edit($data);
  	}
+
 
  	/****************************************
 	- Insert a block in the database.
@@ -267,6 +281,7 @@ class Administrator_Logic{
  		return $blockDAO_model->changeState($data);
  	}
 
+
  	/****************************************
 	- Delete the information of a block.
 	****************************************/
@@ -275,6 +290,7 @@ class Administrator_Logic{
  		$blockDAO_model = new BlockDAO_model();
  		return $blockDAO_model->delete($data);
  	}
+
 
  	/****************************************
 	- Operations of courses. (Not available for the moment)
@@ -308,6 +324,7 @@ class Administrator_Logic{
  		return $query;
  	}
 
+
  	/****************************************
 	- Insert a course in the database.
 	****************************************/
@@ -316,6 +333,7 @@ class Administrator_Logic{
  		$courseDAO_model = new CourseDAO_model();
  		return $courseDAO_model->insert($data);
  	}
+
 
  	/****************************************
 	- Get the information about an unique course.
@@ -326,6 +344,7 @@ class Administrator_Logic{
  		return $courseDAO_model->get($id);
  	}
 
+
  	/****************************************
 	- Edit the information of a course.
 	****************************************/
@@ -334,6 +353,7 @@ class Administrator_Logic{
  		$courseDAO_model = new CourseDAO_model();
  		return $courseDAO_model->edit($data);
  	}
+
 
  	/****************************************
 	- Delete the information of a course.
@@ -344,6 +364,7 @@ class Administrator_Logic{
  		return $courseDAO_model->delete($id);
  	}
 
+
  	/****************************************
 	- Change the state of a course.
 	****************************************/
@@ -352,6 +373,91 @@ class Administrator_Logic{
  		$courseDAO_model = new CourseDAO_model();
  		return $courseDAO_model->changeState($data);
  	}
+
+	/****************************************
+	- Operations of courses. (Not available for the moment)
+	- Show (All)
+	- Insert
+	- Get (Only unique)
+	- Edit
+	- Delete
+	****************************************/
+
+	/****************************************
+	- Convert the data to the database an array.
+	****************************************/
+	public function getArrayProfessors($id = null)
+	{
+		/* Get the professors from the database */
+		$professorDAO_model = new ProfessorDAO_model();
+
+		if ($id == null)
+		{
+			$query = $professorDAO_model->show();
+		}
+		
+		else
+		{
+			$query = $professorDAO_model->showByCareer($id);
+		}
+	
+		if (!$query)
+		{
+			return array();
+		}
+
+		return $query;
+	}
+
+
+	/****************************************
+   - Insert a professor in the database.
+   ****************************************/
+	public function insertProfessor($data)
+	{
+		$professorDAO_model = new ProfessorDAO_model();
+		return $professorDAO_model->insert($data);
+	}
+
+
+	/****************************************
+   - Get the information about an unique course.
+   ****************************************/
+	public function getUniqueProfessor($id)
+	{
+		$professorDAO_model = new ProfessorDAO_model();
+		return $professorDAO_model->get($id);
+	}
+
+
+	/****************************************
+   - Edit the information of a course.
+   ****************************************/
+	public function editProfessor($data)
+	{
+		$professorDAO_model = new ProfessorDAO_model();
+		return $professorDAO_model->edit($data);
+	}
+
+
+	/****************************************
+   - Delete the information of a course.
+   ****************************************/
+	public function deleteProfessor($id)
+	{
+		$professorDAO_model = new ProfessorDAO_model();
+		return $professorDAO_model->delete($id);
+	}
+
+
+	/****************************************
+   - Change the state of a course.
+   ****************************************/
+	public function changeStateProfessor($data)
+	{
+		$professorDAO_model = new ProfessorDAO_model();
+		return $professorDAO_model->changeState($data);
+	}
 
  	/**************************************************************
 	This function returns all the schedules regitered in the sistem

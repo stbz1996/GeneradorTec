@@ -6,6 +6,7 @@
 		'type' => 'text',
 		'id' => 'inputEmail',
 		'minlength' => '4',
+		'required' => 'true',
 		'maxlength' => '10'
 	);
 
@@ -16,6 +17,7 @@
 		'type' => 'password',
 		'id' => 'inputPassword',
 		'minlength' => '4',
+		'required' => 'true',
 		'maxlength' => '10'
 	);	
 

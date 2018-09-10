@@ -31,9 +31,9 @@ class Form_controller extends CI_Controller {
 		$this->Form_Logic = new Form_Logic();
 	}
 
+
 	function index()
 	{
-
 		//Get hashcode of link (p = value)
 		$hashCode = $_GET['p'];
 		

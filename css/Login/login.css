@@ -1,8 +1,19 @@
+body{
+  -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 #LoginForm{ 
 	background-image:url("http://fotorecurso.com/images/2016/04/29/fondo-azul-blue-cuadros-fotorecurso.jpg"); 
   background-repeat:no-repeat; 
 	background-position:center; 
 	background-size:cover; 
+  -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .panel h2{ 

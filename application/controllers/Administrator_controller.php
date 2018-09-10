@@ -58,6 +58,7 @@ class Administrator_controller extends CI_Controller
 		$this->callView("homePage", null);
 	}
 
+
 	/****************************************
 	- Get all careers. Show them.
 	****************************************/
@@ -71,10 +72,12 @@ class Administrator_controller extends CI_Controller
 		$data['ADD'] = getAddressCareers();
 		$data['careers'] = $this->administrator_logic->getArrayCareers();
 
-        $this->load->view('Admin/Header');
-        $this->load->view('Admin/BreadCrumb', $data);
-        $this->load->view('Admin/Career', $data);
+        $this->load->view('HomePage/Header');
+        $this->load->view('HomePage/Admin/BreadCrumb', $data);
+        $this->load->view('HomePage/Admin/Career', $data);
+        $this->load->view('HomePage/Footer');
 	}
+
 
 	/****************************************
 	- Get all plans. Show the plans.
@@ -97,16 +100,17 @@ class Administrator_controller extends CI_Controller
 		$data['ADD'] = getAddressPlans();       // Address of redirect.
 		$data['plans'] = $this->administrator_logic->getArrayPlans($id);
 
-        $this->load->view('Admin/Header');
-        $this->load->view('Admin/BreadCrumb', $data);
-        $this->load->view('Admin/Plan', $data);
+        $this->load->view('HomePage/Header');
+        $this->load->view('HomePage/Admin/BreadCrumb', $data);
+        $this->load->view('HomePage/Admin/Plan', $data);
+        $this->load->view("HomePage/Footer");
 	}
+
 
 	/****************************************
 	- Add a new plan
 		The data is received by javascript.
 	****************************************/
-
 	public function addPlan()
 	{
 		$data = array(
@@ -118,6 +122,7 @@ class Administrator_controller extends CI_Controller
 		$result = $this->administrator_logic->insertPlan($data);
         validateModal();
 	}
+
 
 	/****************************************
 	- Edit a new plan
@@ -135,6 +140,7 @@ class Administrator_controller extends CI_Controller
 		validateModal();
 	}
 
+
 	/****************************************
 	- Get the information of a plan.
 	****************************************/	
@@ -143,6 +149,7 @@ class Administrator_controller extends CI_Controller
     	$data = $this->administrator_logic->getUniquePlan($id);
     	validateArrayModal($data);
     }
+
 
 	/****************************************
 	- Delete a plan (only if doesn't have any block reference).
@@ -153,6 +160,7 @@ class Administrator_controller extends CI_Controller
 		$result = $this->administrator_logic->deletePlan($data);
 		validateModal();
 	}
+
 
 	/****************************************
 	- Change the state of a plan.
@@ -193,11 +201,12 @@ class Administrator_controller extends CI_Controller
 		// Take all the plans of the database.
 		$data['plans'] = $this->administrator_logic->getArrayPlans(null);
 
-        $this->load->view('Admin/Header');
-        $this->load->view('Admin/BreadCrumb', $data);
-        $this->load->view('Admin/Block', $data);
+        $this->load->view('HomePage/Header');
+        $this->load->view('HomePage/Admin/BreadCrumb', $data);
+        $this->load->view('HomePage/Admin/Block', $data);
+        $this->load->view("HomePage/Footer");
 	}
-
+	
 	/****************************************
 	- Add a new block. 
 		The data is received by javascript.
@@ -287,10 +296,11 @@ class Administrator_controller extends CI_Controller
 
 		// Take all the blocks of the database.
 		$data['blocks'] = $this->administrator_logic->getArrayBlocks(null);
-
-        $this->load->view('Admin/Header');
-        $this->load->view('Admin/BreadCrumb', $data);
-        $this->load->view('Admin/Course', $data);
+		
+		$this->load->view('HomePage/Header');
+        $this->load->view('HomePage/Admin/BreadCrumb', $data);
+        $this->load->view('HomePage/Admin/Course', $data);
+        $this->load->view("HomePage/Footer");
     }
 
     /****************************************
@@ -363,6 +373,96 @@ class Administrator_controller extends CI_Controller
 		validateModal();
 	}
 
+	public function Professors($id = null, $name = null)
+    {
+    	// if there is not a id, take the idCareer, idPlan, and idBlock previous selected.
+		if ($id == null)
+		{
+			$id = $this->session->userdata('idCareer');
+			$name = $this->session->userdata('nameCareer');
+		}else{
+			$array = getBlockSessions($this->session, $id, urldecode($name));
+			$this->session->set_userdata($array);
+		}
+
+		/* These are data that the interface is going to need.*/
+		$data['iters'] = getBreadCrumbProfessors(); // Relative position
+		$data['idParent'] = $id; // Id of the plan
+		$data['actual'] = urldecode($name);   // Actual position
+		$data['ADD'] = getAddressProfessors();
+		$data['professors'] = $this->administrator_logic->getArrayProfessors(); //id parametro
+
+		$this->load->view('HomePage/Header');
+        $this->load->view('HomePage/Admin/BreadCrumb', $data);
+        $this->load->view('HomePage/Admin/Professor', $data);
+        $this->load->view("HomePage/Footer");
+    }
+
+
+	/****************************************
+	- Add a new professor. 
+		The data is received by javascript.
+	****************************************/
+	public function addProfessor()
+	{
+		$data = array(
+			'name' => $this->input->post('inputName'),
+			'lastName' => $this->input->post('inputLastName'),
+			'email' => $this->input->post('inputEmail'),
+			'idCareer' => 1 //debe actualizarse a id de carrera
+		);
+
+		$insert = $this->administrator_logic->insertProfessor($data);
+		validateModal();
+	}
+
+	/****************************************
+	- Get the information of a professor.
+	****************************************/	
+	public function getProfessor($id)
+    {
+    	$data = $this->administrator_logic->getUniqueProfessor($id);
+    	validateArrayModal($data);
+    }
+
+	/****************************************
+	- Edit the curse.
+		The data is received by javascript.
+	****************************************/
+	public function editProfessor()
+	{
+		$data = array(
+			'idProfessor' => $this->input->post('inputIdProfessor'),
+            'name' => $this->input->post('inputName'),
+            'lastName' => $this->input->post('inputLastName'),
+            'email' => $this->input->post('inputEmail')
+        );
+		$result = $this->administrator_logic->editProfessor($data);
+		validateModal();
+	}
+
+ 	/****************************************
+	- Delete the selected professor.
+	****************************************/	
+    public function deleteProfessor($id)
+    {
+    	$result = $this->administrator_logic->deleteProfessor($id);
+        validateModal();
+	}
+	
+	/****************************************
+	- Change professor state.
+	****************************************/
+	public function changeStateProfessor()
+	{
+		$data = array(
+			'idProfessor' => $this->input->post('id'),
+			'state' => $this->input->post('state')
+		);
+		$this->administrator_logic->changeStateProfessor($data);
+		validateModal();
+	}
+
 	/****************************************
 	- That function create the links for the 
 	  professors
@@ -371,16 +471,24 @@ class Administrator_controller extends CI_Controller
 	{
 		$idCareer = $_SESSION['idCareer'];
 		$data['profesors'] = $this->administrator_logic->findProfessors($idCareer);
-		$data['periods'] = $this->administrator_logic->findPeriods(); 
+		$data['periods']   = $this->administrator_logic->findPeriods(); 
+		
 		if ($data['profesors'] == false)
 		{
 			echo "<script>alert('No hay profesores activos');</script>";
+			$this->index();
 		}
+		
 		if ($data['periods'] == false)
 		{
 			echo "<script>alert('No hay periodos');</script>";
+			$this->index();
 		}
-		$this->callView("LinksPage", $data);
+
+		if ($data['profesors'] == true && $data['periods'] == true) {
+			$this->callView("LinksPage", $data);
+			$this->session->set_userdata('LinksState', "");
+		}
 	}
 
 
@@ -501,10 +609,11 @@ class Administrator_controller extends CI_Controller
 	public function AddAdmin()
 	{
 		$data['pageName'] = "Add a new admin";
-		$this->load->view("Admin/Header");
-		$this->load->view("Admin/addAdmin", $data);
-		$this->load->view("Admin/Footer");
+		$this->load->view("HomePage/Header");
+		$this->load->view("HomePage/Admin/addAdmin", $data);
+		$this->load->view("HomePage/Footer");
 	}
+
 
 	/****************************************
 	- Get the data of the new administrator and compare with the database.
