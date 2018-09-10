@@ -9,6 +9,19 @@ class Administrator_Logic{
 
 	}
 
+	/******************************************************************
+	Insert a new administrator in the database.
+	******************************************************************/
+	public function insertAdmin($username, $password)
+	{
+		$administratorDAO_model = new AdministratorDAO_model();
+		$administrator = new AdministratorDTO();
+		$administrator->setUser($username);
+		$administrator->setPassword($password);
+
+		$administratorDAO_model->insert($administrator);
+	}
+
 
 	/******************************************************************
 	That functions returns the idAdministrator if the administratrator
@@ -67,13 +80,13 @@ class Administrator_Logic{
 	- $data -> is an array of users in the database.
 	- Returns (true/false) if the user is registered.
 	****************************************/
-	private function compareUser($data, $Admin)
+	private function compareUser($data, $username)
 	{
 		for($i = 0; $i < count($data); $i++)
 		{
 			$tempName = $data[$i]->userName;
 
-			if (strtolower($tempName) == strtolower($Admin->getUser()))
+			if (strtolower($tempName) == strtolower($username))
 			{
 				return false;
 			}
@@ -86,28 +99,62 @@ class Administrator_Logic{
 	- Get all the users in the database and call function compareUser.
 	- Returns the result of compareUser.
 	****************************************/
-	public function isUserInDatabase($query, $Admin)
+	public function isUserInDatabase($username)
 	{
+		$administratorDAO = new AdministratorDAO_model();
 		$data = array();
 		$state = false;
+		$query = $administratorDAO->show();
 
 		// If there are not admins.
 		if (!$query){
-			echo "<script>alert('Hay un problema con su solicitud');</script>";
+			printMessage("Hay un problema con su solicitud");
 			return false;
 		}
 
 		$data = $query->result();
-
-		$state = $this->compareUser($data, $Admin);
+		$state = $this->compareUser($data, $username);
 
 		/* If the new admin username is registered in the database*/
 		if (!$state){
-			echo "<script>alert('El usuario ya está registrado en el sistema.');</script>";
+			printMessage("El usuario ya está registrado en el sistema.");
 			return false;
 		}
 
 		return true;
+	}
+
+	/****************************************
+	- Compare the data from the form to insert an admin.
+	****************************************/
+	public function validAdminData($username, $password, $autentification)
+	{
+		if ($password != $autentification)
+		{
+			printMessage("Las contraseñas no coinciden");
+			return false;
+		}
+
+		if ($username == null || $username = "")
+		{
+			printMessage("El nombre de usuario no puede estar vacío");
+			return false;
+		}
+
+		if ($password == null || $password = "")
+		{
+			printMessage("Debe escribir una contraseña.");
+			return false;
+		}
+
+		if ($autentification == null || $autentification = "")
+		{
+			printMessage("Debe escribir una verificación de la contraseña");
+			return false;
+		}
+
+		return true; // Data is valid.
+
 	}
 
 

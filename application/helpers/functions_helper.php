@@ -291,4 +291,9 @@ function validateArrayModal($data)
 	echo json_encode($data);
 }
 
+function printMessage($message)
+{
+	echo "<script>alert('".$message."');</script>";
+}
+
 ?>
