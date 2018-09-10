@@ -65,7 +65,7 @@ class AdministratorDAO_model extends CI_Model
 	/****************************************
 	- The function returns all admin registered in the database
 	****************************************/
-	public function show($Admin)
+	public function show()
 	{
 		/* Return all the admin in the system.*/
 		$query = $this->db->get('Administrator');

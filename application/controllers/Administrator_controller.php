@@ -9,7 +9,7 @@ class Administrator_controller extends CI_Controller
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('Administrator_Logic');
-		$this->load->library('logicControllerView/scheduleRelations');
+		//$this->load->library('logicControllerView/scheduleRelations');
 		$this->load->helper("functions_helper");
 
 		$this->load->helper("form");
@@ -296,8 +296,8 @@ class Administrator_controller extends CI_Controller
 
 		// Take all the blocks of the database.
 		$data['blocks'] = $this->administrator_logic->getArrayBlocks(null);
-
-        $this->load->view('Admin/Header');
+		
+		$this->load->view('HomePage/Header');
         $this->load->view('HomePage/Admin/BreadCrumb', $data);
         $this->load->view('HomePage/Admin/Course', $data);
         $this->load->view("HomePage/Footer");
@@ -373,6 +373,95 @@ class Administrator_controller extends CI_Controller
 		validateModal();
 	}
 
+	public function Professors($id = null, $name = null)
+    {
+    	// if there is not a id, take the idCareer, idPlan, and idBlock previous selected.
+		if ($id == null)
+		{
+			$id = $this->session->userdata('idCareer');
+			$name = $this->session->userdata('nameCareer');
+		}else{
+			$array = getBlockSessions($this->session, $id, urldecode($name));
+			$this->session->set_userdata($array);
+		}
+
+		/* These are data that the interface is going to need.*/
+		$data['iters'] = getBreadCrumbProfessors(); // Relative position
+		$data['idParent'] = $id; // Id of the plan
+		$data['actual'] = urldecode($name);   // Actual position
+		$data['ADD'] = getAddressProfessors();
+		$data['professors'] = $this->administrator_logic->getArrayProfessors(); //id parametro
+
+		$this->load->view('HomePage/Header');
+        $this->load->view('HomePage/Admin/BreadCrumb', $data);
+        $this->load->view('HomePage/Admin/Professor', $data);
+        $this->load->view("HomePage/Footer");
+    }
+
+
+	/****************************************
+	- Add a new professor. 
+		The data is received by javascript.
+	****************************************/
+	public function addProfessor()
+	{
+		$data = array(
+			'name' => $this->input->post('inputName'),
+			'lastName' => $this->input->post('inputLastName'),
+			'email' => $this->input->post('inputEmail'),
+			'idCareer' => 1 //debe actualizarse a id de carrera
+		);
+
+		$insert = $this->administrator_logic->insertProfessor($data);
+		validateModal();
+	}
+
+	/****************************************
+	- Get the information of a professor.
+	****************************************/	
+	public function getProfessor($id)
+    {
+    	$data = $this->administrator_logic->getUniqueProfessor($id);
+    	validateArrayModal($data);
+    }
+
+	/****************************************
+	- Edit the curse.
+		The data is received by javascript.
+	****************************************/
+	public function editProfessor()
+	{
+		$data = array(
+			'idProfessor' => $this->input->post('inputIdProfessor'),
+            'name' => $this->input->post('inputName'),
+            'lastName' => $this->input->post('inputLastName'),
+            'email' => $this->input->post('inputEmail')
+        );
+		$result = $this->administrator_logic->editProfessor($data);
+		validateModal();
+	}
+
+ 	/****************************************
+	- Delete the selected professor.
+	****************************************/	
+    public function deleteProfessor($id)
+    {
+    	$result = $this->administrator_logic->deleteProfessor($id);
+        validateModal();
+	}
+	
+	/****************************************
+	- Change professor state.
+	****************************************/
+	public function changeStateProfessor()
+	{
+		$data = array(
+			'idProfessor' => $this->input->post('id'),
+			'state' => $this->input->post('state')
+		);
+		$this->administrator_logic->changeStateProfessor($data);
+		validateModal();
+	}
 
 	/****************************************
 	- That function create the links for the 
@@ -532,23 +621,14 @@ class Administrator_controller extends CI_Controller
 	****************************************/
 	public function getAdminData()
 	{
-		$autentification = "";
 		$state = false;
-		$Admin = new AdministratorDTO();
-
-		$Admin->setUser($this->input->post('inputUsername'));
-		$Admin->setPassword($this->input->post('inputPassword'));
+		$stateUsername = false;
+		$username = $this->input->post('inputUsername');
+		$password = $this->input->post('inputPassword');
 		$autentification = $this->input->post('inputPasswordAgain');
 
-		// If the password are different.
-		if ($Admin->getPassword() != $autentification)
-		{
-			echo "<script>alert('Las contraseñas no coinciden');</script>";
-			redirect('Administrator_controller/addAdmin', 'refresh');
-			return;
-		}
-		$query = $this->AdministratorDAO_model->show($Admin);
-		$state = $this->administrator_logic->isUserInDatabase($query, $Admin);
+		// Verify if the username, password and autentification fields were filled.
+		$state = $this->administrator_logic->validAdminData($username, $password, $autentification);
 
 		if (!$state)
 		{
@@ -556,10 +636,20 @@ class Administrator_controller extends CI_Controller
 			return;
 		}
 
-		$this->AdministratorDAO_model->insert($Admin);
+		// Verify if the user is registered in the database.
+		$stateUsername = $this->administrator_logic->isUserInDatabase($username);
 
+		if (!$stateUsername)
+		{
+			redirect('Administrator_controller/addAdmin', 'refresh');
+			return;
+		}
+
+		// Insert the new administrator.
+		$this->administrator_logic->insertAdmin($username, $password);
+
+		printMessage("Se ha agregado a la base de datos");
 		redirect('Administrator_controller/index/');
-		echo "<script>alert('Se ha agregado a la base de datos.');</script>";
 	}
 }
 

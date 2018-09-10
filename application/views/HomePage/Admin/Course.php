@@ -1,5 +1,5 @@
 <script>var base_url = '<?php echo base_url() ?>';</script>
-<!-- Los tituloso -->
+<!-- Los titulos -->
 <div>
     <h1>Cursos</h1>
     <p>Explicacion de lo que hay en la página</p>
@@ -31,7 +31,7 @@
                 <td><?php echo $course->name;?></td>
                 <td>
                   <div class="btn-group" data-toggle="buttons">
-                  <? if($course->state): ?>
+                  <?php if($course->state): ?>
                       <label class="btn btn-success active" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
                         <input type="radio" name="radioActivate" id="option2" autocomplete="off" checked>
                         <span class="glyphicon glyphicon-ok"></span>
@@ -40,7 +40,7 @@
                         <input type="radio" name="radioDesactivate" id="option2" autocomplete="off">
                         <span class="glyphicon glyphicon-ok"></span>
                       </label>
-                  <? else: ?>
+                  <?php else: ?>
                       <label class="btn btn-success" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
                         <input type="radio" name="radioActivate" id="option2" autocomplete="off" >
                         <span class="glyphicon glyphicon-ok"></span>
@@ -49,11 +49,17 @@
                         <input type="radio" name="radioDesactivate" id="option2" autocomplete="off" checked>
                         <span class="glyphicon glyphicon-ok"></span>
                       </label>
-                  <? endif; ?>
+                  <?php endif; ?>
                   </div>
                 </td>
                 <td><?php echo $course->lessonNumber; ?></td>
-                <td><?php echo $course->isCareer; ?></td>
+                <td>
+                <?php if ($course->isCareer == 0): ?> 
+                    No
+                <?php else: ?>
+                    Sí
+                <?php endif; ?>
+                </td>
                 <td>
                   <button class="btn btn-primary" onclick='editCourse("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $course->idCourse ?>)'><i class="glyphicon glyphicon-pencil"></i></button>
                   <button class="btn btn-danger" onclick='deleteAll("<?=base_url().$ADD['ADDRESS_4']?>", <?= $course->idCourse ?>)'><i class="glyphicon glyphicon-remove"></i></button>
@@ -73,10 +79,9 @@
             </tr>
         </tfoot>
     </table>
+</div>
 
-      
-      
-  <!-- Bootstrap modal -->
+<!-- Bootstrap modal -->
 <div class="modal fade" id="modal_form" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -119,7 +124,12 @@
                     <div class="form-group">
                         <label class="control-label col-md-3">¿Carrera?</label>
                         <div class="col-md-9">
-                            <input name="inputCareer" placeholder="Carrera" class="form-control" type="text">
+                            <label class="radio-inline">
+                              <input type="radio" value="1" name="inputCareer" checked>Sí
+                            </label>
+                            <label class="radio-inline">
+                              <input type="radio" value="0" name="inputCareer">No
+                            </label>
                         </div>
                     </div>
               </div>
@@ -130,9 +140,9 @@
                       <select class="mdb-select colorful-select dropdown-primary" id="select" name='select'>
                           <option value="<?= $idParent ?>" selected><?= $actual ?></option>
                           <?php foreach($blocks as $block){?>
-                              <? if ($idParent != $block->idBlock): ?>
+                              <?php if ($idParent != $block->idBlock): ?>
                               <option value="<?= $block->idBlock?>"><?= $block->name ?></option>
-                              <? endif; ?>
+                              <?php endif; ?>
                         <?php }?>
                       </select>
                   </div>

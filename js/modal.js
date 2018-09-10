@@ -73,6 +73,16 @@ function addCourse()
     $('.modal-title').text('Crear Curso');
 }
 
+/****************************************
+- If button add professor is pressed, show the modal.
+****************************************/
+function addProfessor()
+{
+    save_method = 'add';
+    $('#form')[0].reset();
+    $('#modal_form').modal('show');
+    $('.modal-title').text('Crear Profesor');
+}
 
 /****************************************
 - If something is activated.
@@ -108,27 +118,6 @@ function desactivateState(url, id)
         success: function(data){
             $('[name="inputState"]').val(data.state);
             alert("Desactivado");
-        },
-        error: function (jqXHR, textStatus, errorThrown)
-        {
-            showErrors(jqXHR, textStatus, errorThrown);
-        }
-    });
-}
-
-/****************************************
-- If radio button is changed
-****************************************/
-function changeState(url, id)
-{
-    $.ajax({
-        url: url,
-        type: "POST",
-        data: $('#formeo' + id).serialize(),
-        dataType: "JSON",
-        success: function(data)
-        {
-            location.reload();// for reload a page
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
@@ -222,7 +211,6 @@ function editCourse(url, id)
             $('[name="inputName"]').val(data.name);
             $('[name="inputState"]').val(data.state);
             $('[name="inputLessons"]').val(data.lessonNumber);
-            $('[name="inputCareer"]').val(data.isCareer);
 
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('Editar Curso'); // Set title to Bootstrap modal title
@@ -236,6 +224,39 @@ function editCourse(url, id)
     });
 }
 
+
+/****************************************
+- If button edit professor is pressed, load the data from the database.
+****************************************/
+function editProfessor(url, id)
+{
+    console.log(url + id);
+    save_method = 'update';
+    $('#form')[0].reset();
+
+    //Ajax Load data from ajax
+    $.ajax({
+        url : url + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+            $('[name="inputIdProfessor"]').val(data.idProfessor);
+            $('[name="inputName"]').val(data.name);
+            $('[name="inputLastName"]').val(data.lastName);
+            $('[name="inputEmail"]').val(data.email);
+            $('[name="inputState"]').val(data.state);
+
+            $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
+            $('.modal-title').text('Editar Profesor'); // Set title to Bootstrap modal title
+
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
 
 /****************************************
 - Store the data in the database.
@@ -268,6 +289,7 @@ function save(url)
 function savePlan()
 {
     var url;
+    var text;
 
     if (save_method == "add")
     {
@@ -276,7 +298,15 @@ function savePlan()
         url = base_url + "index.php/Administrator_controller/editPlan";
     }
 
-    save(url);
+    text = $('[name="inputName"]').val();
+
+    if (text)
+    {
+        save(url);
+    }else
+    {
+        alert("Debe escribir un nombre para el plan");
+    }
 }
 
 /****************************************
@@ -293,7 +323,15 @@ function saveBlock()
         url = base_url + "index.php/Administrator_controller/editBlock";
     }
 
-    save(url);
+    text = $('[name="inputName"]').val();
+
+    if (text)
+    {
+        save(url);
+    }else
+    {
+        alert("Debe escribir un nombre para el bloque");
+    }
 }
 
 /****************************************
@@ -302,6 +340,7 @@ function saveBlock()
 function saveCourse()
 {
     var url;
+    var name, code, lessons;
 
     if (save_method == "add")
     {
@@ -310,7 +349,42 @@ function saveCourse()
         url = base_url + "index.php/Administrator_controller/editCourse";
     }
 
-    console.log(url);
+    code = $('[name="inputCode"]').val();
+    name = $('[name="inputName"]').val();
+    lessons = $('[name="inputLessons"]').val();
+
+    if (code && name && lessons)
+    {   
+        if(!/^([0-9])*$/.test(lessons)){
+            alert("El número de créditos no es un número");
+            return;
+        }
+
+        if (lessons > 12 || lessons < 0){
+            alert("El número de créditos no es aceptado");
+            return;
+        }
+
+        save(url);
+    }else{
+        alert("Falta agregar datos.");
+    }
+}
+
+/****************************************
+- If the user press save a course, defined the method.
+****************************************/
+function saveProfessor()
+{
+    var url;
+
+    if (save_method == "add")
+    {
+        url = base_url + "index.php/Administrator_controller/addProfessor";
+    }else{
+        url = base_url + "index.php/Administrator_controller/editProfessor";
+    }
+
     save(url);
 }
 

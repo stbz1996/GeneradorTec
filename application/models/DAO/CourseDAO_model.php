@@ -91,6 +91,15 @@ class CourseDAO_model extends CI_Model
         $this->db->update($this->table, $changes);
     }
 
+    /****************************************
+    *Function that get all active plans     *
+    *                                       *
+    *Input:                                 *
+    *   -$idPlan: Integer, id of a plan     *
+    *                                       *
+    *Result:                                *
+    *   Query with all plans' information   *
+    *****************************************/
     public function getPlanCourses($idPlan)
     {
         $this->db->select('idCourse');
@@ -102,6 +111,26 @@ class CourseDAO_model extends CI_Model
         $this->db->join('Block', 'Course.idBlock = Block.idBlock');
         $this->db->where('Block.idPlan', $idPlan);
         $this->db->where('Course.isCareer', 1);
+        $query = $this->db->get();
+        return $query;
+    }
+
+    /****************************************
+    *Function that returns query of courses *
+    *assigned by professor.                 *
+    *                                       *
+    *Input:                                 *
+    *   -$idForm: Integer, id of Form       *
+    *Result:                                *
+    *   Query with all courses assigned by  *
+    *   professor.                          *
+    *****************************************/
+    public function getFormCourses($idForm)
+    {
+        $this->db->select('idCourse');
+        $this->db->select('priority');
+        $this->db->from('CourseXForm');
+        $this->db->where('idForm', $idForm);
         $query = $this->db->get();
         return $query;
     }
