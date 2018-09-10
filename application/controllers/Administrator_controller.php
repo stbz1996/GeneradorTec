@@ -621,23 +621,14 @@ class Administrator_controller extends CI_Controller
 	****************************************/
 	public function getAdminData()
 	{
-		$autentification = "";
 		$state = false;
-		$Admin = new AdministratorDTO();
-
-		$Admin->setUser($this->input->post('inputUsername'));
-		$Admin->setPassword($this->input->post('inputPassword'));
+		$stateUsername = false;
+		$username = $this->input->post('inputUsername');
+		$password = $this->input->post('inputPassword');
 		$autentification = $this->input->post('inputPasswordAgain');
 
-		// If the password are different.
-		if ($Admin->getPassword() != $autentification)
-		{
-			echo "<script>alert('Las contraseñas no coinciden');</script>";
-			redirect('Administrator_controller/addAdmin', 'refresh');
-			return;
-		}
-		$query = $this->AdministratorDAO_model->show($Admin);
-		$state = $this->administrator_logic->isUserInDatabase($query, $Admin);
+		// Verify if the username, password and autentification fields were filled.
+		$state = $this->administrator_logic->validAdminData($username, $password, $autentification);
 
 		if (!$state)
 		{
@@ -645,10 +636,20 @@ class Administrator_controller extends CI_Controller
 			return;
 		}
 
-		$this->AdministratorDAO_model->insert($Admin);
+		// Verify if the user is registered in the database.
+		$stateUsername = $this->administrator_logic->isUserInDatabase($username);
 
+		if (!$stateUsername)
+		{
+			redirect('Administrator_controller/addAdmin', 'refresh');
+			return;
+		}
+
+		// Insert the new administrator.
+		$this->administrator_logic->insertAdmin($username, $password);
+
+		printMessage("Se ha agregado a la base de datos");
 		redirect('Administrator_controller/index/');
-		echo "<script>alert('Se ha agregado a la base de datos.');</script>";
 	}
 }
 
