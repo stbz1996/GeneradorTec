@@ -56,6 +56,7 @@ class FormDAO_model extends CI_Model
 		$this->db->select('Professor.name as professorName');
 		$this->db->select('Professor.lastName');
 		$this->db->select('Professor.idCareer');
+		$this->db->select('Professor.workLoad');
 		$this->db->select('Career.name as careerName');
 		$this->db->select('Period.number');
 		$this->db->select('Period.year');
@@ -125,9 +126,22 @@ class FormDAO_model extends CI_Model
 	*****************************************/
 	function updateWorkload($idProfessor, $workload)
 	{
-		$this->db->set('Professor.workLoad', (string)$workload, false);
+		$this->db->set('Professor.workLoad', (string)$workload);
 		$this->db->where('Professor.idProfessor', (string)$idProfessor);
 		$this->db->update('Professor');
+	}
+
+	/****************************************
+	*Function that relate courses assigned  *
+	*by the professor and his/her form. 	*
+	*										*
+	*Input:									*
+	*	-$courses: Array($CoursesDTO), cour-*
+	* 	ses professor chose. 				*
+	*****************************************/
+	public function insertCoursesForm($data)
+	{
+		$this->db->insert_batch('CourseXForm', $data);
 	}
 }
 

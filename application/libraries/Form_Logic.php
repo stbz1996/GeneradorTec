@@ -67,19 +67,19 @@ class Form_Logic{
 		$form->updateWorkload($idProfessor, $workload);
 	}
 
-	public function validateInsertActivity($idForm, $description, $workPorcent)
-	{ 
-		try {
-			$activityDTO = new ActivityDTO();
-			$activityDTO->setDescription($description);
-			$activityDTO->setIdForm($idForm);
-			$activityDTO->setWorkPorcent($workPorcent);
 
-			$activityDAO = new ActivityDAO_model();
-			$activityDAO->insertActivity($activityDTO);
-		} catch (Exception $e) {
-			return false;
-		}
+	/****************************************
+	*Function that validates the insert of  *
+	*an activity.							*
+	*										*
+	*Input:									*
+	*	-$activity: ActivityDTO, necessary  *
+	*	data to insert activity 			*
+	*****************************************/
+	public function validateInsertActivity($activity)
+	{ 
+		$activityDAO = new ActivityDAO_model();
+		$activityDAO->insertActivity($activity);
 	}
 
 	public function createForm($pIdPeriod, $pDueDate, $pIdProfessor)
@@ -121,40 +121,23 @@ class Form_Logic{
     	return $hash;
 	}
 
-	public function getCareerCourses()
-	{
-		$courseDAO = new CourseDAO_model();
-		$query = $courseDAO->getCareerCourses();
-
-		$data = array();
-		foreach ($query as $row) {
-			$newCourse = new CourseDTO();
-			$newCourse->setIdCourse($row['idCourse']);
-			$newCourse->setCode($row['code']);
-			$newCourse->setName($row['name']);
-			$newCourse->setLessonNumber($row['lessonNumber']);
-
-			$data[] = $newCourse;
-			/*
-			
-			echo $newCourse->getCode()." ";
-			echo $newCourse->getName()." ";
-			echo $newCourse->getLessonNumber()." ";
-			echo "</br>";
-			
-			*/
-		}
-
-		return $data;
-
-	}
-
+	/****************************************
+	*Function that get all plans of a career*
+	*										*
+	*Input:									*
+	*	-$pIdCareer: Integer, id of career  *
+	*										*
+	*Result: 								*
+	*	Array of all active plans 	 		*
+	*****************************************/
 	public function getCareerPlans($pIdCareer)
 	{
 		$planDAO = new PlanDAO_model();
 		$query = $planDAO->show($pIdCareer)->result_array();
 
 		$data = array();
+
+		//Get all active plans
 		foreach ($query as $row) {
 			if($row['state'])
 			{
@@ -167,13 +150,23 @@ class Form_Logic{
 		}
 		return $data;
 	}
-
+	/****************************************
+	*Function that get all courses of a plan*
+	*										*
+	*Input:									*
+	*	-$pIdPlan: Integer, id of a plan    *
+	*										*
+	*Result: 								*
+	*	Array with all the courses  		*
+	*****************************************/
 	public function getPlanCourses($pIdPlan)
 	{
 		$courseDAO = new CourseDAO_model();
 		$query = $courseDAO->getPlanCourses($pIdPlan)->result_array();
 
 		$data = array();
+
+		//Get all active courses
 		foreach ($query as $row) {
 			if($row['state'])
 			{
@@ -186,6 +179,90 @@ class Form_Logic{
 			}
 		}
 		return $data;
+	}
+
+	/****************************************
+	*Function that relate courses assigned  *
+	*by the professor and his/her form. 	*
+	*										*
+	*Input:									*
+	*	-$courses: Array($CoursesDTO), cour-*
+	* 	ses professor chose. 				*
+	*****************************************/
+	public function insertCoursesForm($courses)
+	{
+		$formDAO = new FormDAO_model();
+		$formDAO->insertCoursesForm($courses);
+	}
+
+	/****************************************
+	*Function that returns array of all ac- *
+	*tivities.								*
+	*										*
+	*Input:									*
+	*	-$idForm: Integer, id of Form 		*
+	*****************************************/
+	public function getActivities($idForm)
+	{
+		$activityDAO = new ActivityDAO_model();
+		$query = $activityDAO->getActivities($idForm);
+
+		//Verify if return rows
+		if($query)
+		{
+			$query = $query->result_array();
+			$data = array();
+
+			//Get all activities from form
+			foreach ($query as $row) {
+				$newActivity = new ActivityDTO();
+				$newActivity->setIdActivity($row['idActivity']);
+				$newActivity->setIdForm($row['idForm']);
+				$newActivity->setDescription($row['description']);
+				$newActivity->setWorkPorcent($row['workPorcent']);
+				$data[] = $newActivity;
+			}
+			return $data;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/****************************************
+	*Function that returns array of courses *
+	*assigned by professor.					*
+	*										*
+	*Input:									*
+	*	-$idForm: Integer, id of Form 		*
+	*Result: 								*
+	* 	Array with all courses assigned by  *
+	*	professor. 							*
+	*****************************************/
+	public function getFormCourses($idForm)
+	{
+		$courseDAO = new CourseDAO_model();
+		$query = $courseDAO->getFormCourses($idForm);
+
+		//Verify if return rows
+		if($query)
+		{
+			//Get necessary information of courses related to form
+			$query = $query->result_array();
+			$data = array();
+			foreach ($query as $row) {
+				$data[] = array(
+					'idCourse' => $row['idCourse'],
+					'priority' => $row['priority']
+				);
+			}
+			return $data;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 

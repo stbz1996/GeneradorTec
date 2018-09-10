@@ -9,8 +9,6 @@ class Form_controller extends CI_Controller {
 	{
 		parent::__construct();
 
-		$idProfessor = 5;
-
 		$this->load->helper("form");
 		$this->load->helper("url");
 
@@ -38,11 +36,6 @@ class Form_controller extends CI_Controller {
 	{
 		//Get hashcode of link (p = value)
 		$hashCode = $_GET['p'];
-
-		//To store in webpage
-		$this->session->set_userdata('idHash' , $hashCode);
-
-		// To consult hashcode $_SESSION['idHash'];
 		
 		//Get form by hashcode
 		$queryForm = $this->Form_Logic->validateForm($hashCode);
@@ -56,7 +49,10 @@ class Form_controller extends CI_Controller {
 		$this->Form->setIdProfessor($newForm->idProfessor);
 		$this->Form->setIdPeriod($newForm->idPeriod);
 
+
+		$this->session->set_userdata('hashCode', $hashCode);
 		$this->session->set_userdata('idForm', $this->Form->getIdForm());
+		$this->session->set_userdata('idProfessor', $this->Form->getIdProfessor());
 
 		//Get initial information of professor
 		$idProfessor = $this->Form->getIdProfessor();
@@ -72,6 +68,7 @@ class Form_controller extends CI_Controller {
 		$data['periodNumber'] = $initialInformation->number;
 		$data['periodYear'] = $initialInformation->year;
 		$data['formState'] = $this->Form->getState();
+		$data['workload'] = $initialInformation->workLoad;
 
 		//Get career id
 		$idCareer = $initialInformation->idCareer;
@@ -89,6 +86,25 @@ class Form_controller extends CI_Controller {
 
 		$data['plans'] = array_values($plans);
 		$data['courses'] = array_values($coursesPlan);
+		$data['activities'] = $this->getActivities($idForm);
+
+		if(!$data['activities'])
+		{
+			$data['activities'] = array();
+		}
+
+		$coursesForm = $this->getFormCourses($idForm);
+		$data['idCourses'] = array();
+		$data['priorities'] = array();
+		
+		if($coursesForm)
+		{
+			foreach ($coursesForm as $course) {
+				$data['idCourses'][] = $course['idCourse'];
+				$data['priorities'][] = $course['priority'];
+			}
+		}
+
 		/*END USER STORY 4*/
 
 		$this->load->view("Forms/Header");
@@ -125,44 +141,86 @@ class Form_controller extends CI_Controller {
 	*****************************************/
 	function getDataFromView()
 	{
-		/* USER STORY 2 */
 
-
-		
+		$idForm = $_SESSION['idForm'];
+		$idProfessor = $_SESSION['idProfessor'];
 		$workload = $this->input->post('workload_options');
-		$idProfessor = $this->Form->getIdProfessor();
-		
-		/* USER STORY 3*/
-
-		
 		$activitiesDescription = $this->input->post('activityDescription');
+		$activitiesWorkPorcent = $this->input->post('workPorcent');
+		$idCourses = $this->input->post('idCourses');
+		$flagEmptyActivity = 0;
 
-		if ($activitiesDescription) 
+		//Verify if professor assigned courses
+		if(!$idCourses)
 		{
-			$idForm = $_SESSION['idForm'];
-			$activitiesWorkPorcent = $this->input->post('workPorcent');
+			echo "<script>alert('No se puede guardar: No asignó cursos');</script>";
+		}
 
-			//Verify if activity porcent is less than workload
-			$totalWorkPorcent = 0;
+		//Verify if courses assigned are less than workload
+		else if(sizeof($idCourses) < $workload / 25)
+		{
+			echo "<script>alert('No se puede guardar: Cantidad de cursos es menor a la carga de trabajo asignado');</script>";
+		}
 
-			foreach ($activitiesWorkPorcent as $workPorcent) {
-				$totalWorkPorcent += $workPorcent;
+		else
+		{
+			//Verify if professor add activities
+			if($activitiesDescription)
+			{
+				//Get total porcent of activities
+				$totalWorkPorcent = 0;
+				foreach ($activitiesWorkPorcent as $workPorcent) {
+					$totalWorkPorcent += $workPorcent;
+				}
+
+				//Verify if porcent of activities is less than workload
+				if($workload >= $totalWorkPorcent)
+				{
+					//Verify if there's an activity without description
+					if(in_array("", $activitiesDescription) || in_array(0, $activitiesWorkPorcent))
+					{
+						$flagEmptyActivity = 1;
+					}
+					else
+					{
+						$this->insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
+					}
+				}
+				else
+				{
+					echo "<script>alert('No se puede guardar: Carga de trabajo es menor al porcentaje total de actividades');</script>";
+				}
 			}
 
-			if($workload >= $totalWorkPorcent)
+			if(!$flagEmptyActivity)
 			{
 				$this->insertWorkload($idProfessor, $workload);
-				$this->insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
+
+				$totalCourses = sizeof($idCourses);
+				$priorities= $this->input->post('priorities');
+				$courses = array();
+
+				for ($i=0; $i < $totalCourses ; $i++) { 
+					$courses[] = array(
+						'idCourse' => $idCourses[$i],
+						'idForm' => $idForm, 
+						'priority' => $priorities[$i],
+						'state' => 1
+					);
+				}
+				$this->insertCoursesByForm($courses);
+				echo "<script>
+						alert('Datos se ingresaron correctamente');
+					  </script>";
 			}
 			else
 			{
-				echo "<script>alert('No se puede guardar: Carga de trabajo es menor al porcentaje de actividades')</script>";
+				echo "<script>alert('No se puede guardar: Una o varias actividades no poseen datos correctos');</script>";
 			}
 		}
-		else
-		{
-			echo "<script>No se agregaron actividades</script>";
-		}
+		$link = "Form_controller/?p=".$_SESSION['hashCode'];
+		redirect($link, 'refresh');
+
 		
 	}
 
@@ -182,22 +240,19 @@ class Form_controller extends CI_Controller {
 	}
 
 	function insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent)
-	{
-		//$descriptions = array('Coordinador Carrera', 'Proyecto Investigación', 'Coordinador Práctica');
-		//$workPorcents = array(30, 20, 30);
-		
+	{		
 		$totalActivities = sizeof($activitiesDescription);
 
 		for($i = 0; $i < $totalActivities; $i++)
 		{	
-			$activityDescription = $activitiesDescription[$i];
-			$activityWorkPorcent = $activitiesWorkPorcent[$i];
-			$this->Form_Logic->validateInsertActivity($idForm, $activityDescription, $activityWorkPorcent);
-		}
-		/*for ($i = 0; $i < 3; $i++ ) {
-			$this->Form_Logic->validateInsertActivity($descriptions[$i], 3, $workPorcents[$i]);
-		}*/
-		
+			$activityDTO = new ActivityDTO();
+
+			$activityDTO->setDescription($activitiesDescription[$i]);
+			$activityDTO->setIdForm($idForm);
+			$activityDTO->setWorkPorcent($activitiesWorkPorcent[$i]);
+
+			$this->Form_Logic->validateInsertActivity($activityDTO);
+		}		
 	}
 
 	function showPlanCourses($plans)
@@ -215,6 +270,21 @@ class Form_controller extends CI_Controller {
 	function showCareerPlans($idCareer)
 	{
 		return $this->Form_Logic->getCareerPlans($idCareer);
+	}
+
+	function insertCoursesByForm($courses)
+	{
+		$this->Form_Logic->insertCoursesForm($courses);
+	}
+
+	function getActivities($idForm)
+	{
+		return $this->Form_Logic->getActivities($idForm);
+	}
+
+	function getFormCourses($idForm)
+	{
+		return $this->Form_Logic->getFormCourses($idForm);
 	}
 
 
