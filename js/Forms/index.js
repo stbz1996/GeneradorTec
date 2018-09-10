@@ -84,7 +84,7 @@ $(".previous").click(function(){
 $(document).on('click', '.btn_add', function(){
 	count_activities ++;
 	$('#dynamic_field').append('<tr id="row'+count_activities+
-		'"><td><input type="text" required name="activityDescription[]" minlength="5" maxlength="100" id="name" placeholder="Ingrese actividad" /></td><td><input type="number" required name="workPorcent[]" min="0" max="100" value="0" class="textnum"></td><td><input type="button" name="remove" id="'+
+		'"><td><input type="text" name="activityDescription[]" maxlength="100" id="name" placeholder="Ingrese actividad" /></td><td><input type="number" name="workPorcent[]" min="0" max="100" value="0" class="textnum"></td><td><input type="button" name="remove" id="'+
 		count_activities+'" class="btn_remove action-button" value="Eliminar" /></td></tr>');
 
 });
@@ -93,6 +93,26 @@ $(document).on('click', '.btn_remove', function(){
 	var button_id = $(this).attr("id");
 	$("#row"+button_id+"").remove();
 	count_activities --;
+});
+
+$(document).on('click', '.cbox', function(){
+	var nameCheck = $(this).attr("id");
+	var idCheck = nameCheck.split("-")[1];
+	if($(this).is(':checked'))
+	{
+		var idCourse = $("#course-"+idCheck+"").attr("value");
+		var priority = $("#select-"+idCheck+"").val();
+		$("#row-"+idCheck+"").append('<td id="id-'+idCheck+'"><input type="hidden" name="idCourses[]" value="'+
+			idCourse+'"/></td><td id="priority-'+idCheck+'"><input type="hidden" name="priorities[]" value="'+
+			priority+'"/></td>');
+		$("#select-"+idCheck+"").prop('disabled', 'disabled');
+	}
+	else
+	{
+		$("#id-"+idCheck+"").remove();
+		$("#priority-"+idCheck+"").remove();
+		$("#select-"+idCheck+"").prop('disabled', false);
+	}
 });
 /*
 $(".add").click(function(){

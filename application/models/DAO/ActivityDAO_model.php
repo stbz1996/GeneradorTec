@@ -10,6 +10,13 @@ class ActivityDAO_model extends CI_Model
 		$this->load->database();
 	}
 
+	/****************************************
+	*Function that insert activity in DB 	*
+	*										*
+	*Input:									*
+	*	-$activity: ActivityDTO, necessary  *
+	*	data to insert activity 			*
+	*****************************************/
 	function insertActivity($activity)
 	{
 		$data = array(
@@ -18,6 +25,31 @@ class ActivityDAO_model extends CI_Model
 			'workPorcent' => $activity->getWorkPorcent() 
 		);
 		$this->db->insert('Activity', $data);
+	}
+
+	/****************************************
+	*Function that returns query of all ac- *
+	*tivities.								*
+	*										*
+	*Input:									*
+	*	-$idForm: Integer, id of Form 		*
+	*Result: 								*
+	*	Query of all activities 			*
+	*****************************************/
+	function getActivities($idForm)
+	{
+		$this->db->select('*');
+		$this->db->from('Activity');
+		$this->db->where('idForm', $idForm);
+		$query = $this->db->get();
+		if($query->num_rows() > 0)
+		{
+			return $query;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 
