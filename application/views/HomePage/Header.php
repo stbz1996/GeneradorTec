@@ -39,20 +39,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="page-wrapper chiller-theme toggled">
         <nav id="sidebar" class="sidebar-wrapper">
             <div class="sidebar-content">
-                
                 <div id="toggle-sidebar">
                     <div></div>
                     <div></div>
                     <div></div>
                 </div>
-                
-                <div class="sidebar-brand">
-                    <a href="#">Generador de Horarios</a>
-                </div>
-
-                <div class="sidebar-header">
-                    <img class="img-responsive" src="https://www.tec.ac.cr/sites/default/files/media/branding/logo-tec.png">
-                </div>
+                <br><br>
 
                 <!-- sidebar-menu  -->
                 <div class="sidebar-menu">

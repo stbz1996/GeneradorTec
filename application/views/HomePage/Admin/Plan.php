@@ -94,16 +94,15 @@
               <div class="form-group">
                 <label class="control-label col-md-3">Nombre</label>
                 <div class="col-md-9">
-                  <input name="inputName" placeholder="Nombre" class="form-control" type="text">
+                  <input name="inputName" placeholder="Nombre" class="form-control" type="text"  >
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="col-md-9">
-                  <input name="inputState" placeholder="Estado" class="form-control" type="hidden">
+                  <input  name="inputState" placeholder="Estado" class="form-control" type="hidden">
                 </div>
               </div>
-
             </form>
           </div>
 
