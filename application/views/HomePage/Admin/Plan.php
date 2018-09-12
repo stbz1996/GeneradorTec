@@ -2,16 +2,13 @@
 
 <!-- Los tituloso -->
 <div>
-    <h1>Titulo grande</h1>
-    <p>Explicacion de lo que hay en la página</p>
+    <h1>Planes</h1>
 </div>
 
 <hr>
 
 <!-- Todo el contenido -->
 <div>
-  <h1 id="tituloPlanes" class="tituloNumero">Planes</h1>
-
   <button class="btn btn-primary" onclick="addPlan()"><i class="glyphicon glyphicon-plus"></i> Crear Plan</button>
   <br/><br/>
         

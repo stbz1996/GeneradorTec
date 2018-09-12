@@ -45,7 +45,6 @@ class System_controller extends CI_Controller {
 	***************************************************/
 	function validCredentials()
 	{
-		// Conect with logic
 		$administrator_Logic = new Administrator_Logic();
 		// Get data from view
 		$user = $this->input->post('inputEmail');
@@ -54,7 +53,6 @@ class System_controller extends CI_Controller {
 		$idAdmin = $administrator_Logic->validCredentials($user, $password);
 		if ($idAdmin != false)
 		{
-			// Load he admin carrer
 			$idCareer = $administrator_Logic->findAdminCareer($idAdmin);
 			$this->save_username_in_session($idAdmin, $idCareer, $user);
 			$this->call_home_page();

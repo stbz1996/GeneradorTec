@@ -153,6 +153,7 @@ function getCareerSessions($id, $name){
 	return $array;
 }
 
+
 function getPlanSessions($session, $id, $name){
 	$array = array(
 			'idCareer' => $session->userdata('idCareer'),

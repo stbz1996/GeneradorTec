@@ -74,7 +74,7 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 //$active_record = TRUE;
-
+/*
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'db4free.net',
@@ -96,8 +96,8 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+*/
 
-/*
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
@@ -119,4 +119,3 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
-*/
