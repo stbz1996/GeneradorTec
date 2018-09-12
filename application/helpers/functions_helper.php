@@ -1,5 +1,4 @@
 <?php
-
 /******************************************************************************
 	This helper has:
 
@@ -294,7 +293,6 @@ function validateArrayModal($data)
 
 function printMessage($message)
 {
-	echo "<script>alert('".$message."');</script>";
+    echo "<script>alert('".$message."')</script>";
 }
-
 ?>

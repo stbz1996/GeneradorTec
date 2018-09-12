@@ -5,12 +5,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <?php
     // Here we can define the links to the controlles
-    $link_to_generateLinks = base_url()."/index.php/Administrator_controller/LoadGenerateLinksView";
-    $linkToCourses = base_url()."/index.php/Administrator_controller/Courses";
-    $linkToScheduleHours = base_url()."/index.php/Administrator_controller/showScheduleSelector";
-    $linkToAdd = base_url()."/index.php/Administrator_controller/AddAdmin";
-    $linkToCareers = base_url()."/index.php/Administrator_controller/Careers";
-    $linkToProfessors = base_url()."/index.php/Administrator_controller/Professors";
+    $link_to_generateLinks = base_url()."/Administrator_controller/LoadGenerateLinksView";
+    $linkToCourses = base_url()."/Administrator_controller/Courses";
+    $linkToScheduleHours = base_url()."/Administrator_controller/showScheduleSelector";
+    $linkToAdd = base_url()."/Administrator_controller/AddAdmin";
+    $linkToCareers = base_url()."/Administrator_controller/Careers";
+    $linkToProfessors = base_url()."/Administrator_controller/Professors";
 ?>
 
 

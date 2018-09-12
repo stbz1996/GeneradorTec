@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class System_controller extends CI_Controller {
-
 	function __construct()
 	{
 		parent::__construct();
@@ -77,6 +75,6 @@ class System_controller extends CI_Controller {
 	***************************************************/
 	function call_home_page()
 	{
-		redirect('Administrator_controller/index/', $data); 
+		redirect('Administrator_controller/index/'); 
 	}
 }
