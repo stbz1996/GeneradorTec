@@ -34,49 +34,158 @@ class Form_controller extends CI_Controller {
 
 	function index()
 	{
-		//Get hashcode of link (p = value)
-		$hashCode = $_GET['p'];
-		
+		$this->session->set_userdata('hashCode', $_GET['p']);
+		$this->callForm();
+	}
+
+
+	/****************************************
+	*Function that get all necessary infor- *
+	*mation from database and show it.		*
+	*****************************************/
+	function callForm()
+	{
+		$hashCode = $_SESSION['hashCode'];
+
 		//Get form by hashcode
 		$queryForm = $this->Form_Logic->validateForm($hashCode);
 		$newForm = $queryForm->row();
-		
-		//Setting Form
-		$this->Form->setIdForm($newForm->idForm);
-		$this->Form->setHashCode($hashCode);
-		$this->Form->setState($newForm->state);
-		$this->Form->setDueDate($newForm->dueDate);
-		$this->Form->setIdProfessor($newForm->idProfessor);
-		$this->Form->setIdPeriod($newForm->idPeriod);
+		$this->Form = $this->getFormInformation($newForm);
 
-
-		$this->session->set_userdata('hashCode', $hashCode);
+		//Set global variables
 		$this->session->set_userdata('idForm', $this->Form->getIdForm());
 		$this->session->set_userdata('idProfessor', $this->Form->getIdProfessor());
 
 		//Get initial information of professor
-		$idProfessor = $this->Form->getIdProfessor();
-		$idForm = $this->Form->getIdForm();
+		$initialInformation = $this->getInitialInformation($this->Form);
 
-		$initialInformation = $this->showInitialInformation($idForm, $idProfessor)->row();
-
-		//Assign information to show it in Form
+		//Assign information to show it in form
+		$data = $this->assignInitialInformation($initialInformation);
 		$data['dueDate'] = $this->Form->getDueDate();
+
+		//Get saved information
+		//TODO: Verify if form was saved before
+		$data['activities'] = $this->getActivities();
+		$idCareer = $initialInformation->idCareer;
+		$savedInformation = $this->getSavedInformation($idCareer);
+		$data = array_merge($data, $savedInformation);
+		
+
+		$this->load->view("Forms/Header");
+		$this->load->view("Forms/Content", $data);
+		$this->load->view("Forms/Footer");
+	}
+
+
+	/****************************************
+	*Function that returns a Form object.   *
+	*										*
+	*Input:									*
+	*	-$newForm: Row, information of form	*
+	*										*
+	*Result: 								*
+	*	An object of type form				*
+	*****************************************/
+	function getFormInformation($newForm)
+	{
+		$form = new FormDTO();
+		$form->setIdForm($newForm->idForm);
+		$form->setHashCode($_SESSION['hashCode']);
+		$form->setState($newForm->state);
+		$form->setDueDate($newForm->dueDate);
+		$form->setIdProfessor($newForm->idProfessor);
+		$form->setIdPeriod($newForm->idPeriod);
+
+		return $form;
+	}
+
+
+	/****************************************
+	*Function that returns an array with i- *
+	* nitial information of form. 			*
+	*										*
+	*Input:									*
+	*	-$form: Form, object form of profe-	*
+	*	ssor. 								*
+	*										*
+	*Result: 								*
+	*	Array with initial information.		*
+	*****************************************/
+	function getInitialInformation($form)
+	{
+		//Get initial information of professor
+		$idProfessor = $form->getIdProfessor();
+		$idForm = $form->getIdForm();
+		$initialInformation = $this->showInitialInformation($idForm, $idProfessor)->row();
+		return $initialInformation;
+	}
+
+
+	/****************************************
+	*Function that returns an array with i- *
+	* nitial information to show in form. 	*
+	*										*
+	*Input:									*
+	*	-$initialInformation: Form, object 	*
+	*	form.  								*
+	*										*
+	*Result: 								*
+	*	Array with initial information to	*
+	*	show. 								*
+	*****************************************/
+	function assignInitialInformation($initialInformation)
+	{
 		$data['professorFirstName'] = $initialInformation->professorName;
 		$data['professorLastName'] = $initialInformation->lastName;
 		$data['careerName'] = $initialInformation->careerName;
 		$data['periodNumber'] = $initialInformation->number;
-		$data['periodYear'] = $initialInformation->year;
-		$data['formState'] = $this->Form->getState();
 		$data['workload'] = $initialInformation->workLoad;
+		$data['periodYear'] = $initialInformation->year;
 
-		//Get career id
-		$idCareer = $initialInformation->idCareer;
-		/*  USER STORY 4  */
+		return $data;
+	}
+
+
+	/****************************************
+	*Function that returns an array with in-*
+	*formation saved by professor. 			*
+	*										*
+	*Input:									*
+	*	-$idCareer: Integer, id of the ca-	*
+	*	reer. 								*
+	*										*
+	*Result: 								*
+	*	Array with saved information.		*
+	*****************************************/
+	function getSavedInformation($idCareer)
+	{
 		$plans = $this->showCareerPlans($idCareer);
 		$coursesPlan = $this->showPlanCourses($plans);
 
+		$data = $this->getFilledPlans($plans, $coursesPlan);
+		$coursesForm = $this->getFormCourses();
+
+		$data = array_merge($data, $coursesForm);
+	
+		return $data;
+	}
+
+	/****************************************
+	*Function that returns an array of plans*
+	*that have courses.			 			*
+	*										*
+	*Input:									*
+	*	-$idCareer: Integer, id of the ca-	*
+	*	reer. 								*
+	*										*
+	*Result: 								*
+	*	Array of plans and courses.			*
+	*****************************************/
+	function getFilledPlans($plans, $coursesPlan)
+	{
 		for ($i=0; $i < count($coursesPlan) ; $i++) { 
+
+			//Verify if plan doesn't have courses
 			if(!count($coursesPlan[$i]))
 			{
 				unset($plans[$i]);
@@ -86,36 +195,8 @@ class Form_controller extends CI_Controller {
 
 		$data['plans'] = array_values($plans);
 		$data['courses'] = array_values($coursesPlan);
-		$data['activities'] = $this->getActivities($idForm);
-
-		if(!$data['activities'])
-		{
-			$data['activities'] = array();
-		}
-
-		$coursesForm = $this->getFormCourses($idForm);
-		$data['idCourses'] = array();
-		$data['priorities'] = array();
-		
-		if($coursesForm)
-		{
-			foreach ($coursesForm as $course) {
-				$data['idCourses'][] = $course['idCourse'];
-				$data['priorities'][] = $course['priority'];
-			}
-		}
-
-		/*END USER STORY 4*/
-
-		$this->load->view("Forms/Header");
-		$this->load->view("Forms/Content", $data);
-		$this->load->view("Forms/Footer");
-		
-		//$cod = $_GET['p'];
-
-		//echo "<script>alert('$cod');</script>";
+		return $data;
 	}
-
 
 	/****************************************
 	*Function that returns the initial in-	*
@@ -130,7 +211,6 @@ class Form_controller extends CI_Controller {
 	*	Initial information to show it in 	*
 	*	form.								*
 	*****************************************/
-
 	function showInitialInformation($idForm, $idProfessor)
 	{
 		return $this->Form_Logic->validateInformation($idForm, $idProfessor);
@@ -141,87 +221,37 @@ class Form_controller extends CI_Controller {
 	*****************************************/
 	function getDataFromView()
 	{
-
-		$idForm = $_SESSION['idForm'];
-		$idProfessor = $_SESSION['idProfessor'];
 		$workload = $this->input->post('workload_options');
 		$activitiesDescription = $this->input->post('activityDescription');
 		$activitiesWorkPorcent = $this->input->post('workPorcent');
 		$idCourses = $this->input->post('idCourses');
-		$flagEmptyActivity = 0;
+		$priorities= $this->input->post('priorities');
 
-		//Verify if professor assigned courses
-		if(!$idCourses)
+		$this->validateDataFromView($workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities);
+	}
+
+	function validateDataFromView($workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities)
+	{
+		$idForm = $_SESSION['idForm'];
+		$idProfessor = $_SESSION['idProfessor'];
+		$message = $this->Form_Logic->validateDataFromView($idForm, $idProfessor, $workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities);
+
+		if($message !== "")
 		{
-			echo "<script>alert('No se puede guardar: No asignó cursos');</script>";
+			echo $message;
 		}
-
-		//Verify if courses assigned are less than workload
-		else if(sizeof($idCourses) < $workload / 25)
-		{
-			echo "<script>alert('No se puede guardar: Cantidad de cursos es menor a la carga de trabajo asignado');</script>";
-		}
-
 		else
 		{
-			//Verify if professor add activities
-			if($activitiesDescription)
-			{
-				//Get total porcent of activities
-				$totalWorkPorcent = 0;
-				foreach ($activitiesWorkPorcent as $workPorcent) {
-					$totalWorkPorcent += $workPorcent;
-				}
+			$this->insertWorkload($idProfessor, $workload);
+			$this->insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
+			$this->assignCourses($idForm, $idCourses, $priorities);
 
-				//Verify if porcent of activities is less than workload
-				if($workload >= $totalWorkPorcent)
-				{
-					//Verify if there's an activity without description
-					if(in_array("", $activitiesDescription) || in_array(0, $activitiesWorkPorcent))
-					{
-						$flagEmptyActivity = 1;
-					}
-					else
-					{
-						$this->insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
-					}
-				}
-				else
-				{
-					echo "<script>alert('No se puede guardar: Carga de trabajo es menor al porcentaje total de actividades');</script>";
-				}
-			}
-
-			if(!$flagEmptyActivity)
-			{
-				$this->insertWorkload($idProfessor, $workload);
-
-				$totalCourses = sizeof($idCourses);
-				$priorities= $this->input->post('priorities');
-				$courses = array();
-
-				for ($i=0; $i < $totalCourses ; $i++) { 
-					$courses[] = array(
-						'idCourse' => $idCourses[$i],
-						'idForm' => $idForm, 
-						'priority' => $priorities[$i],
-						'state' => 1
-					);
-				}
-				$this->insertCoursesByForm($courses);
-				echo "<script>
-						alert('Datos se ingresaron correctamente');
-					  </script>";
-			}
-			else
-			{
-				echo "<script>alert('No se puede guardar: Una o varias actividades no poseen datos correctos');</script>";
-			}
-		}
-		$link = "Form_controller/?p=".$_SESSION['hashCode'];
-		redirect($link, 'refresh');
-
-		
+			echo "<script>
+					alert('Datos se ingresaron correctamente');
+				  </script>";
+		}		
+		//$link = "Form_controller/?p=".$_SESSION['hashCode'];
+		//redirect($link, 'refresh');
 	}
 
 	/****************************************
@@ -255,6 +285,23 @@ class Form_controller extends CI_Controller {
 		}		
 	}
 
+	function assignCourses($idForm, $idCourses, $priorities)
+	{
+		$totalCourses = sizeof($idCourses);
+		$courses = array();
+
+		for($i = 0; $i < $totalCourses; $i++)
+		{
+			$courses[] = array(
+				'idCourse' => $idCourses[$i],
+				'idForm' => $idForm, 
+				'priority' => $priorities[$i],
+				'state' => 1
+			);
+		}
+		$this->insertCoursesByForm($courses);
+	}
+
 	function showPlanCourses($plans)
 	{	
 		$data = array();
@@ -277,18 +324,38 @@ class Form_controller extends CI_Controller {
 		$this->Form_Logic->insertCoursesForm($courses);
 	}
 
-	function getActivities($idForm)
+	function getActivities()
 	{
-		return $this->Form_Logic->getActivities($idForm);
+		$idForm = $_SESSION['idForm'];
+		$activities = $this->Form_Logic->getActivities($idForm);
+
+		if($activities)
+		{
+			return $activities;
+		}
+		else
+		{
+			return array();
+		}
 	}
 
-	function getFormCourses($idForm)
+	function getFormCourses()
 	{
-		return $this->Form_Logic->getFormCourses($idForm);
+		$idForm = $_SESSION['idForm'];
+		$coursesForm = $this->Form_Logic->getFormCourses($idForm);
+		
+		$data['idCourses'] = array();
+		$data['priorities'] = array();
+		
+		if($coursesForm)
+		{
+			foreach ($coursesForm as $course) {
+				$data['idCourses'][] = $course['idCourse'];
+				$data['priorities'][] = $course['priority'];
+			}
+		}
+
+		return $data;
 	}
-
-
 }
-
-
 ?>

@@ -264,6 +264,70 @@ class Form_Logic{
 			return false;
 		}
 	}
+
+
+	function validateDataFromView($idForm, $idProfessor, $workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities)
+	{
+		$flagEmptyActivity = 0;
+		$message = "";
+
+		$message = $this->verifyAssignCourses($idCourses, $workload);
+		if($message !== "")
+		{
+			return $message;
+		}
+
+		$message = $this->verifyActivities($activitiesDescription, $activitiesWorkPorcent, $workload, $idForm);
+		return $message;
+	}
+
+	function verifyAssignCourses($idCourses, $workload)
+	{
+		//Verify if professor assigned courses
+		if(!$idCourses)
+		{
+			return "<script>alert('No se puede guardar: No asignó cursos');</script>";
+		}
+
+		//Verify if courses assigned are less than workload
+		else if(sizeof($idCourses) < $workload / 25)
+		{
+			return "<script>alert('No se puede guardar: Cantidad de cursos es menor a la carga de trabajo asignado');</script>";
+		}
+		else
+		{
+			return "";
+		}
+	}
+
+	function verifyActivities($activitiesDescription, $activitiesWorkPorcent, $workload, $idForm)
+	{
+		//Verify if professor add activities
+		if($activitiesDescription)
+		{
+			//Get total porcent of activities
+			$totalWorkPorcent = 0;
+			foreach ($activitiesWorkPorcent as $workPorcent) {
+				$totalWorkPorcent += $workPorcent;
+			}
+
+			//Verify if porcent of activities is less than workload
+			if($workload >= $totalWorkPorcent)
+			{
+				//Verify if there's an activity without description
+				if(in_array("", $activitiesDescription) || in_array(0, $activitiesWorkPorcent))
+				{
+					return "<script>alert('No se puede guardar: Una o varias actividades no poseen datos correctos');</script>";
+				}
+			}
+			else
+			{
+				return "<script>alert('No se puede guardar: Carga de trabajo es menor al porcentaje total de actividades');</script>";
+			}
+		}
+
+		return "";
+	}
 }
 
 ?>
