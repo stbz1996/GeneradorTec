@@ -530,6 +530,23 @@ class Administrator_Logic{
  		$scheduleDAO_model->updateScheduleState($schedule);
  	}
 
+
+
+
+
+ 	public function getEmailsubject()
+ 	{
+ 		return 'Link para solicitud de cursos TEC';
+ 	}
+
+ 	public function getEmailMessage($pProfessorName, $pHash)
+ 	{
+ 		$message = "Buenas ".$pProfessorName.", "."mediante el siguiente link usted podrá ingresar al formulario de solicitud de cursos ".base_url()."Form_controller/?p=".$pHash;
+ 		return $message;
+ 	}
+
+
+
 }
 
 ?>

@@ -29,7 +29,7 @@
 		'maxlength' => '20'
 	);	
 	$button = array(
-		'name' => 'submitButton',
+		'name' =>  'submitButton',
 		'value' => 'Nuevo Administrador',
 		'class' => "btn btn-default"
 	);

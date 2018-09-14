@@ -82,6 +82,8 @@ class Form_Logic{
 		$activityDAO->insertActivity($activity);
 	}
 
+
+// retorna el hash si lo crea bien y false si no lo crea
 	public function createForm($pIdPeriod, $pDueDate, $pIdProfessor)
 	{
 		$form = new FormDTO();
@@ -91,7 +93,12 @@ class Form_Logic{
 		$form->setDueDate($pDueDate);
 		$form->setIdProfessor($pIdProfessor);
 		$formDAO_model = new FormDAO_model();
-		return $formDAO_model->createForm($form);
+		if ($formDAO_model->createForm($form) == true) {
+			return $form->getHashCode();
+		}
+		else{
+			return false;
+		} 
 	}
 
 

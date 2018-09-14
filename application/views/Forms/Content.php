@@ -8,7 +8,7 @@
 
   $optionsWorkload = array(25, 50, 75, 100);
 
-  $linkWorkload = base_url()."index.php/Form_controller/getDataFromView";
+  $linkWorkload = base_url()."Form_controller/getDataFromView";
 
 ?>
 

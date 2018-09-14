@@ -9,9 +9,11 @@ class Administrator_controller extends CI_Controller
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('Administrator_Logic');
+		$this->load->library('System_Logic');
 		$this->load->helper("functions_helper");
 
 		$this->load->helper("form");
+		$this->load->library('email');
 
 		$this->load->library('Form_Logic');
 		$this->load->model("DAO/ProfessorDAO_model");
@@ -22,6 +24,7 @@ class Administrator_controller extends CI_Controller
 		$this->load->model("DAO/CourseDAO_model");
 		$this->load->model("DAO/PeriodDAO_model");
 		$this->load->model("DAO/FormDAO_model");
+		
 
 		$this->load->model("DTO/ScheduleDTO");		
 		$this->load->model("DAO/ScheduleDAO_model");
@@ -238,6 +241,7 @@ class Administrator_controller extends CI_Controller
 		validateModal();
 	}
 
+
 	/****************************************
 	- Get the information of a block.
 	****************************************/	
@@ -246,6 +250,7 @@ class Administrator_controller extends CI_Controller
     	$data = $this->administrator_logic->getUniqueBlock($id);
     	validateArrayModal($data);
     }
+
 
     /****************************************
 	- Delete a block (only if doesn't have any block reference).
@@ -256,6 +261,7 @@ class Administrator_controller extends CI_Controller
 		$result = $this->administrator_logic->deleteBlock($data);
 		validateModal();
 	}
+
 
 	/****************************************
 	- Change the state of a block.
@@ -302,6 +308,7 @@ class Administrator_controller extends CI_Controller
         $this->load->view("HomePage/Footer");
     }
 
+
     /****************************************
 	- Add a new course. 
 		The data is received by javascript.
@@ -320,6 +327,7 @@ class Administrator_controller extends CI_Controller
         $insert = $this->administrator_logic->insertCourse($data);
         validateModal();
     }
+
 
     /****************************************
 	- Edit the curse.
@@ -340,6 +348,7 @@ class Administrator_controller extends CI_Controller
 		validateModal();
 	}
 
+
 	/****************************************
 	- Get the information of a course.
 	****************************************/	
@@ -359,6 +368,7 @@ class Administrator_controller extends CI_Controller
         validateModal();
     }
 
+
     /****************************************
 	- Change the state of a course.
 	****************************************/
@@ -371,6 +381,7 @@ class Administrator_controller extends CI_Controller
 		$this->administrator_logic->changeStateCourse($data);
 		validateModal();
 	}
+
 
 	public function Professors($id = null, $name = null)
     {
@@ -415,6 +426,7 @@ class Administrator_controller extends CI_Controller
 		validateModal();
 	}
 
+
 	/****************************************
 	- Get the information of a professor.
 	****************************************/	
@@ -423,6 +435,7 @@ class Administrator_controller extends CI_Controller
     	$data = $this->administrator_logic->getUniqueProfessor($id);
     	validateArrayModal($data);
     }
+
 
 	/****************************************
 	- Edit the curse.
@@ -440,6 +453,7 @@ class Administrator_controller extends CI_Controller
 		validateModal();
 	}
 
+
  	/****************************************
 	- Delete the selected professor.
 	****************************************/	
@@ -449,6 +463,7 @@ class Administrator_controller extends CI_Controller
         validateModal();
 	}
 	
+
 	/****************************************
 	- Change professor state.
 	****************************************/
@@ -461,6 +476,7 @@ class Administrator_controller extends CI_Controller
 		$this->administrator_logic->changeStateProfessor($data);
 		validateModal();
 	}
+
 
 	/****************************************
 	- That function create the links for the 
@@ -504,6 +520,8 @@ class Administrator_controller extends CI_Controller
 		$day   = $date[2];
 		$sendDate = $year."-".$month."-".$day;
 		$period   = $this->input->post('period');
+		
+		// Find active professors
 		$data['profesors'] = $this->administrator_logic->findProfessors($idCareer);
 		
 		// Check if the forms are registered or not
@@ -511,16 +529,17 @@ class Administrator_controller extends CI_Controller
 		{
 			foreach ($data['profesors']->result() as $p)
 			{ 
-				$result = $this->form_Logic->lookForSpecificForm($p->idProfessor, $period);
-				// Create the form
-				if ($result == false) 
+				$isForRegistered = $this->form_Logic->lookForSpecificForm($p->idProfessor, $period);
+				// If the form is not registered 
+				if ($isForRegistered == false) 
 				{
-					$result = $this->form_Logic->createForm($period, $sendDate, $p->idProfessor);
-					if ($result == false) {
-						echo "<script>alert('No se pudo crear el formulario');</script>";
-					}
-					else{
-						$this->sendMail();
+					$hashCode = $this->form_Logic->createForm($period, $sendDate, $p->idProfessor);
+					// send the email if the form was created
+					if ($hashCode != false) {
+						$professorName = $p->name." ".$p->lastName;
+						$email = $p->email;
+						$hash = $hashCode;
+						$this->sendMailToProfessor($professorName, $email, $hash);
 					}
 				}
 			}
@@ -529,9 +548,48 @@ class Administrator_controller extends CI_Controller
 			echo "<script>alert('No hay profesores activos');</script>";
 		}
 
+		// Call view
 		$this->session->set_userdata('LinksState', "Los Links han sido enviados");
-		redirect("Administrator_controller/LoadGenerateLinksView");
+		$this->LoadGenerateLinksView();
 	}
+
+
+	/***********************************************************
+	Send an email to the 
+	***********************************************************/
+	public function sendMailToProfessor($pProfessorName, $pEmail, $pHash)
+	{
+
+		$administrator_Logic = new Administrator_Logic();
+
+		$from = 'Test@test.com';
+		$fromComplement = 'Administración';
+		$subject = $administrator_Logic->getEmailsubject();
+		$message = $administrator_Logic->getEmailMessage($pProfessorName, $pHash);
+		
+		$this->email->from($from, $fromComplement);
+		$this->email->to($pEmail);
+		$this->email->subject($subject);
+		$this->email->message($message);
+		/*$res = $this->email->send();
+		if ($res == false) 
+		{	
+			$error = "No se pudo enviar el correo a ".$pProfessorName;
+			echo "<script>alert('$error');</script>";
+		}
+		$x = $message.' - '.$pEmail;
+		echo "<script>alert('$x');</script>";
+		*/
+	}
+
+
+
+
+
+
+
+
+
 
 
 	/***********************************************************
@@ -656,16 +714,19 @@ class Administrator_controller extends CI_Controller
 
 
 
-	public function sendMail()
-	{
-	/*	$this->load->library('email');
-		$this->email->from('ejemplo@test.com', 'Steven');
-		$this->email->to('stbz1996@gmail.com');
-		$this->email->subject('Este es el subject');
-		$this->email->message('tests');
-		$res = $this->email->send(); // retorna un booleano 
-		echo $res;
-		*/
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
