@@ -42,9 +42,6 @@
       <div>
       Periodo actual: <?= $periodNumber ?> Semestre, <?= $periodYear ?>
       </div>
-      <div>
-      Estado: <?= $formState ?>
-      </div>
     </div>
     <input type="button" name="next" class="next action-button" value="Siguiente" />
     
@@ -78,13 +75,13 @@
 
   <fieldset>
     <h2 class="fs-title">Actividades</h2>
-    <h3 class="fs-subtitle"> Ingrese las actividades que considera le reducen la carga de trabajo que espera obtener, por lo que afectará la carga que brindo en la sección anterior. </h3>
+    <h3 class="fs-subtitle"> Ingrese las actividades que considera le reducen la carga de trabajo que espera obtener, por lo que afectará la carga que brindó en la sección anterior. </h3>
 
     <div>
       <input type="button" name="add" id="add" class="btn_add action-button" value="Agregar Actividad" />
       
       <div>
-      <table id="dynamic_field" name="dynamic_field">
+      <table id="dynamic_field" name="dynamic_field" class="dynamic_table">
       <?php 
       $totalActivities = count($activities);
       for($i = 0; $i < $totalActivities; $i++) {
@@ -93,7 +90,7 @@
       ?>
         <tr id="row<?= $i+1?>">
           <td>
-            <input type="text" name="activityDescription[]" maxlength="100" id="name" placeholder="Ingrese actividad" value="<?= $description?>" />
+            <input type="text" name="activityDescription[]" maxlength="100" id="descriptionActivity" placeholder="Ingrese actividad" value="<?= $description?>" />
           </td>
           <td>
             <input type="number" name="workPorcent[]" min="0" max="100" value="<?= $workPorcent?>" class="textnum">

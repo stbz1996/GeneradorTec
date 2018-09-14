@@ -3,7 +3,7 @@
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
-var count_activities = 0;
+var count_activities = document.getElementById("dynamic_field").getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
 
 $(".next").click(function(){
 	if(animating) return false;
@@ -84,7 +84,7 @@ $(".previous").click(function(){
 $(document).on('click', '.btn_add', function(){
 	count_activities ++;
 	$('#dynamic_field').append('<tr id="row'+count_activities+
-		'"><td><input type="text" name="activityDescription[]" maxlength="100" id="name" placeholder="Ingrese actividad" /></td><td><input type="number" name="workPorcent[]" min="0" max="100" value="0" class="textnum"></td><td><input type="button" name="remove" id="'+
+		'"><td><input type="text" name="activityDescription[]" maxlength="100" id="descriptionActivity" placeholder="Ingrese actividad" /></td><td><input type="number" name="workPorcent[]" min="0" max="100" value="0" class="textnum"></td><td><input type="button" name="remove" id="'+
 		count_activities+'" class="btn_remove action-button" value="Eliminar" /></td></tr>');
 
 });

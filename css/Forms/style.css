@@ -82,7 +82,7 @@ body {
 }
 
 #msform .textnum{
-	width: 100px;
+	width: 80px;
 }
 
 /*buttons*/
@@ -118,7 +118,16 @@ body {
 	width: 15px;
 }
 
+#msform table
+{
+	margin-left:auto; 
+    margin-right:auto;
+}
 
+#msform #descriptionActivity
+{
+	width: 400px;
+}
 
 
 /*progressbar*/
