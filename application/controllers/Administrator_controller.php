@@ -519,6 +519,7 @@ class Administrator_controller extends CI_Controller
 		$month = $date[1];
 		$day   = $date[2];
 		$sendDate = $year."-".$month."-".$day;
+		$dateForEmail = $day."-".$month."-".$year;
 		$period   = $this->input->post('period');
 		
 		// Find active professors
@@ -539,7 +540,7 @@ class Administrator_controller extends CI_Controller
 						$professorName = $p->name." ".$p->lastName;
 						$email = $p->email;
 						$hash = $hashCode;
-						$this->sendMailToProfessor($professorName, $email, $hash);
+						$this->sendMailToProfessor($professorName, $email, $hash, $dateForEmail);
 					}
 				}
 			}
@@ -557,7 +558,7 @@ class Administrator_controller extends CI_Controller
 	/***********************************************************
 	Send an email to the 
 	***********************************************************/
-	public function sendMailToProfessor($pProfessorName, $pEmail, $pHash)
+	public function sendMailToProfessor($pProfessorName, $pEmail, $pHash, $pSendDate)
 	{
 
 		$administrator_Logic = new Administrator_Logic();
@@ -565,31 +566,24 @@ class Administrator_controller extends CI_Controller
 		$from = 'Test@test.com';
 		$fromComplement = 'Administración';
 		$subject = $administrator_Logic->getEmailsubject();
-		$message = $administrator_Logic->getEmailMessage($pProfessorName, $pHash);
+		$message = $administrator_Logic->getEmailMessage($pProfessorName, $pHash, $pSendDate);
 		
 		$this->email->from($from, $fromComplement);
 		$this->email->to($pEmail);
 		$this->email->subject($subject);
 		$this->email->message($message);
+
+
+		//echo "<script>alert('$message');</script>";
+		
 		/*$res = $this->email->send();
 		if ($res == false) 
 		{	
 			$error = "No se pudo enviar el correo a ".$pProfessorName;
 			echo "<script>alert('$error');</script>";
 		}
-		$x = $message.' - '.$pEmail;
-		echo "<script>alert('$x');</script>";
 		*/
 	}
-
-
-
-
-
-
-
-
-
 
 
 	/***********************************************************
@@ -663,6 +657,7 @@ class Administrator_controller extends CI_Controller
 		$this->showScheduleSelector();
 	}
 
+
 	/****************************************
 	- Add a new admin. Show the view.
 	****************************************/
@@ -713,20 +708,4 @@ class Administrator_controller extends CI_Controller
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-

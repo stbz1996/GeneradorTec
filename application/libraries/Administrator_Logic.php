@@ -539,14 +539,11 @@ class Administrator_Logic{
  		return 'Link para solicitud de cursos TEC';
  	}
 
- 	public function getEmailMessage($pProfessorName, $pHash)
+ 	public function getEmailMessage($pProfessorName, $pHash, $pSendDate)
  	{
- 		$message = "Buenas ".$pProfessorName.", "."mediante el siguiente link usted podrá ingresar al formulario de solicitud de cursos ".base_url()."Form_controller/?p=".$pHash;
+ 		$message = "Buenas ".$pProfessorName.". ".'\n'.'\n'."Mediante el siguiente link usted podrá ingresar al formulario de solicitud de cursos. Es importante que recuerde que este formulario vence el ".$pSendDate.".".'\n'.'\n'.base_url()."Form_controller/?p=".$pHash;
  		return $message;
  	}
-
-
-
 }
 
 ?>

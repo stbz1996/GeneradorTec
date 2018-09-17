@@ -29,9 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/custom.css">
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/custom-themes.css">
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/homePage.css" />
-
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/selectHours.css" />
-
     <link rel="shortcut icon" type="image/png" href="<?=base_url()?>img/favicon.png" />
 </head>
 
