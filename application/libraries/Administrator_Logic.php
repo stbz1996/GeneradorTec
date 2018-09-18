@@ -530,14 +530,23 @@ class Administrator_Logic{
  		$scheduleDAO_model->updateScheduleState($schedule);
  	}
 
+
+ 	/**************************************************************
+	Returns the subject of the email
+ 	***************************************************************/
  	public function getEmailsubject()
  	{
  		return 'Link para solicitud de cursos TEC';
  	}
 
- 	public function getEmailMessage($pProfessorName, $pHash)
+
+ 	/**************************************************************
+	Receive the name of the profesor, the hash and the date to
+	create the message of the email that will be sent to the profesor
+ 	***************************************************************/
+ 	public function getEmailMessage($pProfessorName, $pHash, $pSendDate)
  	{
- 		$message = "Buenas ".$pProfessorName.", "."mediante el siguiente link usted podrá ingresar al formulario de solicitud de cursos ".base_url()."Form_controller/?p=".$pHash;
+ 		$message = "Buenas ".$pProfessorName.". ".'\n'.'\n'."Mediante el siguiente link usted podrá ingresar al formulario de solicitud de cursos. Es importante que recuerde que este formulario vence el ".$pSendDate.".".'\n'.'\n'.base_url()."Form_controller/?p=".$pHash;
  		return $message;
  	}
 
