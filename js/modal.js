@@ -48,7 +48,7 @@ function addPlan()
     save_method = 'add';
     $('#form')[0].reset(); // reset form on modals
     $('#modal_form').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Crear Plan');
+    $('.modal-title').text('Agregar Plan');
 }
 
 /****************************************
@@ -59,7 +59,7 @@ function addBlock()
     save_method = 'add';
     $('#form')[0].reset(); // reset form on modals
     $('#modal_form').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Crear Bloque');
+    $('.modal-title').text('Agregar Bloque');
 }
 
 /****************************************
@@ -70,7 +70,7 @@ function addCourse()
     save_method = 'add';
     $('#form')[0].reset();
     $('#modal_form').modal('show');
-    $('.modal-title').text('Crear Curso');
+    $('.modal-title').text('Agregar Curso');
 }
 
 /****************************************
@@ -81,7 +81,18 @@ function addProfessor()
     save_method = 'add';
     $('#form')[0].reset();
     $('#modal_form').modal('show');
-    $('.modal-title').text('Crear Profesor');
+    $('.modal-title').text('Agregar Profesor');
+}
+
+/****************************************
+- If button add period is pressed, show the modal.
+****************************************/
+function addPeriod()
+{
+    save_method = 'add';
+    $('#form')[0].reset();
+    $('#modal_form').modal('show');
+    $('.modal-title').text('Agregar Periodo');
 }
 
 /****************************************
@@ -230,7 +241,6 @@ function editCourse(url, id)
 ****************************************/
 function editProfessor(url, id)
 {
-    console.log(url + id);
     save_method = 'update';
     $('#form')[0].reset();
 
@@ -249,6 +259,36 @@ function editProfessor(url, id)
 
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('Editar Profesor'); // Set title to Bootstrap modal title
+
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
+
+/****************************************
+- If button edit professor is pressed, load the data from the database.
+****************************************/
+function editPeriod(url, id)
+{
+    save_method = 'update';
+    $('#form')[0].reset();
+
+    //Ajax Load data from ajax
+    $.ajax({
+        url : url + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+            $('[name="inputIdPeriod"]').val(data.idPeriod);
+            $('[name="inputNumber"]').val(data.number);
+            $('[name="inputYear"]').val(data.year);
+
+            $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
+            $('.modal-title').text('Editar Periodo'); // Set title to Bootstrap modal title
 
         },
         error: function (jqXHR, textStatus, errorThrown)
@@ -383,6 +423,23 @@ function saveProfessor()
         url = base_url + "index.php/Administrator_controller/addProfessor";
     }else{
         url = base_url + "index.php/Administrator_controller/editProfessor";
+    }
+
+    save(url);
+}
+
+/****************************************
+- If the user press save a course, defined the method.
+****************************************/
+function savePeriod()
+{
+    var url;
+
+    if (save_method == "add")
+    {
+        url = base_url + "index.php/Administrator_controller/addPeriod";
+    }else{
+        url = base_url + "index.php/Administrator_controller/editPeriod";
     }
 
     save(url);

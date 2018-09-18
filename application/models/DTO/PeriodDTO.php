@@ -49,7 +49,6 @@ class PeriodDTO{
 
 	/* Finish the setters and getters */
 
-
 }
 
 ?>

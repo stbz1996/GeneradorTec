@@ -280,24 +280,24 @@ class Administrator_controller extends CI_Controller
 	/****************************************
 	- Get all courses. Show the view.
 	****************************************/
-    public function Courses($id = null, $name = null)
+    public function Courses($pId = null, $pName = null)
     {
     	// if there is not a id, take the idCareer, idPlan, and idBlock previous selected.
-		if ($id == null)
+		if ($pId == null)
 		{
-			$id = $this->session->userdata('idBlock');
-			$name = $this->session->userdata('nameBlock');
+			$pId = $this->session->userdata('idBlock');
+			$pName = $this->session->userdata('nameBlock');
 		}else{
-			$array = getBlockSessions($this->session, $id, urldecode($name));
+			$array = getBlockSessions($this->session, $pId, urldecode($pName));
 			$this->session->set_userdata($array);
 		}
 
 		/* These are data that the interface is going to need.*/
 		$data['iters'] = getBreadCrumbBlock(); // Relative position
-		$data['idParent'] = $id; // Id of the plan that the block belongs.
-		$data['actual'] = urldecode($name);   // Actual position
+		$data['idParent'] = $pId; // Id of the plan that the block belongs.
+		$data['actual'] = urldecode($pName);   // Actual position
 		$data['ADD'] = getAddressCourses();    // Get address of a block position
-		$data['courses'] = $this->administrator_logic->getArrayCourses($id);
+		$data['courses'] = $this->administrator_logic->getArrayCourses($pId);
 
 		// Take all the blocks of the database.
 		$data['blocks'] = $this->administrator_logic->getArrayBlocks(null);
@@ -352,9 +352,9 @@ class Administrator_controller extends CI_Controller
 	/****************************************
 	- Get the information of a course.
 	****************************************/	
-	public function getCourse($id)
+	public function getCourse($pId)
     {
-    	$data = $this->administrator_logic->getUniqueCourse($id);
+    	$data = $this->administrator_logic->getUniqueCourse($pId);
     	validateArrayModal($data);
     }
 
@@ -362,9 +362,9 @@ class Administrator_controller extends CI_Controller
     /****************************************
 	- Delete the course selected.
 	****************************************/	
-    public function deleteCourse($id)
+    public function deleteCourse($pId)
     {
-    	$result = $this->administrator_logic->deleteCourse($id);
+    	$result = $this->administrator_logic->deleteCourse($pId);
         validateModal();
     }
 
@@ -383,22 +383,22 @@ class Administrator_controller extends CI_Controller
 	}
 
 
-	public function Professors($id = null, $name = null)
+	public function Professors($pId = null, $pName = null)
     {
     	// if there is not a id, take the idCareer, idPlan, and idBlock previous selected.
-		if ($id == null)
+		if ($pId == null)
 		{
-			$id = $this->session->userdata('idCareer');
-			$name = $this->session->userdata('nameCareer');
+			$pId = $this->session->userdata('idCareer');
+			$pName = $this->session->userdata('nameCareer');
 		}else{
-			$array = getBlockSessions($this->session, $id, urldecode($name));
+			$array = getBlockSessions($this->session, $pId, urldecode($pName));
 			$this->session->set_userdata($array);
 		}
 
 		/* These are data that the interface is going to need.*/
 		$data['iters'] = getBreadCrumbProfessors(); // Relative position
-		$data['idParent'] = $id; // Id of the plan
-		$data['actual'] = urldecode($name);   // Actual position
+		$data['idParent'] = $pId; // Id of the plan
+		$data['actual'] = urldecode($pName);   // Actual position
 		$data['ADD'] = getAddressProfessors();
 		$data['professors'] = $this->administrator_logic->getArrayProfessors(); //id parametro
 
@@ -430,9 +430,9 @@ class Administrator_controller extends CI_Controller
 	/****************************************
 	- Get the information of a professor.
 	****************************************/	
-	public function getProfessor($id)
+	public function getProfessor($pId)
     {
-    	$data = $this->administrator_logic->getUniqueProfessor($id);
+    	$data = $this->administrator_logic->getUniqueProfessor($pId);
     	validateArrayModal($data);
     }
 
@@ -457,9 +457,9 @@ class Administrator_controller extends CI_Controller
  	/****************************************
 	- Delete the selected professor.
 	****************************************/	
-    public function deleteProfessor($id)
+    public function deleteProfessor($pId)
     {
-    	$result = $this->administrator_logic->deleteProfessor($id);
+    	$result = $this->administrator_logic->deleteProfessor($pId);
         validateModal();
 	}
 	
@@ -583,15 +583,6 @@ class Administrator_controller extends CI_Controller
 	}
 
 
-
-
-
-
-
-
-
-
-
 	/***********************************************************
 	Load the information about the schedules in DB and show
 	in the view the active an deactive schedules
@@ -712,21 +703,66 @@ class Administrator_controller extends CI_Controller
 		redirect('Administrator_controller/index/');
 	}
 
+	/****************************************
+	- Show the period settings
+	****************************************/
+
+	public function Period()
+	{
+		$data['ADD'] = getAddressPeriod();
+		$data['periods'] = $this->administrator_logic->getArrayPeriods();
+
+		$this->load->view('HomePage/Header');
+        $this->load->view('HomePage/Admin/Period', $data);
+        $this->load->view("HomePage/Footer");
+	}
+
+	/****************************************
+	- Get the information of a professor.
+	****************************************/	
+	public function getPeriod($pId)
+    {
+    	$data = $this->administrator_logic->getUniquePeriod($pId);
+    	validateArrayModal($data);
+    }
+	
+	/****************************************
+	- Add a new period. 
+	  The data is received by javascript.
+	****************************************/
+    public function addPeriod()
+    {
+        $data = array(
+            'number' => $this->input->post('inputNumber'),
+            'year' => $this->input->post('inputYear'),
+        );
+
+        $insert = $this->administrator_logic->insertPeriod($data);
+        validateModal();
+    }
+
+	/****************************************
+	- Edit the period.
+	  The data is received by javascript.
+	****************************************/
+	public function editPeriod()
+	{
+		$data = array(
+			'idPeriod' => $this->input->post('inputIdPeriod'),
+            'number' => $this->input->post('inputNumber'),
+            'year' => $this->input->post('inputYear')
+        );
+		$result = $this->administrator_logic->editPeriod($data);
+		validateModal();
+	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 	/****************************************
+	- Delete the selected period.
+	****************************************/	
+    public function deletePeriod($pId)
+    {
+    	$result = $this->administrator_logic->deletePeriod($pId);
+        validateModal();
+	}
 }
-

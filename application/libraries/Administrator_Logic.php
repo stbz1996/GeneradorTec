@@ -351,16 +351,16 @@ class Administrator_Logic{
 	/****************************************
 	- Convert the data to the database an array.
 	****************************************/
- 	public function getArrayCourses($id)
+ 	public function getArrayCourses($pId)
  	{
  		/* Get the blocks from the database */
  		$courseDAO_model = new CourseDAO_model();
 
- 		if ($id == null)
+ 		if ($pId == null)
  		{
  			$query = $courseDAO_model->show();
  		}else{
- 			$query = $courseDAO_model->showById($id);
+ 			$query = $courseDAO_model->showById($pId);
  		}
  	
  		if (!$query)
@@ -375,50 +375,50 @@ class Administrator_Logic{
  	/****************************************
 	- Insert a course in the database.
 	****************************************/
- 	public function insertCourse($data)
+ 	public function insertCourse($pData)
  	{
  		$courseDAO_model = new CourseDAO_model();
- 		return $courseDAO_model->insert($data);
+ 		return $courseDAO_model->insert($pData);
  	}
 
 
  	/****************************************
 	- Get the information about an unique course.
 	****************************************/
- 	public function getUniqueCourse($id)
+ 	public function getUniqueCourse($pId)
  	{
  		$courseDAO_model = new CourseDAO_model();
- 		return $courseDAO_model->get($id);
+ 		return $courseDAO_model->get($pId);
  	}
 
 
  	/****************************************
 	- Edit the information of a course.
 	****************************************/
- 	public function editCourse($data)
+ 	public function editCourse($pData)
  	{
  		$courseDAO_model = new CourseDAO_model();
- 		return $courseDAO_model->edit($data);
+ 		return $courseDAO_model->edit($pData);
  	}
 
 
  	/****************************************
 	- Delete the information of a course.
 	****************************************/
- 	public function deleteCourse($id)
+ 	public function deleteCourse($pId)
  	{
  		$courseDAO_model = new CourseDAO_model();
- 		return $courseDAO_model->delete($id);
+ 		return $courseDAO_model->delete($pId);
  	}
 
 
  	/****************************************
 	- Change the state of a course.
 	****************************************/
- 	public function changeStateCourse($data)
+ 	public function changeStateCourse($pData)
  	{
  		$courseDAO_model = new CourseDAO_model();
- 		return $courseDAO_model->changeState($data);
+ 		return $courseDAO_model->changeState($pData);
  	}
 
 	/****************************************
@@ -433,19 +433,19 @@ class Administrator_Logic{
 	/****************************************
 	- Convert the data to the database an array.
 	****************************************/
-	public function getArrayProfessors($id = null)
+	public function getArrayProfessors($pId = null)
 	{
 		/* Get the professors from the database */
 		$professorDAO_model = new ProfessorDAO_model();
 
-		if ($id == null)
+		if ($pId == null)
 		{
 			$query = $professorDAO_model->show();
 		}
 		
 		else
 		{
-			$query = $professorDAO_model->showByCareer($id);
+			$query = $professorDAO_model->showByCareer($pId);
 		}
 	
 		if (!$query)
@@ -460,50 +460,50 @@ class Administrator_Logic{
 	/****************************************
    - Insert a professor in the database.
    ****************************************/
-	public function insertProfessor($data)
+	public function insertProfessor($pData)
 	{
 		$professorDAO_model = new ProfessorDAO_model();
-		return $professorDAO_model->insert($data);
+		return $professorDAO_model->insert($pData);
 	}
 
 
 	/****************************************
-   - Get the information about an unique course.
+   - Get the information about an unique professor.
    ****************************************/
-	public function getUniqueProfessor($id)
+	public function getUniqueProfessor($pId)
 	{
 		$professorDAO_model = new ProfessorDAO_model();
-		return $professorDAO_model->get($id);
+		return $professorDAO_model->get($pId);
 	}
 
 
 	/****************************************
-   - Edit the information of a course.
+   - Edit the information of a professor.
    ****************************************/
-	public function editProfessor($data)
+	public function editProfessor($pData)
 	{
 		$professorDAO_model = new ProfessorDAO_model();
-		return $professorDAO_model->edit($data);
+		return $professorDAO_model->edit($pData);
 	}
 
 
 	/****************************************
-   - Delete the information of a course.
+   - Delete the information of a professor.
    ****************************************/
-	public function deleteProfessor($id)
+	public function deleteProfessor($pId)
 	{
 		$professorDAO_model = new ProfessorDAO_model();
-		return $professorDAO_model->delete($id);
+		return $professorDAO_model->delete($pId);
 	}
 
 
 	/****************************************
-   - Change the state of a course.
+   - Change the state of a professor.
    ****************************************/
-	public function changeStateProfessor($data)
+	public function changeStateProfessor($pData)
 	{
 		$professorDAO_model = new ProfessorDAO_model();
-		return $professorDAO_model->changeState($data);
+		return $professorDAO_model->changeState($pData);
 	}
 
  	/**************************************************************
@@ -530,10 +530,6 @@ class Administrator_Logic{
  		$scheduleDAO_model->updateScheduleState($schedule);
  	}
 
-
-
-
-
  	public function getEmailsubject()
  	{
  		return 'Link para solicitud de cursos TEC';
@@ -545,7 +541,71 @@ class Administrator_Logic{
  		return $message;
  	}
 
+	/****************************************
+	- Convert the data to the database an array.
+	- Return all the periods and their info in database.
+	****************************************/
+	public function getArrayPeriods($pId = null)
+	{
+		/* Get the professors from the database */
+		$periodDAO_model = new PeriodDAO_model();
 
+		if ($pId == null)
+		{
+			$query = $periodDAO_model->show();
+		}
+	
+		if (!$query)
+		{
+			return array();
+		}
+
+		return $query;
+	}
+
+
+	/****************************************
+   - Insert a period in the database.
+   - Receive the period number and year.
+   ****************************************/
+	public function insertPeriod($pData)
+	{
+		$periodDAO_model = new PeriodDAO_model();
+		return $periodDAO_model->insert($pData);
+	}
+
+
+	/****************************************
+   - Get the information about an unique period.
+   - Receive the period id.
+   ****************************************/
+	public function getUniquePeriod($pId)
+	{
+		$periodDAO_model = new PeriodDAO_model();
+		return $periodDAO_model->get($pId);
+	}
+
+
+	/****************************************
+   - Edit the information of a period.
+   - Receive the period id, number and year.
+   ****************************************/
+	public function editPeriod($pData)
+	{
+		$periodDAO_model = new PeriodDAO_model();
+		return $periodDAO_model->edit($pData);
+	}
+
+
+	/****************************************
+   - Delete the information of a period.
+   - Receive the period id that will be deleted.
+   ****************************************/
+	public function deletePeriod($pId)
+	{
+		$periodDAO_model = new PeriodDAO_model();
+		return $periodDAO_model->delete($pId);
+	}
 
 }
 
