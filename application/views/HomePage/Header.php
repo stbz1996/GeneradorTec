@@ -11,6 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $linkToAdd = base_url()."/Administrator_controller/AddAdmin";
     $linkToCareers = base_url()."/Administrator_controller/Careers";
     $linkToProfessors = base_url()."/Administrator_controller/Professors";
+    $linkToCurrentPeriod = base_url()."/Administrator_controller/Period";
 ?>
 
 
@@ -79,6 +80,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <a href="<?= $linkToProfessors?>">
                                 <i class="fa fa-address-card"></i>
                                 <span>Profesores</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= $linkToCurrentPeriod?>">
+                                <i class="fa fa-address-card"></i>
+                                <span>Periodo</span>
                             </a>
                         </li>
                     </ul>

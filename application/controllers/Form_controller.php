@@ -243,7 +243,7 @@ class Form_controller extends CI_Controller {
 		else
 		{
 			$this->insertWorkload($idProfessor, $workload);
-			$this->insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
+			$this->manageActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
 			$this->assignCourses($idForm, $idCourses, $priorities);
 
 			echo "<script>
@@ -252,6 +252,98 @@ class Form_controller extends CI_Controller {
 		}		
 		//$link = "Form_controller/?p=".$_SESSION['hashCode'];
 		//redirect($link, 'refresh');
+	}
+
+	function manageActivities($idForm, $activitiesDescription, $activitiesWorkPorcent)
+	{
+		//Prepare data
+		$oldActivities = $this->getActivities();
+		$totalOldActivities = count($oldActivities);
+		$totalNewActivities = 0;
+
+		if(isset($activitiesDescription))
+		{
+			$totalNewActivities = sizeof($activitiesDescription);
+		}		
+		$this->updateActivities($totalOldActivities, $totalNewActivities, $oldActivities, $activitiesWorkPorcent, $activitiesDescription);
+
+		if($totalOldActivities >= $totalNewActivities)
+		{
+			$this->deleteOldActivities($oldActivities, $totalNewActivities, $totalOldActivities);
+		}
+		else if($totalOldActivities < $totalNewActivities)
+		{
+			$this->insertNewActivities($idForm, $activitiesDescription, $totalOldActivities);
+		}
+	}
+
+	function updateActivities($totalOldActivities, $totalNewActivities, $oldActivities, $activitiesWorkPorcent, $activitiesDescription)
+	{
+		$newActivities = array();
+
+		if($totalOldActivities >= $totalNewActivities)
+		{
+			//Verify if they're new activities
+			if(!$totalNewActivities)
+			{
+				return;
+			}
+
+			//Create new activities
+			for($i = 0; $i < $totalNewActivities; $i++)
+			{
+				$newActivity = array(
+					'idActivity' => $oldActivities[$i]->getId(),
+					'workPorcent' => $activitiesWorkPorcent[$i],
+					'description' => $activitiesDescription[$i]
+				);
+				$newActivities[] = $newActivity;				
+			}
+		}
+		else if($totalOldActivities < $totalNewActivities)
+		{
+			//Verify if they're old activities
+			if(!$totalOldActivities)
+			{
+				return;
+			}
+
+			$updateDescription = array_slice($activitiesDescription, 0, $totalOldActivities);
+			$updateWorkPorcent = array_slice($activitiesWorkPorcent, 0, $totalOldActivities);
+
+			//Build array of new activities
+			for($i = 0; $i < $totalOldActivities; $i++)
+			{
+				$newActivity = array(
+					'idActivity' => $oldActivities[$i]->getId(),
+					'workPorcent' => $updateWorkPorcent[$i],
+					'description' => $updateDescription[$i]
+				);
+				$newActivities[] = $newActivity;				
+			}
+			$this->Form_Logic->updateActivities($newActivities);
+		}
+	}
+
+	function deleteOldActivities($oldActivities, $totalNewActivities, $totalOldActivities)
+	{
+		//Delete the old activities left
+		$oldActivities = array_slice($oldActivities, $totalNewActivities);
+		if($totalOldActivities > $totalNewActivities)
+		{
+			$idActivities = array();
+			foreach ($oldActivities as $oldActivity) {
+				$idActivities[] = $oldActivity->getId();
+			}
+			$this->Form_Logic->deleteActivities($idActivities);
+		}
+	}
+
+	function insertNewActivities($idForm, $activitiesDescription, $totalOldActivities)
+	{
+		$newDescription = array_slice($activitiesDescription, $totalOldActivities);
+		$newWorkPorcent = array_slice($activitiesWorkPorcent, $totalOldActivities);
+		$this->insertActivities($idForm, $newDescription, $newWorkPorcent);
 	}
 
 	/****************************************
@@ -299,6 +391,7 @@ class Form_controller extends CI_Controller {
 				'state' => 1
 			);
 		}
+		$this->deleteCoursesByForm($idForm);
 		$this->insertCoursesByForm($courses);
 	}
 
@@ -322,6 +415,11 @@ class Form_controller extends CI_Controller {
 	function insertCoursesByForm($courses)
 	{
 		$this->Form_Logic->insertCoursesForm($courses);
+	}
+
+	function deleteCoursesByForm($idForm)
+	{
+		$this->Form_Logic->deleteCoursesForm($idForm);
 	}
 
 	function getActivities()

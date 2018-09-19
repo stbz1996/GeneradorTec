@@ -322,7 +322,7 @@ class Form_Logic{
 			if($workload >= $totalWorkPorcent)
 			{
 				//Verify if there's an activity without description
-				if(in_array("", $activitiesDescription) || in_array(0, $activitiesWorkPorcent))
+				if(in_array("", $activitiesDescription))
 				{
 					return "<script>alert('No se puede guardar: Una o varias actividades no poseen datos correctos');</script>";
 				}
@@ -334,6 +334,27 @@ class Form_Logic{
 		}
 
 		return "";
+	}
+
+	function updateActivities($activities)
+	{
+		$activityDAO = new ActivityDAO_model();
+		$activityDAO->updateActivities($activities);
+	}
+
+	function deleteActivities($idActivities)
+	{
+		$activityDAO = new ActivityDAO_model();
+		for($i = 0; $i < count($idActivities); $i++)
+		{
+			$activityDAO->deleteActivity($idActivities[$i]);
+		}
+	}
+
+	function deleteCoursesForm($idForm)
+	{
+		$formDAO = new FormDAO_model();
+		$formDAO->deleteCoursesForm($idForm);
 	}
 }
 

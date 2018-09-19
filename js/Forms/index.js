@@ -3,7 +3,12 @@
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
-var count_activities = document.getElementById("dynamic_field").getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
+
+var count_activities = 0
+if(document.getElementById("dynamic_field").rows.length)
+{
+	count_activities = document.getElementById("dynamic_field").getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
+}
 
 $(".next").click(function(){
 	if(animating) return false;
@@ -119,9 +124,6 @@ $(".add").click(function(){
 	$('#dynamic_field').append('<tr><td><input type="text" name="name[]" id="name" placeholder="Ingrese actividad" /></td><td><input type="button" name="add" id="add" value="+" /></td></tr>');
 
 });*/
-
-
-
 
 // We have to send or save the form here  
 $(".submit").click(function(){

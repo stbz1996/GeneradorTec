@@ -242,6 +242,16 @@ function getAddressProfessors()
 	return $address;
 }
 
+function getAddressPeriod()
+{
+	$address = array(
+		'ADDRESS_3' => "index.php/Administrator_controller/getPeriod/",
+		'ADDRESS_4' => "index.php/Administrator_controller/deletePeriod/",
+		'ADDRESS_5' => "index.php/Administrator_controller/addPeriod"
+	);
+	return $address;
+}
+
 function stateValid()
 {
 	$state = array(
