@@ -7,7 +7,6 @@
 ?>
 
 
-
 			
 			<div class="titles">
               	<h1>Generación automática de links</h1>
@@ -31,7 +30,7 @@
 			    <h4>Seleccione el periodo de validez de los formularios</h4>
 				<select class="form-control" name="period" required>
 				<?php 
-					foreach ($periods->result() as $p) { ?>
+					foreach ($periods as $p) { ?>
 						<option value=<?= $p->idPeriod ?>> <?= $p->number.' - '.$p->year ?> </option>
 					<?php } ?>
 				</select>

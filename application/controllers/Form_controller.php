@@ -273,7 +273,7 @@ class Form_controller extends CI_Controller {
 		}
 		else if($totalOldActivities < $totalNewActivities)
 		{
-			$this->insertNewActivities($idForm, $activitiesDescription, $totalOldActivities);
+			$this->insertNewActivities($idForm, $activitiesWorkPorcent, $activitiesDescription, $totalOldActivities);
 		}
 	}
 
@@ -339,12 +339,13 @@ class Form_controller extends CI_Controller {
 		}
 	}
 
-	function insertNewActivities($idForm, $activitiesDescription, $totalOldActivities)
+	function insertNewActivities($idForm, $activitiesWorkPorcent, $activitiesDescription, $totalOldActivities)
 	{
 		$newDescription = array_slice($activitiesDescription, $totalOldActivities);
 		$newWorkPorcent = array_slice($activitiesWorkPorcent, $totalOldActivities);
 		$this->insertActivities($idForm, $newDescription, $newWorkPorcent);
 	}
+
 
 	/****************************************
 	*Function that insert workload of a pro-*

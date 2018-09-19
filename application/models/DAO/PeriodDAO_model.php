@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class PeriodDAO_model extends CI_Model {
 
-	var $table = 'Period';
+	var $periodTable = 'Period'; // Table name 
 
 	function __construct()
 	{
@@ -11,56 +11,24 @@ class PeriodDAO_model extends CI_Model {
 		$this->load->database();
 	}
 
-	/****************************************
-	Returns the active period 
-	****************************************/
-	function findActivePeriod($PeriodDTO, $pCarrer)
-	{
-		$this->db->select('idPeriod');
-		$this->db->from('Career');
-		$this->db->where('idCareer', $pCarrer->getId());
-		try{ $query = $this->db->get(); }
-		catch (Exception $e){ return false; }
-		
-		if ($query->num_rows() > 0) {
-			$idPeriod = $query->row()->idPeriod;
-			$PeriodDTO->setIdPeriod($idPeriod);
-		}
-		else{
-			$PeriodDTO->setIdPeriod(0);
-		}
 
-		return $PeriodDTO;
-	}
-
-
-	public function getPeriods()
- 	{
- 		$this->db->select('*');
-		$this->db->from('Period');
-		try{ $query = $this->db->get(); }
-		catch (Exception $e){ return false; }
-		
-		if ($query->num_rows() > 0) return $query;
-		else return false;
-	}
-	 
 	 /****************************************
     - Get all the periods from the database
     ****************************************/
     public function show()
     {
-        $this->db->from($this->table);
+        $this->db->from($this->periodTable);
         $query = $this->db->get();
         return $query->result();
     }
+    
 
     /****************************************
-    - Get a unique professor from the database
+    - Get a unique period from the database
     ****************************************/
     public function get($pId)
     {
-        $this->db->from($this->table);
+        $this->db->from($this->periodTable);
         $this->db->where('idPeriod', $pId);
         $query = $this->db->get();
         return $query->row();
@@ -71,7 +39,7 @@ class PeriodDAO_model extends CI_Model {
     ****************************************/
     public function insert($pPeriod)
     {
-        $this->db->insert($this->table, $pPeriod);
+        $this->db->insert($this->periodTable, $pPeriod);
         return $this->db->insert_id();
     }
 
@@ -85,9 +53,10 @@ class PeriodDAO_model extends CI_Model {
             'year' => $pPeriod['year']
         );
         $this->db->where('idPeriod', $pPeriod['idPeriod']);
-        $this->db->update($this->table, $changes);
+        $this->db->update($this->periodTable, $changes);
         return $this->db->affected_rows();
     }
+
 
     /****************************************
     - Delete the period in the database.
@@ -95,7 +64,7 @@ class PeriodDAO_model extends CI_Model {
     public function delete($pId)
     {
         $this->db->where('idPeriod', $pId);
-        $this->db->delete($this->table);
+        $this->db->delete($this->periodTable);
     }
 
 }

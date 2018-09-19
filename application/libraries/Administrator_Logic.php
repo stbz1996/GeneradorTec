@@ -61,7 +61,7 @@ class Administrator_Logic{
  	public function findPeriods()
  	{
  		$periodDAO_model = new PeriodDAO_model();
- 		return $periodDAO_model->findPeriods();
+ 		return $periodDAO_model->show();
  	}
 
 
@@ -550,13 +550,14 @@ class Administrator_Logic{
  		return $message;
  	}
 
+
 	/****************************************
 	- Convert the data to the database an array.
 	- Return all the periods and their info in database.
 	****************************************/
 	public function getArrayPeriods($pId = null)
 	{
-		/* Get the professors from the database */
+		/* Get the periods from the database */
 		$periodDAO_model = new PeriodDAO_model();
 
 		if ($pId == null)

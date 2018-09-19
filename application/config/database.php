@@ -100,7 +100,7 @@ $db['default'] = array(
 */
 
 //************************************** Base de datos de Steven 
-/*$db['default'] = array(
+$db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	'username' => 'root',
@@ -120,9 +120,9 @@ $db['default'] = array(
 	'stricton' => FALSE,
 	'failover' => array(),
 	'save_queries' => TRUE
-);*/
+);
 
-
+/*
 //************************************** Base de datos de desarrollo 
 $db['default'] = array(
 	'dsn'	=> '',
@@ -145,3 +145,4 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+*/

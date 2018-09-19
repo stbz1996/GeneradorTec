@@ -225,6 +225,7 @@ class Administrator_controller extends CI_Controller
 
 	}
 
+
 	/****************************************
 	- Edit the block.
 		The data is received by javascript.
@@ -488,6 +489,7 @@ class Administrator_controller extends CI_Controller
 		$data['profesors'] = $this->administrator_logic->findProfessors($idCareer);
 		$data['periods']   = $this->administrator_logic->findPeriods(); 
 		
+
 		if ($data['profesors'] == true && $data['periods'] == true) {
 			$this->callView("LinksPage", $data);
 			$this->session->set_userdata('LinksState', "");
