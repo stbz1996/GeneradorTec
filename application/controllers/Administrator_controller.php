@@ -668,10 +668,10 @@ class Administrator_controller extends CI_Controller
 	}
 
 
-	/****************************************
+	/*********************************************************************
 	- Get the data of the new administrator and compare with the database.
 	- If there's no admin with the username, add the new one.
-	****************************************/
+	**********************************************************************/
 	public function getAdminData()
 	{
 		$state = false;
