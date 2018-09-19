@@ -51,6 +51,25 @@ class ActivityDAO_model extends CI_Model
 			return false;
 		}
 	}
+
+	/****************************************
+	*Function that updates activities of 	*
+	*professor.								*
+	*										*
+	*Input:									*
+	*	-$activities: Array, activities to  *
+	*	be updating. 						*
+	*****************************************/
+	function updateActivities($activities)
+	{
+		$this->db->update_batch('Activity', $activities, 'idActivity');
+	}
+
+	function deleteActivity($idActivity)
+	{
+		$this->db->where('idActivity', $idActivity);
+		$this->db->delete('Activity');
+	}
 }
 
 ?>

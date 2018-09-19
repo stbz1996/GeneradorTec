@@ -143,6 +143,12 @@ class FormDAO_model extends CI_Model
 	{
 		$this->db->insert_batch('CourseXForm', $data);
 	}
+
+	public function deleteCoursesForm($idForm)
+	{
+		$this->db->where('idForm', $idForm);
+		$this->db->delete('CourseXForm');
+	}
 }
 
 
