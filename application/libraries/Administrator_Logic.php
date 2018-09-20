@@ -506,6 +506,38 @@ class Administrator_Logic{
 		return $professorDAO_model->changeState($pData);
 	}
 
+	/****************************************
+   - Get all the forms of a professor.
+   ****************************************/
+	public function getProfessorWithForms($idPeriod)
+	{
+		$professorDAO_model = new ProfessorDAO_model();
+		$activityDAO_model = new ActivityDAO_model();
+		$professors = $professorDAO_model->getProfessorsXForms($idPeriod);
+
+		// For each professor look for the respective activities.
+		foreach ($professors as $professor) {
+			$idForm = $professor->idForm;
+			$result = $activityDAO_model->getPorcentWork($idForm); // Get the activities of a form.
+			if (!$result)
+			{
+				$professor->workPorcent = 0; // Porcent the activities assigned.
+				$professor->available = $professor->workLoad;
+			}else
+			{
+				$professor->workPorcent = $result[0]->activityPorcent; // Porcent the activities assigned.
+				$professor->available = $professor->workLoad - $professor->workPorcent;
+
+				// If professor doesn't have the enough time.
+				if ($professor->available < 0){
+					$professor->available = 0;
+				}
+			}
+		}
+
+		return $professors;
+	}
+
  	/**************************************************************
 	This function returns all the schedules regitered in the sistem
  	***************************************************************/

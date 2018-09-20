@@ -29,13 +29,6 @@
             <?php }?>
         </tbody>
 
-        <tfoot>
-            <tr>
-                <th>Código</th>
-                <th>Nombre</th>
-                <th></th>
-            </tr>
-        </tfoot>
     </table>
 
 
