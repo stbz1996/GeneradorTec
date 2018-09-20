@@ -56,13 +56,6 @@
             <?php }?>
         </tbody>
 
-        <tfoot>
-            <tr>
-                <th>Nombre</th>
-                <th>Estado</th>
-                <th></th>
-            </tr>
-        </tfoot>
     </table>
 </div>
 

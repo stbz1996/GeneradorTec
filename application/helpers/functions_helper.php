@@ -37,7 +37,7 @@ function getBreadCrumbHome()
 	$breadCrumb = array(
 		array ( 
 			'NAME' => "Inicio",
-			'HTML' => "index.php/Administrator_controller"
+			'HTML' => "Administrator_controller"
 		)
 	);
 	return $breadCrumb;
@@ -48,7 +48,7 @@ function getBreadCrumbProfessors()
 	$breadCrumb = array(
 		array ( 
 			'NAME' => "Profesores",
-			'HTML' => "index.php/Administrator_controller/Professors"
+			'HTML' => "Administrator_controller/Professors"
 		)
 	);
 	return $breadCrumb;
@@ -59,11 +59,11 @@ function getBreadCrumbCareer()
 	$breadCrumb = array(
 		array ( 
 			'NAME' => "Inicio",
-			'HTML' => "index.php/Administrator_controller"
+			'HTML' => "Administrator_controller"
 		),
 		array (
 			'NAME' => "Carreras",
-			'HTML' => "index.php/Administrator_controller/Careers"
+			'HTML' => "Administrator_controller/Careers"
 		)
 	);
 	return $breadCrumb;
@@ -74,15 +74,15 @@ function getBreadCrumbPlan()
 	$breadCrumb = array(
 		array ( 
 			'NAME' => "Inicio",
-			'HTML' => "index.php/Administrator_controller"
+			'HTML' => "Administrator_controller"
 		),
 		array (
 			'NAME' => "Carreras",
-			'HTML' => "index.php/Administrator_controller/Careers"
+			'HTML' => "Administrator_controller/Careers"
 		),
 		array (
 			'NAME' => "Planes",
-			'HTML' => "index.php/Administrator_controller/Plans"
+			'HTML' => "Administrator_controller/Plans"
 		)
 	);
 	return $breadCrumb;
@@ -93,19 +93,19 @@ function getBreadCrumbBlock()
 	$breadCrumb = array(
 		array ( 
 			'NAME' => "Inicio",
-			'HTML' => "index.php/Administrator_controller"
+			'HTML' => "Administrator_controller"
 		),
 		array (
 			'NAME' => "Carreras",
-			'HTML' => "index.php/Administrator_controller/Careers"
+			'HTML' => "Administrator_controller/Careers"
 		),
 		array (
 			'NAME' => "Planes",
-			'HTML' => "index.php/Administrator_controller/Plans"
+			'HTML' => "Administrator_controller/Plans"
 		),
 		array (
 			'NAME' => "Bloques",
-			'HTML' => "index.php/Administrator_controller/Blocks"
+			'HTML' => "Administrator_controller/Blocks"
 		)
 	);
 	return $breadCrumb;
@@ -116,79 +116,52 @@ function getBreadCrumbCourse()
 	$breadCrumb = array(
 		array ( 
 			'NAME' => "Inicio",
-			'HTML' => "index.php/Administrator_controller"
+			'HTML' => "Administrator_controller"
 		),
 		array (
 			'NAME' => "Carreras",
-			'HTML' => "index.php/Administrator_controller/Careers"
+			'HTML' => "Administrator_controller/Careers"
 		),
 		array (
 			'NAME' => "Planes",
-			'HTML' => "index.php/Administrator_controller/Plans"
+			'HTML' => "Administrator_controller/Plans"
 		),
 		array (
 			'NAME' => "Bloques",
-			'HTML' => "index.php/Administrator_controller/Blocks"
+			'HTML' => "Administrator_controller/Blocks"
 		),
 		array (
 			'NAME' => "Cursos",
-			'HTML' => "index.php/Administrator_controller/Courses"
+			'HTML' => "Administrator_controller/Courses"
 		)
 	);
 	return $breadCrumb;
 }
 
-function getCareerSessions($id, $name){
-	$array = array(
-			'idCareer' => $id,
-			'nameCareer' => $name,
-			'idPlan' => '0',
-			'namePlan' => '',
-			'idBlock' => '0',
-			'nameBlock' => '',
-			'idCourse' => '0',
-			'nameCourse' => '0'
-	);
-	return $array;
-}
 
-
-function getPlanSessions($session, $id, $name){
-	$array = array(
-			'idCareer' => $session->userdata('idCareer'),
-			'nameCareer' => $session->userdata('nameCareer'),
-			'idPlan' => $id,
-			'namePlan' => $name,
-			'idBlock' => '0',
-			'nameBlock' => '',
-			'idCourse' => '0',
-			'nameCourse' => '0'
+function getBreadCrumbAssignCourses()
+{
+	$breadCrumb = array(
+		array ( 
+			'NAME' => "Inicio",
+			'HTML' => "Administrator_controller"
+		),
+		array (
+			'NAME' => "Period",
+			'HTML' => "Administrator_controller/Period"
+		)
 	);
-	return $array;
-}
-
-function getBlockSessions($session, $id, $name){
-	$array = array(
-			'idCareer' => $session->userdata('idCareer'),
-			'nameCareer' => $session->userdata('nameCareer'),
-			'idPlan' => $session->userdata('idPlan'),
-			'namePlan' => $session->userdata('namePlan'),
-			'idBlock' => $id,
-			'nameBlock' => $name,
-			'idCourse' => '0',
-			'nameCourse' => '0'
-	);
-	return $array;
+	return $breadCrumb;
 }
 
 function getAddressCareers()
 {
 	$address = array(
-		'ADDRESS_1' => "index.php/Administrator_controller/Plans",
-		'ADDRESS_2' => "index.php/Administrator_controller/changeStateCareer",
-		'ADDRESS_3' => "index.php/Administrator_controller/getCareer/",
-		'ADDRESS_4' => "index.php/Administrator_controller/deleteCareer/",
-		'ADDRESS_5' => "index.php/Administrator_controller/addCareer"
+		'ADDRESS_1' => "Administrator_controller/Plans",
+		'ADDRESS_2' => "Administrator_controller/changeStateCareer",
+		'ADDRESS_3' => "Administrator_controller/getCareer/",
+		'ADDRESS_4' => "Administrator_controller/deleteCareer/",
+		'ADDRESS_5' => "Administrator_controller/addCareer"
 	);
 	return $address;
 }
@@ -196,11 +169,11 @@ function getAddressCareers()
 function getAddressPlans()
 {
 	$address = array(
-		'ADDRESS_1' => "index.php/Administrator_controller/Blocks",
-		'ADDRESS_2' => "index.php/Administrator_controller/changeStatePlan",
-		'ADDRESS_3' => "index.php/Administrator_controller/getPlan/",
-		'ADDRESS_4' => "index.php/Administrator_controller/deletePlan/",
-		'ADDRESS_5' => "index.php/Administrator_controller/addPlan"
+		'ADDRESS_1' => "Administrator_controller/Blocks",
+		'ADDRESS_2' => "Administrator_controller/changeStatePlan",
+		'ADDRESS_3' => "Administrator_controller/getPlan/",
+		'ADDRESS_4' => "Administrator_controller/deletePlan/",
+		'ADDRESS_5' => "Administrator_controller/addPlan"
 	);
 	return $address;
 }
@@ -208,11 +181,11 @@ function getAddressPlans()
 function getAddressBlocks()
 {
 	$address = array(
-		'ADDRESS_1' => "index.php/Administrator_controller/Courses",
-		'ADDRESS_2' => "index.php/Administrator_controller/changeStateBlock",
-		'ADDRESS_3' => "index.php/Administrator_controller/getBlock/",
-		'ADDRESS_4' => "index.php/Administrator_controller/deleteBlock/",
-		'ADDRESS_5' => "index.php/Administrator_controller/addBlock"
+		'ADDRESS_1' => "Administrator_controller/Courses",
+		'ADDRESS_2' => "Administrator_controller/changeStateBlock",
+		'ADDRESS_3' => "Administrator_controller/getBlock/",
+		'ADDRESS_4' => "Administrator_controller/deleteBlock/",
+		'ADDRESS_5' => "Administrator_controller/addBlock"
 	);
 	return $address;
 }
@@ -220,11 +193,11 @@ function getAddressBlocks()
 function getAddressCourses()
 {
 	$address = array(
-		'ADDRESS_1' => "index.php/Administrator_controller/Groups",
-		'ADDRESS_2' => "index.php/Administrator_controller/changeStateCourse",
-		'ADDRESS_3' => "index.php/Administrator_controller/getCourse/",
-		'ADDRESS_4' => "index.php/Administrator_controller/deleteCourse/",
-		'ADDRESS_5' => "index.php/Administrator_controller/addCourse"
+		'ADDRESS_1' => "Administrator_controller/Groups",
+		'ADDRESS_2' => "Administrator_controller/changeStateCourse",
+		'ADDRESS_3' => "Administrator_controller/getCourse/",
+		'ADDRESS_4' => "Administrator_controller/deleteCourse/",
+		'ADDRESS_5' => "Administrator_controller/addCourse"
 	);
 	return $address;
 }
@@ -233,11 +206,11 @@ function getAddressCourses()
 function getAddressProfessors()
 {
 	$address = array(
-		'ADDRESS_1' => "index.php/Administrator_controller/Groups",
-		'ADDRESS_2' => "index.php/Administrator_controller/changeStateProfessor",
-		'ADDRESS_3' => "index.php/Administrator_controller/getProfessor/",
-		'ADDRESS_4' => "index.php/Administrator_controller/deleteProfessor/",
-		'ADDRESS_5' => "index.php/Administrator_controller/addProfessor"
+		'ADDRESS_1' => "Administrator_controller/Groups",
+		'ADDRESS_2' => "Administrator_controller/changeStateProfessor",
+		'ADDRESS_3' => "Administrator_controller/getProfessor/",
+		'ADDRESS_4' => "Administrator_controller/deleteProfessor/",
+		'ADDRESS_5' => "Administrator_controller/addProfessor"
 	);
 	return $address;
 }

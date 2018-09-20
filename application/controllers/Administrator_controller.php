@@ -24,6 +24,7 @@ class Administrator_controller extends CI_Controller
 		$this->load->model("DAO/CourseDAO_model");
 		$this->load->model("DAO/PeriodDAO_model");
 		$this->load->model("DAO/FormDAO_model");
+		$this->load->model("DAO/ActivityDAO_model");
 		
 
 		$this->load->model("DTO/ScheduleDTO");		
@@ -49,6 +50,18 @@ class Administrator_controller extends CI_Controller
 		$this->load->view("HomePage/Footer");
 	}
 
+	/*************************************************** 
+	This functions is equal to callView.. but needs to load the breadCrumb.
+	***************************************************/
+	function callViewBreadCrumb($viewName, $data)
+	{
+		$route = "HomePage/".$viewName;
+		$this->load->view("HomePage/Header");
+		$this->load->view("HomePage/Admin/BreadCrumb", $data);
+		$this->load->view($route, $data);
+		$this->load->view("HomePage/Footer");
+	}
+
 
 	/***************************************************
 	That function is the first function that is called. 
@@ -66,18 +79,12 @@ class Administrator_controller extends CI_Controller
 	****************************************/
 	public function Careers()
 	{
-		$array = getCareerSessions('0', "");
-		$this->session->set_userdata($array);
-
 		$data['iters'] = getBreadCrumbHome();
 		$data['actual'] = "Careers";
 		$data['ADD'] = getAddressCareers();
 		$data['careers'] = $this->administrator_logic->getArrayCareers();
 
-        $this->load->view('HomePage/Header');
-        $this->load->view('HomePage/Admin/BreadCrumb', $data);
-        $this->load->view('HomePage/Admin/Career', $data);
-        $this->load->view('HomePage/Footer');
+		$this->callViewBreadCrumb("Admin/Career", $data);
 	}
 
 
@@ -92,8 +99,7 @@ class Administrator_controller extends CI_Controller
 			$id = $this->session->userdata('idCareer');
 			$name = $this->session->userdata('nameCareer');
 		}else{
-			$array = getCareerSessions($id, urldecode($name));
-			$this->session->set_userdata($array);
+			$this->session->set_userdata('nameCareer', urldecode($name));
 		}
 
 		/* These are data that the interface is going to get.*/
@@ -102,10 +108,7 @@ class Administrator_controller extends CI_Controller
 		$data['ADD'] = getAddressPlans();       // Address of redirect.
 		$data['plans'] = $this->administrator_logic->getArrayPlans($id);
 
-        $this->load->view('HomePage/Header');
-        $this->load->view('HomePage/Admin/BreadCrumb', $data);
-        $this->load->view('HomePage/Admin/Plan', $data);
-        $this->load->view("HomePage/Footer");
+		$this->callViewBreadCrumb("Admin/Plan", $data);
 	}
 
 
@@ -189,8 +192,8 @@ class Administrator_controller extends CI_Controller
 			$id = $this->session->userdata('idPlan');
 			$name = $this->session->userdata('namePlan');
 		}else{
-			$array = getPlanSessions($this->session, $id, urldecode($name));
-			$this->session->set_userdata($array);
+			$this->session->set_userdata('idPlan', $id);
+			$this->session->set_userdata('namePlan', urldecode($name));
 		}
 
 		/* These are data that the interface is going to need.*/
@@ -203,10 +206,7 @@ class Administrator_controller extends CI_Controller
 		// Take all the plans of the database.
 		$data['plans'] = $this->administrator_logic->getArrayPlans(null);
 
-        $this->load->view('HomePage/Header');
-        $this->load->view('HomePage/Admin/BreadCrumb', $data);
-        $this->load->view('HomePage/Admin/Block', $data);
-        $this->load->view("HomePage/Footer");
+		$this->callViewBreadCrumb("Admin/Block", $data);
 	}
 	
 	/****************************************
@@ -283,13 +283,16 @@ class Administrator_controller extends CI_Controller
     public function Courses($id = null, $name = null)
     {
     	// if there is not a id, take the idCareer, idPlan, and idBlock previous selected.
+    	$idPlan = $this->session->userdata('idPlan');
+		$namePlan = $this->session->userdata('namePlan');
+
 		if ($id == null)
 		{
 			$id = $this->session->userdata('idBlock');
 			$name = $this->session->userdata('nameBlock');
 		}else{
-			$array = getBlockSessions($this->session, $id, urldecode($name));
-			$this->session->set_userdata($array);
+			$this->session->set_userdata('idBlock', $id);
+			$this->session->set_userdata('nameBlock', urldecode($name));
 		}
 
 		/* These are data that the interface is going to need.*/
@@ -298,14 +301,14 @@ class Administrator_controller extends CI_Controller
 		$data['actual'] = urldecode($name);   // Actual position
 		$data['ADD'] = getAddressCourses();    // Get address of a block position
 		$data['courses'] = $this->administrator_logic->getArrayCourses($id);
+		$data['idParentPlan'] = $idPlan;
+		$data['nameParentPlan'] = $namePlan;
 
 		// Take all the blocks of the database.
-		$data['blocks'] = $this->administrator_logic->getArrayBlocks(null);
+		$data['plans'] = $this->administrator_logic->getArrayPlans(null);
+		$data['blocks'] = $this->administrator_logic->getArrayBlocks($idPlan);
 		
-		$this->load->view('HomePage/Header');
-        $this->load->view('HomePage/Admin/BreadCrumb', $data);
-        $this->load->view('HomePage/Admin/Course', $data);
-        $this->load->view("HomePage/Footer");
+		$this->callViewBreadCrumb("Admin/Course", $data);
     }
 
 
@@ -321,13 +324,22 @@ class Administrator_controller extends CI_Controller
             'state' => false,
             'isCareer' => $this->input->post('inputCareer'),
             'lessonNumber' => $this->input->post('inputLessons'),
-            'idBlock' => $this->input->post('select'),
+            'idBlock' => $this->input->post('selectBlock'),
         );
 
         $insert = $this->administrator_logic->insertCourse($data);
         validateModal();
     }
 
+    /****************************************
+	- Load all the blocks that belong a plan.
+		The data is received by javascript.
+	****************************************/
+    public function loadBlocks($idPlan)
+    {
+    	$blocks = $this->administrator_logic->getArrayBlocks($idPlan);
+    	validateArrayModal($blocks);
+    }
 
     /****************************************
 	- Edit the curse.
@@ -342,7 +354,7 @@ class Administrator_controller extends CI_Controller
             'state' => $this->input->post('inputState'),
             'isCareer' => $this->input->post('inputCareer'),
             'lessonNumber' => $this->input->post('inputLessons'),
-            'idBlock' => $this->input->post('select'),
+            'idBlock' => $this->input->post('selectBlock'),
         );
 		$result = $this->administrator_logic->editCourse($data);
 		validateModal();
@@ -390,9 +402,6 @@ class Administrator_controller extends CI_Controller
 		{
 			$id = $this->session->userdata('idCareer');
 			$name = $this->session->userdata('nameCareer');
-		}else{
-			$array = getBlockSessions($this->session, $id, urldecode($name));
-			$this->session->set_userdata($array);
 		}
 
 		/* These are data that the interface is going to need.*/
@@ -402,10 +411,7 @@ class Administrator_controller extends CI_Controller
 		$data['ADD'] = getAddressProfessors();
 		$data['professors'] = $this->administrator_logic->getArrayProfessors(); //id parametro
 
-		$this->load->view('HomePage/Header');
-        $this->load->view('HomePage/Admin/BreadCrumb', $data);
-        $this->load->view('HomePage/Admin/Professor', $data);
-        $this->load->view("HomePage/Footer");
+		$this->callViewBreadCrumb("Admin/Professor", $data);
     }
 
 
@@ -475,6 +481,20 @@ class Administrator_controller extends CI_Controller
 		);
 		$this->administrator_logic->changeStateProfessor($data);
 		validateModal();
+	}
+
+
+	/****************************************
+	- Load the view to get the professor and courses
+	****************************************/
+	public function AssignmentCourses()
+	{
+		$idPeriod = 1; // Se define por medio de sessions.
+		$data['iters'] = getBreadCrumbAssignCourses(); // Relative position
+		$data['actual'] = "Período 2018";   /* Se asigna con respecto al session*/
+		$data['professors'] = $this->administrator_logic->getProfessorWithForms($idPeriod);
+		$this->callViewBreadCrumb("Admin/AssignCourses", $data);
+
 	}
 
 
@@ -711,22 +731,6 @@ class Administrator_controller extends CI_Controller
 		printMessage("Se ha agregado a la base de datos");
 		redirect('Administrator_controller/index/');
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 

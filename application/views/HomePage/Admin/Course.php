@@ -67,17 +67,6 @@
               </tr>
               <?php }?>
         </tbody>
-
-        <tfoot>
-            <tr>
-                <th>Codigo</th>
-                <th>Nombre</th>
-                <th>Estado</th>
-                <th>Lecciones</th>
-                <th>¿Carrera?</th>
-                <th></th>
-            </tr>
-        </tfoot>
     </table>
 </div>
 
@@ -135,9 +124,23 @@
               </div>
 
               <div class="form-group">
+                  <label class="control-label col-md-3">Plan</label>
+                  <div class="col-md-9">
+                      <select class="mdb-select colorful-select dropdown-primary" id="selectPlan" name='selectPlan'>
+                          <option value="<?= $idParentPlan ?>" selected><?= $nameParentPlan ?></option>
+                          <?php foreach($plans as $plan){?>
+                              <?php if ($idParentPlan != $plan->idPlan): ?>
+                              <option value="<?= $plan->idPlan?>"><?= $plan->name ?></option>
+                              <?php endif; ?>
+                        <?php }?>
+                      </select>
+                  </div>
+              </div>
+
+              <div class="form-group">
                   <label class="control-label col-md-3">Bloque</label>
                   <div class="col-md-9">
-                      <select class="mdb-select colorful-select dropdown-primary" id="select" name='select'>
+                      <select class="mdb-select colorful-select dropdown-primary" id="selectBlock" name='selectBlock'>
                           <option value="<?= $idParent ?>" selected><?= $actual ?></option>
                           <?php foreach($blocks as $block){?>
                               <?php if ($idParent != $block->idBlock): ?>

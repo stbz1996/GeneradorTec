@@ -51,6 +51,26 @@ class ActivityDAO_model extends CI_Model
 			return false;
 		}
 	}
+
+	/****************************************
+	*Function that returns the total porcent of the studies.
+	*****************************************/
+	function getPorcentWork($idForm)
+	{
+		$this->db->select('SUM(workPorcent) AS activityPorcent');
+		$this->db->from('Activity');
+		$this->db->where('idForm', $idForm);
+		$query = $this->db->get();
+
+		if ($query->num_rows() > 0)
+		{
+			return $query->result();
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 
 ?>

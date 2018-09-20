@@ -293,9 +293,9 @@ function savePlan()
 
     if (save_method == "add")
     {
-        url = base_url + "index.php/Administrator_controller/addPlan";
+        url = base_url + "Administrator_controller/addPlan";
     }else{
-        url = base_url + "index.php/Administrator_controller/editPlan";
+        url = base_url + "Administrator_controller/editPlan";
     }
 
     text = $('[name="inputName"]').val();
@@ -318,9 +318,9 @@ function saveBlock()
 
     if (save_method == "add")
     {
-        url = base_url + "index.php/Administrator_controller/addBlock";
+        url = base_url + "Administrator_controller/addBlock";
     }else{
-        url = base_url + "index.php/Administrator_controller/editBlock";
+        url = base_url + "Administrator_controller/editBlock";
     }
 
     text = $('[name="inputName"]').val();
@@ -340,18 +340,29 @@ function saveBlock()
 function saveCourse()
 {
     var url;
-    var name, code, lessons;
+    var name; 
+    var code; 
+    var lessons;
+    var block;
 
     if (save_method == "add")
     {
-        url = base_url + "index.php/Administrator_controller/addCourse";
+        url = base_url + "Administrator_controller/addCourse";
     }else{
-        url = base_url + "index.php/Administrator_controller/editCourse";
+        url = base_url + "Administrator_controller/editCourse";
     }
 
     code = $('[name="inputCode"]').val();
     name = $('[name="inputName"]').val();
     lessons = $('[name="inputLessons"]').val();
+    block = $('#selectBlock option:selected').val();
+    console.log("Id del bloque: " + block);
+
+    /* If the block is not selected. */
+    if(block == '0' || block == '' || block == 'undefined' || block == null ){
+        alert("No se ha seleccionado ningún bloque para almacenar el curso");
+        return;
+    }
 
     if (code && name && lessons)
     {   
@@ -371,6 +382,45 @@ function saveCourse()
     }
 }
 
+// When the plans is selected... load all the blocks.
+$('#selectPlan').on('change', function(){
+    var id = $('#selectPlan option:selected').val();
+    $('#selectBlock').empty();
+    loadBlocks(id);
+})
+
+/****************************************
+- Loads the blocks of the plan.
+****************************************/
+function loadBlocks(id)
+{
+    var url = base_url + "Administrator_controller/loadBlocks/";
+
+    console.log(url + id);
+    $.ajax({
+        url: url + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(blocks)
+        {
+            console.log(blocks);
+            var count = 0;
+
+            blocks.forEach(function(block){
+                var messageId = '<option value="' + String(block.idBlock) + '">';
+                var messageName = String(block.name) + '</option>';
+                var message = messageId + messageName;
+                $('#selectBlock').append(message);
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            console.log("Error a la hora de cargar los datos.")
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
+
 /****************************************
 - If the user press save a course, defined the method.
 ****************************************/
@@ -380,9 +430,9 @@ function saveProfessor()
 
     if (save_method == "add")
     {
-        url = base_url + "index.php/Administrator_controller/addProfessor";
+        url = base_url + "Administrator_controller/addProfessor";
     }else{
-        url = base_url + "index.php/Administrator_controller/editProfessor";
+        url = base_url + "Administrator_controller/editProfessor";
     }
 
     save(url);
