@@ -631,19 +631,6 @@ class Administrator_controller extends CI_Controller
 		// All schedules on DB 
 		$schedules = $this->administrator_logic->getAllSchedules();
 		
-		////////////////////////////////////////////////////////////////////////////////
-		// Use that Method if the schedules was not being deleted never, so, it 
-		// takes the ids from 1 to n but in order, 1,2,3...,n. If the id x was deleted
-		// the algoritm does not work well 
-		$scheduleCounter = $_SESSION['scheduleCounter'];
-		for ($i = 1; $i <= $scheduleCounter; $i++) { 
-			$state = $this->input->post('Inp-'.$i);
-			$schedule = new ScheduleDTO();
-			$schedule->setIdSchedule($i);
-			$schedule->setState($state);
-			$this->administrator_logic->updateSchedule($schedule);
-		}
-		////////////////////////////////////////////////////////////////////////////////
 		foreach ($schedules as $schedule) 
 		{
 			$idSchedule = $schedule['id'];
@@ -654,6 +641,7 @@ class Administrator_controller extends CI_Controller
 			$schedule->setState($state);
 			$this->administrator_logic->updateSchedule($schedule);
 		}
+		
 		$this->showScheduleSelector();
 	}
 

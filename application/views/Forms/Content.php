@@ -17,7 +17,7 @@
 <!-- multistep form -->
 <form id="msform" action="getDataFromView" method="post">
   
-  <input type="Submit" name="Submit" value="Submit">
+  
   <!-- progressbar -->
   <ul id="progressbar">
     <li class="active">Información</li>
