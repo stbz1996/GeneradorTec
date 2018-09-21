@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class FormDAO_model extends CI_Model
 {
 
+	var $table = 'Form';
 	function __construct()
 	{
 		parent::__construct();
@@ -129,6 +130,26 @@ class FormDAO_model extends CI_Model
 		$this->db->set('Professor.workLoad', (string)$workload);
 		$this->db->where('Professor.idProfessor', (string)$idProfessor);
 		$this->db->update('Professor');
+	}
+
+	/****************************************
+	*Function that get the form that belongs 
+	* to a professor.				        *
+	*										*
+	*Input:									*
+	*	-$idProfessor: Integer, id of profe-*
+	*	ssor. 								*
+	*	-$idPeriod: Integer, id of actual   *
+	*   period. 							*
+	*****************************************/
+	function getProfessorForm($idProfessor, $idPeriod)
+	{
+		$this->db->select('*');
+		$this->db->from($this->table);
+		$this->db->where('idProfessor', $idProfessor);
+		$this->db->where('idPeriod', $idPeriod); 
+		$query = $this->db->get(); 		
+		return $query->row();
 	}
 
 	/****************************************

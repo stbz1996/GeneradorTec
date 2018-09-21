@@ -371,6 +371,24 @@ class Administrator_Logic{
  		return $query;
  	}
 
+ 	/****************************************
+	- Convert all activeCourses
+	****************************************/
+ 	public function getActiveCourses()
+ 	{
+ 		/* Get the blocks from the database */
+ 		$courseDAO_model = new CourseDAO_model();
+
+ 		$query = $courseDAO_model->getActiveCourses();
+ 	
+ 		if (!$query)
+ 		{
+ 			return array();
+ 		}
+
+ 		return $query;
+ 	}
+
 
  	/****************************************
 	- Insert a course in the database.
@@ -456,6 +474,30 @@ class Administrator_Logic{
 		return $query;
 	}
 
+	/****************************************
+	- Get courses selected by a professor.
+	****************************************/
+	public function loadSelectCourses($idProfessor, $idPeriod)
+	{
+		$courseDAO_model = new CourseDAO_model();
+		$formDAO_model = new FormDAO_model();
+
+		/* Get the form that belongs to a professor */
+		$formQuery = $formDAO_model->getProfessorForm($idProfessor, $idPeriod);
+		if (!$formQuery)
+		{
+			return array();
+		}
+
+		$idForm = $formQuery->idForm;
+		/* Get the courses that belong to a form. */
+		$coursesQuery = $courseDAO_model->getFormCourses($idForm);
+		if (!$coursesQuery)
+		{
+			return array();
+		}
+		return $coursesQuery->result();
+	}
 
 	/****************************************
    - Insert a professor in the database.
