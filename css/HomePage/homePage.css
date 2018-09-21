@@ -88,3 +88,47 @@ h1#tituloPlanes {
 .btn.active span.glyphicon {				
 	opacity: 1;				
 }
+
+#sectionTwoScreens { 
+	position: relative; 
+} 
+
+#leftScreen { 
+	position: relative; 
+	width: 49%; 
+	top: 0; 
+	left: 0;  
+	float: left; 
+	text-align: center;
+}
+
+#rightScreen { 
+	position: relative; 
+	width: 49%; 
+	top: 0; 
+	right: 0; 
+	float: right; 
+	border-left:3px dotted black;
+	text-align: center;
+}
+
+.esqinfder { 
+	position: absolute; 
+	bottom: 5px; 
+	right: 5px;
+	margin-top: 10px; 
+	background: #ff0; 
+} 
+
+.professorDiv {
+	border-style: ridge;
+	border-width: 1px; 
+	margin-bottom: 4px;
+}
+
+#titleSections {
+	margin-left: auto;
+	margin-right: auto;
+	color: #045FB4;
+	display: inline-block;
+}
