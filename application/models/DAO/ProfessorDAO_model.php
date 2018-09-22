@@ -102,4 +102,36 @@ class ProfessorDAO_model extends CI_Model {
         $this->db->where('idProfessor', $pProfessor['idProfessor']);
         $this->db->update($this->table, $changes);
     }
+
+
+    /****************************************
+    - Returns all the professors with his respective form of a period.
+    ****************************************/
+    function getProfessorsXForms($idPeriod)
+    {
+        $this->db->select('Professor.idProfessor');
+        $this->db->select('Professor.name');
+        $this->db->select('Professor.lastName');
+        $this->db->select('Professor.workLoad');
+        $this->db->select('Form.idForm');
+        $this->db->select('Period.idPeriod');
+        $this->db->from('Professor');
+        $this->db->join('Form', 'Professor.idProfessor = Form.idProfessor');
+        $this->db->join('Period', 'Form.idPeriod = Period.idPeriod');
+
+        $this->db->where('Form.idPeriod', $idPeriod);
+        $this->db->where('Professor.state', 1);
+
+        $query = $this->db->get();
+        if($query->num_rows() > 0)
+        {
+            
+            return $query->result();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 }

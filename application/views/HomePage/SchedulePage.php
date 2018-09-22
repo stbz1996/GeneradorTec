@@ -44,7 +44,7 @@
 					$Did = 'Div-'.$baseId;
 					$Mid = 'Inp-'.$baseId;
 				?>
-				<div id="<?= $Did ?>" onclick="changeState('<?= $Mid ?>', '<?= $Did ?>')" class="item" onLoad="changeState('<?= $Mid ?>', '<?= $Did ?>')">.
+				<div id="<?= $Did ?>" onclick="changeState('<?= $Mid ?>', '<?= $Did ?>')" class="item">.
 					<input class="hiddenItem" id="<?= $Mid ?>" value="<?= $baseState ?>"type="hidden" name="<?= $Mid  ?>">
 				</div>
 			<?php } ?>						

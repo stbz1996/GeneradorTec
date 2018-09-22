@@ -61,14 +61,6 @@
   <?php }?>
   </tbody>
 
-  <tfoot>
-    <tr>
-      <th>Código</th>
-      <th>Nombre</th>
-      <th>Estado</th>
-      <th></th>
-    </tr>
-  </tfoot>
   </table>
 
       
