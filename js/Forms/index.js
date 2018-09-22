@@ -4,13 +4,21 @@ var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
-var count_activities = 0
+var count_activities = 0;
 if(document.getElementById("dynamic_field").rows.length)
 {
 	count_activities = document.getElementById("dynamic_field").getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
 }
 
 $(".next").click(function(){
+
+	var areActivitiesIncorrect;
+	if($(this).attr("id") == 'next-activity') areActivitiesIncorrect = verifyActivities();
+
+	if(areActivitiesIncorrect)
+	{
+		return false;
+	}
 	if(animating) return false;
 	animating = true;
 	
@@ -131,3 +139,119 @@ $(".submit").click(function(){
 });
 
 
+function verifyActivities(){
+	
+	var activitiesDescription = $('input[name^="activityDescription"]');
+	var activitiesWorkPorcent = $('input[name^="workPorcent"]');
+	var workloadSelect = document.getElementById("workload_options");
+	var workloadValue = workloadSelect.options[workloadSelect.selectedIndex].value;
+	var totalWork = 0;
+
+	for(i = 0; i < activitiesDescription.length; i++)
+	{
+		var description = activitiesDescription[i].value;
+		var workPorcent = activitiesWorkPorcent[i].value;
+
+		if(description === "")
+		{
+			swal('Lo sentimos', 'Una o varias actividades no poseen descripción', 'error');
+			return true;
+		}
+
+		if(workPorcent < 0)
+		{
+			swal('Lo sentimos', 'Uno o varios porcentajes no son válidos', 'error');
+			return true;
+		}
+
+		totalWork += parseInt(workPorcent, 10);
+	}
+	if(workloadValue < totalWork)
+	{
+		swal('Lo sentimos', 'Actividades sobrepasan la carga de trabajo asignado', 'error');
+		return true;
+	}
+	return false;
+}
+
+$('.submit-save').click(function(){
+
+	//Get data from view
+	var areActivitiesIncorrect;
+	areActivitiesIncorrect = verifyActivities();
+
+	if(areActivitiesIncorrect)
+	{
+		return false;
+	}
+	var workloadSelect = document.getElementById("workload_options");
+	var activitiesDescription = $('input[name^="activityDescription"]');
+	var activitiesWorkPorcent = $('input[name^="workPorcent"]');
+	var idCourses = $('input[name^="idCourses"]');
+	var priorities = $('input[name^="priorities"]');
+	var schedules = $('input[name^="Inp-"]');
+
+	var workloadValue = workloadSelect.options[workloadSelect.selectedIndex].value;
+	var newActivitiesDescription = [];
+	var newActivitiesWorkPorcent = [];
+	var newIdCourses = [];
+	var newPriorities = [];
+	var newSchedules = [];
+
+	for(i = 0; i < activitiesDescription.length; i++){
+		newActivitiesDescription.push(activitiesDescription[i].value);
+		newActivitiesWorkPorcent.push(activitiesWorkPorcent[i].value);
+	}
+
+	for(i = 0; i < idCourses.length; i++)
+	{
+		newIdCourses.push(idCourses[i].value);
+		newPriorities.push(priorities[i].value);
+	}
+
+	for(i = 0; i < schedules.length; i++)
+	{
+		if(schedules[i].value == 1){
+			var id = schedules[i].id.split("-")[1];
+			id = parseInt(id, 10);
+			newSchedules.push(id);
+		}
+	}
+
+	$.ajax({
+		url: '../Form_Controller/getDataFromView',
+		type: "POST",
+		data:{
+			workload: workloadValue,
+			activitiesDescription: newActivitiesDescription,
+			activitiesWorkPorcent: newActivitiesWorkPorcent,
+			idCourses: newIdCourses,
+			priorities: newPriorities,
+			schedules: newSchedules
+		},
+		success: function(){
+			swal('Listo', 'Sus datos han sido guardados', 'success');
+		},
+		error: function ()
+        {
+            swal('Lo sentimos', 'No sé pudieron guardar los datos correctamente', 'error');
+        }
+	});
+});
+/*function getDataFromView(url)
+{
+
+	$.ajax({
+        url: url,
+        type: "POST",
+        data:{id:id, state:value},
+        success: function(data){
+            $('[name="inputState"]').val(value);
+            alert("Activado");
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}*/

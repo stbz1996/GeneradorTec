@@ -1,0 +1,43 @@
+.mainContainer{
+	width: 100%;
+	font-family: Verdana;
+	overflow: hidden;
+    box-shadow: 17px 20px 19px -5px black;
+    border-radius: 20px;
+    background: black;
+}
+
+.mainContainer div{
+	float: left;
+	width: 100%;
+}
+
+.mainContainer div div{
+	float: left;
+	border: 0px black solid;
+	width: 13.07%;
+	overflow: hidden;
+	text-align: center;
+	padding: 0.5%;
+	margin: 0.1%;
+}
+
+.itemf1{
+	background: #2B3A42;
+	color: white;
+	font-weight: bold;
+	font-size: 15px;
+	font-size: 1.25vw;
+}
+
+.itemCol1{
+	background: #2B3A75;
+	color: white;
+	font-size: 0.8vw;
+}
+
+.item{
+	background: white;
+	color: white;
+	font-size: 0.8vw;
+}

@@ -29,7 +29,7 @@ class FormDAO_model extends CI_Model
 
 		if($query->num_rows() > 0)
 		{
-			return $query;
+			return $query->row();
 		}
 		else
 		{
@@ -148,6 +148,34 @@ class FormDAO_model extends CI_Model
 	{
 		$this->db->where('idForm', $idForm);
 		$this->db->delete('CourseXForm');
+	}
+
+	public function insertScheduleForm($data)
+	{
+		$this->db->insert_batch('FormXSchedule', $data);
+	}
+
+	public function deleteScheduleForm($idForm)
+	{
+		$this->db->where('idForm', $idForm);
+		$this->db->delete('FormXSchedule');
+	}
+
+	public function showScheduleForm($idForm)
+	{
+		$this->db->select('*');
+		$this->db->from('FormXSchedule');
+		$this->db->where('idForm', $idForm);
+
+		$query = $this->db->get();
+		if($query->num_rows() > 0)
+		{
+			return $query->result_array();
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 
