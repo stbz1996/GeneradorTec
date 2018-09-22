@@ -103,6 +103,7 @@ class ProfessorDAO_model extends CI_Model {
         $this->db->update($this->table, $changes);
     }
 
+
     /****************************************
     - Returns all the professors with his respective form of a period.
     ****************************************/

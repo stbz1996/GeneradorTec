@@ -1,4 +1,5 @@
 <!-- Los tituloso -->
+<script>var base_url = '<?php echo base_url() ?>';</script>
 <div>
     <h1>Asignación de Cursos</h1>
 </div>
@@ -18,7 +19,7 @@
 			<?php 
        		foreach($professors as $professor) { ?>
 
-				<div class="professorDiv" data-value="<?= $professor->idProfessor ?>">
+				<div class="professorDiv" data-value="<?= $professor->idProfessor ?>" onclick="selectProfessor(this)">
 				 	<h4> <?= $professor->name . " " . $professor->lastName ?> </h4>
 				 	<p>Solicitó un <?= $professor->workLoad ?>% de carga</p>
 				 	<div class="progress">
@@ -35,12 +36,25 @@
 		<!-- Right section of the Screen. It contains the information about courses. -->
 		<div id="rightScreen">
 			<h3 id="titleSections">Cursos</h3>
+			<hr>
+
+			<?php 
+       		foreach($courses as $course) { ?>
+
+				<div class="coursesDiv" data-value="<?= $course->idCourse ?>" onclick="">
+				 	<h4> <?= $course->name ?> </h4>
+				 	<p> No ha sido asignado </p>
+				</div>
+
+			<?php  } ?>
 		</div> 
 	</section>
 </div>
 
 
 <!-- Los botones -->
-<div class="modal-footer">
+<div class="modal-footer" id="divFooter">
     Aqui los botones
 </div>
+
+<div id="loader"></div>

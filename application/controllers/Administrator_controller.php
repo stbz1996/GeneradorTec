@@ -283,17 +283,18 @@ class Administrator_controller extends CI_Controller
 	****************************************/
     public function Courses($pId = null, $pName = null)
     {
+    	$idPlan = $this->session->userdata('idPlan');
+		$namePlan = $this->session->userdata('namePlan');
+
     	// if there is not a idPlan and idBlock previous selected.
 		if ($pId == null){
-	    	$idPlan = $this->session->userdata('idPlan');
-			$namePlan = $this->session->userdata('namePlan');
 			$pId = $this->session->userdata('idBlock');
 			$pName = $this->session->userdata('nameBlock');
 		}
 		else
 		{
-			$this->session->set_userdata('idBlock', $id);
-			$this->session->set_userdata('nameBlock', urldecode($name));
+			$this->session->set_userdata('idBlock', $pId);
+			$this->session->set_userdata('nameBlock', urldecode($pName));
 		}
 
 		/* These are data that the interface is going to need.*/
@@ -497,8 +498,19 @@ class Administrator_controller extends CI_Controller
 		$data['iters'] = getBreadCrumbAssignCourses(); // Relative position
 		$data['actual'] = "Período 2018";   /* Se asigna con respecto al session*/
 		$data['professors'] = $this->administrator_logic->getProfessorWithForms($idPeriod);
-		$this->callViewBreadCrumb("Admin/AssignCourses", $data);
+		$data['courses'] = $this->administrator_logic->getActiveCourses();
 
+		$this->callViewBreadCrumb("Admin/AssignCourses", $data);
+	}
+
+	/****************************************
+	- Load the courses selected by the user.
+	****************************************/
+	public function loadSelectCourses($idProfessor)
+	{
+		$idPeriod = 1; // This period is selected by 'sessions->userdata(idPeriod)'
+		$result = $this->administrator_logic->loadSelectCourses($idProfessor, $idPeriod);
+		validateArrayModal($result); // Send to Javascript the result of the operation.
 	}
 
 
