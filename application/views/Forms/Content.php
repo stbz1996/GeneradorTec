@@ -24,7 +24,7 @@
     <li> Actividades </li>
     <li> Cursos </li>
     <li> Horarios </li>
-    <li> Guardar o Enviar </li>
+    <li> Enviar </li>
   </ul>
   
   <!-- fieldsets -->
@@ -235,7 +235,7 @@
   </fieldset>
   
   <fieldset>
-    <h2 class="fs-title">Guardar o Enviar</h2>
+    <h2 class="fs-title">Enviar</h2>
     <h3 class="fs-subtitle"></h3>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input type="submit" name="submit" class="submit submit-save action-button" value="Enviar" />
