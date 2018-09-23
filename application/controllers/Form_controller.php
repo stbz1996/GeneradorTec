@@ -283,12 +283,8 @@ class Form_controller extends CI_Controller {
 		//Prepare data
 		$oldActivities = $this->getActivities();
 		$totalOldActivities = count($oldActivities);
-		$totalNewActivities = 0;
+		$totalNewActivities = count($activitiesDescription);
 
-		if(isset($activitiesDescription))
-		{
-			$totalNewActivities = sizeof($activitiesDescription);
-		}		
 		$this->updateActivities($totalOldActivities, $totalNewActivities, $oldActivities, $activitiesWorkPorcent, $activitiesDescription);
 
 		if($totalOldActivities >= $totalNewActivities)
@@ -388,7 +384,7 @@ class Form_controller extends CI_Controller {
 
 	function insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent)
 	{		
-		$totalActivities = sizeof($activitiesDescription);
+		$totalActivities = count($activitiesDescription);
 
 		for($i = 0; $i < $totalActivities; $i++)
 		{	
