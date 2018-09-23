@@ -67,10 +67,10 @@ class Form_controller extends CI_Controller {
 		$initialInformation = $this->getInitialInformation($this->Form);
 
 		//This condition verify if due date already pass
-		/*if(strtotime(date("Y/m/d")) > strtotime($this->Form->getDueDate()) || !$this->Form->getState())
+		if(strtotime(date("Y/m/d")) > strtotime($this->Form->getDueDate()) || !$this->Form->getState())
 		{
 			return;
-		}*/
+		}
 		//Assign information to show it in form
 		$data = $this->assignInitialInformation($initialInformation);
 		$data['dueDate'] = $this->Form->getDueDate();
@@ -237,14 +237,14 @@ class Form_controller extends CI_Controller {
 	*****************************************/
 	function getDataFromView()
 	{
-		/////FUNCIONA
+		$saveState = $_POST['saveState'];
 		$workload = $_POST['workload'];
-		$activitiesDescription = $_POST['activitiesDescription'];
-		$activitiesWorkPorcent = $_POST['activitiesWorkPorcent'];
-		$idCourses = $_POST['idCourses'];
-		$priorities = $_POST['priorities'];
-		$schedules = $_POST['schedules'];
-		$this->validateDataFromView($workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities, $schedules);
+		$activitiesDescription = json_decode($_POST['activitiesDescription']);
+		$activitiesWorkPorcent = json_decode($_POST['activitiesWorkPorcent']);
+		$idCourses = json_decode($_POST['idCourses']);
+		$priorities = json_decode($_POST['priorities']);
+		$schedules = json_decode($_POST['schedules']);
+		$this->validateDataFromView($saveState, $workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities, $schedules);
 		
 		/*$workload = $this->input->post('workload_options');
 		$activitiesDescription = $this->input->post('activityDescription');
@@ -255,27 +255,18 @@ class Form_controller extends CI_Controller {
 		$this->validateDataFromView($workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities);*/
 	}
 
-	function validateDataFromView($workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities, $schedules)
+	function validateDataFromView($saveState, $workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities, $schedules)
 	{
 		$idForm = $_SESSION['idForm'];
 		$idProfessor = $_SESSION['idProfessor'];
-		/*$message = $this->Form_Logic->validateDataFromView($idForm, $idProfessor, $workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities);
-
-		if($message !== "")
-		{
-			echo $message;
-		}
-		else
-		{*/
+		
 		$this->insertWorkload($idProfessor, $workload);
 		$this->manageActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
 		$this->assignCourses($idForm, $idCourses, $priorities);
 		$this->saveScheduleInformation($schedules);
+		if($saveState)
+			$this->desactivateForm($idForm);
 
-			//echo "<script type='text/javascript'>swal('No se puede guardar: Cantidad de cursos es menor a la carga de trabajo asignado', 'hola', 'error');</script>";
-		//}		
-		//$link = "Form_controller/?p=".$_SESSION['hashCode'];
-		//redirect($link, 'refresh');
 	}
 
 	function manageActivities($idForm, $activitiesDescription, $activitiesWorkPorcent)
@@ -341,6 +332,9 @@ class Form_controller extends CI_Controller {
 				);
 				$newActivities[] = $newActivity;				
 			}
+		}
+		if(count($newActivities))
+		{
 			$this->Form_Logic->updateActivities($newActivities);
 		}
 	}
@@ -400,9 +394,13 @@ class Form_controller extends CI_Controller {
 
 	function assignCourses($idForm, $idCourses, $priorities)
 	{
-		$totalCourses = sizeof($idCourses);
+		$totalCourses = count($idCourses);
 		$courses = array();
-
+		$this->deleteCoursesByForm($idForm);
+		if(!$totalCourses)
+		{
+			return;
+		}
 		for($i = 0; $i < $totalCourses; $i++)
 		{
 			$courses[] = array(
@@ -412,7 +410,6 @@ class Form_controller extends CI_Controller {
 				'state' => 1
 			);
 		}
-		$this->deleteCoursesByForm($idForm);
 		$this->insertCoursesByForm($courses);
 	}
 
@@ -441,6 +438,11 @@ class Form_controller extends CI_Controller {
 	function deleteCoursesByForm($idForm)
 	{
 		$this->Form_Logic->deleteCoursesForm($idForm);
+	}
+
+	function desactivateForm($idForm)
+	{
+		$this->Form_Logic->desactivateForm($idForm);
 	}
 
 	function getActivities()
@@ -528,6 +530,12 @@ class Form_controller extends CI_Controller {
 		$idForm = $_SESSION['idForm'];
 		$this->Form_Logic->deleteScheduleForm($idForm);
 		$data = array();
+
+		if(!count($schedules))
+		{
+			return false;
+		}
+
 		foreach ($schedules as $schedule) 
 		{
 			$data[] = array(
@@ -535,10 +543,8 @@ class Form_controller extends CI_Controller {
 				'idSchedule' => $schedule
 			);
 		}
-		if(count($data))
-		{
-			$this->Form_Logic->insertScheduleForm($data);
-		}
+		$this->Form_Logic->insertScheduleForm($data);
+		
 
 		// All schedules on DB 
 		/*

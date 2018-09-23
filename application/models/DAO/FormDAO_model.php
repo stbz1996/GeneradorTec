@@ -198,6 +198,13 @@ class FormDAO_model extends CI_Model
 			return false;
 		}
 	}
+
+	public function desactivateForm($idForm)
+	{
+		$changes = array('state' => 0);
+		$this->db->where('idForm', $idForm);
+		$this->db->update('Form', $changes);
+	}
 }
 
 

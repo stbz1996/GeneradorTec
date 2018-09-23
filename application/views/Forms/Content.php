@@ -39,7 +39,7 @@
       Carrera: <?= $careerName ?>
       </div>
       <div>
-      Periodo actual: <?= $periodNumber ?> Semestre, <?= $periodYear ?>
+      Periodo: <?= $periodNumber ?> Semestre, <?= $periodYear ?>
       </div>
     </div>
     <input type="button" name="next" class="next action-button" value="Siguiente" />
@@ -67,7 +67,7 @@
     </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">
-    <input type="button" name="next" class="next action-button" value="Siguiente" />
+    <input type="button" name="next" id="next-workload" class="next action-button" value="Siguiente" />
     <!--<input type='submit' name='submit' class="submit action-button" value='Submit' />-->
     
   </fieldset>
@@ -162,10 +162,10 @@
                 <?php 
                 if(in_array($idCourse, $idCourses)) {?>
                 <td id="id-<?= $totalCourses ?>">
-                  <input type="hidden" name="idCourses[]" value=<?= $idCourse?> />
+                  <input type="hidden" id="idCourse-<?= $totalCourses ?>" name="idCourses[]" value=<?= $idCourse?> />
                 </td>
                 <td id="priority-<?= $totalCourses ?>">
-                  <input type="hidden" name="priorities[]" value=<?= $priorities[array_search($idCourse,$idCourses)]?> />
+                  <input type="hidden" id="prior-<?= $totalCourses ?>" name="priorities[]" value=<?= $priorities[array_search($idCourse,$idCourses)]?> />
                 </td>
                 <?php } ?>
 
@@ -180,7 +180,7 @@
 
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">
-    <input type="button" name="next" class="next action-button" value="Siguiente" />
+    <input type="button" name="next" id="next-courses" class="next action-button" value="Siguiente" />
   </fieldset>
 
   <fieldset>
@@ -231,12 +231,25 @@
 </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">
-    <input type="button" name="next" class="next action-button" value="Siguiente" />
+    <input type="button" name="next" id="next-schedules" class="next action-button" value="Siguiente" />
   </fieldset>
   
   <fieldset>
     <h2 class="fs-title">Enviar</h2>
     <h3 class="fs-subtitle"></h3>
+    <div id="content">
+      <div id="div-information">
+        <h1>Formulario</h1>
+        <h2>Profesor: <?= $professorFirstName?> <?= $professorLastName ?></h2>
+        <h2>Carrera: <?= $careerName ?></h2>
+        <h2>Periodo: <?= $periodNumber ?> Semestre, <?= $periodYear ?></h2>
+      </div>
+      <div id="div-workload"></div>
+      <div id="div-activities"></div>
+      <div id="div-courses"></div>
+      <div id="div-schedules"></div>
+    </div>
+    <div id="editor"></div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input type="submit" name="submit" class="submit submit-save action-button" value="Enviar" />
   </fieldset>
