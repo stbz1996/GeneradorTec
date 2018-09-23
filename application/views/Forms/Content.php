@@ -216,6 +216,9 @@
           onclick="changeState('<?= $Mid ?>', '<?= $Did ?>')" <?php }?> 
         class="item">.
           <input class="hiddenItem" id="<?= $Mid ?>" value="<?= $baseState ?>" type="hidden" name="<?= $Mid ?>">
+          <input type="hidden" id="day-<?= $baseId ?>" value="<?=$days[$i][$k]['day']?>">
+          <input type="hidden" id="initialTime-<?= $baseId ?>" value="<?=$days[$i][$k]['initialTime']?>">
+          <input type="hidden" id="finalTime-<?= $baseId ?>" value="<?=$days[$i][$k]['finishTime']?>">
         </div>
       <?php } ?>            
       </div>

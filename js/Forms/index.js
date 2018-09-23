@@ -30,6 +30,7 @@ $(".next").click(function(){
 		addActivitiesText();
 	}
 	if($(this).attr("id") == 'next-courses')addCoursesText();
+	if($(this).attr("id") == 'next-schedules')addSchedulesText();
 
 	if(animating) return false;
 	animating = true;
@@ -253,11 +254,14 @@ $('.submit-save').click(function(){
 			schedules: JSON.stringify(newSchedules)
 		},
 		success: function(){
-			doc.fromHTML($('#content').html(), 15, 15, {
-				'width': 170,
-				'elementHandlers': specialElementHandlers
-			});
-			doc.save('formulario.pdf');
+			if(saveState)
+			{
+				doc.fromHTML($('#content').html(), 15, 15, {
+								'width': 170,
+								'elementHandlers': specialElementHandlers
+							});
+				doc.save('formulario.pdf');
+			}
 			swal('Listo', 'Sus datos han sido guardados', 'success');
 		},
 		error: function ()
@@ -323,5 +327,25 @@ function addCoursesText()
 		$('#div-courses').append('<h5>'+code+'\t' +name+'\t, prioridad: '+priority+'</h5>');
 		//$("#element td:nth-child(2)").text('ChangedText');
 
+	}
+}
+
+function addSchedulesText()
+{
+	var schedules = $('input[name^="Inp-"]');
+	$('#div-schedules').empty();
+	$('#div-schedules').append("<h4>Horarios</h4>");
+	
+	for(i = 0; i < schedules.length; i++)
+	{
+		if(schedules[i].value == 1){
+			var id = schedules[i].id.split("-")[1];
+			id = parseInt(id, 10);
+			var day = $("#day-"+id+"").val();
+			var initialTime = $("#initialTime-"+id+"").val();
+			var finishTime = $("#finalTime-"+id+"").val();
+
+			$('#div-schedules').append("<h5>Dia: "+day+ ", Hora inicial: "+initialTime+ ", Hora final: "+ finishTime+"</h5>");
+		}
 	}
 }

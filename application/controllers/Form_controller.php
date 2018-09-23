@@ -41,6 +41,32 @@ class Form_controller extends CI_Controller {
 
 	function index()
 	{
+		//Sending email
+		/*$config= array(
+			'protocol' => 'smtp',
+			'smtp_host' => 'smtp.gmail.com',
+			'smtp_port' => 587,
+			'smtp_user' => 'testingkushluk@gmail.com',
+			'smtp_pass' => 'J17l0G7r96'
+		);
+		$this->load->library('email', $config);
+
+		$this->email->from('jorgegr1707@gmail.com', 'Jorge González');
+		$this->email->to('jorgegr1707@gmail.com');
+
+		$this->email->subject('Email Test');
+		$this->email->message('Testing the email class.');
+
+		if($this->email->send())
+		{
+			echo "Sending successful";
+		}
+		else
+		{
+			show_error($this->email->print_debugger());
+		}
+		//Finish sending email*/
+
 		$this->session->set_userdata('hashCode', $_GET['p']);
 		$this->callForm();
 	}
@@ -76,7 +102,6 @@ class Form_controller extends CI_Controller {
 		$data['dueDate'] = $this->Form->getDueDate();
 
 		//Get saved information
-		//TODO: Verify if form was saved before
 		$data['activities'] = $this->getActivities();
 		$idCareer = $initialInformation->idCareer;
 		$savedInformation = $this->getSavedInformation($idCareer);
@@ -498,9 +523,13 @@ class Form_controller extends CI_Controller {
 		foreach ($schedules as $schedule) {
 			$hour = $hoursRepresentation[$schedule['initialTime']]; 
 			$day = $daysRepresentation[$schedule['dayName']];
-			// To accord with the hour and the day, we sent information 
+			// To accord with the hour and the day, we sent information
+			$dataToView[$hour][$day]['day'] = $schedule['dayName'];
+			$dataToView[$hour][$day]['initialTime'] = $schedule['initialTime'];
+			$dataToView[$hour][$day]['finishTime'] = $schedule['finishTime'];
 			$dataToView[$hour][$day]['id']    = $schedule['id'];
-			$dataToView[$hour][$day]['state'] = $schedule['state']; 
+			$dataToView[$hour][$day]['state'] = $schedule['state'];
+
 			$scheduleCounter += 1;
 		}
 		// That varible is used to count the number of schedules in BD
