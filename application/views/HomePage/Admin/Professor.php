@@ -50,7 +50,7 @@
                 </td>
                 <td>
                     <button class="btn btn-primary" onclick='editProfessor("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $professor->idProfessor ?>)'><i class="glyphicon glyphicon-pencil"></i></button>
-                    <button class="btn btn-danger" onclick='deleteAll("<?=base_url().$ADD['ADDRESS_4']?>", <?= $professor->idProfessor ?>)'><i class="glyphicon glyphicon-remove"></i></button>
+                    <button class="btn btn-danger" onclick='deleteProfessor("<?=base_url().$ADD['ADDRESS_4']?>", <?= $professor->idProfessor ?>)'><i class="glyphicon glyphicon-remove"></i></button>
                 </td>
             </tr>
             <?php }?>

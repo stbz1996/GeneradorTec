@@ -121,11 +121,12 @@ class Administrator_controller extends CI_Controller
 		$data = array(
 			'name' => $this->input->post('inputName'),
 			'state' => false,
-			'idCareer' => $this->session->userdata('idCareer')
+			//'idCareer' => $this->session->userdata('idCareer') esta un NULL
+			'idCareer' => 1
 		);
 		
 		$result = $this->administrator_logic->insertPlan($data);
-        validateModal();
+        return $result;
 	}
 
 
@@ -142,7 +143,7 @@ class Administrator_controller extends CI_Controller
 			'idCareer' => $this->session->userdata('idCareer')
 		);
 		$result = $this->administrator_logic->editPlan($data);
-		validateModal();
+        return $result;
 	}
 
 
@@ -163,7 +164,7 @@ class Administrator_controller extends CI_Controller
 	{
 		$data['id'] = $id;
 		$result = $this->administrator_logic->deletePlan($data);
-		validateModal();
+		return $result;
 	}
 
 
@@ -221,8 +222,7 @@ class Administrator_controller extends CI_Controller
 			'idPlan' => $this->input->post('select')
 		);
 		$result = $this->administrator_logic->insertBlock($data);
-        validateModal();
-
+        return $result;
 	}
 
 
@@ -239,7 +239,7 @@ class Administrator_controller extends CI_Controller
 			'idPlan' => $this->input->post('select')
 		);
 		$result = $this->administrator_logic->editBlock($data);
-		validateModal();
+		return $result;
 	}
 
 
@@ -260,7 +260,7 @@ class Administrator_controller extends CI_Controller
 	{
 		$data['id'] = $id;
 		$result = $this->administrator_logic->deleteBlock($data);
-		validateModal();
+		return $result;
 	}
 
 
@@ -330,8 +330,8 @@ class Administrator_controller extends CI_Controller
         );
 
         $insert = $this->administrator_logic->insertCourse($data);
-        validateModal();
-    }
+		return $insert;
+	}
 
     /****************************************
 	- Load all the blocks that belong a plan.
@@ -359,7 +359,7 @@ class Administrator_controller extends CI_Controller
             'idBlock' => $this->input->post('selectBlock'),
         );
 		$result = $this->administrator_logic->editCourse($data);
-		validateModal();
+		return $result;
 	}
 
 
@@ -379,7 +379,7 @@ class Administrator_controller extends CI_Controller
     public function deleteCourse($pId)
     {
     	$result = $this->administrator_logic->deleteCourse($pId);
-        validateModal();
+        return $result;
     }
 
 
@@ -434,7 +434,7 @@ class Administrator_controller extends CI_Controller
 		);
 
 		$insert = $this->administrator_logic->insertProfessor($data);
-		validateModal();
+		return $insert;
 	}
 
 
@@ -461,7 +461,7 @@ class Administrator_controller extends CI_Controller
             'email' => $this->input->post('inputEmail')
         );
 		$result = $this->administrator_logic->editProfessor($data);
-		validateModal();
+		return $result;
 	}
 
 
@@ -471,10 +471,10 @@ class Administrator_controller extends CI_Controller
     public function deleteProfessor($pId)
     {
     	$result = $this->administrator_logic->deleteProfessor($pId);
-        validateModal();
+        return $result;
 	}
 	
-
+	
 	/****************************************
 	- Change professor state.
 	****************************************/
@@ -511,6 +511,72 @@ class Administrator_controller extends CI_Controller
 		$idPeriod = 1; // This period is selected by 'sessions->userdata(idPeriod)'
 		$result = $this->administrator_logic->loadSelectCourses($idProfessor, $idPeriod);
 		validateArrayModal($result); // Send to Javascript the result of the operation.
+	}
+
+	/****************************************
+	- Show the period settings
+	****************************************/
+
+	public function Period()
+	{
+		$data['ADD'] = getAddressPeriod();
+		$data['periods'] = $this->administrator_logic->getArrayPeriods();
+
+		$this->load->view('HomePage/Header');
+        $this->load->view('HomePage/Admin/Period', $data);
+        $this->load->view("HomePage/Footer");
+	}
+
+	/****************************************
+	- Get the information of a professor.
+	****************************************/	
+	public function getPeriod($pId)
+    {
+    	$data = $this->administrator_logic->getUniquePeriod($pId);
+    	validateArrayModal($data);
+    }
+	
+	/****************************************
+	- Add a new period. 
+	  The data is received by javascript.
+	****************************************/
+    public function addPeriod()
+    {
+        $data = array(
+            'number' => $this->input->post('inputNumber'),
+            'year' => $this->input->post('inputYear'),
+        );
+
+        $insert = $this->administrator_logic->insertPeriod($data);
+		//validateModal();
+		return $insert;
+    }
+
+	/****************************************
+	- Edit the period.
+	  The data is received by javascript.
+	****************************************/
+	public function editPeriod()
+	{
+		$data = array(
+			'idPeriod' => $this->input->post('inputIdPeriod'),
+            'number' => $this->input->post('inputNumber'),
+            'year' => $this->input->post('inputYear')
+        );
+		$result = $this->administrator_logic->editPeriod($data);
+		//validateModal();
+		return $result;
+	}
+
+
+ 	/****************************************
+	- Delete the selected period.
+	****************************************/	
+    public function deletePeriod($pId)
+    {
+    	$result = $this->administrator_logic->deletePeriod($pId);
+		//validateModal();
+		return $result;
 	}
 
 
@@ -728,71 +794,5 @@ class Administrator_controller extends CI_Controller
 
 		printMessage("Se ha agregado a la base de datos");
 		redirect('Administrator_controller/index/');
-	}
-
-	/****************************************
-	- Show the period settings
-	****************************************/
-
-	public function Period()
-	{
-		$data['ADD'] = getAddressPeriod();
-		$data['periods'] = $this->administrator_logic->getArrayPeriods();
-
-		$this->load->view('HomePage/Header');
-        $this->load->view('HomePage/Admin/Period', $data);
-        $this->load->view("HomePage/Footer");
-	}
-
-	/****************************************
-	- Get the information of a professor.
-	****************************************/	
-	public function getPeriod($pId)
-    {
-    	$data = $this->administrator_logic->getUniquePeriod($pId);
-    	validateArrayModal($data);
-    }
-	
-	/****************************************
-	- Add a new period. 
-	  The data is received by javascript.
-	****************************************/
-    public function addPeriod()
-    {
-        $data = array(
-            'number' => $this->input->post('inputNumber'),
-            'year' => $this->input->post('inputYear'),
-        );
-
-        $insert = $this->administrator_logic->insertPeriod($data);
-		//validateModal();
-		return $insert;
-    }
-
-	/****************************************
-	- Edit the period.
-	  The data is received by javascript.
-	****************************************/
-	public function editPeriod()
-	{
-		$data = array(
-			'idPeriod' => $this->input->post('inputIdPeriod'),
-            'number' => $this->input->post('inputNumber'),
-            'year' => $this->input->post('inputYear')
-        );
-		$result = $this->administrator_logic->editPeriod($data);
-		//validateModal();
-		return $result;
-	}
-
-
- 	/****************************************
-	- Delete the selected period.
-	****************************************/	
-    public function deletePeriod($pId)
-    {
-    	$result = $this->administrator_logic->deletePeriod($pId);
-		//validateModal();
-		return $result;
 	}
 }

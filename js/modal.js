@@ -107,11 +107,12 @@ function activateState(url, id)
         data:{id:id, state:value},
         success: function(data){
             $('[name="inputState"]').val(value);
-            alert("Activado");
+            swal({title: "Activado", icon: "success"});
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
             showErrors(jqXHR, textStatus, errorThrown);
+            swal({title: "Error al Activar", icon: "error"});
         }
     });
 }
@@ -128,11 +129,12 @@ function desactivateState(url, id)
         data:{id:id, state:value},
         success: function(data){
             $('[name="inputState"]').val(data.state);
-            alert("Desactivado");
+            swal({title: "Desactivado", icon: "success"});
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
             showErrors(jqXHR, textStatus, errorThrown);
+            swal({title: "Error al Desactivar", icon: "error"});
         }
     });
 }
@@ -322,6 +324,40 @@ function save(url)
     });
 }
 
+
+function saveTest(url, message)
+{
+    // ajax adding data to database
+    $.ajax({
+        url : url,
+        type: "POST",
+        data: $('#form').serialize(),
+        dataType: "JSON",
+        success: function(response)
+        {
+            if (response == true)
+            {
+                $('#modal_form').modal('hide');
+                swal({title: "Listo", 
+                text: message[0],
+                icon: "success"}).then(function(){
+                    location.reload();
+                });
+            }
+
+            else
+            {
+                swal({title: "Error", text: message[1], icon: "warning"});
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
+
 /****************************************
 - If the user press save a plan, defined the method.
 ****************************************/
@@ -333,18 +369,33 @@ function savePlan()
     if (save_method == "add")
     {
         url = base_url + "Administrator_controller/addPlan";
-    }else{
+        var message = [
+            "Se ha agregado el plan",
+            "Error al agregar el plan. Verifique los datos e inténtelo de nuevo."
+        ];
+    }
+    
+    else
+    {
         url = base_url + "Administrator_controller/editPlan";
+        var message = [
+            "Se ha editado el plan",
+            "Error al editar el plan. Verifique los datos e inténtelo de nuevo."
+        ];
     }
 
     text = $('[name="inputName"]').val();
 
     if (text)
     {
-        save(url);
-    }else
+        saveTest(url, message);
+    }
+    
+    else
     {
-        alert("Debe escribir un nombre para el plan");
+        swal({title: "Error", 
+            text: "Debe escribir un nombre para el plan", 
+            icon: "error"});
     }
 }
 
@@ -358,75 +409,35 @@ function saveBlock()
     if (save_method == "add")
     {
         url = base_url + "Administrator_controller/addBlock";
-    }else{
+        var message = [
+            "Se ha agregado el bloque",
+            "Error al agregar el bloque. Verifique los datos e inténtelo de nuevo."
+        ];
+    }
+    
+    else
+    {
         url = base_url + "Administrator_controller/editBlock";
+        var message = [
+            "Se ha editado el plan",
+            "Error al editar el plan. Verifique los datos e inténtelo de nuevo."
+        ];
     }
 
     text = $('[name="inputName"]').val();
 
     if (text)
     {
-        save(url);
-    }else
+        saveTest(url, message);
+    }
+    
+    else
     {
-        alert("Debe escribir un nombre para el bloque");
+        swal({title: "Error", 
+            text: "Debe escribir un nombre para el bloque", 
+            icon: "error"});
     }
 }
-
-/****************************************
-- If the user press save a course, defined the method.
-****************************************/
-function saveCourse()
-{
-    var url;
-    var name; 
-    var code; 
-    var lessons;
-    var block;
-
-    if (save_method == "add")
-    {
-        url = base_url + "Administrator_controller/addCourse";
-    }else{
-        url = base_url + "Administrator_controller/editCourse";
-    }
-
-    code = $('[name="inputCode"]').val();
-    name = $('[name="inputName"]').val();
-    lessons = $('[name="inputLessons"]').val();
-    block = $('#selectBlock option:selected').val();
-    console.log("Id del bloque: " + block);
-
-    /* If the block is not selected. */
-    if(block == '0' || block == '' || block == 'undefined' || block == null ){
-        alert("No se ha seleccionado ningún bloque para almacenar el curso");
-        return;
-    }
-
-    if (code && name && lessons)
-    {   
-        if(!/^([0-9])*$/.test(lessons)){
-            alert("El número de créditos no es un número");
-            return;
-        }
-
-        if (lessons > 12 || lessons < 0){
-            alert("El número de créditos no es aceptado");
-            return;
-        }
-
-        save(url);
-    }else{
-        alert("Falta agregar datos.");
-    }
-}
-
-// When the plans is selected... load all the blocks.
-$('#selectPlan').on('change', function(){
-    var id = $('#selectPlan option:selected').val();
-    $('#selectBlock').empty();
-    loadBlocks(id);
-})
 
 /****************************************
 - Loads the blocks of the plan.
@@ -460,8 +471,85 @@ function loadBlocks(id)
     });
 }
 
+// When the plans is selected... load all the blocks.
+$('#selectPlan').on('change', function(){
+    var id = $('#selectPlan option:selected').val();
+    $('#selectBlock').empty();
+    loadBlocks(id);
+})
+
 /****************************************
 - If the user press save a course, defined the method.
+****************************************/
+function saveCourse()
+{
+    var url;
+    var name; 
+    var code; 
+    var lessons;
+    var block;
+
+    if (save_method == "add")
+    {
+        url = base_url + "Administrator_controller/addCourse";
+        var message = [
+            "Se ha agregado el curso",
+            "Error al agregar el curso. Verifique los datos e inténtelo de nuevo."
+        ];
+    }
+
+    else
+    {
+        url = base_url + "Administrator_controller/editCourse";
+        var message = [
+            "Se ha editado el curso",
+            "Error al editar el curso. Verifique los datos e inténtelo de nuevo."
+        ];
+    }
+
+    code = $('[name="inputCode"]').val();
+    name = $('[name="inputName"]').val();
+    lessons = $('[name="inputLessons"]').val();
+    block = $('#selectBlock option:selected').val();
+
+    /* If the block is not selected. */
+    if(block == '0' || block == '' || block == 'undefined' || block == null )
+    {
+        swal({title: "Error", 
+            text: "No se ha seleccionado ningún bloque para almacenar el curso", 
+            icon: "error"});
+        return;
+    }
+
+    if (code && name && lessons)
+    {   
+        if(!/^([0-9])*$/.test(lessons)){
+            swal({title: "Error", 
+                text: "El número de créditos no es un número", 
+                icon: "error"});
+            return;
+        }
+
+        if (lessons > 12 || lessons < 0){
+            swal({title: "Error", 
+                text: "El número de créditos no es aceptado", 
+                icon: "error"});
+            return;
+        }
+
+        saveTest(url, message);
+    }
+    
+    else
+    {
+        swal({title: "Error", 
+            text: "Datos incompletos.", 
+            icon: "error"});
+    }
+}
+
+/****************************************
+- If the user press save a professor, defined the method.
 ****************************************/
 function saveProfessor()
 {
@@ -470,73 +558,30 @@ function saveProfessor()
     if (save_method == "add")
     {
         url = base_url + "Administrator_controller/addProfessor";
-    }else{
+        var message = [
+            "Se ha agregado el profesor",
+            "No se ha agregado el profesor. Verifique los datos."
+        ];
+    }
+    
+    else
+    {
         url = base_url + "Administrator_controller/editProfessor";
+        var message = [
+            "Se ha editado el profesor",
+            "No se ha editado el profesor. Verifique los datos."
+        ];
     }
 
-    save(url);
-}
-
-$.fn.dataTableExt.oApi.fnStandingRedraw = function(oSettings) {
-    //redraw to account for filtering and sorting
-    // concept here is that (for client side) there is a row got inserted at the end (for an add)
-    // or when a record was modified it could be in the middle of the table
-    // that is probably not supposed to be there - due to filtering / sorting
-    // so we need to re process filtering and sorting
-    // BUT - if it is server side - then this should be handled by the server - so skip this step
-    if(oSettings.oFeatures.bServerSide === false){
-        var before = oSettings._iDisplayStart;
-        oSettings.oApi._fnReDraw(oSettings);
-        //iDisplayStart has been reset to zero - so lets change it back
-        oSettings._iDisplayStart = before;
-        oSettings.oApi._fnCalculateEnd(oSettings);
-    }
-      
-    //draw the 'current' page
-    oSettings.oApi._fnDraw(oSettings);
-};
-
-function saveTest(url, message)
-{
-    // ajax adding data to database
-    $.ajax({
-        url : url,
-        type: "POST",
-        data: $('#form').serialize(),
-        dataType: "JSON",
-        success: function(response)
-        {
-            if (response == true)
-            {
-                $('#modal_form').modal('hide');
-                swal({title: "Listo", 
-                text: message[0], 
-                icon: "success"}).then(function(){
-                    location.reload();
-                    table.fnStandingRedraw();
-                });
-            }
-
-            else
-            {
-                swal({title: "Error", text: message[1], icon: "warning"});
-            }
-
-        },
-        error: function (jqXHR, textStatus, errorThrown)
-        {
-            showErrors(jqXHR, textStatus, errorThrown);
-        }
-    });
+    saveTest(url, message);
 }
 
 /****************************************
-- If the user press save a course, defined the method.
+- If the user press save a period, defined the method.
 ****************************************/
 function savePeriod()
 {
     var url;
-    var message;
 
     if (save_method == "add")
     {
@@ -558,36 +603,15 @@ function savePeriod()
     saveTest(url, message);
 }
 
-/****************************************
-- If the user press delete for whatever.
-****************************************/
-function deleteAll(url, id)
-{
-    if(confirm('¿Está seguro de eliminar?'))
-    {
-        // ajax delete data from database
-        $.ajax({
-            url : url + id,
-            type: "POST",
-            dataType: "JSON",
-            success: function(data)
-            {
-                alert("Borrado exitosamente.");
-                location.reload();
-            },
-            error: function (jqXHR, textStatus, errorThrown)
-            {
-                showErrors(jqXHR, textStatus, errorThrown);
-                alert("Error al borrar.");
-            }
-        });
-    }
-}
-
-function deleteTest(url, id)
+/************************************************
+- If the user press delete for whatever.        *
+- This is the main delete function for          *
+- plans, block, courses, professors and periods.*
+*************************************************/   
+function deleteAll(url, id, message)
 {
     swal({
-        title: "¿Está seguro de eliminar el periodo?",
+        title: message[0],
         text: "La accion no se puede revertir",
         icon: "warning",
         buttons: true,
@@ -606,7 +630,7 @@ function deleteTest(url, id)
                 {
                     $('#modal_form').modal('hide');
                     swal({title: "Listo", 
-                        text: 'Periodo eliminado', 
+                        text: message[1], 
                         icon: "success"}).then(function(){
                             location.reload();
                             table.fnStandingRedraw();
@@ -616,8 +640,8 @@ function deleteTest(url, id)
                 else
                 {
                     swal({title: "Error",
-                        text: "El periodo no se ha eliminado por estar asociado a formularios o ya existe.",
-                        icon: "warning"});
+                        text: message[2],
+                        icon: "error"});
                 }
 
             },
@@ -629,4 +653,59 @@ function deleteTest(url, id)
     }
     });
 
+}
+
+function deletePlan(url, id)
+{
+    var message = [
+        '¿Está seguro de eliminar el plan?',
+        'Plan eliminado.',
+        "No se ha borrado el plan. No se realizarán los cambios."
+    ];
+
+    deleteAll(url, id, message);
+}
+
+function deleteBlock(url, id)
+{
+    var message = [
+        '¿Está seguro de eliminar el bloque?',
+        'Bloque eliminado.',
+        "No se ha borrado el bloque. No se realizarán los cambios."
+    ];
+
+    deleteAll(url, id, message);
+}
+
+function deleteCourse(url, id)
+{
+    var message = [
+        '¿Está seguro de eliminar el curso?',
+        'Curso eliminado.',
+        "No se ha borrado el curso. No se realizarán los cambios."
+    ];
+
+    deleteAll(url, id, message);
+}
+
+function deleteProfessor(url, id)
+{
+    var message = [
+        '¿Está seguro de eliminar el profesor?',
+        'Profesor eliminado.',
+        "El profesor puede tener formularios asociados. No se realizarán los cambios."
+    ];
+
+    deleteAll(url, id, message);
+}
+
+function deletePeriod(url, id)
+{
+    var message = [
+        '¿Está seguro de eliminar el periodo?',
+        'Periodo eliminado.',
+        "El periodo ya existe o tiene formularios asociados. No se realizarán los cambios."
+    ];
+
+    deleteAll(url, id, message);
 }
