@@ -3,6 +3,13 @@
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
+var doc = new jsPDF();
+
+var specialElementHandlers = {
+	'#editor': function(element, renderer){
+		return true;
+	}
+}
 
 var count_activities = 0;
 if(document.getElementById("dynamic_field").rows.length)
@@ -12,13 +19,18 @@ if(document.getElementById("dynamic_field").rows.length)
 
 $(".next").click(function(){
 
-	var areActivitiesIncorrect;
-	if($(this).attr("id") == 'next-activity') areActivitiesIncorrect = verifyActivities();
+	var areActivitiesIncorrect;	
 
-	if(areActivitiesIncorrect)
+	//Adding text for form
+	if($(this).attr("id") == 'next-workload')addWorkloadText();
+	if($(this).attr("id") == 'next-activity') 
 	{
-		return false;
+		areActivitiesIncorrect = verifyActivities();
+		if(areActivitiesIncorrect)return false;
+		addActivitiesText();
 	}
+	if($(this).attr("id") == 'next-courses')addCoursesText();
+
 	if(animating) return false;
 	animating = true;
 	
@@ -115,8 +127,8 @@ $(document).on('click', '.cbox', function(){
 	{
 		var idCourse = $("#course-"+idCheck+"").attr("value");
 		var priority = $("#select-"+idCheck+"").val();
-		$("#row-"+idCheck+"").append('<td id="id-'+idCheck+'"><input type="hidden" name="idCourses[]" value="'+
-			idCourse+'"/></td><td id="priority-'+idCheck+'"><input type="hidden" name="priorities[]" value="'+
+		$("#row-"+idCheck+"").append('<td id="id-'+idCheck+'"><input type="hidden" id="idCourse-'+idCheck+'" name="idCourses[]" value="'+
+			idCourse+'"/></td><td id="prior-'+idCheck+'"><input type="hidden" id="priority-'+idCheck+'" name="priorities[]" value="'+
 			priority+'"/></td>');
 		$("#select-"+idCheck+"").prop('disabled', 'disabled');
 	}
@@ -127,11 +139,6 @@ $(document).on('click', '.cbox', function(){
 		$("#select-"+idCheck+"").prop('disabled', false);
 	}
 });
-/*
-$(".add").click(function(){
-	$('#dynamic_field').append('<tr><td><input type="text" name="name[]" id="name" placeholder="Ingrese actividad" /></td><td><input type="button" name="add" id="add" value="+" /></td></tr>');
-
-});*/
 
 // We have to send or save the form here  
 $(".submit").click(function(){
@@ -158,7 +165,7 @@ function verifyActivities(){
 			return true;
 		}
 
-		if(workPorcent < 0)
+		if(workPorcent < 0 || workPorcent === "")
 		{
 			swal('Lo sentimos', 'Uno o varios porcentajes no son válidos', 'error');
 			return true;
@@ -197,6 +204,30 @@ $('.submit-save').click(function(){
 	var newIdCourses = [];
 	var newPriorities = [];
 	var newSchedules = [];
+	var saveState = 0;
+
+	for(i = 0; i < schedules.length; i++)
+	{
+		if(schedules[i].value == 1){
+			var id = schedules[i].id.split("-")[1];
+			id = parseInt(id, 10);
+			newSchedules.push(id);
+		}
+	}
+
+	if($(this).val() == "Enviar")
+	{
+		var areCoursesAssigned;
+		var areSchedulesAssigned;
+
+		areCoursesAssigned = verifyCourses(workloadValue, idCourses);
+		areSchedulesAssigned = verifySchedules(newSchedules);
+		if(areCoursesAssigned || areSchedulesAssigned)
+		{
+			return false;
+		}
+		saveState = 1;
+	}
 
 	for(i = 0; i < activitiesDescription.length; i++){
 		newActivitiesDescription.push(activitiesDescription[i].value);
@@ -209,27 +240,24 @@ $('.submit-save').click(function(){
 		newPriorities.push(priorities[i].value);
 	}
 
-	for(i = 0; i < schedules.length; i++)
-	{
-		if(schedules[i].value == 1){
-			var id = schedules[i].id.split("-")[1];
-			id = parseInt(id, 10);
-			newSchedules.push(id);
-		}
-	}
-
 	$.ajax({
 		url: '../Form_Controller/getDataFromView',
 		type: "POST",
 		data:{
+			saveState: saveState,
 			workload: workloadValue,
-			activitiesDescription: newActivitiesDescription,
-			activitiesWorkPorcent: newActivitiesWorkPorcent,
-			idCourses: newIdCourses,
-			priorities: newPriorities,
-			schedules: newSchedules
+			activitiesDescription: JSON.stringify(newActivitiesDescription),
+			activitiesWorkPorcent: JSON.stringify(newActivitiesWorkPorcent),
+			idCourses: JSON.stringify(newIdCourses),
+			priorities: JSON.stringify(newPriorities),
+			schedules: JSON.stringify(newSchedules)
 		},
 		success: function(){
+			doc.fromHTML($('#content').html(), 15, 15, {
+				'width': 170,
+				'elementHandlers': specialElementHandlers
+			});
+			doc.save('formulario.pdf');
 			swal('Listo', 'Sus datos han sido guardados', 'success');
 		},
 		error: function ()
@@ -238,20 +266,62 @@ $('.submit-save').click(function(){
         }
 	});
 });
-/*function getDataFromView(url)
-{
 
-	$.ajax({
-        url: url,
-        type: "POST",
-        data:{id:id, state:value},
-        success: function(data){
-            $('[name="inputState"]').val(value);
-            alert("Activado");
-        },
-        error: function (jqXHR, textStatus, errorThrown)
-        {
-            showErrors(jqXHR, textStatus, errorThrown);
-        }
-    });
-}*/
+function verifyCourses(workload, courses)
+{
+	var minimumCourses = workload / 25;
+	if(minimumCourses > courses.length)
+	{
+		swal('Lo sentimos', 'Cantidad de cursos es menor a la carga de trabajo', 'error');
+		return true;
+	}
+	return false;
+}
+
+function verifySchedules(newSchedules)
+{
+	if(!newSchedules.length)
+	{
+		swal('Lo sentimos', 'No asignó horarios', 'error');
+		return true;
+	}
+	return false;
+}
+
+function addWorkloadText()
+{
+	var workloadSelect = document.getElementById("workload_options");
+	var workloadValue = workloadSelect.options[workloadSelect.selectedIndex].value;
+	$('#div-workload').empty();
+	$('#div-workload').append('<h4> Carga de trabajo: '+workloadValue+'%</h4>');
+}
+
+function addActivitiesText()
+{
+	var activitiesDescription = $('input[name^="activityDescription"]');
+	var activitiesWorkPorcent = $('input[name^="workPorcent"]');
+	$('#div-activities').empty();
+	$('#div-activities').append("<h4>Actividades</h4>");
+	for(i = 0; i < activitiesDescription.length; i++)
+	{
+		$('#div-activities').append('<h5>'+activitiesDescription[i].value+': ' +activitiesWorkPorcent[i].value+ '</h5>');
+	}
+}
+
+function addCoursesText()
+{
+	var idCourses = $('input[name^="idCourses"]');
+	var priorities = $('input[name^="priorities"]');
+	$('#div-courses').empty();
+	$('#div-courses').append("<h4>Cursos</h4>");
+	for(i = 0; i < idCourses.length; i++)
+	{
+		var idCourse = idCourses[i].id.split("-")[1];
+		var code = $("#row-"+idCourse+" td:nth-child(2)").text();
+		var name = $("#row-"+idCourse+" td:nth-child(3)").text();
+		var priority = priorities[i].value;
+		$('#div-courses').append('<h5>'+code+'\t' +name+'\t, prioridad: '+priority+'</h5>');
+		//$("#element td:nth-child(2)").text('ChangedText');
+
+	}
+}

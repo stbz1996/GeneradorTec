@@ -403,6 +403,12 @@ class Form_Logic{
 
  		return $schedules;
  	}
+
+ 	function desactivateForm($idForm)
+ 	{
+ 		$formDAO = new FormDAO_model();
+ 		$formDAO->desactivateForm($idForm);
+ 	}
 }
 
 ?>
