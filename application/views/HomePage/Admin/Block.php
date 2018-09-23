@@ -16,7 +16,6 @@
   <table id="table_id" class="table table-striped table-bordered" cellspacing="0" width="100%">
     <thead>
       <tr>
-        <th>Código</th>
         <th>Nombre</th>
         <th>Estado</th>
         <th></th>
@@ -26,7 +25,6 @@
       <tbody>
         <?php foreach($blocks as $block){?>
         <tr>
-          <td><?php echo "No code"; ?></td>
           <td><?php echo $block->name;?></td>
           <td>
           <div class="btn-group" data-toggle="buttons">
@@ -58,7 +56,7 @@
           </td>
           <td>
             <button class="btn btn-primary" onclick='editBlock("<?=base_url($ADD['ADDRESS_3']) ?>",<?= $block->idBlock?>)'><i class="glyphicon glyphicon-pencil"></i></button>
-            <button class="btn btn-danger" onclick='deleteAll("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $block->idBlock;?>)'><i class="glyphicon glyphicon-remove"></i></button>
+            <button class="btn btn-danger" onclick='deleteBlock("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $block->idBlock;?>)'><i class="glyphicon glyphicon-remove"></i></button>
             <button class="btn btn-success" onclick='location.href="<?=base_url().$ADD['ADDRESS_1']?>/<?= $block->idBlock ?>/<?= urlencode($block->name) ?>"' type="button"><i class="glyphicon glyphicon-chevron-right"></i></button>
           </td>
         </tr>

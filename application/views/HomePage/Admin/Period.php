@@ -26,7 +26,7 @@
                 <td><?php echo $period->number, "\t - \t", $period->year;?></td>
                 <td>
                   <button class="btn btn-primary" onclick='editPeriod("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-pencil"></i></button>
-                  <button class="btn btn-danger" onclick='deleteTest("<?=base_url().$ADD['ADDRESS_4']?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-remove"></i></button>
+                  <button class="btn btn-danger" onclick='deletePeriod("<?=base_url().$ADD['ADDRESS_4']?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-remove"></i></button>
                 </td>
               </tr>
               <?php }?>

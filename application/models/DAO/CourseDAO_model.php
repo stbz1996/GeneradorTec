@@ -49,7 +49,8 @@ class CourseDAO_model extends CI_Model
     public function insert($Course)
     {
         $this->db->insert($this->table, $Course);
-        return $this->db->insert_id();
+        echo 'true';
+        return;
     }
 
     /****************************************
@@ -66,8 +67,18 @@ class CourseDAO_model extends CI_Model
             'idBlock' => $Course['idBlock']
         );
         $this->db->where('idCourse', $Course['idCourse']);
-        $this->db->update($this->table, $changes);
-        return $this->db->affected_rows();
+        $query = $this->db->update($this->table, $changes);
+
+        if($query)
+        {
+            echo 'true';
+            return;
+        }
+        else
+        {
+            echo 'false';
+            return;
+        }
     }
 
     /****************************************
@@ -77,6 +88,17 @@ class CourseDAO_model extends CI_Model
     {
         $this->db->where('idCourse', $id);
         $this->db->delete($this->table);
+        
+        if($this->db->affected_rows())
+        {
+            echo 'true';
+            return;
+        }
+        else
+        {
+            echo 'false';
+            return;
+        }
     }
 
     /****************************************

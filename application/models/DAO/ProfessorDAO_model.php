@@ -64,7 +64,8 @@ class ProfessorDAO_model extends CI_Model {
     public function insert($pProfessor)
     {
         $this->db->insert($this->table, $pProfessor);
-        return $this->db->insert_id();
+        echo 'true';
+        return;
     }
 
     /****************************************
@@ -78,8 +79,18 @@ class ProfessorDAO_model extends CI_Model {
             'email' => $pProfessor['email']
         );
         $this->db->where('idProfessor', $pProfessor['idProfessor']);
-        $this->db->update($this->table, $changes);
-        return $this->db->affected_rows();
+        $query = $this->db->update($this->table, $changes);
+
+        if($query)
+        {
+            echo 'true';
+            return;
+        }
+        else
+        {
+            echo 'false';
+            return;
+        }
     }
 
     /****************************************
@@ -89,6 +100,16 @@ class ProfessorDAO_model extends CI_Model {
     {
         $this->db->where('idProfessor', $id);
         $this->db->delete($this->table);
+        if($this->db->affected_rows())
+        {
+            echo 'true';
+            return;
+        }
+        else
+        {
+            echo 'false';
+            return;
+        }
     }
 
     /****************************************

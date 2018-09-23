@@ -29,7 +29,8 @@ class PlanDAO_model extends CI_Model{
 	public function insert($Plan)
 	{
 		$this->db->insert('Plan', $Plan);
-        return $this->db->insert_id();
+        echo 'true';
+        return;
 	}
 
 
@@ -39,12 +40,21 @@ class PlanDAO_model extends CI_Model{
 	public function edit($Plan)
 	{
 		$changes = array(
-			'name' => $Plan['name'], 
-			'state' => $Plan['state'], 
-			'idCareer' => $Plan['idCareer']
+			'name' => $Plan['name']
 		);
 		$this->db->where('idPlan', $Plan['idPlan']);
-		return $this->db->update('Plan', $changes);
+		$query = $this->db->update('Plan', $changes);
+
+        if($query)
+        {
+            echo 'true';
+            return;
+        }
+        else
+        {
+            echo 'false';
+            return;
+        }
 	}
 
 
@@ -62,9 +72,13 @@ class PlanDAO_model extends CI_Model{
 		}
 		
 		$query = $this->db->get();
-		if ($query->num_rows() > 0){
+		if ($query->num_rows() > 0)
+		{
 			return $query;
-		}else{
+		}
+		
+		else
+		{
 			return false;
 		}
 	}
@@ -87,7 +101,18 @@ class PlanDAO_model extends CI_Model{
 	public function delete($Plan)
 	{
 		$this->db->where('idPlan', $Plan['id']);
-        return $this->db->delete('Plan');
+		$this->db->delete('Plan');
+		
+        if($this->db->affected_rows())
+        {
+            echo 'true';
+            return;
+        }
+        else
+        {
+            echo 'false';
+            return;
+        }
 	}
 
 }

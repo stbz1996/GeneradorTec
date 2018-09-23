@@ -690,7 +690,6 @@ class Administrator_Logic{
 		$periodDAO_model = new PeriodDAO_model();
 		return $periodDAO_model->delete($pId);
 	}
-
 }
 
 ?>

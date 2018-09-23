@@ -15,7 +15,6 @@
   <table id="table_id" class="table table-striped table-bordered" cellspacing="0" width="100%">
   <thead>
     <tr>
-      <th>Código</th>
       <th>Nombre</th>
       <th>Estado</th>
       <th></th>
@@ -25,7 +24,6 @@
   <tbody>
   <?php foreach($plans as $plan){?>
     <tr>
-      <td><?php echo "No code"; ?></td>
       <td><?php echo $plan->name;?></td>
       <td>
         <div class="btn-group" data-toggle="buttons">
@@ -54,7 +52,7 @@
       </td>
       <td>
         <button class="btn btn-primary" onclick='editPlan("<?=base_url($ADD['ADDRESS_3']) ?>",<?= $plan->idPlan?>)'><i class="glyphicon glyphicon-pencil"></i></button>
-        <button class="btn btn-danger" onclick='deleteAll("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $plan->idPlan;?>)'><i class="glyphicon glyphicon-remove"></i></button>
+        <button class="btn btn-danger" onclick='deletePlan("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $plan->idPlan;?>)'><i class="glyphicon glyphicon-remove"></i></button>
         <button class="btn btn-success" onclick='location.href="<?=base_url().$ADD['ADDRESS_1']?>/<?= $plan->idPlan ?>/<?= urlencode($plan->name) ?>"' type="button"><i class="glyphicon glyphicon-chevron-right"></i></button>
       </td>
     </tr>

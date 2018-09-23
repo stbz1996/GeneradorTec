@@ -15,7 +15,8 @@ class BlockDAO_model extends CI_Model{
 	public function insert($Block)
 	{
 		$this->db->insert('Block', $Block);
-		return $this->db->insert_id();
+        echo 'true';
+        return;
 	}
 
 	/****************************************
@@ -29,7 +30,18 @@ class BlockDAO_model extends CI_Model{
 			'idPlan' => $Block['idPlan'] 
 		);
 		$this->db->where('idBlock', $Block['idBlock']);
-		return $this->db->update('Block', $changes);
+		$query = $this->db->update('Block', $changes);
+		
+        if($query)
+        {
+            echo 'true';
+            return;
+        }
+        else
+        {
+            echo 'false';
+            return;
+        }
 	}
 
 	/****************************************
@@ -40,13 +52,20 @@ class BlockDAO_model extends CI_Model{
 		$this->db->select('*');
 		$this->db->from('Block');
 
-		if ($idPlan){
+		if ($idPlan)
+		{
 			$this->db->where('idPlan', $idPlan);
 		}
+
 		$query = $this->db->get();
-		if ($query->num_rows() > 0){
+
+		if ($query->num_rows() > 0)
+		{
 			return $query;
-		}else{
+		}
+
+		else
+		{
 			return false;
 		}
 	}
@@ -68,7 +87,18 @@ class BlockDAO_model extends CI_Model{
 	public function delete($Block)
 	{
 		$this->db->where('idBlock', $Block['id']);
-        return $this->db->delete('Block');
+		$this->db->delete('Block');
+		
+        if($this->db->affected_rows())
+        {
+            echo 'true';
+            return;
+        }
+        else
+        {
+            echo 'false';
+            return;
+        }
 	}
 
 	/****************************************
@@ -82,7 +112,4 @@ class BlockDAO_model extends CI_Model{
 		$this->db->where('idBlock', $Block['idBlock']);
 		$this->db->update('Block', $changes);
 	}
-
-
-
 }
