@@ -777,7 +777,8 @@ class Administrator_controller extends CI_Controller
         );
 
         $insert = $this->administrator_logic->insertPeriod($data);
-        validateModal();
+		//validateModal();
+		return $insert;
     }
 
 	/****************************************
@@ -792,7 +793,8 @@ class Administrator_controller extends CI_Controller
             'year' => $this->input->post('inputYear')
         );
 		$result = $this->administrator_logic->editPeriod($data);
-		validateModal();
+		//validateModal();
+		return $result;
 	}
 
 
@@ -802,6 +804,7 @@ class Administrator_controller extends CI_Controller
     public function deletePeriod($pId)
     {
     	$result = $this->administrator_logic->deletePeriod($pId);
-        validateModal();
+		//validateModal();
+		return $result;
 	}
 }

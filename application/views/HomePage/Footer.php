@@ -14,5 +14,7 @@
     <script src="<?php echo base_url('js/loadDivs.js')?>"></script>
     <script src="<?=base_url()?>js/HomePage/custom.js"></script>
     <script src="<?=base_url()?>js/HomePage/operations.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.19/api/fnReloadAjax.js"></script>
 </body>
 </html>

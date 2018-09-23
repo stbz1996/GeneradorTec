@@ -1,9 +1,9 @@
-$(document).ready( function () {
-    $('#table_id').DataTable();
-} );
-
 var save_method; //for save method string
 var table;
+
+$(document).ready(function() {
+    table = $('#table_id').DataTable();
+  });
 
 /****************************************
 - Show the errors in the execution of a javascript operation.
@@ -320,7 +320,6 @@ function save(url)
             showErrors(jqXHR, textStatus, errorThrown);
         }
     });
-    console.log($('#form').serialize());
 }
 
 /****************************************
@@ -478,21 +477,85 @@ function saveProfessor()
     save(url);
 }
 
+$.fn.dataTableExt.oApi.fnStandingRedraw = function(oSettings) {
+    //redraw to account for filtering and sorting
+    // concept here is that (for client side) there is a row got inserted at the end (for an add)
+    // or when a record was modified it could be in the middle of the table
+    // that is probably not supposed to be there - due to filtering / sorting
+    // so we need to re process filtering and sorting
+    // BUT - if it is server side - then this should be handled by the server - so skip this step
+    if(oSettings.oFeatures.bServerSide === false){
+        var before = oSettings._iDisplayStart;
+        oSettings.oApi._fnReDraw(oSettings);
+        //iDisplayStart has been reset to zero - so lets change it back
+        oSettings._iDisplayStart = before;
+        oSettings.oApi._fnCalculateEnd(oSettings);
+    }
+      
+    //draw the 'current' page
+    oSettings.oApi._fnDraw(oSettings);
+};
+
+function saveTest(url, message)
+{
+    // ajax adding data to database
+    $.ajax({
+        url : url,
+        type: "POST",
+        data: $('#form').serialize(),
+        dataType: "JSON",
+        success: function(response)
+        {
+            if (response == true)
+            {
+                $('#modal_form').modal('hide');
+                swal({title: "Listo", 
+                text: message[0], 
+                icon: "success"}).then(function(){
+                    location.reload();
+                    table.fnStandingRedraw();
+                });
+            }
+
+            else
+            {
+                swal({title: "Error", text: message[1], icon: "warning"});
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
+
 /****************************************
 - If the user press save a course, defined the method.
 ****************************************/
 function savePeriod()
 {
     var url;
+    var message;
 
     if (save_method == "add")
     {
         url = base_url + "index.php/Administrator_controller/addPeriod";
-    }else{
+        var message = [
+            "Se ha agregado el periodo",
+            "El periodo ya existe. No se realizarán los cambios."
+        ];
+    }
+    else
+    {
         url = base_url + "index.php/Administrator_controller/editPeriod";
+        var message = [
+            "Se ha editado el periodo",
+            "El periodo ya existe o tiene formularios asociados. No se realizarán los cambios."
+        ];
     }
 
-    save(url);
+    saveTest(url, message);
 }
 
 /****************************************
@@ -500,7 +563,7 @@ function savePeriod()
 ****************************************/
 function deleteAll(url, id)
 {
-    if(confirm('¿Está seguro de eliminar la carpeta?'))
+    if(confirm('¿Está seguro de eliminar?'))
     {
         // ajax delete data from database
         $.ajax({
@@ -509,7 +572,54 @@ function deleteAll(url, id)
             dataType: "JSON",
             success: function(data)
             {
+                alert("Borrado exitosamente.");
                 location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                showErrors(jqXHR, textStatus, errorThrown);
+                alert("Error al borrar.");
+            }
+        });
+    }
+}
+
+function deleteTest(url, id)
+{
+    swal({
+        title: "¿Está seguro de eliminar el periodo?",
+        text: "La accion no se puede revertir",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((willDelete) => {
+    if (willDelete)
+    {
+        $.ajax({
+            url : url + id,
+            type: "POST",
+            dataType: "JSON",
+            success: function(response)
+            {
+                if (response == true)
+                {
+                    $('#modal_form').modal('hide');
+                    swal({title: "Listo", 
+                        text: 'Periodo eliminado', 
+                        icon: "success"}).then(function(){
+                            location.reload();
+                            table.fnStandingRedraw();
+                    });
+                }
+
+                else
+                {
+                    swal({title: "Error",
+                        text: "El periodo no se ha eliminado por estar asociado a formularios o ya existe.",
+                        icon: "warning"});
+                }
+
             },
             error: function (jqXHR, textStatus, errorThrown)
             {
@@ -517,4 +627,6 @@ function deleteAll(url, id)
             }
         });
     }
+    });
+
 }
