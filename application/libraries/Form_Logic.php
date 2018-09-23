@@ -275,7 +275,6 @@ class Form_Logic{
 
 	function validateDataFromView($idForm, $idProfessor, $workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities)
 	{
-		$flagEmptyActivity = 0;
 		$message = "";
 
 		$message = $this->verifyAssignCourses($idCourses, $workload);
@@ -356,6 +355,54 @@ class Form_Logic{
 		$formDAO = new FormDAO_model();
 		$formDAO->deleteCoursesForm($idForm);
 	}
+
+	/**************************************************************
+	This function returns all the schedules regitered in the sistem
+ 	***************************************************************/
+ 	function getAllSchedules()
+ 	{
+ 		$schedules = new ScheduleDAO_model(); 
+ 		$allSchedules = $schedules->getAllSchedules(); 	
+ 		foreach ($allSchedules->result() as $schedule) {
+ 			$arr['id'] = $schedule->idSchedule;
+ 			$arr['dayName'] = $schedule->dayName;
+ 			$arr['initialTime'] = $schedule->initialTime;
+ 			$arr['finishTime'] = $schedule->finishTime;
+ 			$arr['state'] = $schedule->state;
+  			$res[] = $arr;
+ 		}
+ 		return $res;
+ 	}
+
+ 	function insertScheduleForm($data)
+ 	{
+ 		$formDAO = new FormDAO_model();
+ 		$formDAO->insertScheduleForm($data);
+ 	}
+
+ 	function deleteScheduleForm($idForm)
+ 	{
+ 		$formDAO = new FormDAO_model();
+ 		$formDAO->deleteScheduleForm($idForm);
+ 	}
+
+ 	function showScheduleForm($idForm)
+ 	{
+ 		$formDAO = new FormDAO_model();
+ 		$query = $formDAO->showScheduleForm($idForm);
+
+ 		if(!$query)
+ 		{
+ 			return false;
+ 		}
+ 		$schedules = array();
+ 		foreach ($query as $schedule) 
+ 		{
+ 			$schedules[] = $schedule['idSchedule'];
+ 		}
+
+ 		return $schedules;
+ 	}
 }
 
 ?>

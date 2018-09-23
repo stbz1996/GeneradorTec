@@ -28,9 +28,8 @@ $db['default'] = array(
 	'save_queries' => TRUE
 );
 */
+/************************************** Base de datos de Steven */
 
-//************************************** Base de datos de Steven 
-/*
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
@@ -52,8 +51,7 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
-*/
-
+/*
 //************************************** Base de datos de desarrollo 
 $db['default'] = array(
 	'dsn'	=> '',
@@ -76,3 +74,4 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+*/

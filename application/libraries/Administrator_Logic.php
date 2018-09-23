@@ -620,7 +620,7 @@ class Administrator_Logic{
  	***************************************************************/
  	public function getEmailMessage($pProfessorName, $pHash, $pSendDate)
  	{
- 		$message = "Buenas ".$pProfessorName.". ".'\n'.'\n'."Mediante el siguiente link usted podrá ingresar al formulario de solicitud de cursos. Es importante que recuerde que este formulario vence el ".$pSendDate.".".'\n'.'\n'.base_url()."Form_controller/?p=".$pHash;
+ 		$message = "Buenas ".$pProfessorName.". "."Mediante el siguiente link usted podrá ingresar al formulario de solicitud de cursos. Es importante que recuerde que este formulario vence el ".$pSendDate.". El link es el siguiente: ".base_url()."Form_controller/?p=".$pHash;
  		return $message;
  	}
 

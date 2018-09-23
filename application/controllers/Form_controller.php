@@ -14,6 +14,7 @@ class Form_controller extends CI_Controller {
 
 		$this->load->library('session');
 		$this->load->library('Form_Logic');
+		$this->load->library('System_Logic');
 
 		$this->load->model("DAO/FormDAO_model");
 		$this->load->model("DTO/FormDTO");
@@ -27,8 +28,14 @@ class Form_controller extends CI_Controller {
 		$this->load->model("DAO/PlanDAO_model");
 		$this->load->model("DTO/PlanDTO");
 
+		$this->load->model("DTO/ScheduleDTO");		
+		$this->load->model("DAO/ScheduleDAO_model");
+
+
+		date_default_timezone_set("America/Costa_Rica");
 		$this->Form = new FormDTO();
 		$this->Form_Logic = new Form_Logic();
+		$this->System_Logic = new System_Logic();
 	}
 
 
@@ -49,9 +56,9 @@ class Form_controller extends CI_Controller {
 
 		//Get form by hashcode
 		$queryForm = $this->Form_Logic->validateForm($hashCode);
-		$newForm = $queryForm->row();
+		$newForm = $queryForm;
 		$this->Form = $this->getFormInformation($newForm);
-
+	
 		//Set global variables
 		$this->session->set_userdata('idForm', $this->Form->getIdForm());
 		$this->session->set_userdata('idProfessor', $this->Form->getIdProfessor());
@@ -59,6 +66,11 @@ class Form_controller extends CI_Controller {
 		//Get initial information of professor
 		$initialInformation = $this->getInitialInformation($this->Form);
 
+		//This condition verify if due date already pass
+		/*if(strtotime(date("Y/m/d")) > strtotime($this->Form->getDueDate()) || !$this->Form->getState())
+		{
+			return;
+		}*/
 		//Assign information to show it in form
 		$data = $this->assignInitialInformation($initialInformation);
 		$data['dueDate'] = $this->Form->getDueDate();
@@ -69,7 +81,11 @@ class Form_controller extends CI_Controller {
 		$idCareer = $initialInformation->idCareer;
 		$savedInformation = $this->getSavedInformation($idCareer);
 		$data = array_merge($data, $savedInformation);
+		$scheduleInformation = $this->showScheduleSelector();
+		$data = array_merge($data, $scheduleInformation);
 		
+		$scheduleForm = $this->showScheduleForm();
+		$data = array_merge($data, $scheduleForm);		
 
 		$this->load->view("Forms/Header");
 		$this->load->view("Forms/Content", $data);
@@ -221,35 +237,43 @@ class Form_controller extends CI_Controller {
 	*****************************************/
 	function getDataFromView()
 	{
-		$workload = $this->input->post('workload_options');
+		/////FUNCIONA
+		$workload = $_POST['workload'];
+		$activitiesDescription = $_POST['activitiesDescription'];
+		$activitiesWorkPorcent = $_POST['activitiesWorkPorcent'];
+		$idCourses = $_POST['idCourses'];
+		$priorities = $_POST['priorities'];
+		$schedules = $_POST['schedules'];
+		$this->validateDataFromView($workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities, $schedules);
+		
+		/*$workload = $this->input->post('workload_options');
 		$activitiesDescription = $this->input->post('activityDescription');
 		$activitiesWorkPorcent = $this->input->post('workPorcent');
 		$idCourses = $this->input->post('idCourses');
 		$priorities= $this->input->post('priorities');
 
-		$this->validateDataFromView($workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities);
+		$this->validateDataFromView($workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities);*/
 	}
 
-	function validateDataFromView($workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities)
+	function validateDataFromView($workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities, $schedules)
 	{
 		$idForm = $_SESSION['idForm'];
 		$idProfessor = $_SESSION['idProfessor'];
-		$message = $this->Form_Logic->validateDataFromView($idForm, $idProfessor, $workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities);
+		/*$message = $this->Form_Logic->validateDataFromView($idForm, $idProfessor, $workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities);
 
 		if($message !== "")
 		{
 			echo $message;
 		}
 		else
-		{
-			$this->insertWorkload($idProfessor, $workload);
-			$this->manageActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
-			$this->assignCourses($idForm, $idCourses, $priorities);
+		{*/
+		$this->insertWorkload($idProfessor, $workload);
+		$this->manageActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
+		$this->assignCourses($idForm, $idCourses, $priorities);
+		$this->saveScheduleInformation($schedules);
 
-			echo "<script>
-					alert('Datos se ingresaron correctamente');
-				  </script>";
-		}		
+			//echo "<script type='text/javascript'>swal('No se puede guardar: Cantidad de cursos es menor a la carga de trabajo asignado', 'hola', 'error');</script>";
+		//}		
 		//$link = "Form_controller/?p=".$_SESSION['hashCode'];
 		//redirect($link, 'refresh');
 	}
@@ -259,12 +283,8 @@ class Form_controller extends CI_Controller {
 		//Prepare data
 		$oldActivities = $this->getActivities();
 		$totalOldActivities = count($oldActivities);
-		$totalNewActivities = 0;
+		$totalNewActivities = count($activitiesDescription);
 
-		if(isset($activitiesDescription))
-		{
-			$totalNewActivities = sizeof($activitiesDescription);
-		}		
 		$this->updateActivities($totalOldActivities, $totalNewActivities, $oldActivities, $activitiesWorkPorcent, $activitiesDescription);
 
 		if($totalOldActivities >= $totalNewActivities)
@@ -364,7 +384,7 @@ class Form_controller extends CI_Controller {
 
 	function insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent)
 	{		
-		$totalActivities = sizeof($activitiesDescription);
+		$totalActivities = count($activitiesDescription);
 
 		for($i = 0; $i < $totalActivities; $i++)
 		{	
@@ -455,6 +475,95 @@ class Form_controller extends CI_Controller {
 		}
 
 		return $data;
+	}
+
+	/***********************************************************
+	Load the information about the schedules in DB and show
+	in the view the active an deactive schedules
+	***********************************************************/
+	public function showScheduleSelector()
+	{
+		// The schedules are loaded
+		$schedules = $this->Form_Logic->getAllSchedules();
+		
+		// Get the data for representation in viw 
+		$system_Logic = new System_Logic();
+		$hoursRepresentationForView = $system_Logic->getHoursRepresentationForView();
+		$daysRepresentation = $system_Logic->getDaysRepresentation();
+		$hoursRepresentation = $system_Logic->gethoursRepresentation();
+	
+		$scheduleCounter = 0;
+		foreach ($schedules as $schedule) {
+			$hour = $hoursRepresentation[$schedule['initialTime']]; 
+			$day = $daysRepresentation[$schedule['dayName']];
+			// To accord with the hour and the day, we sent information 
+			$dataToView[$hour][$day]['id']    = $schedule['id'];
+			$dataToView[$hour][$day]['state'] = $schedule['state']; 
+			$scheduleCounter += 1;
+		}
+		// That varible is used to count the number of schedules in BD
+		$this->session->set_userdata('scheduleCounter' , $scheduleCounter);
+		$data['hours'] = $hoursRepresentationForView;
+		$data['days'] = $dataToView;
+		$data['schedules'] = $schedules;
+
+		return $data;
+		//$this->callView("SchedulePage", $data);
+	}
+
+	public function showScheduleForm()
+	{
+		$idForm = $_SESSION['idForm'];
+		$schedules = $this->Form_Logic->showScheduleForm($idForm);
+		$data['formSchedules'] = array();
+		if($schedules)
+		{
+			$data['formSchedules'] = $schedules;
+		}
+		return $data;
+	}
+
+	public function saveScheduleInformation($schedules)
+	{
+		$idForm = $_SESSION['idForm'];
+		$this->Form_Logic->deleteScheduleForm($idForm);
+		$data = array();
+		foreach ($schedules as $schedule) 
+		{
+			$data[] = array(
+				'idForm' => $idForm,
+				'idSchedule' => $schedule
+			);
+		}
+		if(count($data))
+		{
+			$this->Form_Logic->insertScheduleForm($data);
+		}
+
+		// All schedules on DB 
+		/*
+		$schedules = $this->Form_Logic->getAllSchedules();
+		$this->Form_Logic->deleteScheduleForm($idForm);
+		foreach ($schedules as $schedule) 
+		{
+			$idSchedule = $schedule['id'];
+			$state = $this->input->post('Inp-'.$idSchedule);	
+			// Create the object 
+			$data = array();
+			if($state)
+			{
+				$data[] = array(
+					'idForm' => $idForm,
+					'idSchedule' => $idSchedule
+				);
+			}
+			if(count($data))
+			{
+				$this->Form_Logic->insertScheduleForm($data);
+			}			
+			
+		}*/
+		$this->showScheduleSelector();
 	}
 }
 ?>

@@ -16,8 +16,7 @@
 
 <!-- multistep form -->
 <form id="msform" action="getDataFromView" method="post">
-  
-  <input type="Submit" name="Submit" value="Submit">
+
   <!-- progressbar -->
   <ul id="progressbar">
     <li class="active">Información</li>
@@ -25,7 +24,7 @@
     <li> Actividades </li>
     <li> Cursos </li>
     <li> Horarios </li>
-    <li> Guardar o Enviar </li>
+    <li> Enviar </li>
   </ul>
   
   <!-- fieldsets -->
@@ -49,11 +48,10 @@
   
   <fieldset>
     <h2 class="fs-title">Carga</h2>
-    <h3 class="fs-subtitle"> Debe seleccionar la posible carga de trabajo para el siguiente periodo*, influirá en el mínimo de cursos posibles a asignar en ese periodo. <br/><br/>
-    *Nota: Se puede agregar literalmente "siguiente periodo" o agregar el periodo que sigue, ejm: I semestre del 2019.</h3>
+    <h3 class="fs-subtitle"> Seleccione la carga de trabajo para el semestre <?= $periodNumber?> del <?= $periodYear ?>, la cual influirá en el mínimo de cursos posibles a asignar en este periodo.</h3>
     
     <div>
-      <select name="workload_options">
+      <select id="workload_options" name="workload_options">
 
         <!--<option value="25">25% (1 curso)</option>
         <option value="50">50% (2 cursos)</option>
@@ -68,6 +66,7 @@
       </select>
     </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
+    <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">
     <input type="button" name="next" class="next action-button" value="Siguiente" />
     <!--<input type='submit' name='submit' class="submit action-button" value='Submit' />-->
     
@@ -75,7 +74,7 @@
 
   <fieldset>
     <h2 class="fs-title">Actividades</h2>
-    <h3 class="fs-subtitle"> Ingrese las actividades que considera le reducen la carga de trabajo que espera obtener, por lo que afectará la carga que brindó en la sección anterior. </h3>
+    <h3 class="fs-subtitle"> Ingrese las actividades que considera le reducen la carga de trabajo, por lo que afectará la carga que brindó en la sección anterior. </h3>
 
     <div>
       <input type="button" name="add" id="add" class="btn_add action-button" value="Agregar Actividad" />
@@ -108,12 +107,13 @@
       </div>
     </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
-    <input type="button" name="next" class="next action-button" value="Siguiente" />
+    <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">
+    <input type="button" id="next-activity" name="next" class="next action-button" value="Siguiente" />
   </fieldset>
 
   <fieldset>
     <h2 class="fs-title">Cursos</h2>
-    <h3 class="fs-subtitle"></h3>
+    <h3 class="fs-subtitle">Seleccione los cursos que quiere impartir, debe seleccionar un mínimo de cursos en relación a la carga de trabajo</h3>
 
     <div class="list-courses">
 
@@ -122,7 +122,7 @@
       $totalCourses = 1;
       for($i = 0; $i < $countPlans; $i++) { ?>
         <table>
-          <?= $plans[$i]->getName() ?>
+          <div> Plan: <?= $plans[$i]->getName() ?><div>
           <tbody>
             <?php 
             $countCourses = count($courses[$i]);
@@ -179,22 +179,66 @@
     </div>
 
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
+    <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">
     <input type="button" name="next" class="next action-button" value="Siguiente" />
   </fieldset>
 
   <fieldset>
     <h2 class="fs-title">Horarios</h2>
-    <h3 class="fs-subtitle"></h3>
+    <h3 class="fs-subtitle">Seleccione los posibles horarios para impartir los cursos que seleccionó anteriormente</h3>
+    <div>
+  <div class="mainContainer">
+    <div class="fileone">
+      <div class="itemf1"> Hora </div>
+      <div class="itemf1"> Lunes </div>
+      <div class="itemf1"> Martes </div>
+      <div class="itemf1"> Miercoles </div>
+      <div class="itemf1"> Jueves </div>
+      <div class="itemf1"> Viernes </div>
+      <div class="itemf1"> Sabado </div>
+    </div>
+
+    <?php 
+    for ($i=1; $i < 15; $i++) { ?>
+      <div class="fileone">
+      <!-- It is the hour -->
+      <div class="itemCol1"> <?= $hours[$i] ?> </div>
+      <?php 
+      for ($k=1; $k < 7; $k++) { ?>
+        <!-- It is a normal space in schedule -->
+        <?php 
+          $baseId = $days[$i][$k]['id'];
+          $baseState = $days[$i][$k]['state'];
+          $Did = 'Div-'.$baseId;
+          $Mid = 'Inp-'.$baseId;
+        ?>
+        <div id="<?= $Did ?>" <?php if($baseState) {?>
+          onclick="changeState('<?= $Mid ?>', '<?= $Did ?>')" <?php }?> 
+        class="item">.
+          <input class="hiddenItem" id="<?= $Mid ?>" value="<?= $baseState ?>" type="hidden" name="<?= $Mid ?>">
+        </div>
+      <?php } ?>            
+      </div>
+    <?php } ?>
+    <?php
+    if($formSchedules){
+      foreach($formSchedules as $schedule){?>
+        <input type="hidden" name="oldSchedules[]" value="<?=$schedule?>">
+      <?php }
+    }?>
+
+  </div>
+</div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
+    <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">
     <input type="button" name="next" class="next action-button" value="Siguiente" />
   </fieldset>
   
   <fieldset>
-    <h2 class="fs-title">Guardar o Enviar</h2>
+    <h2 class="fs-title">Enviar</h2>
     <h3 class="fs-subtitle"></h3>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
-    <input type="Submit" name="Submit" class="Submit action-button" onclick="Form_Controller/getDataFromView()" value="Guardar" />
-    <input type="submit" name="submit" class="submit action-button" value="Enviar" />
+    <input type="submit" name="submit" class="submit submit-save action-button" value="Enviar" />
   </fieldset>
 
 </form>
