@@ -253,11 +253,11 @@ $('.submit-save').click(function(){
 			schedules: JSON.stringify(newSchedules)
 		},
 		success: function(){
-			doc.fromHTML($('#content').html(), 15, 15, {
+			/*doc.fromHTML($('#content').html(), 15, 15, {
 				'width': 170,
 				'elementHandlers': specialElementHandlers
 			});
-			doc.save('formulario.pdf');
+			doc.save('formulario.pdf');*/
 			swal('Listo', 'Sus datos han sido guardados', 'success');
 		},
 		error: function ()
