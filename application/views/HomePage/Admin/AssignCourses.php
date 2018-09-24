@@ -2,6 +2,7 @@
 <script>var base_url = '<?php echo base_url() ?>';</script>
 <div>
     <h1>Asignación de Cursos</h1>
+    <p>Prioridades  (Rojo - A), (Naranja - B), (Amarillo - C)</p>
 </div>
 
 <hr>
@@ -44,6 +45,10 @@
 				<div class="coursesDiv" data-value="<?= $course->idCourse ?>" onclick="">
 				 	<h4> <?= $course->name ?> </h4>
 				 	<p> No ha sido asignado </p>
+				 	<button class="btn btn-warning" onclick="selectCourse(this.parentElement)"><i class="glyphicon glyphicon-ok"></i></button>
+				 	<input name="state" type="hidden" value="1" />
+				 	<input name="reserved" type="hidden" value="0" />
+				 	<p></p>
 				</div>
 
 			<?php  } ?>
@@ -55,6 +60,8 @@
 <!-- Los botones -->
 <div class="modal-footer" id="divFooter">
     Aqui los botones
+    <button type="button" id="btnSave" onclick="saveAssigned()" class="btn btn-primary">Guardar</button>
 </div>
 
 <div id="loader"></div>
+
