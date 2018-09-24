@@ -795,4 +795,20 @@ class Administrator_controller extends CI_Controller
 		printMessage("Se ha agregado a la base de datos");
 		redirect('Administrator_controller/index/');
 	}
+
+	public function AdvanceDays()
+	{
+		$this->load->view("HomePage/Header");
+		$this->load->view("HomePage/Admin/AdvanceDays");
+		$this->load->view("HomePage/Footer");
+	}
+
+	public function assignAdvanceDays()
+	{
+		$advanceDays = $_POST['advanceDays'];
+		$data = array('advanceDays'=>$advanceDays);
+		$result = $this->administrator_logic->assignAdvanceDays($data);
+		if($result)echo 1;
+		else echo 0;
+	}
 }

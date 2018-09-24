@@ -41,32 +41,6 @@ class Form_controller extends CI_Controller {
 
 	function index()
 	{
-		//Sending email
-		/*$config= array(
-			'protocol' => 'smtp',
-			'smtp_host' => 'smtp.gmail.com',
-			'smtp_port' => 587,
-			'smtp_user' => 'testingkushluk@gmail.com',
-			'smtp_pass' => 'J17l0G7r96'
-		);
-		$this->load->library('email', $config);
-
-		$this->email->from('jorgegr1707@gmail.com', 'Jorge González');
-		$this->email->to('jorgegr1707@gmail.com');
-
-		$this->email->subject('Email Test');
-		$this->email->message('Testing the email class.');
-
-		if($this->email->send())
-		{
-			echo "Sending successful";
-		}
-		else
-		{
-			show_error($this->email->print_debugger());
-		}
-		//Finish sending email*/
-
 		$this->session->set_userdata('hashCode', $_GET['p']);
 		$this->callForm();
 	}
