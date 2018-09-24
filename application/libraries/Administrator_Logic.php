@@ -690,6 +690,12 @@ class Administrator_Logic{
 		$periodDAO_model = new PeriodDAO_model();
 		return $periodDAO_model->delete($pId);
 	}
+
+	public function assignAdvanceDays($data)
+	{
+		$careerDAO = new careerDAO_model();
+		return $careerDAO->assignAdvanceDays($data);
+	}
 }
 
 ?>

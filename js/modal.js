@@ -709,3 +709,31 @@ function deletePeriod(url, id)
 
     deleteAll(url, id, message);
 }
+
+function assignAdvanceDays(url)
+{
+    var selectAdvanceDays = document.getElementById("select-advanceDays");
+    var advanceDays = selectAdvanceDays.options[selectAdvanceDays.selectedIndex].value;
+
+    $.ajax({
+        url : url,
+        type: "POST",
+        data: {advanceDays: advanceDays},
+        success: function(response)
+        {
+            if(response)
+            {
+                swal('Listo', 'Cambios han sido guardados', 'success');
+            }
+            else
+            {
+                swal('Lo sentimos', 'No se pudieron realizar los cambios, intente más tarde', 'error');
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
+   

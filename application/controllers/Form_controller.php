@@ -76,7 +76,6 @@ class Form_controller extends CI_Controller {
 		$data['dueDate'] = $this->Form->getDueDate();
 
 		//Get saved information
-		//TODO: Verify if form was saved before
 		$data['activities'] = $this->getActivities();
 		$idCareer = $initialInformation->idCareer;
 		$savedInformation = $this->getSavedInformation($idCareer);
@@ -498,9 +497,13 @@ class Form_controller extends CI_Controller {
 		foreach ($schedules as $schedule) {
 			$hour = $hoursRepresentation[$schedule['initialTime']]; 
 			$day = $daysRepresentation[$schedule['dayName']];
-			// To accord with the hour and the day, we sent information 
+			// To accord with the hour and the day, we sent information
+			$dataToView[$hour][$day]['day'] = $schedule['dayName'];
+			$dataToView[$hour][$day]['initialTime'] = $schedule['initialTime'];
+			$dataToView[$hour][$day]['finishTime'] = $schedule['finishTime'];
 			$dataToView[$hour][$day]['id']    = $schedule['id'];
-			$dataToView[$hour][$day]['state'] = $schedule['state']; 
+			$dataToView[$hour][$day]['state'] = $schedule['state'];
+
 			$scheduleCounter += 1;
 		}
 		// That varible is used to count the number of schedules in BD

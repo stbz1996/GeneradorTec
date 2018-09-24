@@ -38,6 +38,28 @@ class FormDAO_model extends CI_Model
 		}
 	}
 
+	function showFormsReminder()
+	{
+		$this->db->select('Form.idForm');
+		$this->db->select('Form.dueDate');
+		$this->db->select('Professor.email');
+		$this->db->select('Career.advanceDays');
+		$this->db->from('Form');
+		$this->db->join('Professor', 'Form.idProfessor = Professor.idProfessor');
+		$this->db->join('Career', 'Professor.idCareer = Career.idCareer');
+		$this->db->where('Form.state', 1);
+		$query = $this->db->get();
+
+		if($query->num_rows() > 0)
+		{
+			return $query->result_array();
+		}
+		else
+		{
+			return array();
+		}
+	}
+
 	/****************************************
 	*Function that returns information to 	*
 	*show it in form.						*

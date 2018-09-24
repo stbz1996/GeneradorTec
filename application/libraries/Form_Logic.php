@@ -357,7 +357,7 @@ class Form_Logic{
 	}
 
 	/**************************************************************
-	This function returns all the schedules regitered in the sistem
+	This function returns all the schedules registered in the system
  	***************************************************************/
  	function getAllSchedules()
  	{

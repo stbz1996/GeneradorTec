@@ -64,4 +64,14 @@ class CareerDAO_model extends CI_Model{
 		// Búsqueda recursiva
 	}
 
+	public function assignAdvanceDays($data)
+	{
+		$this->db->update('Career', $data);
+		if($this->db->affected_rows())
+		{
+			return true;
+		}
+		return false;
+	}
+
 }
