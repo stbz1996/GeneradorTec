@@ -88,7 +88,7 @@ class GenerateLinks_controller extends CI_Controller
 		
 		// Find active professors
 		$data['profesors'] = $this->administrator_logic->findProfessors($idCareer);
-		
+		$listOfEmailSent = [];
 		// Check if the forms are registered or not
 		if ($data['profesors'] != false)
 		{
@@ -105,6 +105,8 @@ class GenerateLinks_controller extends CI_Controller
 						$email = $p->email;
 						$hash = $hashCode;
 						$this->sendMailToProfessor($professorName, $email, $hash, $dateForEmail);
+						// aqui agrego el nombre del profesor a una lista 
+						$listOfEmailSent[] = $professorName;
 					}
 				}
 			}
@@ -113,8 +115,13 @@ class GenerateLinks_controller extends CI_Controller
 			$this->showError('No hay profesores activos');
 		}
 
+		$result = 'El correo fue enviado a: ';
+		foreach ($listOfEmailSent as $k) {
+			$result .= $k.' - ';
+		}
+
 		// Call view
-		$this->session->set_userdata('LinksState', "Los Links han sido enviados");
+		$this->session->set_userdata('LinksState', $result);
 		$this->LoadGenerateLinksView();
 	}
 

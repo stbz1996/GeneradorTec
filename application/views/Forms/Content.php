@@ -30,29 +30,30 @@
   <!-- fieldsets -->
   <fieldset>
     <h2 class="fs-title">Información</h2>
-    <h3 class="fs-subtitle">Último día para enviar formulario: <?= $dueDate ?></h3>
-    <div>
-      <div>
-        Profesor: <?= $professorFirstName?> <?= $professorLastName ?>
+    <h3 class="fs-subtitle">El formulario debe ser enviado antes del <?= $dueDate ?></h3>
+    <div class="infoTagBox">
+      <div class="infoTag">
+        <?= $professorFirstName?> <?= $professorLastName ?>
       </div>
-      <div>
-      Carrera: <?= $careerName ?>
+      <div class="infoTag">
+        <?= $careerName ?>
       </div>
-      <div>
-      Periodo: <?= $periodNumber ?> Semestre, <?= $periodYear ?>
+      <div class="infoTag">
+        <?= $periodNumber ?> Semestre, <?= $periodYear ?>
       </div>
+      <div class="infoTag">
+        Vence el <?= $dueDate ?>
+      </div>
+
     </div>
-    <input type="button" name="next" class="next action-button" value="Siguiente" />
-    
+    <input type="button" name="next" class="next action-button" value="Siguiente" />   
   </fieldset>
   
   <fieldset>
     <h2 class="fs-title">Carga</h2>
     <h3 class="fs-subtitle"> Seleccione la carga de trabajo para el semestre <?= $periodNumber?> del <?= $periodYear ?>, la cual influirá en el mínimo de cursos posibles a asignar en este periodo.</h3>
-    
     <div>
-      <select id="workload_options" name="workload_options">
-
+      <select id="workload_options" name="workload_options" class="comboBoxCarga">
         <!--<option value="25">25% (1 curso)</option>
         <option value="50">50% (2 cursos)</option>
         <option value="75">75% (3 cursos)</option>
@@ -69,7 +70,6 @@
     <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">
     <input type="button" name="next" id="next-workload" class="next action-button" value="Siguiente" />
     <!--<input type='submit' name='submit' class="submit action-button" value='Submit' />-->
-    
   </fieldset>
 
   <fieldset>
