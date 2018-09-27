@@ -15,7 +15,6 @@ class Administrator_controller extends CI_Controller
 		$this->load->library('Form_Logic');
 		$this->load->model("DAO/ProfessorDAO_model");
 		$this->load->model("DAO/AdministratorDAO_model");
-		$this->load->model("DAO/CareerDAO_model");
 		$this->load->model("DAO/PlanDAO_model");
 		$this->load->model("DAO/BlockDAO_model");
 		$this->load->model("DAO/CourseDAO_model");
@@ -27,7 +26,6 @@ class Administrator_controller extends CI_Controller
 		$this->load->model("DTO/PeriodDTO");
 		$this->load->model("DTO/ProfessorDTO");
 		$this->load->model("DTO/FormDTO");
-		$this->load->model("DTO/CareerDTO");
 		$this->load->model("DTO/AdministratorDTO");
 		$this->load->model("DTO/PlanDTO");
 
@@ -67,9 +65,8 @@ class Administrator_controller extends CI_Controller
 		$this->callView("homePage", null);
 	}
 
-
 	/****************************************
-	- Get all careers. Show them.
+	- Get all careers. Show all careers.
 	****************************************/
 	public function Careers()
 	{
@@ -77,10 +74,8 @@ class Administrator_controller extends CI_Controller
 		$data['actual'] = "Careers";
 		$data['ADD'] = getAddressCareers();
 		$data['careers'] = $this->administrator_logic->getArrayCareers();
-
 		$this->callViewBreadCrumb("Admin/Career", $data);
 	}
-
 
 	/****************************************
 	- Get all plans. Show the plans.
@@ -92,7 +87,9 @@ class Administrator_controller extends CI_Controller
 		{
 			$id = $this->session->userdata('idCareer');
 			$name = $this->session->userdata('nameCareer');
-		}else{
+		}
+		else
+		{
 			$this->session->set_userdata('nameCareer', urldecode($name));
 		}
 
@@ -167,7 +164,6 @@ class Administrator_controller extends CI_Controller
 	****************************************/
 	public function changeStatePlan()
 	{
-		// Falta...
 		$data = array(
 			'idPlan' => $this->input->post('id'),
 			'state' => $this->input->post('state')
@@ -186,7 +182,9 @@ class Administrator_controller extends CI_Controller
 		{
 			$id = $this->session->userdata('idPlan');
 			$name = $this->session->userdata('namePlan');
-		}else{
+		}
+		else
+		{
 			$this->session->set_userdata('idPlan', $id);
 			$this->session->set_userdata('namePlan', urldecode($name));
 		}
@@ -281,7 +279,8 @@ class Administrator_controller extends CI_Controller
 		$namePlan = $this->session->userdata('namePlan');
 
     	// if there is not a idPlan and idBlock previous selected.
-		if ($pId == null){
+		if ($pId == null)
+		{
 			$pId = $this->session->userdata('idBlock');
 			$pName = $this->session->userdata('nameBlock');
 		}
@@ -390,15 +389,18 @@ class Administrator_controller extends CI_Controller
 		validateModal();
 	}
 
-
+	/****************************************
+	- Get all the professors. Show the view.
+	****************************************/
 	public function Professors($pId = null, $pName = null)
     {
-    	// if there is not a id, take the idCareer, idPlan, and idBlock previous selected.
+    	// if there is not an id, take the idCareer, idPlan, and idBlock previous selected.
 		if ($pId == null)
 		{
 			$pId = $this->session->userdata('idCareer');
 			$pName = $this->session->userdata('nameCareer');
-		}else{
+		}
+		else{
 			$id = $this->session->userdata('idCareer');
 			$name = $this->session->userdata('nameCareer');
 		}
@@ -508,7 +510,7 @@ class Administrator_controller extends CI_Controller
 	}
 
 	/****************************************
-	- Show the period settings
+	- Show the period´s view
 	****************************************/
 	public function Period()
 	{
@@ -521,7 +523,7 @@ class Administrator_controller extends CI_Controller
 	}
 
 	/****************************************
-	- Get the information of a professor.
+	- Get the information of a period.
 	****************************************/	
 	public function getPeriod($pId)
     {
@@ -542,7 +544,6 @@ class Administrator_controller extends CI_Controller
         );
 
         $insert = $this->administrator_logic->insertPeriod($data);
-		//validateModal();
 		return $insert;
     }
 
@@ -558,7 +559,6 @@ class Administrator_controller extends CI_Controller
             'year' => $this->input->post('inputYear')
         );
 		$result = $this->administrator_logic->editPeriod($data);
-		//validateModal();
 		return $result;
 	}
 
@@ -569,7 +569,6 @@ class Administrator_controller extends CI_Controller
     public function deletePeriod($pId)
     {
     	$result = $this->administrator_logic->deletePeriod($pId);
-		//validateModal();
 		return $result;
 	}
 
@@ -591,7 +590,8 @@ class Administrator_controller extends CI_Controller
 		$hoursRepresentation = $system_Logic->gethoursRepresentation();
 	
 		$scheduleCounter = 0;
-		foreach ($schedules as $schedule) {
+		foreach ($schedules as $schedule)
+		{
 			$hour = $hoursRepresentation[$schedule['initialTime']]; 
 			$day = $daysRepresentation[$schedule['dayName']];
 			// To accord with the hour and the day, we sent information 
@@ -599,6 +599,7 @@ class Administrator_controller extends CI_Controller
 			$dataToView[$hour][$day]['state'] = $schedule['state']; 
 			$scheduleCounter += 1;
 		}
+
 		// That varible is used to count the number of schedules in BD
 		$this->session->set_userdata('scheduleCounter' , $scheduleCounter);
 		$data['hours'] = $hoursRepresentationForView;

@@ -55,10 +55,6 @@ function getBreadCrumbCareer()
 		array ( 
 			'NAME' => "Inicio",
 			'HTML' => "Administrator_controller"
-		),
-		array (
-			'NAME' => "Carreras",
-			'HTML' => "Administrator_controller/Careers"
 		)
 	);
 	return $breadCrumb;
@@ -70,10 +66,6 @@ function getBreadCrumbPlan()
 		array ( 
 			'NAME' => "Inicio",
 			'HTML' => "Administrator_controller"
-		),
-		array (
-			'NAME' => "Carreras",
-			'HTML' => "Administrator_controller/Careers"
 		),
 		array (
 			'NAME' => "Planes",
@@ -89,10 +81,6 @@ function getBreadCrumbBlock()
 		array ( 
 			'NAME' => "Inicio",
 			'HTML' => "Administrator_controller"
-		),
-		array (
-			'NAME' => "Carreras",
-			'HTML' => "Administrator_controller/Careers"
 		),
 		array (
 			'NAME' => "Planes",
@@ -112,10 +100,6 @@ function getBreadCrumbCourse()
 		array ( 
 			'NAME' => "Inicio",
 			'HTML' => "Administrator_controller"
-		),
-		array (
-			'NAME' => "Carreras",
-			'HTML' => "Administrator_controller/Careers"
 		),
 		array (
 			'NAME' => "Planes",
@@ -142,23 +126,11 @@ function getBreadCrumbAssignCourses()
 			'HTML' => "Administrator_controller"
 		),
 		array (
-			'NAME' => "Period",
+			'NAME' => "Periodos",
 			'HTML' => "Administrator_controller/Period"
 		)
 	);
 	return $breadCrumb;
-}
-
-function getAddressCareers()
-{
-	$address = array(
-		'ADDRESS_1' => "Administrator_controller/Plans",
-		'ADDRESS_2' => "Administrator_controller/changeStateCareer",
-		'ADDRESS_3' => "Administrator_controller/getCareer/",
-		'ADDRESS_4' => "Administrator_controller/deleteCareer/",
-		'ADDRESS_5' => "Administrator_controller/addCareer"
-	);
-	return $address;
 }
 
 function getAddressPlans()
