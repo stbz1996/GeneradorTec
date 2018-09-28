@@ -75,7 +75,6 @@ class FormDAO_model extends CI_Model
 	function getInitialInformation($idForm, $idProfessor)
 	{
 
-
 		$this->db->select('Professor.name as professorName');
 		$this->db->select('Professor.lastName');
 		$this->db->select('Professor.idCareer');
