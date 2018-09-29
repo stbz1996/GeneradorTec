@@ -9,7 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $linkToCourses = base_url()."/Administrator_controller/Courses";
     $linkToScheduleHours = base_url()."/Administrator_controller/showScheduleSelector";
     $linkToAdd = base_url()."/Administrator_controller/AddAdmin";
-    $linkToCareers = base_url()."/Administrator_controller/Careers";
+    $linkToPlans = base_url()."/Administrator_controller/Plans";
     $linkToProfessors = base_url()."/Administrator_controller/Professors";
     $linkToCurrentPeriod = base_url()."/Administrator_controller/Period";
     $linkToAssignCourses = base_url()."/Administrator_controller/AssignmentCourses";
@@ -61,7 +61,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </a>
                         </li>
                         <li>
-                            <a href="<?= $linkToCareers ?>">
+                            <a href="<?= $linkToPlans ?>">
                                 <i class="fa fa-folder"></i>
                                 <span>Editar Información</span>
                             </a>
