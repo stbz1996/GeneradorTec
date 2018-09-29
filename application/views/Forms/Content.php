@@ -128,11 +128,9 @@
               $nameIdCourse = 'course-'.$totalCourses;
               $idCourse = $courses[$i][$j]->getId(); ?>
               <div class="tablerow" id=<?=$nameRow ?> >
-                <div>
-                  <input type="hidden" id="<?=$nameIdCourse?>" value="<?=$idCourse?>"/>
-                </div>
+                <div><input type="hidden" id=<?= $nameIdCourse ?> value=<?=$idCourse?> /></div>
                 <div class="tableColumCode"> <?= $courses[$i][$j]->getCode() ?> </div>
-                <div class="tableColumName"> <?= $courses[$i][$j]->getName() ?> </div>
+                <div class="tableColumName"><?= $courses[$i][$j]->getName() ?> </div>
                 <div class="tableColumPriority">
                   <select id=<?=$nameSelect ?> <?= in_array($idCourse, $idCourses) ? 'disabled' : '' ?>>
                     <?php 
@@ -171,6 +169,7 @@
                   <input type="hidden" id="prior-<?= $totalCourses ?>" name="priorities[]" value=<?= $priorities[array_search($idCourse,$idCourses)]?> />
                 </div>
                 <?php } ?>
+
               </div>
             <?php 
               $totalCourses++;
