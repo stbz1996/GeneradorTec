@@ -40,59 +40,47 @@ function showErrors(jqXHR, textStatus, errorThrown)
     }
 }
 
-/****************************************
-- If button add plan is pressed, show the modal.
-****************************************/
+/*************************************************
+- If the user press add for whatever.            *
+- This is the main add function for              *
+- plans, block, courses, professors and periods. *
+**************************************************/
+function add(message)
+{
+    save_method = 'add';
+    $('#form')[0].reset(); // reset form on modals
+    $('#modal_form').modal('show'); // show bootstrap modal
+    $('.modal-title').text(message);
+}
+
 function addPlan()
 {
-    save_method = 'add';
-    $('#form')[0].reset(); // reset form on modals
-    $('#modal_form').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Agregar Plan');
+    var message = "Agregar Plan";
+    add(message);
 }
 
-/****************************************
-- If button add block is pressed, show the modal.
-****************************************/
 function addBlock()
 {
-    save_method = 'add';
-    $('#form')[0].reset(); // reset form on modals
-    $('#modal_form').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Agregar Bloque');
+    var message = "Agregar Bloque";
+    add(message);
 }
 
-/****************************************
-- If button add course is pressed, show the modal.
-****************************************/
 function addCourse()
 {
-    save_method = 'add';
-    $('#form')[0].reset();
-    $('#modal_form').modal('show');
-    $('.modal-title').text('Agregar Curso');
+    var message = "Agregar Curso";
+    add(message);
 }
 
-/****************************************
-- If button add professor is pressed, show the modal.
-****************************************/
 function addProfessor()
 {
-    save_method = 'add';
-    $('#form')[0].reset();
-    $('#modal_form').modal('show');
-    $('.modal-title').text('Agregar Profesor');
+    var message = "Agregar Profesor";
+    add(message);
 }
 
-/****************************************
-- If button add period is pressed, show the modal.
-****************************************/
 function addPeriod()
 {
-    save_method = 'add';
-    $('#form')[0].reset();
-    $('#modal_form').modal('show');
-    $('.modal-title').text('Agregar Periodo');
+    var message = "Agregar Periodo";
+    add(message);
 }
 
 /****************************************
@@ -300,32 +288,12 @@ function editPeriod(url, id)
     });
 }
 
-/****************************************
-- Store the data in the database.
-****************************************/
-function save(url)
-{
-    // ajax adding data to database
-    $.ajax({
-        url : url,
-        type: "POST",
-        data: $('#form').serialize(),
-        dataType: "JSON",
-        success: function(data)
-        {
-            //if success close modal and reload ajax table
-            $('#modal_form').modal('hide');
-            location.reload();// for reload a page
-        },
-        error: function (jqXHR, textStatus, errorThrown)
-        {
-            showErrors(jqXHR, textStatus, errorThrown);
-        }
-    });
-}
-
-
-function saveTest(url, message)
+/************************************************
+- If the user press delete for whatever.        *
+- This is the main save function for            *
+- plans, block, courses, professors and periods.*
+*************************************************/
+function save(url, message)
 {
     // ajax adding data to database
     $.ajax({
@@ -358,9 +326,6 @@ function saveTest(url, message)
     });
 }
 
-/****************************************
-- If the user press save a plan, defined the method.
-****************************************/
 function savePlan()
 {
     var url;
@@ -388,7 +353,7 @@ function savePlan()
 
     if (text)
     {
-        saveTest(url, message);
+        save(url, message);
     }
     
     else
@@ -399,9 +364,6 @@ function savePlan()
     }
 }
 
-/****************************************
-- If the user press save a block, defined the method.
-****************************************/
 function saveBlock()
 {
     var url;
@@ -428,7 +390,7 @@ function saveBlock()
 
     if (text)
     {
-        saveTest(url, message);
+        save(url, message);
     }
     
     else
@@ -439,9 +401,6 @@ function saveBlock()
     }
 }
 
-/****************************************
-- Loads the blocks of the plan.
-****************************************/
 function loadBlocks(id)
 {
     var url = base_url + "Administrator_controller/loadBlocks/";
@@ -478,9 +437,6 @@ $('#selectPlan').on('change', function(){
     loadBlocks(id);
 })
 
-/****************************************
-- If the user press save a course, defined the method.
-****************************************/
 function saveCourse()
 {
     var url;
@@ -537,7 +493,7 @@ function saveCourse()
             return;
         }
 
-        saveTest(url, message);
+        save(url, message);
     }
     
     else
@@ -548,9 +504,6 @@ function saveCourse()
     }
 }
 
-/****************************************
-- If the user press save a professor, defined the method.
-****************************************/
 function saveProfessor()
 {
     var url;
@@ -573,12 +526,9 @@ function saveProfessor()
         ];
     }
 
-    saveTest(url, message);
+    save(url, message);
 }
 
-/****************************************
-- If the user press save a period, defined the method.
-****************************************/
 function savePeriod()
 {
     var url;
@@ -600,7 +550,7 @@ function savePeriod()
         ];
     }
 
-    saveTest(url, message);
+    save(url, message);
 }
 
 /************************************************

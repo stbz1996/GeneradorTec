@@ -61,7 +61,7 @@ class CareerDAO_model extends CI_Model{
 	****************************************/
 	public function delete($Career)
 	{
-		// Búsqueda recursiva
+		return;
 	}
 
 	public function assignAdvanceDays($data)
