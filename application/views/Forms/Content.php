@@ -1,15 +1,10 @@
-
 <?php
-
   $button = array(
     'name' => 'submitButton',
     'value' => 'Submit'
   );
-
   $optionsWorkload = array(25, 50, 75, 100);
-
   $linkWorkload = base_url()."Form_controller/getDataFromView";
-
 ?>
 
 <!--<a href="<?= $linkWorkload ?>"> <i class="fa fa-calendar"></i> <span>Generar Links</span> </a>-->
@@ -27,6 +22,7 @@
     <li> Enviar </li>
   </ul>
   
+
   <!-- fieldsets -->
   <fieldset>
     <h2 class="fs-title">Información</h2>
@@ -77,7 +73,7 @@
     <h3 class="fs-subtitle"> Ingrese las actividades que considera le reducen la carga de trabajo, por lo que afectará la carga que brindó en la sección anterior. </h3>
 
     <div>
-      <input type="button" name="add" id="add" class="btn_add action-button" value="Agregar Actividad" />
+      <input type="button" name="add" id="add" class="btn_add action-button" value="Agregar Actividad" /></input>
       
       <div>
       <table id="dynamic_field" name="dynamic_field" class="dynamic_table">
@@ -111,19 +107,18 @@
     <input type="button" id="next-activity" name="next" class="next action-button" value="Siguiente" />
   </fieldset>
 
+
   <fieldset>
     <h2 class="fs-title">Cursos</h2>
     <h3 class="fs-subtitle">Seleccione los cursos que quiere impartir, debe seleccionar un mínimo de cursos en relación a la carga de trabajo</h3>
 
-    <div class="list-courses">
-
+    <div class="listOfcourses">
       <?php 
       $countPlans = count($plans);
       $totalCourses = 1;
       for($i = 0; $i < $countPlans; $i++) { ?>
-        <table>
-          <div> Plan: <?= $plans[$i]->getName() ?><div>
-          <tbody>
+          <div class="coursesPlan"> Plan <?= $plans[$i]->getName() ?></div>
+          <div class="tablecourses">
             <?php 
             $countCourses = count($courses[$i]);
             for($j = 0; $j < $countCourses; $j++) {
@@ -132,11 +127,13 @@
               $nameCheckBox = 'cbox-'.$totalCourses;
               $nameIdCourse = 'course-'.$totalCourses;
               $idCourse = $courses[$i][$j]->getId(); ?>
-              <tr id=<?=$nameRow ?> >
-                <td><input type="hidden" id=<?= $nameIdCourse ?> value=<?=$idCourse?> /></td>
-                <td><?= $courses[$i][$j]->getCode() ?> </td>
-                <td><?= $courses[$i][$j]->getName() ?> </td>
-                <td>
+              <div class="tablerow" id=<?=$nameRow ?> >
+                <div>
+                  <input type="hidden" id="<?=$nameIdCourse?>" value="<?=$idCourse?>"/>
+                </div>
+                <div class="tableColumCode"> <?= $courses[$i][$j]->getCode() ?> </div>
+                <div class="tableColumName"> <?= $courses[$i][$j]->getName() ?> </div>
+                <div class="tableColumPriority">
                   <select id=<?=$nameSelect ?> <?= in_array($idCourse, $idCourses) ? 'disabled' : '' ?>>
                     <?php 
                     if(in_array($idCourse, $idCourses))
@@ -145,8 +142,7 @@
                       <option <?= $priorities[array_search($idCourse, $idCourses)] == 'A' ? 'selected="selected"' : '' ?> value="A">A</option>
                       <option <?= $priorities[array_search($idCourse, $idCourses)] == 'B' ? 'selected="selected"' : '' ?> value="B">B</option>
                       <option <?= $priorities[array_search($idCourse, $idCourses)] == 'C' ? 'selected="selected"' : '' ?> value="C">C</option>
-                    <?php 
-                    }
+                    <?php }
                     else
                     {
                     ?>
@@ -157,24 +153,29 @@
                     }
                     ?>
                   </select>
-                </td>
-                <td><input type="checkbox" class="cbox" id=<?= $nameCheckBox ?> value="first_checkbox" <?= in_array($idCourse, $idCourses) ? 'checked' : '' ?> /></td>
+                </div>
+
+                <div class="tableColumCheck">
+                  <label class="container">
+                    <input type="checkbox" class="cbox" id=<?= $nameCheckBox ?> value="first_checkbox" <?= in_array($idCourse, $idCourses) ? 'checked' : '' ?> />
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+
                 <?php 
                 if(in_array($idCourse, $idCourses)) {?>
-                <td id="id-<?= $totalCourses ?>">
+                <div id="id-<?= $totalCourses ?>">
                   <input type="hidden" id="idCourse-<?= $totalCourses ?>" name="idCourses[]" value=<?= $idCourse?> />
-                </td>
-                <td id="priority-<?= $totalCourses ?>">
+                </div>
+                <div id="priority-<?= $totalCourses ?>">
                   <input type="hidden" id="prior-<?= $totalCourses ?>" name="priorities[]" value=<?= $priorities[array_search($idCourse,$idCourses)]?> />
-                </td>
+                </div>
                 <?php } ?>
-
-              </tr>
+              </div>
             <?php 
               $totalCourses++;
             }?>
-          </tbody>
-        </table>
+          </div>
       <?php }?>     
     </div>
 
