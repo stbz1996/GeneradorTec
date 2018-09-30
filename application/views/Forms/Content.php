@@ -23,6 +23,7 @@
   </ul>
   
 
+
   <fieldset>
     <h2 class="fs-title">Información</h2>
     <h3 class="fs-subtitle">El formulario debe ser enviado antes del <?= $dueDate ?></h3>
@@ -242,20 +243,21 @@
     <input type="button" name="next" id="next-schedules" class="next action-button" value="Siguiente" />
   </fieldset>
   
+
+
+
   <fieldset>
-    <h2 class="fs-title">Enviar</h2>
-    <h3 class="fs-subtitle"></h3>
     <div id="content">
       <div id="div-information">
-        <h1>Formulario</h1>
-        <h2>Profesor: <?= $professorFirstName?> <?= $professorLastName ?></h2>
-        <h2>Carrera: <?= $careerName ?></h2>
-        <h2>Periodo: <?= $periodNumber ?> Semestre, <?= $periodYear ?></h2>
+        <div class="showFormtxt">Información del formulario</div>
+        <div class="showInfo"><?= $professorFirstName?> <?= $professorLastName ?></div>
+        <div class="showInfo"><?= $careerName ?></div>
+        <div class="showInfo">Periodo del <?= $periodNumber ?> Semestre, <?= $periodYear ?></div>
       </div>
-      <div id="div-workload"></div>
-      <div id="div-activities"></div>
-      <div id="div-courses"></div>
-      <div id="div-schedules"></div>
+      <div class="showInfo" id="div-workload"></div>
+      <div class="showInfo" id="div-activities"></div>
+      <div class="showInfo" id="div-courses"></div>
+      <div class="showInfo" id="div-schedules"></div>
     </div>
     <div id="editor"></div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />

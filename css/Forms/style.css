@@ -340,3 +340,23 @@ body {
 /* //////////////////////////// */
 /*   END Style of checkbox  */
 /* //////////////////////////// */
+
+
+
+.showFormtxt{
+	margin: 2%;
+	font-size: 1.5vw;
+	font-weight: bold;
+}
+
+.showInfo{
+	margin: 1%;
+	text-align: left;
+	font-size: 1.2vw;
+}
+.showInfo div{
+	margin: 0.5%;
+	text-align: left;
+	margin-left: 5%;
+	font-size: 1.2vw;
+}
