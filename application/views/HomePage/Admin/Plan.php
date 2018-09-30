@@ -51,9 +51,9 @@
         </div>
       </td>
       <td>
-        <button class="btn btn-primary" onclick='editPlan("<?=base_url($ADD['ADDRESS_3']) ?>",<?= $plan->idPlan?>)'><i class="glyphicon glyphicon-pencil"></i></button>
-        <button class="btn btn-danger" onclick='deletePlan("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $plan->idPlan;?>)'><i class="glyphicon glyphicon-remove"></i></button>
-        <button class="btn btn-success" onclick='location.href="<?=base_url().$ADD['ADDRESS_1']?>/<?= $plan->idPlan ?>/<?= urlencode($plan->name) ?>"' type="button"><i class="glyphicon glyphicon-chevron-right"></i></button>
+        <button class="btn btn-primary" onclick='editPlan("<?=base_url($ADD['ADDRESS_3']) ?>",<?= $plan->idPlan?>)'><i class="glyphicon glyphicon-pencil"></i> Editar</button>
+        <button class="btn btn-danger" onclick='deletePlan("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $plan->idPlan;?>)'><i class="glyphicon glyphicon-trash"></i> Borrar</button>
+        <button class="btn btn-success" onclick='location.href="<?=base_url().$ADD['ADDRESS_1']?>/<?= $plan->idPlan ?>/<?= urlencode($plan->name) ?>"' type="button"><i class="glyphicon glyphicon-chevron-right"></i> Continuar</button>
       </td>
     </tr>
   <?php }?>

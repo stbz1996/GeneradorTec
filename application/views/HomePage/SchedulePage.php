@@ -2,7 +2,7 @@
 	$button = array(
 		'name' => 'sendData',
 		'value' => 'Guardar',
-		'class' => "btn btn-default"
+		'class' => "btn btn-primary"
 	);
 ?>
 

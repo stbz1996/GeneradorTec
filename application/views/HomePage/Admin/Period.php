@@ -25,8 +25,8 @@
               <tr>
                 <td><?php echo $period->number, "\t - \t", $period->year;?></td>
                 <td>
-                  <button class="btn btn-primary" onclick='editPeriod("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-pencil"></i></button>
-                  <button class="btn btn-danger" onclick='deletePeriod("<?=base_url().$ADD['ADDRESS_4']?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-remove"></i></button>
+                  <button class="btn btn-primary" onclick='editPeriod("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-pencil"></i> Editar</button>
+                  <button class="btn btn-danger" onclick='deletePeriod("<?=base_url().$ADD['ADDRESS_4']?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-trash"></i> Borrar</button>
                 </td>
               </tr>
               <?php }?>
@@ -59,7 +59,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3">Semestre</label>
                         <div class="col-md-9">
-                            <select class="mdb-select colorful-select dropdown-primary" id="inputNumber" name='inputNumber'>
+                            <select class="form-control" id="inputNumber" name='inputNumber'>
                                 <option value="1" selected>I</option>
                                 <option value="2">II</option>
                             </select>
@@ -69,7 +69,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3">Año</label>
                         <div class="col-md-9">
-                            <select class="mdb-select colorful-select dropdown-primary" id="inputYear" name='inputYear'>
+                            <select class="form-control" id="inputYear" name='inputYear'>
                                 <option value="<?= date("Y"); ?>" selected><?= date("Y"); ?></option>
                                 <option value="<?= date("Y")+1; ?>"><?= date("Y")+1; ?></option>
                             </select>

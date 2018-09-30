@@ -17,17 +17,13 @@ body{
 	width: 60%;
 }
 .dateInput{
-	width: 30%;
+	width: 80%;
 	padding: 1%;
 	border-radius: 5px; 
 }
 .form-control{
-	width: 30%;
-	
+	width: 80%;
 }
-
-
-
 
 /* --- Table of generate links --- */
 .profesorsTable{
@@ -44,7 +40,7 @@ body{
 	width: 7%;
 }
 .profesorTable{
-	width: 30%;
+	width: 80%;
 }
 .emailTable{
 	width: 25%;

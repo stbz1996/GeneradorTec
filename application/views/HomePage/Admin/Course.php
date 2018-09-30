@@ -61,8 +61,8 @@
                 <?php endif; ?>
                 </td>
                 <td>
-                  <button class="btn btn-primary" onclick='editCourse("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $course->idCourse ?>)'><i class="glyphicon glyphicon-pencil"></i></button>
-                  <button class="btn btn-danger" onclick='deleteCourse("<?=base_url().$ADD['ADDRESS_4']?>", <?= $course->idCourse ?>)'><i class="glyphicon glyphicon-remove"></i></button>
+                  <button class="btn btn-primary" onclick='editCourse("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $course->idCourse ?>)'><i class="glyphicon glyphicon-pencil"></i> Editar</button>
+                  <button class="btn btn-danger" onclick='deleteCourse("<?=base_url().$ADD['ADDRESS_4']?>", <?= $course->idCourse ?>)'><i class="glyphicon glyphicon-trash"></i> Borrar</button>
                 </td>
               </tr>
               <?php }?>
@@ -126,7 +126,7 @@
               <div class="form-group">
                   <label class="control-label col-md-3">Plan</label>
                   <div class="col-md-9">
-                      <select class="mdb-select colorful-select dropdown-primary" id="selectPlan" name='selectPlan'>
+                      <select class="form-control" id="selectPlan" name='selectPlan'>
                           <option value="<?= $idParentPlan ?>" selected><?= $nameParentPlan ?></option>
                           <?php foreach($plans as $plan){?>
                               <?php if ($idParentPlan != $plan->idPlan): ?>
@@ -140,7 +140,7 @@
               <div class="form-group">
                   <label class="control-label col-md-3">Bloque</label>
                   <div class="col-md-9">
-                      <select class="mdb-select colorful-select dropdown-primary" id="selectBlock" name='selectBlock'>
+                      <select class="form-control" id="selectBlock" name='selectBlock'>
                           <option value="<?= $idParent ?>" selected><?= $actual ?></option>
                           <?php foreach($blocks as $block){?>
                               <?php if ($idParent != $block->idBlock): ?>

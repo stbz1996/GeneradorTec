@@ -55,9 +55,9 @@
           </div>
           </td>
           <td>
-            <button class="btn btn-primary" onclick='editBlock("<?=base_url($ADD['ADDRESS_3']) ?>",<?= $block->idBlock?>)'><i class="glyphicon glyphicon-pencil"></i></button>
-            <button class="btn btn-danger" onclick='deleteBlock("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $block->idBlock;?>)'><i class="glyphicon glyphicon-remove"></i></button>
-            <button class="btn btn-success" onclick='location.href="<?=base_url().$ADD['ADDRESS_1']?>/<?= $block->idBlock ?>/<?= urlencode($block->name) ?>"' type="button"><i class="glyphicon glyphicon-chevron-right"></i></button>
+            <button class="btn btn-primary" onclick='editBlock("<?=base_url($ADD['ADDRESS_3']) ?>",<?= $block->idBlock?>)'><i class="glyphicon glyphicon-pencil"></i> Editar</button>
+            <button class="btn btn-danger" onclick='deleteBlock("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $block->idBlock;?>)'><i class="glyphicon glyphicon-trash"></i> Borrar</button>
+            <button class="btn btn-success" onclick='location.href="<?=base_url().$ADD['ADDRESS_1']?>/<?= $block->idBlock ?>/<?= urlencode($block->name) ?>"' type="button"><i class="glyphicon glyphicon-chevron-right"></i> Continuar</button>
           </td>
         </tr>
         <?php }?>
@@ -98,7 +98,7 @@
           <div class="form-group">
             <label class="control-label col-md-3">Plan</label>
             <div class="col-md-9">
-              <select class="mdb-select colorful-select dropdown-primary" id="select" name='select'>
+              <select class="form-control" id="select" name='select'>
               <option value="<?= $idParent ?>" selected><?= $actual ?></option>
 
               <?php foreach($plans as $plan){?>
