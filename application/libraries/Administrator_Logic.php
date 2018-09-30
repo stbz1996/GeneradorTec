@@ -48,7 +48,7 @@ class Administrator_Logic{
 		$administratorDAO_model = new AdministratorDAO_model();
 		$result = $administratorDAO_model->getAdminCareer($idAdmin);
 		if ($result != false ) {
-			$carrer = $result->row();
+			$carrer = $result;
 			return $carrer->idCareer;
 		}
 		return false;
