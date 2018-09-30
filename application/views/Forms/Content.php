@@ -126,14 +126,16 @@
             $countCourses = count($courses[$i]);
             for($j = 0; $j < $countCourses; $j++) {
               $nameRow = 'row-'.$totalCourses;
+              $divCode = 'div-code-'.$totalCourses;
+              $divName = 'div-name-'.$totalCourses;
               $nameSelect = 'select-'.$totalCourses;
               $nameCheckBox = 'cbox-'.$totalCourses;
               $nameIdCourse = 'course-'.$totalCourses;
               $idCourse = $courses[$i][$j]->getId(); ?>
               <div class="tablerow" id=<?=$nameRow ?> >
                 <div><input type="hidden" id=<?= $nameIdCourse ?> value=<?=$idCourse?> /></div>
-                <div class="tableColumCode"> <?= $courses[$i][$j]->getCode() ?> </div>
-                <div class="tableColumName"><?= $courses[$i][$j]->getName() ?> </div>
+                <div class="tableColumCode" id=<?= $divCode ?>><?= $courses[$i][$j]->getCode() ?> </div>
+                <div class="tableColumName" id=<?= $divName ?>><?= $courses[$i][$j]->getName() ?> </div>
                 <div class="tableColumPriority">
                   <select id=<?=$nameSelect ?> <?= in_array($idCourse, $idCourses) ? 'disabled' : '' ?>>
                     <?php 

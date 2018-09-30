@@ -321,8 +321,10 @@ function addCoursesText()
 	for(i = 0; i < idCourses.length; i++)
 	{
 		var idCourse = idCourses[i].id.split("-")[1];
-		var code = $("#row-"+idCourse+" td:nth-child(2)").text();
-		var name = $("#row-"+idCourse+" td:nth-child(3)").text();
+		var code = $("#div-code-"+idCourse).text();
+		var name = $("#div-name-"+idCourse).text();
+		alert(code);
+		alert(name);
 		var priority = priorities[i].value;
 		$('#div-courses').append('<h5>'+code+'\t' +name+'\t, prioridad: '+priority+'</h5>');
 		//$("#element td:nth-child(2)").text('ChangedText');
