@@ -255,7 +255,7 @@ class Administrator_Logic{
  	public function deletePlan($data)
  	{
  		$planDAO_model = new PlanDAO_model();
- 		$planDAO_model->delete($data);
+ 		return $planDAO_model->delete($data);
  	}
 
 

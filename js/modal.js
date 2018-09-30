@@ -576,6 +576,7 @@ function deleteAll(url, id, message)
             dataType: "JSON",
             success: function(response)
             {
+                console.log(response);
                 if (response == true)
                 {
                     $('#modal_form').modal('hide');
@@ -610,7 +611,7 @@ function deletePlan(url, id)
     var message = [
         '¿Está seguro de eliminar el plan?',
         'Plan eliminado.',
-        "No se ha borrado el plan. No se realizarán los cambios."
+        "No se ha borrado el plan. Verifique que no tenga información asociada. No se realizarán los cambios."
     ];
 
     deleteAll(url, id, message);
@@ -621,7 +622,7 @@ function deleteBlock(url, id)
     var message = [
         '¿Está seguro de eliminar el bloque?',
         'Bloque eliminado.',
-        "No se ha borrado el bloque. No se realizarán los cambios."
+        "Erro al borrar el bloque. Verifique que no tenga cursos asociados. No se realizarán los cambios."
     ];
 
     deleteAll(url, id, message);
@@ -686,4 +687,3 @@ function assignAdvanceDays(url)
         }
     });
 }
-   

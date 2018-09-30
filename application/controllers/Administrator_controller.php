@@ -151,10 +151,9 @@ class Administrator_controller extends CI_Controller
 	/****************************************
 	- Delete a plan (only if doesn't have any block reference).
 	****************************************/
-	public function deletePlan($id)
+	public function deletePlan($pId)
 	{
-		$data['id'] = $id;
-		$result = $this->administrator_logic->deletePlan($data);
+		$result = $this->administrator_logic->deletePlan($pId);
 		return $result;
 	}
 
@@ -248,10 +247,9 @@ class Administrator_controller extends CI_Controller
     /****************************************
 	- Delete a block (only if doesn't have any block reference).
 	****************************************/
-	public function deleteBlock($id)
+	public function deleteBlock($pId)
 	{
-		$data['id'] = $id;
-		$result = $this->administrator_logic->deleteBlock($data);
+		$result = $this->administrator_logic->deleteBlock($pId);
 		return $result;
 	}
 

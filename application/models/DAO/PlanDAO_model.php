@@ -94,20 +94,32 @@ class PlanDAO_model extends CI_Model{
         return $query->row();
     }
 
+	/****************************************
+    - Check if there is a unique plan associated with information in database
+    ****************************************/
+    private function validatePlan($pId)
+    {
+        $this->db->from('Block');
+        $this->db->where('idPlan', $pId);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
 
 	/****************************************
 	- Delete the plan in the database.
 	****************************************/
-	public function delete($Plan)
+	public function delete($pId)
 	{
-		$this->db->where('idPlan', $Plan['id']);
-		$this->db->delete('Plan');
-		
-        if($this->db->affected_rows())
+		$validatePlan = $this->validatePlan($pId);
+
+        if($validatePlan == 0)
         {
+            $this->db->where('idPlan', $pId);
+            $this->db->delete('Plan');
             echo 'true';
             return;
         }
+
         else
         {
             echo 'false';

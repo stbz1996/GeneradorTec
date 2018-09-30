@@ -79,21 +79,34 @@ class BlockDAO_model extends CI_Model{
         $this->db->where('idBlock', $id);
         $query = $this->db->get();
         return $query->row();
+	}
+	
+	/****************************************
+    - Check if there is a unique block associated with a course
+    ****************************************/
+    private function validateBlockInCourses($pId)
+    {
+        $this->db->from('Course');
+        $this->db->where('idBlock', $pId);
+        $query = $this->db->get();
+        return $query->num_rows();
     }
 
 	/****************************************
 	- Delete the block in the database.
 	****************************************/
-	public function delete($Block)
+	public function delete($pId)
 	{
-		$this->db->where('idBlock', $Block['id']);
-		$this->db->delete('Block');
-		
-        if($this->db->affected_rows())
+		$validateBlockInCourses = $this->validateBlockInCourses($pId);
+
+        if($validateBlockInCourses == 0)
         {
+            $this->db->where('idBlock', $pId);
+            $this->db->delete('Block');
             echo 'true';
             return;
         }
+
         else
         {
             echo 'false';
