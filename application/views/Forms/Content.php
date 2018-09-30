@@ -23,7 +23,6 @@
   </ul>
   
 
-  <!-- fieldsets -->
   <fieldset>
     <h2 class="fs-title">Información</h2>
     <h3 class="fs-subtitle">El formulario debe ser enviado antes del <?= $dueDate ?></h3>
@@ -45,9 +44,12 @@
     <input type="button" name="next" class="next action-button" value="Siguiente" />   
   </fieldset>
   
+
   <fieldset>
     <h2 class="fs-title">Carga</h2>
-    <h3 class="fs-subtitle"> Seleccione la carga de trabajo para el semestre <?= $periodNumber?> del <?= $periodYear ?>, la cual influirá en el mínimo de cursos posibles a asignar en este periodo.</h3>
+    <h3 class="fs-subtitle"> 
+      Seleccione la carga de trabajo para el semestre <?= $periodNumber?> del <?= $periodYear ?>, la cual influirá en el mínimo de cursos posibles a asignar en este periodo.
+    </h3>
     <div>
       <select id="workload_options" name="workload_options" class="comboBoxCarga">
         <!--<option value="25">25% (1 curso)</option>
@@ -62,44 +64,44 @@
         <?php }?>
       </select>
     </div>
-    <input type="button" name="previous" class="previous action-button" value="Anterior" />
+    <input type="button" name="previous" class="previous action-button" value="Anterior"/>
     <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">
     <input type="button" name="next" id="next-workload" class="next action-button" value="Siguiente" />
     <!--<input type='submit' name='submit' class="submit action-button" value='Submit' />-->
   </fieldset>
 
+
   <fieldset>
     <h2 class="fs-title">Actividades</h2>
-    <h3 class="fs-subtitle"> Ingrese las actividades que considera le reducen la carga de trabajo, por lo que afectará la carga que brindó en la sección anterior. </h3>
-
+    <h3 class="fs-subtitle"> 
+      Ingrese las actividades que considera le reducen la carga de trabajo, por lo que afectará la carga que brindó en la sección anterior. 
+    </h3>
     <div>
       <input type="button" name="add" id="add" class="btn_add action-button" value="Agregar Actividad" /></input>
-      
       <div>
-      <table id="dynamic_field" name="dynamic_field" class="dynamic_table">
-      <?php 
-      $totalActivities = count($activities);
-      for($i = 0; $i < $totalActivities; $i++) {
-        $description = $activities[$i]->getDescription();
-        $workPorcent = $activities[$i]->getWorkPorcent();
-      ?>
-        <tr id="row<?= $i+1?>">
-          <td>
-            <input type="text" name="activityDescription[]" maxlength="100" id="descriptionActivity" placeholder="Ingrese actividad" value="<?= $description?>" />
-          </td>
-          <td>
-            <input type="number" name="workPorcent[]" min="0" max="100" value="<?= $workPorcent?>" class="textnum">
-          </td>
-          <td>
-            <input type="button" name="remove" id="<?=$i+1?>" class="btn_remove action-button" value="Eliminar" />
-          </td>
+        <table id="dynamic_field" name="dynamic_field" class="dynamic_table">
+        <?php 
+        $totalActivities = count($activities);
+        for($i = 0; $i < $totalActivities; $i++) {
+          $description = $activities[$i]->getDescription();
+          $workPorcent = $activities[$i]->getWorkPorcent();
+        ?>
+          <tr id="row<?= $i+1?>">
+            <td>
+              <input type="text" name="activityDescription[]" maxlength="100" id="descriptionActivity" placeholder="Ingrese actividad" value="<?= $description?>" />
+            </td>
+            <td>
+              <input type="number" name="workPorcent[]" min="0" max="100" value="<?= $workPorcent?>" class="textnum">
+            </td>
+            <td>
+              <input type="button" name="remove" id="<?=$i+1?>" class="btn_remove action-button" value="Eliminar" />
+            </td>
 
-        </tr>
-      <?php }?>
-      </table>
+          </tr>
+        <?php }?>
+        </table>
       
       <!--<input type="number" id="activity_porcent" min="0" value="0" class="textnum">-->
-      
       </div>
     </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
@@ -110,8 +112,9 @@
 
   <fieldset>
     <h2 class="fs-title">Cursos</h2>
-    <h3 class="fs-subtitle">Seleccione los cursos que quiere impartir, debe seleccionar un mínimo de cursos en relación a la carga de trabajo</h3>
-
+    <h3 class="fs-subtitle">
+      Seleccione los cursos que quiere impartir, debe seleccionar un mínimo de cursos en relación a la carga de trabajo
+    </h3>
     <div class="listOfcourses">
       <?php 
       $countPlans = count($plans);
@@ -177,61 +180,61 @@
           </div>
       <?php }?>     
     </div>
-
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">
     <input type="button" name="next" id="next-courses" class="next action-button" value="Siguiente" />
   </fieldset>
 
+
   <fieldset>
     <h2 class="fs-title">Horarios</h2>
     <h3 class="fs-subtitle">Seleccione los posibles horarios para impartir los cursos que seleccionó anteriormente</h3>
     <div>
-  <div class="mainContainer">
-    <div class="fileone">
-      <div class="itemf1"> Hora </div>
-      <div class="itemf1"> Lunes </div>
-      <div class="itemf1"> Martes </div>
-      <div class="itemf1"> Miercoles </div>
-      <div class="itemf1"> Jueves </div>
-      <div class="itemf1"> Viernes </div>
-      <div class="itemf1"> Sabado </div>
-    </div>
-
-    <?php 
-    for ($i=1; $i < 15; $i++) { ?>
-      <div class="fileone">
-      <!-- It is the hour -->
-      <div class="itemCol1"> <?= $hours[$i] ?> </div>
-      <?php 
-      for ($k=1; $k < 7; $k++) { ?>
-        <!-- It is a normal space in schedule -->
-        <?php 
-          $baseId = $days[$i][$k]['id'];
-          $baseState = $days[$i][$k]['state'];
-          $Did = 'Div-'.$baseId;
-          $Mid = 'Inp-'.$baseId;
-        ?>
-        <div id="<?= $Did ?>" <?php if($baseState) {?>
-          onclick="changeState('<?= $Mid ?>', '<?= $Did ?>')" <?php }?> 
-        class="item">.
-          <input class="hiddenItem" id="<?= $Mid ?>" value="<?= $baseState ?>" type="hidden" name="<?= $Mid ?>">
-          <input type="hidden" id="day-<?= $baseId ?>" value="<?=$days[$i][$k]['day']?>">
-          <input type="hidden" id="initialTime-<?= $baseId ?>" value="<?=$days[$i][$k]['initialTime']?>">
-          <input type="hidden" id="finalTime-<?= $baseId ?>" value="<?=$days[$i][$k]['finishTime']?>">
+      <div class="mainContainer">
+        <div class="fileone">
+          <div class="itemf1"> Hora </div>
+          <div class="itemf1"> Lunes </div>
+          <div class="itemf1"> Martes </div>
+          <div class="itemf1"> Miercoles </div>
+          <div class="itemf1"> Jueves </div>
+          <div class="itemf1"> Viernes </div>
+          <div class="itemf1"> Sabado </div>
         </div>
-      <?php } ?>            
-      </div>
-    <?php } ?>
-    <?php
-    if($formSchedules){
-      foreach($formSchedules as $schedule){?>
-        <input type="hidden" name="oldSchedules[]" value="<?=$schedule?>">
-      <?php }
-    }?>
 
-  </div>
-</div>
+        <?php 
+        for ($i=1; $i < 15; $i++) { ?>
+          <div class="fileone">
+          <!-- It is the hour -->
+          <div class="itemCol1"> <?= $hours[$i] ?> </div>
+          <?php 
+          for ($k=1; $k < 7; $k++) { ?>
+            <!-- It is a normal space in schedule -->
+            <?php 
+              $baseId = $days[$i][$k]['id'];
+              $baseState = $days[$i][$k]['state'];
+              $Did = 'Div-'.$baseId;
+              $Mid = 'Inp-'.$baseId;
+            ?>
+            <div id="<?= $Did ?>" <?php if($baseState) {?>
+              onclick="changeState('<?= $Mid ?>', '<?= $Did ?>')" <?php }?> 
+            class="item">.
+              <input class="hiddenItem" id="<?= $Mid ?>" value="<?= $baseState ?>" type="hidden" name="<?= $Mid ?>">
+              <input type="hidden" id="day-<?= $baseId ?>" value="<?=$days[$i][$k]['day']?>">
+              <input type="hidden" id="initialTime-<?= $baseId ?>" value="<?=$days[$i][$k]['initialTime']?>">
+              <input type="hidden" id="finalTime-<?= $baseId ?>" value="<?=$days[$i][$k]['finishTime']?>">
+            </div>
+          <?php } ?>            
+          </div>
+        <?php } ?>
+        <?php
+        if($formSchedules){
+          foreach($formSchedules as $schedule){?>
+            <input type="hidden" name="oldSchedules[]" value="<?=$schedule?>">
+          <?php }
+        }?>
+
+      </div>
+    </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">
     <input type="button" name="next" id="next-schedules" class="next action-button" value="Siguiente" />
