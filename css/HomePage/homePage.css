@@ -174,3 +174,13 @@ h1#tituloPlanes {
 	border-style: dotted;
 	background-color: #b3e6ff;
 }
+
+
+
+.advanceDaysSelect{
+	width: 5%;
+	font-size: 1.2vw;
+	padding: 0.5%;
+	margin-bottom: 1%;
+
+}
