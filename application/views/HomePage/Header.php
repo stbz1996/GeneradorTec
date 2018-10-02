@@ -34,6 +34,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/homePage.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/selectHours.css" />
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?=base_url()?>css/HomePage/admin.css" />
+    <link rel="stylesheet" href="<?=base_url()?>css/HomePage/GenerateLinks.css">
+
     <link rel="shortcut icon" type="image/png" href="<?=base_url()?>img/favicon.png" />
 </head>
 

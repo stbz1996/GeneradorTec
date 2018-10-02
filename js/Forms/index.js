@@ -297,7 +297,7 @@ function addWorkloadText()
 	var workloadSelect = document.getElementById("workload_options");
 	var workloadValue = workloadSelect.options[workloadSelect.selectedIndex].value;
 	$('#div-workload').empty();
-	$('#div-workload').append('<h4> Carga de trabajo: '+workloadValue+'%</h4>');
+	$('#div-workload').append('<h4> Carga de trabajo seleccionada: '+workloadValue+'%</h4>');
 }
 
 function addActivitiesText()
@@ -305,10 +305,10 @@ function addActivitiesText()
 	var activitiesDescription = $('input[name^="activityDescription"]');
 	var activitiesWorkPorcent = $('input[name^="workPorcent"]');
 	$('#div-activities').empty();
-	$('#div-activities').append("<h4>Actividades</h4>");
+	$('#div-activities').append("<h4>Actividades seleccionadas: </h4>");
 	for(i = 0; i < activitiesDescription.length; i++)
 	{
-		$('#div-activities').append('<h5>'+activitiesDescription[i].value+': ' +activitiesWorkPorcent[i].value+ '</h5>');
+		$('#div-activities').append('<div> - '+activitiesDescription[i].value+' con un ' +activitiesWorkPorcent[i].value+ '%</div>');
 	}
 }
 
@@ -317,14 +317,14 @@ function addCoursesText()
 	var idCourses = $('input[name^="idCourses"]');
 	var priorities = $('input[name^="priorities"]');
 	$('#div-courses').empty();
-	$('#div-courses').append("<h4>Cursos</h4>");
+	$('#div-courses').append("<h4>Cursos seleccionados:</h4>");
 	for(i = 0; i < idCourses.length; i++)
 	{
 		var idCourse = idCourses[i].id.split("-")[1];
-		var code = $("#row-"+idCourse+" td:nth-child(2)").text();
-		var name = $("#row-"+idCourse+" td:nth-child(3)").text();
+		var code = $("#div-code-"+idCourse).text();
+		var name = $("#div-name-"+idCourse).text();
 		var priority = priorities[i].value;
-		$('#div-courses').append('<h5>'+code+'\t' +name+'\t, prioridad: '+priority+'</h5>');
+		$('#div-courses').append('<div> - '+code+'\t'+name+' con prioridad '+priority+'</div>');
 		//$("#element td:nth-child(2)").text('ChangedText');
 
 	}
@@ -334,7 +334,7 @@ function addSchedulesText()
 {
 	var schedules = $('input[name^="Inp-"]');
 	$('#div-schedules').empty();
-	$('#div-schedules').append("<h4>Horarios</h4>");
+	$('#div-schedules').append("<h4>Horarios seleccionados:</h4>");
 	
 	for(i = 0; i < schedules.length; i++)
 	{
@@ -345,7 +345,7 @@ function addSchedulesText()
 			var initialTime = $("#initialTime-"+id+"").val();
 			var finishTime = $("#finalTime-"+id+"").val();
 
-			$('#div-schedules').append("<h5>Dia: "+day+ ", Hora inicial: "+initialTime+ ", Hora final: "+ finishTime+"</h5>");
+			$('#div-schedules').append("<div> - "+day+ " de "+initialTime+ " a "+ finishTime+"</div>");
 		}
 	}
 }

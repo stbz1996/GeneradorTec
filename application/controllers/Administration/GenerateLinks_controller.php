@@ -76,15 +76,16 @@ class GenerateLinks_controller extends CI_Controller
 	***********************************************************/
 	public function generateLinks()
 	{
-		// Get data from form 
+		// Get data from viw 
 		$idCareer = $_SESSION['idCareer'];
-		$date  = explode("-", $this->input->post('date'));
+		$inputDate = $_POST['dateForLinks'];
+		$date  = explode("-", $inputDate);
 		$year  = $date[0];
 		$month = $date[1];
 		$day   = $date[2];
 		$sendDate = $year."-".$month."-".$day;
 		$dateForEmail = $day."-".$month."-".$year;
-		$period   = $this->input->post('period');
+		$period   = $_POST['periodForLinks'];
 		
 		// Find active professors
 		$data['profesors'] = $this->administrator_logic->findProfessors($idCareer);
@@ -105,24 +106,14 @@ class GenerateLinks_controller extends CI_Controller
 						$email = $p->email;
 						$hash = $hashCode;
 						$this->sendMailToProfessor($professorName, $email, $hash, $dateForEmail);
-						// aqui agrego el nombre del profesor a una lista 
+						// add the professor to the email sent list 
 						$listOfEmailSent[] = $professorName;
 					}
 				}
 			}
 		}
-		else{
-			$this->showError('No hay profesores activos');
-		}
-
-		$result = 'El correo fue enviado a: ';
-		foreach ($listOfEmailSent as $k) {
-			$result .= $k.' - ';
-		}
-
-		// Call view
-		$this->session->set_userdata('LinksState', $result);
-		$this->LoadGenerateLinksView();
+		// Send data to Ajax
+		echo json_encode($listOfEmailSent);
 	}
 
 

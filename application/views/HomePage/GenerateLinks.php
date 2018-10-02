@@ -3,10 +3,11 @@
 		'name' => 'sendData',
 		'value' => 'Enviar Links',
 		'class' => "btn btn-default",
+		'onclick' => 'x()',
 	);
 ?>
 
-<div class="titles">
+<div class="titles" id="titles">
   	<h1>Generación automática de links</h1>
    	<ul>
 		<li type="disc"> 
@@ -19,14 +20,14 @@
   	<p></p>
     </div>
     <hr>
-    <?= form_open("/Administration/GenerateLinks_controller/generateLinks") ?>
+    <form id="LinksForm">
         <div class="containerDate">
 			<h4>Seleccione la fecha de vencimiento de los formularios</h4>
-				<input class="dateInput" required type="date" name="date" min="<?php echo date("Y-m-d"); ?>" value="<?php echo date("Y-m-d"); ?>">
+				<input id="dateForLinks" class="dateInput" required type="date" name="date" min="<?php echo date("Y-m-d"); ?>" value="<?php echo date("Y-m-d"); ?>">
 		</div> 
 		<div class="containerDate">
 		    <h4>Seleccione el periodo de validez de los formularios</h4>
-			<select class="form-control" name="period" required>
+			<select id="periodForLinks" class="form-control" name="period" required>
 			<?php 
 				foreach ($periods as $p) { ?>
 					<option value=<?= $p->idPeriod ?>> <?= $p->number.' - '.$p->year ?></option>
@@ -60,8 +61,10 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-					<?= form_submit($button) ?>
+					<input type="button" name="sendData" value="Enviar Links" class="btn btn-default" onclick="showEmailSent()">
 				</div>
 			</form> 
-			<?= form_close() ?>
 		</div>
+	</form>
+
+<div id="loader"></div>

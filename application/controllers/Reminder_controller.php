@@ -15,7 +15,6 @@ class Reminder_controller extends CI_Controller {
 		$this->load->model('DAO/ProfessorDAO_model');
 		$this->load->model('DTO/FormDTO');
 		$this->load->model('DTO/ProfessorDTO');
-
 		$this->Reminder_Logic = new Reminder_Logic();
 	}
 

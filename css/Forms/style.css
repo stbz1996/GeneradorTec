@@ -219,3 +219,144 @@ body {
 #msform .textnum{
 	width: 80px;
 }
+
+
+.coursesPlan{
+	padding: 0.5%;
+	font-size: 1.4vw;
+	font-weight: bold;
+}
+.listOfcourses{
+	width: 100%;
+	padding: 1%;
+	margin: 1%;
+}
+
+.tablerow{
+	margin: 0.5%;
+	padding: 0.5%;
+	width: 60%;
+	margin-left: 19.5%;
+	font-size: 1.1vw;
+	border: 1px solid black; 
+	overflow: hidden;
+}
+
+.tableColumCode{
+	width: 10%;
+	float: left;
+	margin-top: 0.5%;
+}
+.tableColumName{
+	width: 78%;
+	float: left;
+	margin-top: 0.2%;
+}
+/* //////////////////////////// */
+/*   Style of select box  */
+/* //////////////////////////// */
+.tableColumPriority{
+	width: 5%;
+	float: left;
+}
+.tableColumPriority select{
+	border-radius: 5px;
+}
+/* //////////////////////////// */
+/*  End of Style of select box  */
+/* //////////////////////////// */
+
+/* //////////////////////////// */
+/*   Style of checkbox  */
+/* //////////////////////////// */
+.tableColumCheck{
+	width: 5%;
+	margin-left: 2%;
+	float: left;
+}
+.container {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    left: 0;
+    height: 25px;
+    width: 85%;
+    margin: 0%;
+    margin-top: -10%;
+    background-color: #eee;
+    border-radius: 60px;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+    background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+/* //////////////////////////// */
+/*   END Style of checkbox  */
+/* //////////////////////////// */
+
+
+
+.showFormtxt{
+	margin: 2%;
+	font-size: 1.5vw;
+	font-weight: bold;
+}
+
+.showInfo{
+	margin: 1%;
+	text-align: left;
+	font-size: 1.2vw;
+}
+.showInfo div{
+	margin: 0.5%;
+	text-align: left;
+	margin-left: 5%;
+	font-size: 1.2vw;
+}

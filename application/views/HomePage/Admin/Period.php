@@ -9,37 +9,39 @@
 
 <!-- Todo el contenido -->
 <div>
-    <button class="btn btn-primary" onclick="addPeriod()"><i class="glyphicon glyphicon-plus"></i> Agregar Periodo</button>
+    <button class="btn btn-primary" onclick="addPeriod()">
+        <i class="glyphicon glyphicon-plus"></i> 
+        Agregar Periodo
+    </button>
     <br/><br/>
         
     <table id="table_id" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>Periodo</th>
-                <th></th>
+                <th>Editar o eliminar</th>
             </tr>
         </thead>
 
         <tbody>
             <?php foreach($periods as $period){?>
               <tr>
-                <td><?php echo $period->number, "\t - \t", $period->year;?></td>
                 <td>
-                  <button class="btn btn-primary" onclick='editPeriod("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-pencil"></i> Editar</button>
-                  <button class="btn btn-danger" onclick='deletePeriod("<?=base_url().$ADD['ADDRESS_4']?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-trash"></i> Borrar</button>
+                    <button class="btn btn-primary" onclick='editPeriod("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-pencil"></i> 
+                    Editar
+                    </button>
+                    <button class="btn btn-danger" onclick='deletePeriod("<?=base_url().$ADD['ADDRESS_4']?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-trash"></i> 
+                        Borrar
+                    </button>
+                    <?php echo $period->number, "\t - \t", $period->year;?>
                 </td>
               </tr>
               <?php }?>
         </tbody>
-
-        <tfoot>
-            <tr>
-                <th></th>
-                <th></th>
-            </tr>
-        </tfoot>
     </table>
 </div>
+
+
 
 <!-- Bootstrap modal -->
 <div class="modal fade" id="modal_form" role="dialog">

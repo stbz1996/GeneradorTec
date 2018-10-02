@@ -21,7 +21,7 @@
 	);
 	$passwordAgain = array(
 		'name' => 'inputPasswordAgain',
-		'placeholder' => 'repita contraseña',
+		'placeholder' => 'Repita contraseña',
 		'class' => 'form-control',
 		'type' => 'password',
 		'id' => 'inputPasswordAgain',
@@ -30,32 +30,28 @@
 	);	
 	$button = array(
 		'name' =>  'submitButton',
-		'value' => 'Nuevo Administrador',
-		'class' => "btn btn-primary"
+		'value' => 'Agregar administrador',
+		'class' => "btn btn-default"
 	);
 ?>
 
-
-<main class="page-content">
-	<div class="container-fluid">
-		<div class="row">
-			<div>
-              	<h1>Administración</h1>
-		   		<p>Por favor ingrese la información del nuevo administrador: </p>
-            </div>
-            <hr>
-            <div>
-            	<form id="Login">
-		        	<div class="form-group"> <?= form_input($user) ?> </div>
-		        	<div class="form-group"> <?= form_input($password) ?> </div>
-		        	<div class="form-group"> <?= form_input($passwordAgain) ?> </div>
-		   		</form>
-            </div>
-            
-            <div class="modal-footer">
-            	<?= form_submit($button) ?>
-            </div>
-			<?= form_close() ?> 
-		</div>
-    </div>
-</main>
+<div class="adminContainer">
+	<div class="row">
+		<div>
+          	<h1>Administración</h1>
+	   		<p>Por favor ingrese la información del nuevo administrador: </p>
+        </div>
+        <hr>
+        <div>
+         	<form id="Login">
+	        	<div class="form-group"> <?= form_input($user) ?> </div>
+	        	<div class="form-group"> <?= form_input($password) ?> </div>
+	        	<div class="form-group"> <?= form_input($passwordAgain) ?> </div>
+	   		</form>
+        </div>            
+        <div class="modal-footer">
+          	<?= form_submit($button) ?>
+        </div>
+		<?= form_close() ?> 
+	</div>
+</div>

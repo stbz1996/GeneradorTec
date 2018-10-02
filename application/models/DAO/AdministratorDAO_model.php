@@ -37,7 +37,7 @@ class AdministratorDAO_model extends CI_Model
 		$this->db->where('idAdministrator', $idAdmin);
 		try{ $query = $this->db->get(); }
 		catch (Exception $e){ return false; }		
-		if ($query->num_rows() > 0) return $query;
+		if ($query->num_rows() > 0) return $query->row();
 		else return false;
 	}
 
