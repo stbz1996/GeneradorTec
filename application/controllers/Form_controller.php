@@ -41,6 +41,11 @@ class Form_controller extends CI_Controller {
 
 	function index()
 	{
+		//Verify if p value exist
+		if(!isset($_GET['p']))
+		{
+			return;
+		}
 		$this->session->set_userdata('hashCode', $_GET['p']);
 		$this->callForm();
 	}
@@ -56,9 +61,15 @@ class Form_controller extends CI_Controller {
 
 		//Get form by hashcode
 		$queryForm = $this->Form_Logic->validateForm($hashCode);
+
+		//Verify if form doesn't exist
+		if(!$queryForm)
+		{
+			return;
+		}
 		$newForm = $queryForm;
 		$this->Form = $this->getFormInformation($newForm);
-	
+
 		//Set global variables
 		$this->session->set_userdata('idForm', $this->Form->getIdForm());
 		$this->session->set_userdata('idProfessor', $this->Form->getIdProfessor());
@@ -244,30 +255,57 @@ class Form_controller extends CI_Controller {
 		$priorities = json_decode($_POST['priorities']);
 		$schedules = json_decode($_POST['schedules']);
 		$this->validateDataFromView($saveState, $workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities, $schedules);
-		
-		/*$workload = $this->input->post('workload_options');
-		$activitiesDescription = $this->input->post('activityDescription');
-		$activitiesWorkPorcent = $this->input->post('workPorcent');
-		$idCourses = $this->input->post('idCourses');
-		$priorities= $this->input->post('priorities');
-
-		$this->validateDataFromView($workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities);*/
 	}
 
+	/****************************************
+	*Function that validate all data form 	*
+	*view and save it in database. 			*
+	*										*
+	*Input:									*
+	*	-$saveState: Integer, state to save *
+	*	information. (0 = just save, 1 = sa-*
+	*	ve and send). 						*
+	*	-$workload: Integer, workload assign*
+	*	by the professor. 					*
+	*	-$activitiesDescription: Array, list*
+	*	of description of all activities. 	*
+	*	-$activitiesWorkPorcent: Array, list*
+	*	of porcent of all activities. 		*
+	*	-$idCourses: Array, list of id of 	*
+	*	courses chosen by professor.		*
+	*	-$priorities: Array, list of priori-*
+	*	ty of each course.					*
+	*	-$schedules: Array, list of all 	*
+	*	schedules chosen by professor.		*
+	*****************************************/
 	function validateDataFromView($saveState, $workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities, $schedules)
 	{
 		$idForm = $_SESSION['idForm'];
 		$idProfessor = $_SESSION['idProfessor'];
 		
+		/* Save data (workload, activities, courses and schedules)*/
 		$this->insertWorkload($idProfessor, $workload);
 		$this->manageActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
 		$this->assignCourses($idForm, $idCourses, $priorities);
 		$this->saveScheduleInformation($schedules);
+
+		/* Verify if professor wanna send the information*/
 		if($saveState)
 			$this->desactivateForm($idForm);
 
 	}
 
+	/****************************************
+	*Function that manage all activities 	*
+	*created by professor. 		 			*
+	*										*
+	*Input:									*
+	*	-$idForm: Integer, id of form. 		*
+	*	-$activitiesDescription: Array, list*
+	*	of description of all activities. 	*
+	*	-$activitiesWorkPorcent: Array, list*
+	*	of porcent of all activities. 		*
+	*****************************************/
 	function manageActivities($idForm, $activitiesDescription, $activitiesWorkPorcent)
 	{
 		//Prepare data
@@ -275,18 +313,37 @@ class Form_controller extends CI_Controller {
 		$totalOldActivities = count($oldActivities);
 		$totalNewActivities = count($activitiesDescription);
 
+		/* Update old activities with the new information */
 		$this->updateActivities($totalOldActivities, $totalNewActivities, $oldActivities, $activitiesWorkPorcent, $activitiesDescription);
 
+		/* Case they are more old activities (activities in DB) than the new ones*/
 		if($totalOldActivities >= $totalNewActivities)
 		{
-			$this->deleteOldActivities($oldActivities, $totalNewActivities, $totalOldActivities);
+			$this->deleteOldActivities($totalOldActivities, $totalNewActivities, $oldActivities);
 		}
+
+		/* Case they are more new activities than the old ones (activities in DB)*/
 		else if($totalOldActivities < $totalNewActivities)
 		{
 			$this->insertNewActivities($idForm, $activitiesWorkPorcent, $activitiesDescription, $totalOldActivities);
 		}
 	}
 
+	/****************************************
+	*Function that update activities from DB*
+	*										*
+	*Input:									*
+	*	-$totalOldActivities: Integer, total*
+	*	of old activities. 					*
+	*	-$totalNewActivities: Integer, total*
+	*	of new activities. 					*
+	*	-$oldActivities: Array, list of old *
+	*	activities stored in DB.			*
+	*	-$activitiesDescription: Array, list*
+	*	of description of all activities. 	*
+	*	-$activitiesWorkPorcent: Array, list*
+	*	of porcent of all activities. 		*
+	*****************************************/
 	function updateActivities($totalOldActivities, $totalNewActivities, $oldActivities, $activitiesWorkPorcent, $activitiesDescription)
 	{
 		$newActivities = array();
@@ -332,13 +389,26 @@ class Form_controller extends CI_Controller {
 				$newActivities[] = $newActivity;				
 			}
 		}
+
+		/* Update the activities in DB */
 		if(count($newActivities))
 		{
 			$this->Form_Logic->updateActivities($newActivities);
 		}
 	}
 
-	function deleteOldActivities($oldActivities, $totalNewActivities, $totalOldActivities)
+	/****************************************
+	*Function that delete activities from DB*
+	*										*
+	*Input:									*
+	*	-$totalOldActivities: Integer, total*
+	*	of old activities. 					*
+	*	-$totalNewActivities: Integer, total*
+	*	of new activities. 					*
+	*	-$oldActivities: Array, list of old *
+	*	activities stored in DB.			*
+	*****************************************/
+	function deleteOldActivities($totalOldActivities, $totalNewActivities, $oldActivities)
 	{
 		//Delete the old activities left
 		$oldActivities = array_slice($oldActivities, $totalNewActivities);
@@ -352,6 +422,19 @@ class Form_controller extends CI_Controller {
 		}
 	}
 
+	/****************************************
+	*Function that insert new activities 	*
+	*from DB. 								*
+	*										*
+	*Input:									*
+	*	-$idForm: Integer, id of form. 		*
+	*	-$activitiesWorkPorcent: Array, list*
+	*	of porcent of all activities. 		*
+	*	-$activitiesDescription: Array, list*
+	*	of description of all activities. 	*
+	*	-$totalOldActivities: Integer, total*
+	*	of old activities. 					*
+	*****************************************/
 	function insertNewActivities($idForm, $activitiesWorkPorcent, $activitiesDescription, $totalOldActivities)
 	{
 		$newDescription = array_slice($activitiesDescription, $totalOldActivities);
@@ -375,10 +458,21 @@ class Form_controller extends CI_Controller {
 		$this->Form_Logic->validateWorkload($idProfessor, $workload);
 	}
 
+	/****************************************
+	*Function that insert activities in DB	*
+	*										*
+	*Input:									*
+	*	-$idForm: Integer, id of form. 		*
+	*	-$activitiesWorkPorcent: Array, list*
+	*	of porcent of all activities. 		*
+	*	-$activitiesDescription: Array, list*
+	*	of description of all activities. 	*
+	*****************************************/
 	function insertActivities($idForm, $activitiesDescription, $activitiesWorkPorcent)
 	{		
 		$totalActivities = count($activitiesDescription);
 
+		/* Create new activityDTO each time and validate it*/
 		for($i = 0; $i < $totalActivities; $i++)
 		{	
 			$activityDTO = new ActivityDTO();
@@ -547,32 +641,7 @@ class Form_controller extends CI_Controller {
 			);
 		}
 		$this->Form_Logic->insertScheduleForm($data);
-		
-
-		// All schedules on DB 
-		/*
-		$schedules = $this->Form_Logic->getAllSchedules();
-		$this->Form_Logic->deleteScheduleForm($idForm);
-		foreach ($schedules as $schedule) 
-		{
-			$idSchedule = $schedule['id'];
-			$state = $this->input->post('Inp-'.$idSchedule);	
-			// Create the object 
-			$data = array();
-			if($state)
-			{
-				$data[] = array(
-					'idForm' => $idForm,
-					'idSchedule' => $idSchedule
-				);
-			}
-			if(count($data))
-			{
-				$this->Form_Logic->insertScheduleForm($data);
-			}			
-			
-		}*/
-		$this->showScheduleSelector();
+		//$this->showScheduleSelector();
 	}
 }
 ?>

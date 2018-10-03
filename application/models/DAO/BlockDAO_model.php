@@ -125,4 +125,19 @@ class BlockDAO_model extends CI_Model{
 		$this->db->where('idBlock', $Block['idBlock']);
 		$this->db->update('Block', $changes);
 	}
+
+	/****************************************
+	- Get total of active blocks of a plan
+	****************************************/
+	public function getTotalActiveBlocks($idPlan)
+	{
+		$this->db->select('*');
+		$this->db->from('Block');
+		$this->db->where('idPlan', $idPlan);
+		$this->db->where('state', 1);
+
+		$query = $this->db->get();
+
+		return $query->num_rows();
+	}
 }
