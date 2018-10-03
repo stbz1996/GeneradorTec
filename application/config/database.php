@@ -30,7 +30,6 @@ $db['default'] = array(
 */
 
 /* Base de datos de Steven */
-/*
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
@@ -51,11 +50,11 @@ $db['default'] = array(
 	'stricton' => FALSE,
 	'failover' => array(),
 	'save_queries' => TRUE
-<<<<<<< HEAD
-);*/
+);
 
 
 /* Base de datos de desarrollo */
+/*
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'db4free.net',
@@ -77,3 +76,4 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+*/
