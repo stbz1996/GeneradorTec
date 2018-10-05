@@ -130,6 +130,12 @@ class CourseDAO_model extends CI_Model
         $this->db->select('lessonNumber');
         $this->db->select('Course.state as state');
         $this->db->from('Course');
+        /*
+        //New part to add with the new table
+
+        $this->db->join('CourseXBlock', 'Course.idCourse = CourseXBlock.idCourse');
+        $this->db->join('Block', 'CourseXBlock.idBlock = Block.idBlock');
+        */
         $this->db->join('Block', 'Course.idBlock = Block.idBlock');
         $this->db->where('Block.idPlan', $idPlan);
         $this->db->where('Course.isCareer', 1);
