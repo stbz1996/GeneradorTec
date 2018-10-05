@@ -27,7 +27,7 @@ class GenerateLinks_controller extends CI_Controller
 	****************************************/
 	function callView($viewName, $data)
 	{
-		$route = "HomePage/".$viewName;
+		$route = $viewName;
 		$this->load->view("HomePage/Header");
 		$this->load->view($route, $data);
 		$this->load->view("HomePage/Footer");
@@ -39,8 +39,8 @@ class GenerateLinks_controller extends CI_Controller
 	the user to the homepage
 	*****************************************/
 	function showError($pError){
+		$this->callView("HomePage/homePage", null);
 		echo "<script>alert('$pError');</script>";
-		$this->callView("homePage", null);
 	}
 
 
@@ -53,21 +53,7 @@ class GenerateLinks_controller extends CI_Controller
 		$idCareer = $_SESSION['idCareer'];
 		$data['profesors'] = $this->administrator_logic->findProfessors($idCareer);
 		$data['periods']   = $this->administrator_logic->findPeriods(); 
-		// If we have proffesors and periods 
-		if ($data['profesors'] == true && $data['periods'] == true) {
-			$this->callView("GenerateLinks", $data);
-			$this->session->set_userdata('LinksState', "");
-		}
-		// If we have no active proffesors
-		if ($data['profesors'] == false)
-		{
-			$this->showError('No hay profesores activos');
-		}
-		// If we have no active periods
-		if ($data['periods'] == false)
-		{
-			$this->showError('No hay periodos');
-		}
+		$this->callView("HomePage/GenerateForms/GenerateLinks", $data);
 	}
 
 

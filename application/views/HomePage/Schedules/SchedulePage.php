@@ -2,7 +2,7 @@
 	$button = array(
 		'name' => 'sendData',
 		'value' => 'Guardar',
-		'class' => "btn btn-primary"
+		'class' => 'btn btn-primary'
 	);
 ?>
 
@@ -16,7 +16,7 @@
 </div>
 
 <!-- Show the information about schedules -->
-<?= form_open("/Administrator_controller/saveScheduleInformation") ?>
+<?= form_open("/Administration/Schedules_controller/saveScheduleInformation") ?>
 <hr>
 <div>
 	<div class="mainContainer">

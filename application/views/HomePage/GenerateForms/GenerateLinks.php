@@ -29,9 +29,11 @@
 		    <h4>Seleccione el periodo de validez de los formularios</h4>
 			<select id="periodForLinks" class="form-control" name="period" required>
 			<?php 
+				if ($periods) {
 				foreach ($periods as $p) { ?>
 					<option value=<?= $p->idPeriod ?>> <?= $p->number.' - '.$p->year ?></option>
-			<?php } ?>
+			<?php } 
+				} ?>
 			</select>
 		</div>
         <hr>
@@ -50,6 +52,7 @@
 						    <td class="indicationsTable">Correo</td>
 						</tr>
 						<?php 
+							if ($profesors) {
 							$num = 1;
 							foreach ($profesors as $p) { ?>
 								<tr>
@@ -57,14 +60,14 @@
 								    <td class="profesorTable"><?= $p->name." ".$p->lastName ?></td>
 								    <td class="emailTable"><?= $p->email ?></td>
 								</tr>
-						<?php $num = $num + 1; } ?>
+						<?php $num = $num + 1; }
+							} ?>
 					</table>
 				</div>
 				<div class="modal-footer">
-					<input type="button" name="sendData" value="Enviar Links" class="btn btn-default" onclick="showEmailSent()">
+					<input type="button" name="sendData" value="Enviar Links" class="btn btn-primary" onclick="showEmailSent()">
 				</div>
 			</form> 
 		</div>
 	</form>
-
 <div id="loader"></div>

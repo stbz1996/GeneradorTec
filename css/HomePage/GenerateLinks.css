@@ -1,3 +1,37 @@
+
+.containerDate{
+  text-align: left;
+  width: 60%;
+}
+.dateInput{
+  width: 43%;
+  padding: 1%;
+  border-radius: 5px; 
+}
+.form-control{
+  width: 43%;
+}
+
+/* --- Table of generate links --- */
+.profesorsTable{
+  width: 65%;
+}
+.indicationsTable{
+  font-weight: bold;
+}
+.profesorsTable tr td{
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+}
+.numberTable{
+  width: 7%;
+}
+.profesorTable{
+  width: 80%;
+}
+.emailTable{
+  width: 25%;
+}
 #loader {
   position: absolute;
   left: 55%;

@@ -15,8 +15,8 @@
 		<?php
 		}?>
 	</select> Días
-	<div class="modal-footer">        
-		<button id="assignAdvanceDays" onclick='assignAdvanceDays("<?= base_url()?>/Administrator_controller/assignAdvanceDays")' value="Asignar">
+	<div class="modal-footer">    
+		<button class="btn btn-primary" id="assignAdvanceDays" onclick='assignAdvanceDays("<?= base_url()?>/Administrator_controller/assignAdvanceDays")' value="Asignar">
 			Guardar
 		</button>
 	</div>

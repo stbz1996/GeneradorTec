@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     // Here we can define the links to the controlles
     $link_to_generateLinks = base_url()."/Administration/GenerateLinks_controller/LoadGenerateLinksView";
     $linkToCourses = base_url()."/Administrator_controller/Courses";
-    $linkToScheduleHours = base_url()."/Administrator_controller/showScheduleSelector";
+    $linkToScheduleHours = base_url()."/Administration/Schedules_controller/showScheduleSelector";
     $linkToAdd = base_url()."/Administrator_controller/AddAdmin";
     $linkToPlans = base_url()."/Administrator_controller/Plans";
     $linkToProfessors = base_url()."/Administrator_controller/Professors";
@@ -36,7 +36,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/admin.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/GenerateLinks.css">
-
     <link rel="shortcut icon" type="image/png" href="<?=base_url()?>img/favicon.png" />
 </head>
 
@@ -115,7 +114,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <main class="page-content">
             <div class="container-fluid">
                 <div class="row">
-
-        <div class="sidebar-header" id="planHeader">
-            <img class="img-responsive" id="image1" src="https://tecdigital.tec.ac.cr/servicios/capacitacion/guia_estudiantes/resources/images/tec.png">
-        </div><br>
+        <br>

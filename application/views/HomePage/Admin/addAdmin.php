@@ -31,7 +31,7 @@
 	$button = array(
 		'name' =>  'submitButton',
 		'value' => 'Agregar administrador',
-		'class' => "btn btn-default"
+		'class' => "btn btn-primary"
 	);
 ?>
 
