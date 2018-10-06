@@ -27,13 +27,15 @@
             <?php foreach($periods as $period){?>
               <tr>
                 <td>
+                    <?php echo $period->number, "\t - \t", $period->year;?>
+                </td>
+                <td>
                     <button class="btn btn-primary" onclick='editPeriod("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-pencil"></i> 
                     Editar
                     </button>
                     <button class="btn btn-danger" onclick='deletePeriod("<?=base_url().$ADD['ADDRESS_4']?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-trash"></i> 
                         Borrar
                     </button>
-                    <?php echo $period->number, "\t - \t", $period->year;?>
                 </td>
               </tr>
               <?php }?>
