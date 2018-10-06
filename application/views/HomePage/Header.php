@@ -6,14 +6,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php
     // Here we can define the links to the controlles
     $link_to_generateLinks = base_url()."/Administration/GenerateLinks_controller/LoadGenerateLinksView";
-    $linkToCourses = base_url()."/Administrator_controller/Courses";
     $linkToScheduleHours = base_url()."/Administration/Schedules_controller/showScheduleSelector";
+    $linkToScheduleHours = base_url()."/Administrator_controller/showScheduleSelector";
     $linkToAdd = base_url()."/Administrator_controller/AddAdmin";
-    $linkToPlans = base_url()."/Administrator_controller/Plans";
-    $linkToProfessors = base_url()."/Administrator_controller/Professors";
-    $linkToCurrentPeriod = base_url()."/Administrator_controller/Period";
-    $linkToAssignCourses = base_url()."/Administrator_controller/AssignmentCourses";
+    $linkToPlans = base_url()."Administrator_controller/Plans";
+    $linkToProfessors = base_url()."Administrator_controller/Professors";
+    $linkToCurrentPeriod = base_url()."Administrator_controller/Period";
+    $linkToAssignCourses = base_url()."Administrator_controller/AssignmentCourses";
     $linkToAssignAdvanceDays = base_url()."Administrator_controller/AdvanceDays";
+    $linkToBlocks = base_url()."Administrator_controller/Blocks";
+    $linkToCourses = base_url()."Administrator_controller/Courses";
 ?>
 
 
@@ -66,7 +68,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <li>
                             <a href="<?= $linkToPlans ?>">
                                 <i class="fa fa-folder"></i>
-                                <span>Editar Información</span>
+                                <span>Planes</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= $linkToBlocks ?>">
+                                <i class="fa fa-folder"></i>
+                                <span>Bloques</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= $linkToCourses ?>">
+                                <i class="fa fa-folder"></i>
+                                <span>Cursos</span>
                             </a>
                         </li>
                         <li>

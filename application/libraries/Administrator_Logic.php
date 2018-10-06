@@ -228,6 +228,20 @@ class Administrator_Logic{
  		return $planDAO_model->get($id);
  	}
 
+ 	/****************************************
+	- Get a unique plan with a idBlock.
+ 	****************************************/
+ 	public function getPlanFromBlock($idBlock)
+	{
+		$planDAO_model = new PlanDAO_model();
+ 		$query = $planDAO_model->getPlanFromBlock($idBlock);
+ 	
+ 		if (!$query)
+ 		{
+ 			return array();
+ 		}
+ 		return $query->row();
+	}
 
  	/****************************************
 	- Edit the information of a plan.
@@ -351,24 +365,19 @@ class Administrator_Logic{
 	/****************************************
 	- Convert the data to the database an array.
 	****************************************/
- 	public function getArrayCourses($pId)
+ 	public function getArrayCourses($pIdBlock)
  	{
  		/* Get the blocks from the database */
  		$courseDAO_model = new CourseDAO_model();
 
- 		if ($pId == null)
- 		{
- 			$query = $courseDAO_model->show();
- 		}else{
- 			$query = $courseDAO_model->showById($pId);
- 		}
- 	
+ 		$query = $courseDAO_model->show($pIdBlock);
+
  		if (!$query)
  		{
  			return array();
  		}
 
- 		return $query;
+ 		return $query->result();
  	}
 
  	/****************************************

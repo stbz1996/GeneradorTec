@@ -2,7 +2,6 @@
 <!-- Los titulos -->
 <div>
     <h1>Cursos</h1>
-    <p>Explicacion de lo que hay en la página</p>
 </div>
 
 <hr>
@@ -17,6 +16,8 @@
             <tr>
                 <th>Codigo</th>
                 <th>Nombre</th>
+                <th>Bloque</th>
+                <th>Plan</th>
                 <th>Estado</th>
                 <th>Lecciones</th>
                 <th>¿Carrera?</th>
@@ -29,6 +30,8 @@
               <tr>
                 <td><?php echo $course->code;?></td>
                 <td><?php echo $course->name;?></td>
+                <td><?php echo $course->blockName;?></td>
+                <td><?php echo $course->planName;?></td>
                 <td>
                   <div class="btn-group" data-toggle="buttons">
                   <?php if($course->state): ?>
@@ -127,12 +130,15 @@
                   <label class="control-label col-md-3">Plan</label>
                   <div class="col-md-9">
                       <select class="form-control" id="selectPlan" name='selectPlan'>
-                          <option value="<?= $idParentPlan ?>" selected><?= $nameParentPlan ?></option>
+                          <?php if ($idParentPlan != null): ?>
+                            <option value="<?= $idParentPlan ?>" selected><?= $nameParentPlan ?></option>
+                          <?php endif; ?>
+                        
                           <?php foreach($plans as $plan){?>
                               <?php if ($idParentPlan != $plan->idPlan): ?>
-                              <option value="<?= $plan->idPlan?>"><?= $plan->name ?></option>
+                                <option value="<?= $plan->idPlan?>"><?= $plan->name ?></option>
                               <?php endif; ?>
-                        <?php }?>
+                          <?php }?>
                       </select>
                   </div>
               </div>
@@ -140,14 +146,20 @@
               <div class="form-group">
                   <label class="control-label col-md-3">Bloque</label>
                   <div class="col-md-9">
-                      <select class="form-control" id="selectBlock" name='selectBlock'>
-                          <option value="<?= $idParent ?>" selected><?= $actual ?></option>
-                          <?php foreach($blocks as $block){?>
-                              <?php if ($idParent != $block->idBlock): ?>
-                              <option value="<?= $block->idBlock?>"><?= $block->name ?></option>
-                              <?php endif; ?>
-                        <?php }?>
-                      </select>
+                  <select class="form-control" id="selectBlock" name='selectBlock'>
+                    <?php if ($idParentPlan != null): ?>
+                        
+                      <?php if ($idParent != null): ?>
+                        <option value="<?= $idParent ?>" selected><?= $actual ?></option>
+                      <?php endif; ?>
+
+                      <?php foreach($blocks as $block){?>
+                        <?php if ($idParent != $block->idBlock): ?>
+                          <option value="<?= $block->idBlock?>"><?= $block->name ?></option>
+                        <?php endif; ?>
+                      <?php }?>
+                    <?php endif; ?>
+                  </select>
                   </div>
               </div>
             </form>
