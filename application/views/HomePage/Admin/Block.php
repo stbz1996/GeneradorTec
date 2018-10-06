@@ -3,7 +3,6 @@
 <!-- Titles -->
 <div>
     <h1>Bloques</h1>
-    <p>Explicacion de lo que hay en la página</p>
 </div>
 
 <hr>
@@ -17,6 +16,7 @@
     <thead>
       <tr>
         <th>Nombre</th>
+        <th>Plan</th>
         <th>Estado</th>
         <th></th>
       </tr>
@@ -26,6 +26,7 @@
         <?php foreach($blocks as $block){?>
         <tr>
           <td><?php echo $block->name;?></td>
+          <td><?php echo $block->planName;?></td>
           <td>
           <div class="btn-group" data-toggle="buttons">
 
@@ -99,7 +100,10 @@
             <label class="control-label col-md-3">Plan</label>
             <div class="col-md-9">
               <select class="form-control" id="select" name='select'>
-              <option value="<?= $idParent ?>" selected><?= $actual ?></option>
+
+              <?php if ($idParent != null): ?>
+                <option value="<?= $idParent ?>" selected><?= $actual ?></option>
+              <?php endif; ?>
 
               <?php foreach($plans as $plan){?>
                 <?php if ($idParent != $plan->idPlan): ?>

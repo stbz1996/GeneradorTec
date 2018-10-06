@@ -49,12 +49,17 @@ class BlockDAO_model extends CI_Model{
 	****************************************/
 	public function show($idPlan)
 	{
-		$this->db->select('*');
+		$this->db->select('Block.idBlock');
+		$this->db->select('Block.name as name');
+		$this->db->select('Block.state');
+		$this->db->select('Block.idPlan');
+		$this->db->select('Plan.name as planName');
 		$this->db->from('Block');
+		$this->db->join('Plan', 'Block.idPlan = Plan.idPlan');
 
 		if ($idPlan)
 		{
-			$this->db->where('idPlan', $idPlan);
+			$this->db->where('Block.idPlan', $idPlan);
 		}
 
 		$query = $this->db->get();
