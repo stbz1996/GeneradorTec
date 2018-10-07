@@ -4,7 +4,11 @@ it state but this is only for view, does not change the value of the inputs
 *************************************************************************************/
 function fillSchedulesStates(){
 	for (var i=1; i < 100; i++) {
-		changeStateOnView('Inp-'+i, 'Div-'+i);
+		try {
+			changeStateOnView('Inp-'+i, 'Div-'+i);
+		}
+		catch(err){
+		}
 	}
 }
 
@@ -13,7 +17,7 @@ function fillSchedulesStates(){
 That function is only for view, it change the stile of the items in view
 *************************************************************************************/
 function changeStateOnView(id, idDiv) {
-	if (document.getElementById(id).value == 1) 
+	if (document.getElementById(id).value != 0) 
 	{
 		document.getElementById(idDiv).style.background="green";
 		document.getElementById(idDiv).style.opacity="0.8";
