@@ -481,7 +481,7 @@ class Administrator_controller extends CI_Controller
 	****************************************/
 	public function AssignmentCourses()
 	{
-		$idPeriod = 1; // Se define por medio de sessions.
+		$idPeriod = 1; // Period to the courses belongs.
 		$data['iters'] = getBreadCrumbAssignCourses(); // Relative position
 		$data['actual'] = "Período 2018";   /* Se asigna con respecto al session*/
 		$data['professors'] = $this->administrator_logic->getProfessorWithForms($idPeriod);
@@ -562,10 +562,6 @@ class Administrator_controller extends CI_Controller
     	$result = $this->administrator_logic->deletePeriod($pId);
 		return $result;
 	}
-
-
-
-
 
 
 	/****************************************
