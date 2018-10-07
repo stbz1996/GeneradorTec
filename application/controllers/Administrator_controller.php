@@ -82,24 +82,14 @@ class Administrator_controller extends CI_Controller
 	/****************************************
 	- Get all plans. Show the plans.
 	****************************************/
-	public function Plans($id = null, $name = null)
+	public function Plans()
 	{
-		// if there is not a id, take the idCareer previous selected.
-		if ($id == null)
-		{
-			$id = $this->session->userdata('idCareer');
-			$name = $this->session->userdata('nameCareer');
-		}
-		else
-		{
-			$this->session->set_userdata('nameCareer', urldecode($name));
-		}
-
+		$name = "Todos los planes";
 		/* These are data that the interface is going to get.*/
 		$data['iters'] = getBreadCrumbCareer(); // Relative position
 		$data['actual'] = urldecode($name);     // Actual position
 		$data['ADD'] = getAddressPlans();       // Address of redirect.
-		$data['plans'] = $this->administrator_logic->getArrayPlans($id);
+		$data['plans'] = $this->administrator_logic->getArrayPlans(null);
 
 		$this->callViewBreadCrumb("Admin/Plan", $data);
 	}
@@ -181,21 +171,20 @@ class Administrator_controller extends CI_Controller
 		// if there is not a id, take the idCareer previous selected.
 		if ($id == null)
 		{
-			$id = $this->session->userdata('idPlan');
-			$name = $this->session->userdata('namePlan');
+			$data['blocks'] = $this->administrator_logic->getArrayBlocks(null);
+			$data['idParent'] = null;
+			$data['actual'] = "Todos los bloques";
 		}
 		else
 		{
-			$this->session->set_userdata('idPlan', $id);
-			$this->session->set_userdata('namePlan', urldecode($name));
+			$data['blocks'] = $this->administrator_logic->getArrayBlocks($id);
+			$data['idParent'] = $id; // Id of the plan that the block belongs.
+			$data['actual'] = urldecode($name);   // Actual position
 		}
 
 		/* These are data that the interface is going to need.*/
 		$data['iters'] = getBreadCrumbPlan(); // Relative position
-		$data['idParent'] = $id; // Id of the plan that the block belongs.
-		$data['actual'] = urldecode($name);   // Actual position
 		$data['ADD'] = getAddressBlocks();    // Get address of a block position
-		$data['blocks'] = $this->administrator_logic->getArrayBlocks($id);
 
 		// Take all the plans of the database.
 		$data['plans'] = $this->administrator_logic->getArrayPlans(null);
@@ -275,32 +264,34 @@ class Administrator_controller extends CI_Controller
 	****************************************/
     public function Courses($pId = null, $pName = null)
     {
-    	$idPlan = $this->session->userdata('idPlan');
-		$namePlan = $this->session->userdata('namePlan');
+    	// Take all the plans from the database.
+		$data['plans'] = $this->administrator_logic->getArrayPlans(null);
 
     	// if there is not a idPlan and idBlock previous selected.
 		if ($pId == null)
 		{
-			$pId = $this->session->userdata('idBlock');
-			$pName = $this->session->userdata('nameBlock');
+			$data['courses'] = $this->administrator_logic->getArrayCourses(null);
+			$data['idParent'] = null;
+			$data['actual'] = "Todos los bloques";
+			// Obtenga el primer plan que se cargó la base de datos.
+			$idPlan = $data['plans'][0]->idPlan;
+			$namePlan = $data['plans'][0]->name; 
 		}
 		else
 		{
-			$this->session->set_userdata('idBlock', $pId);
-			$this->session->set_userdata('nameBlock', urldecode($pName));
+			$data['courses'] = $this->administrator_logic->getArrayCourses($pId);
+			$data['idParent'] = $pId; // Id of the plan that the block belongs.
+			$data['actual'] = urldecode($pName);   // Actual position
+			$plan = $this->administrator_logic->getPlanFromBlock($pId);
+			$idPlan = $plan->idPlan;
+			$namePlan = $plan->name;
 		}
 
 		/* These are data that the interface is going to need.*/
 		$data['iters'] = getBreadCrumbBlock(); // Relative position
-		$data['idParent'] = $pId; // Id of the plan that the block belongs.
-		$data['actual'] = urldecode($pName);   // Actual position
 		$data['ADD'] = getAddressCourses();    // Get address of a block position
-		$data['courses'] = $this->administrator_logic->getArrayCourses($pId);
 		$data['idParentPlan'] = $idPlan;
 		$data['nameParentPlan'] = $namePlan;
-
-		// Take all the blocks of the database.
-		$data['plans'] = $this->administrator_logic->getArrayPlans(null);
 		$data['blocks'] = $this->administrator_logic->getArrayBlocks($idPlan);
 		
 		$this->callViewBreadCrumb("Admin/Course", $data);

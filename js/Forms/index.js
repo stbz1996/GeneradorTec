@@ -253,6 +253,11 @@ $('.submit-save').click(function(){
 			priorities: JSON.stringify(newPriorities),
 			schedules: JSON.stringify(newSchedules)
 		},
+		beforeSend: function(){ 
+			document.getElementById("msform").style.opacity = 0.5;
+			document.getElementById("loader").style.display = "block";
+		},
+
 		success: function(){
 			if(saveState)
 			{
@@ -262,6 +267,8 @@ $('.submit-save').click(function(){
 							});
 				doc.save('formulario.pdf');
 			}
+			document.getElementById("loader").style.display = "none";
+			document.getElementById("msform").style.opacity = 1;
 			swal('Listo', 'Sus datos han sido guardados', 'success');
 		},
 		error: function ()

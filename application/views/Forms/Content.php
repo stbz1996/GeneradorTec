@@ -264,3 +264,5 @@
   </fieldset>
 
 </form>
+
+<div id="loader"></div>

@@ -245,4 +245,9 @@ function printMessage($message)
 {
     echo "<script>alert('".$message."')</script>";
 }
+
+function printReal($message)
+{
+    echo "<script>console.log('".$message."')</script>";
+}
 ?>

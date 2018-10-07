@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CourseDAO_model extends CI_Model
 {
     var $table = 'Course';
+    var $tableForBlock = 'CourseXBlock';
 
     public function __construct()
     {
@@ -14,22 +15,36 @@ class CourseDAO_model extends CI_Model
     /****************************************
     - Get all the courses from the database
     ****************************************/
-    public function show()
+    public function show($idBlock)
     {
-        $this->db->from($this->table);
-        $query = $this->db->get();
-        return $query->result();
-    }
+        $this->db->select('Course.idCourse as idCourse');
+        $this->db->select('Course.code as code');
+        $this->db->select('Course.name as name');
+        $this->db->select('Course.state as state');
+        $this->db->select('Course.isCareer as isCareer');
+        $this->db->select('Course.lessonNumber as lessonNumber');
+        $this->db->select('Block.name as blockName');
+        $this->db->select('Plan.name as planName');
+        $this->db->from('Block');
+        $this->db->join('CourseXBlock', 'Block.idBlock = CourseXBlock.idBlock');
+        $this->db->join('Course', 'Course.idCourse = CourseXBlock.idCourse');
+        $this->db->join('Plan', 'Block.idPlan = Plan.idPlan');
 
-    /****************************************
-    - Get all the courses that belongs to a specific block.
-    ****************************************/
-    public function showById($idBlock)
-    {
-        $this->db->from($this->table);
-        $this->db->where('idBlock', $idBlock);
+        if ($idBlock)
+        {
+            $this->db->where('Block.idBlock', $idBlock);
+        }
+
         $query = $this->db->get();
-        return $query->result();
+
+        if ($query->num_rows() > 0)
+        {
+            return $query;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /****************************************
@@ -49,6 +64,13 @@ class CourseDAO_model extends CI_Model
     public function insert($Course)
     {
         $this->db->insert($this->table, $Course);
+
+        $courseXBlock = array(
+            'idCourse' => $this->db->insert_id(),
+            'idBlock' => $Course['idBlock']
+        );
+
+        $this->db->insert($this->tableForBlock, $courseXBlock);
         echo 'true';
         return;
     }
@@ -69,6 +91,13 @@ class CourseDAO_model extends CI_Model
         $this->db->where('idCourse', $Course['idCourse']);
         $query = $this->db->update($this->table, $changes);
 
+        $courseXBlock = array(
+            'idCourse' => $Course['idCourse'],
+            'idBlock' => $Course['idBlock']
+        );
+
+        $this->addCourseXBlock($courseXBlock); // Try to insert to the database.
+
         if($query)
         {
             echo 'true';
@@ -81,14 +110,46 @@ class CourseDAO_model extends CI_Model
         }
     }
 
+    /* Try to insert in the database. */
+    public function addCourseXBlock($CourseXBlock)
+    {
+        try{
+            $this->db->select('*');
+            $this->db->from($this->tableForBlock);
+            $this->db->where('idCourse', $CourseXBlock['idCourse']);
+            $this->db->where('idBlock', $CourseXBlock['idBlock']);
+            $query = $this->db->get();
+            if ($query->num_rows() == 0)
+            {
+                $this->db->insert($this->tableForBlock, $CourseXBlock);
+            }
+            return 1;
+        }
+        catch(Exception $e)
+        {
+            return 0;
+        }
+    }
+
     /****************************************
-    - Delete the block in the database.
+    - Delete the course in the database.
     ****************************************/
     public function delete($id)
     {
+        /* Drop all the instances of the course in the block.*/
+        $this->db->where('idCourse', $id);
+        $this->db->delete($this->tableForBlock);
+        $num_affected_rows = $this->db->affected_rows();
+        
+        if(!$num_affected_rows)
+        {
+            echo 'false';
+            return;
+        }
+
         $this->db->where('idCourse', $id);
         $this->db->delete($this->table);
-        
+
         if($this->db->affected_rows())
         {
             echo 'true';

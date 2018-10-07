@@ -84,6 +84,33 @@ class PlanDAO_model extends CI_Model{
 	}
 
 	/****************************************
+	- Get a list of plan that has the same idBlock.
+	****************************************/
+	public function getPlanFromBlock($idBlock)
+	{
+		$this->db->select('Plan.idPlan');
+		$this->db->select('Plan.name');
+		$this->db->from('Plan');
+		$this->db->join('Block', 'Plan.idPlan = Block.idPlan');
+
+		if ($idBlock)
+		{
+			$this->db->where('Block.idBlock', $idBlock);
+		}
+
+		$query = $this->db->get();
+
+		if ($query->num_rows() > 0)
+		{
+			return $query;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/****************************************
 	- Get a unique plan from the database
 	****************************************/
 	public function get($id)
