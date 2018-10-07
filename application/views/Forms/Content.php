@@ -8,7 +8,6 @@
 ?>
 
 <!--<a href="<?= $linkWorkload ?>"> <i class="fa fa-calendar"></i> <span>Generar Links</span> </a>-->
-
 <!-- multistep form -->
 <form id="msform" action="getDataFromView" method="post">
 
