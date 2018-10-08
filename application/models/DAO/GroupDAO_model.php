@@ -11,8 +11,7 @@ class GroupDAO_model extends CI_Model {
 		$this->load->database();
 	}
 
-
-	 /****************************************
+    /****************************************
     - Get all the groups from the database
     ****************************************/
     public function show()
@@ -97,5 +96,22 @@ class GroupDAO_model extends CI_Model {
             return false;
         }
     }
+
+	function getGroup($idGroup)
+	{
+		$this->db->select('*');
+		$this->db->from('ClassGroup');
+		$this->db->where('idGroup', $idGroup);
+		$query = $this->db->get();
+
+		if($query)
+		{
+			return $query->row();
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 }

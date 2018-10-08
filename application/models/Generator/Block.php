@@ -1,16 +1,13 @@
 <?php
 
-class Plan
+class Block
 {
 	private $id;
     private $name;
-    private $plan
+    private $plan;
 
-	function __construct($pId, $pName, $pPlan)
+	function __construct()
 	{
-		$this->id = $pId;
-        $this->name = $pName;
-        $this->plan = $pPlan;
 	}
 
 	public function setId($pId)

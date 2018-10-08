@@ -34,4 +34,38 @@ class ScheduleDAO_model extends CI_Model
 		$this->db->update('Schedule', $changes);
 	}
 
+	public function getSchedule($idSchedule)
+	{
+		$this->db->select('*');
+		$this->db->from('Schedule');
+		$this->db->where('idSchedule', $idSchedule);
+		$query = $this->db->get();
+		if($query)
+		{
+			return $query->row();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public function getSchedulesByForm($idForm)
+	{
+		$this->db->select('*');
+		$this->db->from('Schedule');
+		$this->db->join('FormXSchedule', 'Schedule.idSchedule = FormXSchedule.idSchedule');
+		$this->db->where('FormXSchedule.idForm', $idForm);
+		$query = $this->db->get();
+
+		if($query)
+		{
+			return $query;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 }
