@@ -52,7 +52,6 @@ $db['default'] = array(
 	'save_queries' => TRUE
 );
 
-
 /* Base de datos de desarrollo */
 /*
 $db['default'] = array(

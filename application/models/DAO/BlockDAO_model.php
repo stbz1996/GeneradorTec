@@ -145,4 +145,24 @@ class BlockDAO_model extends CI_Model{
 
 		return $query->num_rows();
 	}
+
+	public function getBlockByCourse($idCourse)
+	{
+		$this->db->select('*');
+		$this->db->from('Block');
+		$this->db->join('Course', 'Block.idBlock = Course.idBlock');
+		$this->db->where('Course.idCourse', $idCourse);
+		$this->db->where('Block.state', 1);
+
+		$query = $this->db->get();
+
+		if($query)
+		{
+			return $query->row();
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

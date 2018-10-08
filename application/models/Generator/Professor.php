@@ -8,14 +8,8 @@ class Professor
     private $courses;
     private $schedules;
 
-	function __construct($pWorkload, $pName, $pActivities, $pCourses, $pSchedules)
-	{
-        $this->workload = $pWorkload;
-        $this->name = $pName;
-        $this->activities = $pActivities;
-        $this->courses = $pCourses;
-        $this->schedules = $pSchedules;
-	}
+	function __construct()
+	{}
 
 	public function setWorkload($pWorkload)
 	{

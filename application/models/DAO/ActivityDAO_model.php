@@ -53,7 +53,6 @@ class ActivityDAO_model extends CI_Model
 	}
 
 	/****************************************
-<<<<<<< HEAD
 	*Function that updates activities of 	*
 	*professor.								*
 	*										*
@@ -85,6 +84,23 @@ class ActivityDAO_model extends CI_Model
 		if ($query->num_rows() > 0)
 		{
 			return $query->result();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	function getActivity($idActivity)
+	{
+		$this->db->select('*');
+		$this->db->from('Activity');
+		$this->db->where('idActivity', $idActivity);
+		$query = $this->db->get();
+
+		if($query->num_rows() > 0)
+		{
+			return $query->row();
 		}
 		else
 		{

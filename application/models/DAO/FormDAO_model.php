@@ -226,6 +226,28 @@ class FormDAO_model extends CI_Model
 		$this->db->where('idForm', $idForm);
 		$this->db->update('Form', $changes);
 	}
+
+	public function getFormByProfessor($idProfessor)
+	{
+		$this->db->select('Form.idForm');
+		$this->db->from('Form');
+		$this->db->join('Professor', 'Form.idProfessor = Professor.idProfessor');
+		$this->db->where('Professor.idProfessor', $idProfessor);
+		$this->db->where('Professor.state', 1);
+		$this->db->order_by('idForm', 'asc');
+		$this->db->limit(1);
+
+		$query = $this->db->get();
+
+		if($query->num_rows() > 0)
+		{
+			return $query->row();
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 
 

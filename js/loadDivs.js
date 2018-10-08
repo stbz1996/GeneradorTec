@@ -1,5 +1,5 @@
-var idProfessor; // This is the id of the professor that is selected in the moment.
-var nameProfessor;
+var idProfessor; //  is the id of the professor that is selected in the moment.
+var nameProfessor; // This is the name of the professor that is selected in the moment.
 var grayBackground = "#3385ff";
 var whiteBackground = "#ffffff";
 var yellowBackground = "#ffff4d";
@@ -162,7 +162,7 @@ function desopaqueCourses(value)
 
 function setForced(div, pValue)
 {
-    var state = div.childNodes[8];
+    var state = div.childNodes[6];
     state.value = pValue;
 }
 
@@ -267,14 +267,46 @@ Registered professor and courses in the database
 function assignCourse(idCourse, idProf, nameCourse, nameProf)
 {
     var divCourse = lookDivCourses(idCourse);
-    var text = divCourse.childNodes[3];
     var button = divCourse.childNodes[5];
     var state = divCourse.childNodes[7];
+    var groupAssigned = divCourse.childNodes[5].childNodes[1].childNodes[1].childNodes[3].childNodes[1];
+    var numGroup = groupAssigned.value;
+    var idGroup = groupAssigned.value;
 
-    text.innerHTML = "Asignado a " + nameProf; // Assign the name of the professor.
-    button.style.display = "none"; // Hide the button
-    divCourse.style.opacity = 0.2; // Make dark.
-    state.value = "0"; // The state is disabled.
+    /* Remove the group that I choose.*/
+    for(var i=0; i < groupAssigned.length; i++)
+    {
+        if (groupAssigned[i].value == groupAssigned.value)
+        {
+            numGroup = groupAssigned[i].text;
+            groupAssigned.removeChild(groupAssigned[i]);
+            break;
+        }
+    }
+
+    /* If there's no more groups to assign. */
+    if (groupAssigned.length <= 1)
+    {
+        button.style.display = "none"; // Hide the button
+        divCourse.style.opacity = 0.2; // Make dark.
+        state.value = "0"; // The state is disabled.
+    } 
+
+    /* Creo el parrafo. */
+    var par = document.createElement("P");                        // Create a <p> node
+    var text = document.createTextNode("Asignado a " + nameProf + " - Group # " + numGroup);
+    par.appendChild(text); 
+
+    var text = divCourse.childNodes[3]; // Get the div of the p values.
+
+    console.log(groupAssigned.length);
+    console.log(text.childNodes[1].textContent);
+    if((groupAssigned.length >= 6) && (text.childNodes[1].textContent = "No ha sido asignado"))
+    {
+        text.removeChild(text.childNodes[1]); // Remove "no ha sido asignado"
+    }
+
+    text.appendChild(par); // Add the assigned.
 
     increaseLoadProfessor(idProf); // Assign the course.
 
@@ -283,6 +315,8 @@ function assignCourse(idCourse, idProf, nameCourse, nameProf)
     courseRegistered.idProfessor = idProf;
     courseRegistered.nameCourse = nameCourse;
     courseRegistered.nameProfessor = nameProf;
+    courseRegistered.idGroup = idGroup;
+    courseRegistered.nameGroup = numGroup;
 
     assigned.push(courseRegistered); // Registered the course
 }
@@ -457,10 +491,18 @@ function selectCourse(divSelected)
 {
     var idCourse;
     var nameCourse;
-    var stateForced = divSelected.childNodes[8].value;
+    var stateForced = divSelected.childNodes[7].value; // Input state...
+    var groupAssigned = divSelected.childNodes[5].childNodes[1].childNodes[1].childNodes[3].childNodes[1];
+    var group = groupAssigned.value;
 
     if (idProfessor == null || idProfessor <= 0){
         alert("No ha seleccionado ningún profesor para asignar el curso");
+        return;
+    }
+
+    if (group == "Grupos")
+    {
+        alert("No ha seleccionado ningún grupo para asignar");
         return;
     }
 

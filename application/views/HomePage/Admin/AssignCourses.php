@@ -42,10 +42,37 @@
 			<?php 
        		foreach($courses as $course) { ?>
 
-				<div class="coursesDiv" data-value="<?= $course->idCourse ?>" onclick="">
+				<div class="coursesDiv" data-value="<?= $course->idCourse ?>">
 				 	<h4> <?= $course->name ?> </h4>
-				 	<p> No ha sido asignado </p>
-				 	<button class="btn btn-warning" onclick="selectCourse(this.parentElement)"><i class="glyphicon glyphicon-ok"></i></button>
+				 	<div id="textGroup">
+				 		<p>No ha sido asignado</p>
+				 	</div>
+
+				 	<div id="buttonPositioner">
+
+				 		<div id="buttonLeftScreen">
+						  	<div class="form-group">
+			                  <label class="control-label col-md-3"></label>
+			                  <div class="col-md-12">
+				                  <select class="form-control" id="selectGroup" name='selectValGroup'>
+				                  <option>Grupos</option>
+				                  <?php 
+	       							foreach($groups as $group) { ?>
+				                         <option value="<?= $group->idGroup ?>">
+				                         	<?= $group->number ?>
+				                         </option>
+				                  <?php  } ?>
+				                  </select>
+			                  </div>
+			              </div>
+						</div> 
+
+						<div id="buttonRightScreen">
+							<button class="btn btn-warning" onclick="selectCourse(this.parentElement.parentElement.parentElement)">Asignar</button>
+						</div>
+						<div style="clear:both"></div>
+
+				 	</div>
 				 	<input name="state" type="hidden" value="1" />
 				 	<input name="reserved" type="hidden" value="0" />
 				 	<p></p>

@@ -6,11 +6,9 @@ class Activity
 	private $description;
 	private $workPorcent;
 
-	function __construct($pId, $pDescription, $pWorkPorcent)
+	function __construct()
 	{
-		$this->id = $pId;
-		$this->description = $pDescription;
-		$this->workPorcent = $pWorkPorcent;
+		
 	}
 
 	public function setId($pid)

@@ -5,11 +5,8 @@ class Plan
 	private $id;
 	private $name;
 
-	function __construct($pId, $pName)
-	{
-		$this->id = $pId;
-		$this->name = $pName;
-	}
+	function __construct()
+	{}
 
 	public function setId($pId)
 	{
