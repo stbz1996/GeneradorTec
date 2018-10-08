@@ -6,12 +6,8 @@ class Schedule
 	private $initialHour;
 	private $finalHour;
 
-	function __construct($pDay, $pInitialHour, $pFinalHour)
-	{
-		$this->day = $pDay;
-		$this->initialHour = $pInitialHour;
-		$this->finalHour = $pFinalHour;
-	}
+	function __construct()
+	{}
 
 	public function setDay($pDay)
 	{

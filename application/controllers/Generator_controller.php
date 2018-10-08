@@ -12,26 +12,38 @@ class Generator_controller extends CI_Controller {
 		$this->load->helper("url");
 
 		$this->load->library('session');
-		$this->load->library('Generator_Logic');
 
-		$this->load->model("DAO/BlockDAO_model");
-		$this->load->model("DTO/BlockDTO");
+		$this->load->model('Generator/FillInformation');
 
-		$this->Generator_Logic = new Generator_Logic();
+		$this->load->model('Generator/Activity');
+		$this->load->model('DAO/ActivityDAO_model');
+
+		$this->load->model('Generator/Schedule');
+		$this->load->model('DAO/ScheduleDAO_model');
+
+		$this->load->model('Generator/Plan');
+		$this->load->model('DAO/PlanDAO_model');
+
+		$this->load->model('Generator/Group');
+		$this->load->model('DAO/GroupDAO_model');
+
+		$this->load->model('Generator/Block');
+		$this->load->model('DAO/BlockDAO_model');
+
+		$this->load->model('Generator/Course');
+		$this->load->model('DAO/CourseDAO_model');
+
+		$this->load->model('Generator/Professor');
+		$this->load->model('DAO/ProfessorDAO_model');
+
+		$this->load->model('DAO/FormDAO_model');
+
+		$this->fillInformation = new FillInformation();
+
 	}
 
 	function index()
 	{
-		$this->fillInfo();
-	}
-
-	function fillInfo()
-	{
-		$totalActiveBlockPlan = $this->Generator_Logic->getTotalActiveBlocks(2);
-		echo $totalActiveBlockPlan;
-		//Obtener número de bloques activos
-		//Por cada bloque, obtener horarios disponibles
-		//lista de asignaciones (Clase Magistral)
 	}
 }
 

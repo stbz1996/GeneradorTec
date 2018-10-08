@@ -8,14 +8,8 @@ class Course
     private $totalLessons;
     private $block;
 
-	function __construct($pId, $pName, $pCode, $pTotalLessons, $pBlock)
-	{
-        $this->id = $pId;
-        $this->name = $pName;
-        $this->code = $pCode;
-        $this->totalLessons = $pTotalLessons;
-        $this->block = $pBlock;
-	}
+	function __construct()
+	{}
 
 	public function setId($pId)
 	{

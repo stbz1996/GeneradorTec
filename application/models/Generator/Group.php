@@ -5,11 +5,8 @@ class Group
 	private $id;
 	private $number;
 
-	function __construct($pId, $pNumber)
-	{
-		$this->id = $pId;
-		$this->number = $pNumber;
-	}
+	function __construct()
+	{}
 
 	public function setId($pId)
 	{
