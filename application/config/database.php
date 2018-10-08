@@ -30,7 +30,9 @@ $db['default'] = array(
 */
 
 /* Base de datos de Steven */
-/*$db['default'] = array(
+/*
+$db['default'] = array(
+>>>>>>> is61
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	'username' => 'root',
@@ -50,8 +52,8 @@ $db['default'] = array(
 	'stricton' => FALSE,
 	'failover' => array(),
 	'save_queries' => TRUE
+<<<<<<< HEAD
 );*/
-
 
 /* Base de datos de desarrollo */
 

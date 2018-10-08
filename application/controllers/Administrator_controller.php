@@ -21,6 +21,7 @@ class Administrator_controller extends CI_Controller
 		$this->load->model("DAO/PeriodDAO_model");
 		$this->load->model("DAO/FormDAO_model");
 		$this->load->model("DAO/ActivityDAO_model");
+		$this->load->model("DAO/GroupDAO_model");
 		$this->load->model("DTO/ScheduleDTO");		
 		$this->load->model("DAO/ScheduleDAO_model");
 		$this->load->model("DTO/PeriodDTO");
@@ -28,6 +29,7 @@ class Administrator_controller extends CI_Controller
 		$this->load->model("DTO/FormDTO");
 		$this->load->model("DTO/AdministratorDTO");
 		$this->load->model("DTO/PlanDTO");
+		$this->load->model("DTO/GroupDTO_model");
 		$this->load->model("DAO/CareerDAO_model");
 		
 
@@ -481,11 +483,12 @@ class Administrator_controller extends CI_Controller
 	****************************************/
 	public function AssignmentCourses()
 	{
-		$idPeriod = 1; // Se define por medio de sessions.
+		$idPeriod = 1; // Period to the courses belongs.
 		$data['iters'] = getBreadCrumbAssignCourses(); // Relative position
 		$data['actual'] = "Período 2018";   /* Se asigna con respecto al session*/
 		$data['professors'] = $this->administrator_logic->getProfessorWithForms($idPeriod);
 		$data['courses'] = $this->administrator_logic->getActiveCourses();
+		$data['groups'] = $this->administrator_logic->getAllGroups();
 
 		$this->callViewBreadCrumb("Admin/AssignCourses", $data);
 	}
@@ -562,10 +565,6 @@ class Administrator_controller extends CI_Controller
     	$result = $this->administrator_logic->deletePeriod($pId);
 		return $result;
 	}
-
-
-
-
 
 
 	/****************************************

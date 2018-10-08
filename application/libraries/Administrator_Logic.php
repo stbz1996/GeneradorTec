@@ -589,6 +589,22 @@ class Administrator_Logic{
 		return $professors;
 	}
 
+	/**************************************************************
+	This function returns all the groups registered in the system
+ 	***************************************************************/
+	public function getAllGroups()
+	{
+		$groupDAO = new GroupDAO_model();
+		$query = $groupDAO->show();
+
+		if (!$query)
+		{
+			return array();
+		}
+		
+		return $query->result();
+	}
+
  	/**************************************************************
 	This function returns all the schedules regitered in the sistem
  	***************************************************************/

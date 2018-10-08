@@ -35,23 +35,31 @@
                 <td>
                   <div class="btn-group" data-toggle="buttons">
                   <?php if($course->state): ?>
+                    <row>
                       <label class="btn btn-success active" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
                         <input type="radio" name="radioActivate" id="option2" autocomplete="off" checked>
                         <span class="glyphicon glyphicon-ok"></span>
                       </label>
-                      <label class="btn btn-danger" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
+                    </row>
+                    <row>
+                      <label class="btn btn-danger" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)' style="margin-top: 1%">
                         <input type="radio" name="radioDesactivate" id="option2" autocomplete="off">
                         <span class="glyphicon glyphicon-ok"></span>
                       </label>
+                    </row>
                   <?php else: ?>
+                    <row>
                       <label class="btn btn-success" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
                         <input type="radio" name="radioActivate" id="option2" autocomplete="off" >
                         <span class="glyphicon glyphicon-ok"></span>
                       </label>
-                      <label class="btn btn-danger active" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
+                    </row>
+                    <row>
+                      <label class="btn btn-danger active" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)' style="margin-top: 1%">
                         <input type="radio" name="radioDesactivate" id="option2" autocomplete="off" checked>
                         <span class="glyphicon glyphicon-ok"></span>
                       </label>
+                    </row>
                   <?php endif; ?>
                   </div>
                 </td>

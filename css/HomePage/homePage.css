@@ -146,3 +146,25 @@ h1#tituloPlanes {
 	margin-bottom: 1%;
 
 }
+
+#buttonPositioner{
+	position: relative;
+}
+
+#buttonLeftScreen { 
+	position: relative; 
+	width: 50%; 
+	top: 0; 
+	left: 10%;
+	float: left;
+	text-align: center;
+}
+
+#buttonRightScreen { 
+	position: relative; 
+	width: 50%; 
+	top: 0; 
+	right: 25%;
+	float: right; 
+	text-align: center;
+}
