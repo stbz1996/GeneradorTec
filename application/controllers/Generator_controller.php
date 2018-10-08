@@ -44,6 +44,7 @@ class Generator_controller extends CI_Controller {
 
 	function index()
 	{
+		
 	}
 }
 
