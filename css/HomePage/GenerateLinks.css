@@ -33,7 +33,7 @@
   width: 25%;
 }
 #loader {
-  position: absolute;
+  position:fixed;
   left: 55%;
   top: 40%;
   z-index: 1;

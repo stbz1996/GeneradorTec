@@ -8,7 +8,7 @@
 <hr>
 
 <!-- Todo el contenido -->
-<div>
+<div id="allcontent">
     <button class="btn btn-primary" onclick="addProfessor()"><i class="glyphicon glyphicon-plus"></i> Crear Profesor</button>
     <br/><br/>
         
@@ -55,7 +55,7 @@
             </tr>
             <?php }?>
         </tbody>
-
+        <div id="loader" style="left: 45%"></div>
     </table>
 </div>
 

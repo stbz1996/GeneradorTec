@@ -5,6 +5,29 @@ $(document).ready(function() {
     table = $('#table_id').DataTable();
   });
 
+/*************************************************************
+    Those function are in charge to show and hide the loader
+**************************************************************/
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) {    
+            break;
+        }
+    }
+}
+
+function showLoader(){
+    document.getElementById("allcontent").style.opacity = 0.5;
+    document.getElementById("loader").style.display = "block";
+}
+
+function hideLoader(){
+    sleep(500);
+    document.getElementById("allcontent").style.opacity = 1;
+    document.getElementById("loader").style.display = "none";
+}
+
 /****************************************
 - Show the errors in the execution of a javascript operation.
 ****************************************/
@@ -93,13 +116,18 @@ function activateState(url, id)
         url: url,
         type: "POST",
         data:{id:id, state:value},
+        beforeSend: function(){
+            showLoader();
+        },
         success: function(data){
             $('[name="inputState"]').val(value);
+            hideLoader();
             swal({title: "Activado", icon: "success"});
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
             showErrors(jqXHR, textStatus, errorThrown);
+            hideLoader();
             swal({title: "Error al Activar", icon: "error"});
         }
     });
@@ -115,13 +143,18 @@ function desactivateState(url, id)
         url: url,
         type: "POST",
         data:{id:id, state:value},
+        beforeSend: function(){
+            showLoader();
+        },
         success: function(data){
             $('[name="inputState"]').val(data.state);
+            hideLoader();
             swal({title: "Desactivado", icon: "success"});
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
             showErrors(jqXHR, textStatus, errorThrown);
+            hideLoader();
             swal({title: "Error al Desactivar", icon: "error"});
         }
     });
@@ -140,12 +173,15 @@ function editPlan(url, id)
         url : url + id,
         type: "GET",
         dataType: "JSON",
+        beforeSend: function(){
+            showLoader();
+        },
         success: function(data)
         {
             $('[name="inputIdPlan"]').val(data.idPlan);
             $('[name="inputName"]').val(data.name);
             $('[name="inputState"]').val(data.state);
-
+            hideLoader();
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('Editar Plan'); // Set title to Bootstrap modal title
 
@@ -156,6 +192,7 @@ function editPlan(url, id)
         }
     });
 }
+
 
 /****************************************
 - If button edit block is pressed, load the data from the database.
@@ -172,12 +209,15 @@ function editBlock(url, id)
         url : url + id,
         type: "GET",
         dataType: "JSON",
+        beforeSend: function(){
+            showLoader();
+        },
         success: function(data)
         {
             $('[name="inputIdBlock"]').val(data.idBlock);
             $('[name="inputName"]').val(data.name);
             $('[name="inputState"]').val(data.state);
-
+            hideLoader();
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('Editar Bloque'); // Set title to Bootstrap modal title
         },
@@ -187,6 +227,7 @@ function editBlock(url, id)
         }
     });
 }
+
 
 /****************************************
 - If button edit course is pressed, load the data from the database.
@@ -204,6 +245,9 @@ function editCourse(url, id)
         url : url + id,
         type: "GET",
         dataType: "JSON",
+        beforeSend: function(){
+            showLoader();
+        },
         success: function(data)
         {
             console.log(url + id);
@@ -212,7 +256,7 @@ function editCourse(url, id)
             $('[name="inputName"]').val(data.name);
             $('[name="inputState"]').val(data.state);
             $('[name="inputLessons"]').val(data.lessonNumber);
-
+            hideLoader();
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('Editar Curso'); // Set title to Bootstrap modal title
 
@@ -239,6 +283,9 @@ function editProfessor(url, id)
         url : url + id,
         type: "GET",
         dataType: "JSON",
+        beforeSend: function(){
+            showLoader();
+        },
         success: function(data)
         {
             $('[name="inputIdProfessor"]').val(data.idProfessor);
@@ -246,7 +293,7 @@ function editProfessor(url, id)
             $('[name="inputLastName"]').val(data.lastName);
             $('[name="inputEmail"]').val(data.email);
             $('[name="inputState"]').val(data.state);
-
+            hideLoader();
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('Editar Profesor'); // Set title to Bootstrap modal title
 
@@ -301,11 +348,15 @@ function save(url, message)
         type: "POST",
         data: $('#form').serialize(),
         dataType: "JSON",
+        beforeSend: function(){
+            showLoader();
+        },
         success: function(response)
         {
             if (response == true)
             {
                 $('#modal_form').modal('hide');
+                hideLoader();
                 swal({title: "Listo", 
                 text: message[0],
                 icon: "success"}).then(function(){
@@ -315,6 +366,7 @@ function save(url, message)
 
             else
             {
+                hideLoader();
                 swal({title: "Error", text: message[1], icon: "warning"});
             }
 
@@ -404,12 +456,14 @@ function saveBlock()
 function loadBlocks(id)
 {
     var url = base_url + "Administrator_controller/loadBlocks/";
-
     console.log(url + id);
     $.ajax({
         url: url + id,
         type: "GET",
         dataType: "JSON",
+        beforeSend: function(){
+            showLoader();
+        },
         success: function(blocks)
         {
             console.log(blocks);
@@ -421,6 +475,7 @@ function loadBlocks(id)
                 var message = messageId + messageName;
                 $('#selectBlock').append(message);
             });
+            hideLoader();
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
@@ -574,12 +629,16 @@ function deleteAll(url, id, message)
             url : url + id,
             type: "POST",
             dataType: "JSON",
+            beforeSend: function(){
+                showLoader();
+            },
             success: function(response)
             {
                 console.log(response);
                 if (response == true)
                 {
                     $('#modal_form').modal('hide');
+                    hideLoader();
                     swal({title: "Listo", 
                         text: message[1], 
                         icon: "success"}).then(function(){
@@ -590,6 +649,7 @@ function deleteAll(url, id, message)
 
                 else
                 {
+                    hideLoader();
                     swal({title: "Error",
                         text: message[2],
                         icon: "error"});
@@ -670,8 +730,12 @@ function assignAdvanceDays(url)
         url : url,
         type: "POST",
         data: {advanceDays: advanceDays},
+        beforeSend: function(){
+            showLoader();
+        },
         success: function(response)
         {
+            hideLoader();
             if(response)
             {
                 swal('Listo', 'Cambios han sido guardados', 'success');
@@ -687,3 +751,6 @@ function assignAdvanceDays(url)
         }
     });
 }
+
+
+

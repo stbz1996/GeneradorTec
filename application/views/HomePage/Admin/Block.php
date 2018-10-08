@@ -8,7 +8,7 @@
 <hr>
 
 <!-- Content -->
-<div>
+<div id="allcontent">
   <button class="btn btn-primary" onclick="addBlock()"><i class="glyphicon glyphicon-plus"></i> Crear Bloque</button>
   <br/><br/>
         
@@ -63,6 +63,7 @@
         </tr>
         <?php }?>
       </tbody>
+      <div id="loader" style="left: 45%"></div>
   </table>
 
 </div>

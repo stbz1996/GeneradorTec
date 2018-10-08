@@ -8,7 +8,7 @@
 <hr>
 
 <!-- Todo el contenido -->
-<div>
+<div id="allcontent">
     <button class="btn btn-primary" onclick="addPeriod()">
         <i class="glyphicon glyphicon-plus"></i> 
         Agregar Periodo
@@ -41,6 +41,7 @@
               <?php }?>
         </tbody>
     </table>
+    <div id="loader" style="left: 45%;"></div>
 </div>
 
 

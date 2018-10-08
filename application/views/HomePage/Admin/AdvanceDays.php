@@ -5,7 +5,7 @@
 
 <hr>
 
-<div>
+<div id="allcontent">
 	<p>Se enviará un recordarotio N días antes de la fecha de vencimiento</p>
 	<select id="select-advanceDays" class="advanceDaysSelect">
 		<?php 
@@ -20,4 +20,5 @@
 			Guardar
 		</button>
 	</div>
+	<div id="loader" style="left: 45%;"></div>
 </div>

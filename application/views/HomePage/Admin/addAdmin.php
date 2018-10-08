@@ -35,7 +35,7 @@
 	);
 ?>
 
-<div class="adminContainer">
+<div class="adminContainer" id="allcontent">
 	<div class="row">
 		<div>
           	<h1>Administración</h1>

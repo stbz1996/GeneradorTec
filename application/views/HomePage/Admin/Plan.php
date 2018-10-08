@@ -8,7 +8,7 @@
 <hr>
 
 <!-- Todo el contenido -->
-<div>
+<div id="allcontent">
   <button class="btn btn-primary" onclick="addPlan()"><i class="glyphicon glyphicon-plus"></i> Crear Plan</button>
   <br/><br/>
         
@@ -58,8 +58,8 @@
     </tr>
   <?php }?>
   </tbody>
-
   </table>
+  <div id="loader" style="left: 45%;"></div>
 
       
       
