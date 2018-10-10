@@ -9,59 +9,73 @@
 
 <!-- Todo el contenido -->
 <div id="allcontent">
-  <button class="btn btn-primary" onclick="addPlan()"><i class="glyphicon glyphicon-plus"></i> Crear Plan</button>
-  <br/><br/>
+  <button class="btn btn-primary" onclick="addPlan()">
+      <i class="glyphicon glyphicon-plus"></i> 
+      Crear Plan
+  </button>
+
+  <br><br>
         
-  <table id="table_id" class="table table-striped table-bordered" cellspacing="0" width="100%">
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Estado</th>
-      <th></th>
-    </tr>
-  </thead>
+  <table id="table_id" class="table table-bordered table-hover table-condensed table-striped" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th class="col-sm-4" id="textCenter">Nombre   </th>
+          <th class="col-sm-1" id="textCenter">Estado   </th>
+          <th class="col-sm-1" id="textCenter">Opciones </th>
+        </tr>
+      </thead>
 
-  <tbody>
-  <?php foreach($plans as $plan){?>
-    <tr>
-      <td><?php echo $plan->name;?></td>
-      <td>
-        <div class="btn-group" data-toggle="buttons">
-          <?php if($plan->state): ?>
+      <tbody>
+          <?php foreach($plans as $plan){?>
+              <tr>
+                  <td>
+                      <div id="textInRowName">
+                          <?php echo $plan->name;?>
+                      </div>
+                  </td>
 
-          <label class="btn btn-success active" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $plan->idPlan ?>)'>
-            <input type="radio" name="radioActivate" id="option2" autocomplete="off" value="<?= $plan->idPlan ?>" checked>
-              <span class="glyphicon glyphicon-ok"></span>
-          </label>
-          <label class="btn btn-danger" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $plan->idPlan ?>)'>
-            <input type="radio" name="radioDesactivate" id="option2" autocomplete="off" value="<?= $plan->idPlan ?>">
-              <span class="glyphicon glyphicon-ok"></span>
-          </label>
+                  <td id="textCenter">
+                      <div class="btn-group" data-toggle="buttons">
+                          <?php if($plan->state): ?>
+                          <label class="btn btn-success active" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $plan->idPlan ?>)'>
+                            <input type="radio" name="radioActivate" id="option2" autocomplete="off" value="<?= $plan->idPlan ?>" checked>
+                              <span class="glyphicon glyphicon-ok"></span>
+                          </label>
+                          <label class="btn btn-danger" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $plan->idPlan ?>)'>
+                            <input type="radio" name="radioDesactivate" id="option2" autocomplete="off" value="<?= $plan->idPlan ?>">
+                              <span class="glyphicon glyphicon-ok"></span>
+                          </label>
+                          <?php else: ?>
+                          <label class="btn btn-success" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $plan->idPlan ?>)'>
+                            <input type="radio" name="radioActivate" value="<?= $plan->idPlan ?>" id="option2" autocomplete="off" >
+                              <span class="glyphicon glyphicon-ok"></span>
+                          </label>
+                          <label class="btn btn-danger active" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $plan->idPlan ?>)'>
+                            <input type="radio" name="radioDesactivate" value="<?=$plan->idPlan?>" id="option2" autocomplete="off" checked>
+                            <span class="glyphicon glyphicon-ok"></span>
+                          </label>
+                        <?php endif; ?>
+                      </div>
+                  </td>
 
-          <?php else: ?>
-          <label class="btn btn-success" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $plan->idPlan ?>)'>
-            <input type="radio" name="radioActivate" value="<?= $plan->idPlan ?>" id="option2" autocomplete="off" >
-              <span class="glyphicon glyphicon-ok"></span>
-          </label>
-          <label class="btn btn-danger active" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $plan->idPlan ?>)'>
-            <input type="radio" name="radioDesactivate" value="<?=$plan->idPlan?>" id="option2" autocomplete="off" checked>
-            <span class="glyphicon glyphicon-ok"></span>
-          </label>
-          <?php endif; ?>
-        </div>
-      </td>
-      <td>
-        <button class="btn btn-primary" onclick='editPlan("<?=base_url($ADD['ADDRESS_3']) ?>",<?= $plan->idPlan?>)'><i class="glyphicon glyphicon-pencil"></i> Editar</button>
-        <button class="btn btn-danger" onclick='deletePlan("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $plan->idPlan;?>)'><i class="glyphicon glyphicon-trash"></i> Borrar</button>
-        <button class="btn btn-success" onclick='location.href="<?=base_url().$ADD['ADDRESS_1']?>/<?= $plan->idPlan ?>/<?= urlencode($plan->name) ?>"' type="button"><i class="glyphicon glyphicon-chevron-right"></i> Continuar</button>
-      </td>
-    </tr>
-  <?php }?>
-  </tbody>
+                  <td id="textCenter">
+                      <button class="btn btn-primary" onclick='editPlan("<?=base_url($ADD['ADDRESS_3']) ?>",<?= $plan->idPlan?>)'>
+                          <i class="glyphicon glyphicon-pencil"></i>
+                      </button>
+                      <button class="btn btn-danger" onclick='deletePlan("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $plan->idPlan;?>)'>
+                          <i class="glyphicon glyphicon-trash"></i>
+                      </button>
+                  </td>
+              </tr>
+          <?php }?>
+      </tbody>
   </table>
+  
   <div id="loader" style="left: 45%;"></div>
 
       
+
+
       
   <!-- Bootstrap modal -->
   <div class="modal fade" id="modal_form" role="dialog">

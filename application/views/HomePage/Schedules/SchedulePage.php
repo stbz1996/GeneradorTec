@@ -29,27 +29,35 @@
 			<div class="itemf1"> Viernes </div>
 			<div class="itemf1"> Sabado </div>
 		</div>
-
 		<?php 
-		for ($i=1; $i < 15; $i++) { ?>
+		$count = 0;
+		$hours = array(
+			'7:30am - 8:20am','8:30am - 9:20am','9:30am - 10:20am','10:30am - 11:20am',
+			'11:30am - 12:20pm', '1:00pm - 1:50pm','2:00pm - 2:50pm','3:00pm - 3:50pm',
+			'4:00pm - 4:50pm','4:50pm - 5:30pm','5:30pm - 6:20pm','6:20pm - 7:10pm',
+			'7:25pm - 8:15pm','8:15pm - 9:05pm','9:05pm - 9:55pm'
+		);
+		for ($i = 0; $i < 14; $i++) { ?>
 			<div class="fileone">
 			<!-- It is the hour -->
 			<div class="itemCol1"> <?= $hours[$i] ?> </div>
 			<?php 
-			for ($k=1; $k < 7; $k++) { ?>
+			for ($k=0; $k < 6; $k++) { ?>
 				<!-- It is a normal space in schedule -->
 				<?php 
-					$baseId = $days[$i][$k]['id'];
-					$baseState = $days[$i][$k]['state'];
+					$baseId = $schedules[$count]['numberSchedule'];
+					$baseState = $schedules[$count]['state'];
 					$Did = 'Div-'.$baseId;
 					$Mid = 'Inp-'.$baseId;
+					$count += 1;
 				?>
 				<div id="<?= $Did ?>" onclick="changeState('<?= $Mid ?>', '<?= $Did ?>')" class="item">.
-					<input class="hiddenItem" id="<?= $Mid ?>" value="<?= $baseState ?>"type="hidden" name="<?= $Mid  ?>">
+					<input class="hiddenItem" id="<?= $Mid ?>" value="<?= $baseState ?>"type="hidden" name="<?= $Mid  ?>"> 
 				</div>
 			<?php } ?>						
 			</div>
 			<?php } ?>
+
 	</div>
 </div>
 <hr>

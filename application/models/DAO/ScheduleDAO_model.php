@@ -17,9 +17,10 @@ class ScheduleDAO_model extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->from('Schedule');
+		$this->db->order_by('numberSchedule', 'asc');
 		try{ $query = $this->db->get(); }
 		catch (Exception $e){ return false; }	
-		if ($query->num_rows() > 0) return $query;
+		if ($query->num_rows() > 0) return $query->result();
 		else return false;
 	}
 
@@ -30,9 +31,10 @@ class ScheduleDAO_model extends CI_Model
 	public function updateScheduleState($schedule)
 	{
 		$changes = array('state' => $schedule->getState());
-		$this->db->where('idSchedule', $schedule->getId());
+		$this->db->where('numberSchedule', $schedule->getNumberSchedule());
 		$this->db->update('Schedule', $changes);
 	}
+
 
 	public function getSchedule($idSchedule)
 	{

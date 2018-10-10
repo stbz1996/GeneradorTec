@@ -11,17 +11,17 @@
     <button class="btn btn-primary" onclick="addCourse()"><i class="glyphicon glyphicon-plus"></i> Crear Curso</button>
     <br/><br/>
         
-    <table id="table_id" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <table id="table_id" class="table table-bordered table-hover table-condensed table-striped" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>Codigo</th>
-                <th>Nombre</th>
-                <th>Bloque</th>
-                <th>Plan</th>
-                <th>Estado</th>
-                <th>Lecciones</th>
-                <th>¿Carrera?</th>
-                <th></th>
+                <th class="col-sm-1" id="textCenter">Codigo</th>
+                <th class="col-sm-1" id="textCenter">Nombre</th>
+                <th class="col-sm-1" id="textCenter">Bloque</th>
+                <th class="col-sm-1" id="textCenter">Plan</th>
+                <th class="col-sm-1" id="textCenter">Estado</th>
+                <th class="col-sm-1" id="textCenter">Lecciones</th>
+                <th class="col-sm-1" id="textCenter">¿Carrera?</th>
+                <th class="col-sm-1" id="textCenter">Opciones</th>
             </tr>
         </thead>
 
@@ -32,48 +32,42 @@
                 <td><?php echo $course->name;?></td>
                 <td><?php echo $course->blockName;?></td>
                 <td><?php echo $course->planName;?></td>
-                <td>
+                <td id="textCenter">
                   <div class="btn-group" data-toggle="buttons">
                   <?php if($course->state): ?>
-                    <row>
                       <label class="btn btn-success active" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
                         <input type="radio" name="radioActivate" id="option2" autocomplete="off" checked>
                         <span class="glyphicon glyphicon-ok"></span>
                       </label>
-                    </row>
-                    <row>
-                      <label class="btn btn-danger" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)' style="margin-top: 1%">
+                      <label class="btn btn-danger" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
                         <input type="radio" name="radioDesactivate" id="option2" autocomplete="off">
                         <span class="glyphicon glyphicon-ok"></span>
                       </label>
-                    </row>
                   <?php else: ?>
-                    <row>
                       <label class="btn btn-success" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
                         <input type="radio" name="radioActivate" id="option2" autocomplete="off" >
                         <span class="glyphicon glyphicon-ok"></span>
                       </label>
-                    </row>
-                    <row>
-                      <label class="btn btn-danger active" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)' style="margin-top: 1%">
+                    
+                      <label class="btn btn-danger active" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $course->idCourse ?>)'>
                         <input type="radio" name="radioDesactivate" id="option2" autocomplete="off" checked>
                         <span class="glyphicon glyphicon-ok"></span>
                       </label>
-                    </row>
                   <?php endif; ?>
+
                   </div>
                 </td>
-                <td><?php echo $course->lessonNumber; ?></td>
-                <td>
+                <td id="textCenter"><?php echo $course->lessonNumber; ?></td>
+                <td id="textCenter">
                 <?php if ($course->isCareer == 0): ?> 
                     No
                 <?php else: ?>
                     Sí
                 <?php endif; ?>
                 </td>
-                <td>
-                  <button class="btn btn-primary" onclick='editCourse("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $course->idCourse ?>)'><i class="glyphicon glyphicon-pencil"></i> Editar</button>
-                  <button class="btn btn-danger" onclick='deleteCourse("<?=base_url().$ADD['ADDRESS_4']?>", <?= $course->idCourse ?>)'><i class="glyphicon glyphicon-trash"></i> Borrar</button>
+                <td id="textCenter">
+                  <button class="btn btn-primary" onclick='editCourse("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $course->idCourse ?>)'><i class="glyphicon glyphicon-pencil"></i></button>
+                  <button class="btn btn-danger" onclick='deleteCourse("<?=base_url().$ADD['ADDRESS_4']?>", <?= $course->idCourse ?>)'><i class="glyphicon glyphicon-trash"></i></button>
                 </td>
               </tr>
               <?php }?>

@@ -15,11 +15,11 @@
     </button>
     <br/><br/>
         
-    <table id="table_id" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <table id="table_id" class="table table-bordered table-hover table-condensed table-striped" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>Periodo</th>
-                <th>Editar o eliminar</th>
+                <th class="col-sm-8" id="textCenter">Periodo</th>
+                <th class="col-sm-2" id="textCenter">Opciones</th>
             </tr>
         </thead>
 
@@ -27,14 +27,17 @@
             <?php foreach($periods as $period){?>
               <tr>
                 <td>
-                    <?php echo $period->number, "\t - \t", $period->year;?>
+                    <div id="textInRowName">
+                        <?php echo $period->number, "\t - \t", $period->year;?>
+                    </div>
                 </td>
-                <td>
-                    <button class="btn btn-primary" onclick='editPeriod("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-pencil"></i> 
-                    Editar
+                
+                <td id="textCenter">
+                    <button class="btn btn-primary" onclick='editPeriod("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $period->idPeriod ?>)'>
+                        <i class="glyphicon glyphicon-pencil"></i> 
                     </button>
-                    <button class="btn btn-danger" onclick='deletePeriod("<?=base_url().$ADD['ADDRESS_4']?>", <?= $period->idPeriod ?>)'><i class="glyphicon glyphicon-trash"></i> 
-                        Borrar
+                    <button class="btn btn-danger" onclick='deletePeriod("<?=base_url().$ADD['ADDRESS_4']?>", <?= $period->idPeriod ?>)'>
+                        <i class="glyphicon glyphicon-trash"></i> 
                     </button>
                 </td>
               </tr>

@@ -35,6 +35,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/homePage.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/selectHours.css" />
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?=base_url()?>css/HomePage/table.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/admin.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/GenerateLinks.css">
     <link rel="shortcut icon" type="image/png" href="<?=base_url()?>img/favicon.png" />
@@ -56,68 +57,72 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="sidebar-menu">
                     <ul>
                         <li class="header-menu">
-                            <span>Menú</span>
-                        </li>
-                        <li>
-                            <a href="<?= $link_to_generateLinks ?>">
-                                <i class="fa fa-calendar"></i>
-                                <span>Generar Links</span>
-                            </a>
+                            <span>Administrar Información</span>
                         </li>
                         <li>
                             <a href="<?= $linkToPlans ?>">
-                                <i class="fa fa-folder"></i>
+                                <i class="fa fa-bookmark"></i>
                                 <span>Planes</span>
                             </a>
                         </li>
                         <li>
                             <a href="<?= $linkToBlocks ?>">
-                                <i class="fa fa-folder"></i>
+                                <i class="fa fa-book"></i>
                                 <span>Bloques</span>
                             </a>
                         </li>
                         <li>
                             <a href="<?= $linkToCourses ?>">
-                                <i class="fa fa-folder"></i>
+                                <i class="fa fa-clone"></i>
                                 <span>Cursos</span>
                             </a>
                         </li>
                         <li>
+                            <a href="<?= $linkToCurrentPeriod?>">
+                                <i class="fa fa-cube"></i>
+                                <span>Periodos</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="<?= $linkToScheduleHours ?>">
-                                <i class="fa fa-book"></i>
+                                <i class="fa fa-calendar"></i>
                                 <span>Horarios</span>
                             </a>
                         </li>
                         <li>
-                            <a href="<?= $linkToAdd ?>">
-                                <i class="fa fa-address-book"></i>
-                                <span>Agregar Administrador</span>
-                            </a>
-                        </li>
-                        <li>
                             <a href="<?= $linkToProfessors?>">
-                                <i class="fa fa-address-card"></i>
+                                <i class="fa fa-address-book"></i>
                                 <span>Profesores</span>
                             </a>
                         </li>
                         <li>
-                            <a href="<?= $linkToCurrentPeriod?>">
+                            <a href="<?= $linkToAssignAdvanceDays ?>">
+                                <i class="fa fa-hourglass-start"></i>
+                                <span>Días de antelación</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= $linkToAdd ?>">
                                 <i class="fa fa-address-card"></i>
-                                <span>Periodo</span>
+                                <span>Administradores</span>
+                            </a>
+                        </li>
+                        <li class="header-menu">
+                            <span>Generación de Horarios</span>
+                        </li>
+                        <li>
+                            <a href="<?= $link_to_generateLinks ?>">
+                                <i class="fa fa-link"></i>
+                                <span>1. Generar Links</span>
                             </a>
                         </li>
                         <li>
                             <a href="<?= $linkToAssignCourses ?>">
-                                <i class="fa fa-graduation-cap"></i>
-                                <span>Asignar Cursos</span>
+                                <i class="fa fa-columns"></i>
+                                <span>2. Asignar Cursos</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="<?= $linkToAssignAdvanceDays ?>">
-                                <i class="fa fa-graduation-cap"></i>
-                                <span>Días de antelación</span>
-                            </a>
-                        </li>
+                        
                     </ul>
                 </div>
                 <!-- sidebar-menu  -->

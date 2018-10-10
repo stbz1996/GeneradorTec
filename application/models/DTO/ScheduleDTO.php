@@ -5,73 +5,63 @@ class ScheduleDTO{
 	Variables
 	****************************************/
 	private $idSchedule;
-	private $initialTime;
-	private $finishTime;
-	private $day;
+	private $description;
+	private $numberSchedule;
 	private $state;
 
 	function __construct()
 	{
-		$this->idSchedule = 0;
-		$this->initialTime = 0;
-		$this->finishTime = 0;
-		$this->day = 0;
+		$this->idSchedule  = 0;
+		$this->description = '';
+		$this->numberSchedule = 0;
 		$this->state = 0;
 	}
 
-	/* Setters and Getters */
 
+	/* Setters and Getters */
 	public function setIdSchedule($pIdSchedule)
 	{
 		$this->idSchedule = $pIdSchedule;
 	}
 
-	public function setInitialTime($pInitialTime)
+
+	public function setDescription($pDescription)
 	{
-		$this->initialTime = $pInitialTime;
+		$this->description = $pDescription;
 	}
 
-	public function setFinishTime($pFinishTime)
-	{
-		$this->finishTime = $pFinishTime;
-	}
-
-	public function setDay($pDay)
-	{
-		$this->day = $pDay;
-	}
 
 	public function setState($pState)
 	{
 		$this->state = $pState;
 	}
 
+	public function setNumberSchedule($pNumberSchedule)
+	{
+		$this->numberSchedule = $pNumberSchedule;
+	}
+
+
 	public function getId()
 	{
 		return $this->idSchedule;
 	}
 
-	public function getInitialTime()
+
+	public function getDescription()
 	{
-		return $this->initialTime;
+		return $this->description;
 	}
 
-	public function getFinishTime()
-	{
-		return $this->finishTime;
-	}
-
-	public function getDay()
-	{
-		return $this->day;
-	}
 
 	public function getState()
 	{
 		return $this->state;
 	}
 
-	/* Finish the setters and getters */
+	public function getNumberSchedule()
+	{
+		return $this->numberSchedule;
+	}
 }
-
 ?>

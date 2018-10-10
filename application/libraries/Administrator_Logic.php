@@ -612,16 +612,9 @@ class Administrator_Logic{
  	{
  		$schedules = new ScheduleDAO_model(); 
  		$allSchedules = $schedules->getAllSchedules(); 	
- 		foreach ($allSchedules->result() as $schedule) {
- 			$arr['id'] = $schedule->idSchedule;
- 			$arr['dayName'] = $schedule->dayName;
- 			$arr['initialTime'] = $schedule->initialTime;
- 			$arr['finishTime'] = $schedule->finishTime;
- 			$arr['state'] = $schedule->state;
-  			$res[] = $arr;
- 		}
- 		return $res;
+ 		return $allSchedules;
  	}
+
 
  	public function updateSchedule($schedule)
  	{

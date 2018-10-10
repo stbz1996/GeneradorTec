@@ -1,12 +1,3 @@
-<?php
-	$button = array(
-		'name' => 'sendData',
-		'value' => 'Enviar Links',
-		'class' => "btn btn-default",
-		'onclick' => 'x()',
-	);
-?>
-
 <div class="titles" id="titles">
   	<h1>Generación automática de links</h1>
    	<ul>

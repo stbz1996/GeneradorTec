@@ -12,63 +12,68 @@
   <button class="btn btn-primary" onclick="addBlock()"><i class="glyphicon glyphicon-plus"></i> Crear Bloque</button>
   <br/><br/>
         
-  <table id="table_id" class="table table-striped table-bordered" cellspacing="0" width="100%">
+  <table id="table_id" class="table table-bordered table-hover table-condensed table-striped" cellspacing="0" width="100%">
     <thead>
       <tr>
-        <th>Nombre</th>
-        <th>Plan</th>
-        <th>Estado</th>
-        <th></th>
+        <th class="col-sm-1" id="textCenter">Nombre   </th>
+        <th class="col-sm-3" id="textCenter">Plan     </th>
+        <th class="col-sm-1" id="textCenter">Estado   </th>
+        <th class="col-sm-1" id="textCenter">Opciones </th>
       </tr>
     </thead>
 
-      <tbody>
+    <tbody>
         <?php foreach($blocks as $block){?>
         <tr>
-          <td><?php echo $block->name;?></td>
-          <td><?php echo $block->planName;?></td>
-          <td>
-          <div class="btn-group" data-toggle="buttons">
-
-          <?php if($block->state): ?>
-
-              <label class="btn btn-success active" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $block->idBlock ?>)'>
-                <input type="radio" name="radioActivate" id="option2" autocomplete="off" checked>
-                  <span class="glyphicon glyphicon-ok"></span>
-              </label>
-              <label class="btn btn-danger" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $block->idBlock ?>)'>
-                <input type="radio" name="radioDesactivate" id="option2" autocomplete="off">
-                  <span class="glyphicon glyphicon-ok"></span>
-              </label>
-
-          <?php else: ?>
-
-                <label class="btn btn-success" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $block->idBlock ?>)'>
-                  <input type="radio" name="radioActivate" id="option2" autocomplete="off" >
-                    <span class="glyphicon glyphicon-ok"></span>
-                </label>
-                <label class="btn btn-danger active" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $block->idBlock ?>)'>
-                  <input type="radio" name="radioDesactivate" id="option2" autocomplete="off" checked>
-                    <span class="glyphicon glyphicon-ok"></span>
-                </label>
-          <?php endif; ?>
-
-          </div>
-          </td>
-          <td>
-            <button class="btn btn-primary" onclick='editBlock("<?=base_url($ADD['ADDRESS_3']) ?>",<?= $block->idBlock?>)'><i class="glyphicon glyphicon-pencil"></i> Editar</button>
-            <button class="btn btn-danger" onclick='deleteBlock("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $block->idBlock;?>)'><i class="glyphicon glyphicon-trash"></i> Borrar</button>
-            <button class="btn btn-success" onclick='location.href="<?=base_url().$ADD['ADDRESS_1']?>/<?= $block->idBlock ?>/<?= urlencode($block->name) ?>"' type="button"><i class="glyphicon glyphicon-chevron-right"></i> Continuar</button>
-          </td>
+            <td>
+                <div id="textInRowName">
+                    <?php echo $block->name;?></td>
+                </div>
+            <td>
+                <div id="textInRowName">
+                    <?php echo $block->planName;?>
+                </div>
+            </td>
+            <td id="textCenter">
+                <div class="btn-group" data-toggle="buttons">
+                    <?php if($block->state): ?>
+                        <label class="btn btn-success active" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $block->idBlock ?>)'>
+                            <input type="radio" name="radioActivate" id="option2" autocomplete="off" checked>
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </label>
+                        <label class="btn btn-danger" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $block->idBlock ?>)'>
+                            <input type="radio" name="radioDesactivate" id="option2" autocomplete="off">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </label>
+                    <?php else: ?>
+                        <label class="btn btn-success" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $block->idBlock ?>)'>
+                            <input type="radio" name="radioActivate" id="option2" autocomplete="off" >
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </label>
+                        <label class="btn btn-danger active" onclick='desactivateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $block->idBlock ?>)'>
+                            <input type="radio" name="radioDesactivate" id="option2" autocomplete="off" checked>
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </label>
+                    <?php endif; ?>
+                </div>
+            </td>
+            
+            <td id="textCenter">
+                <button class="btn btn-primary" onclick='editBlock("<?=base_url($ADD['ADDRESS_3']) ?>",<?= $block->idBlock?>)'>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                </button>
+                <button class="btn btn-danger" onclick='deleteBlock("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $block->idBlock;?>)'><i class="glyphicon glyphicon-trash"></i>
+                </button>
+            </td>
         </tr>
         <?php }?>
-      </tbody>
-      <div id="loader" style="left: 45%"></div>
+    </tbody>
   </table>
-
 </div>
-      
-  <!-- Bootstrap modal -->
+
+<div id="loader" style="left: 45%"></div>    
+
+<!-- Bootstrap modal -->
 <div class="modal fade" id="modal_form" role="dialog">
 
   <div class="modal-dialog">

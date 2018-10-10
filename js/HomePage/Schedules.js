@@ -2,13 +2,11 @@
 That function is only for view, it takes up to 100 schedules and active or deactive 
 it state but this is only for view, does not change the value of the inputs
 *************************************************************************************/
-function fillSchedulesStates(){
-	for (var i=1; i < 100; i++) {
-		try {
-			changeStateOnView('Inp-'+i, 'Div-'+i);
-		}
-		catch(err){
-		}
+function fillSchedulesStates()
+{
+	for (var i = 1; i < 85; i++) 
+	{
+		changeStateOnView('Inp-'+i, 'Div-'+i);	
 	}
 }
 
