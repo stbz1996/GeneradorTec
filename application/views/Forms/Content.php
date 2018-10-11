@@ -65,7 +65,8 @@
       </select>
     </div>
 
-    <div class="tableColumCheck">
+    <div class="tableColumnCheckExtension">
+      <p class="extension-txt">¿Ampliación?</p>
       <label class="container">
         <input type="checkbox" class="cbox_extension" id="cbox_extension" name="cbox_extension" value="first_checkbox" <?= $extension ? 'checked' : '' ?> />
         <span class="checkmark"></span>
