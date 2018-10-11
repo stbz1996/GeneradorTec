@@ -14,7 +14,6 @@ class Form_controller extends CI_Controller {
 
 		$this->load->library('session');
 		$this->load->library('Form_Logic');
-		$this->load->library('System_Logic');
 
 		$this->load->model("DAO/FormDAO_model");
 		$this->load->model("DTO/FormDTO");
@@ -35,7 +34,6 @@ class Form_controller extends CI_Controller {
 		date_default_timezone_set("America/Costa_Rica");
 		$this->Form = new FormDTO();
 		$this->Form_Logic = new Form_Logic();
-		$this->System_Logic = new System_Logic();
 	}
 
 
@@ -85,6 +83,7 @@ class Form_controller extends CI_Controller {
 		//Assign information to show it in form
 		$data = $this->assignInitialInformation($initialInformation);
 		$data['dueDate'] = $this->Form->getDueDate();
+		$data['extension'] = $this->Form->getExtension();
 
 		//Get saved information
 		$data['activities'] = $this->getActivities();
@@ -95,7 +94,7 @@ class Form_controller extends CI_Controller {
 		$data = array_merge($data, $scheduleInformation);
 		
 		$scheduleForm = $this->showScheduleForm();
-		$data = array_merge($data, $scheduleForm);		
+		$data = array_merge($data, $scheduleForm);
 
 		$this->load->view("Forms/Header");
 		$this->load->view("Forms/Content", $data);
@@ -121,6 +120,7 @@ class Form_controller extends CI_Controller {
 		$form->setDueDate($newForm->dueDate);
 		$form->setIdProfessor($newForm->idProfessor);
 		$form->setIdPeriod($newForm->idPeriod);
+		$form->setExtension($newForm->extension);
 
 		return $form;
 	}
@@ -249,12 +249,13 @@ class Form_controller extends CI_Controller {
 	{
 		$saveState = $_POST['saveState'];
 		$workload = $_POST['workload'];
+		$extension = $_POST['extension'];
 		$activitiesDescription = json_decode($_POST['activitiesDescription']);
 		$activitiesWorkPorcent = json_decode($_POST['activitiesWorkPorcent']);
 		$idCourses = json_decode($_POST['idCourses']);
 		$priorities = json_decode($_POST['priorities']);
 		$schedules = json_decode($_POST['schedules']);
-		$this->validateDataFromView($saveState, $workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities, $schedules);
+		$this->validateDataFromView($saveState, $workload, $extension, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities, $schedules);
 	}
 
 	/****************************************
@@ -278,13 +279,13 @@ class Form_controller extends CI_Controller {
 	*	-$schedules: Array, list of all 	*
 	*	schedules chosen by professor.		*
 	*****************************************/
-	function validateDataFromView($saveState, $workload, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities, $schedules)
+	function validateDataFromView($saveState, $workload, $extension, $activitiesDescription, $activitiesWorkPorcent, $idCourses, $priorities, $schedules)
 	{
 		$idForm = $_SESSION['idForm'];
 		$idProfessor = $_SESSION['idProfessor'];
 		
 		/* Save data (workload, activities, courses and schedules)*/
-		$this->insertWorkload($idProfessor, $workload);
+		$this->insertWorkload($idProfessor, $workload, $extension);
 		$this->manageActivities($idForm, $activitiesDescription, $activitiesWorkPorcent);
 		$this->assignCourses($idForm, $idCourses, $priorities);
 		$this->saveScheduleInformation($schedules);
@@ -453,9 +454,9 @@ class Form_controller extends CI_Controller {
 	*	-$workload: Integer, possible work-	*
 	*	load assigned by the professor.		*
 	*****************************************/
-	function insertWorkload($idProfessor, $workload)
+	function insertWorkload($idProfessor, $workload, $extension)
 	{
-		$this->Form_Logic->validateWorkload($idProfessor, $workload);
+		$this->Form_Logic->validateWorkload($idProfessor, $workload, $extension);
 	}
 
 	/****************************************
@@ -581,13 +582,29 @@ class Form_controller extends CI_Controller {
 		// The schedules are loaded
 		$schedules = $this->Form_Logic->getAllSchedules();
 		
-		// Get the data for representation in viw 
-		$system_Logic = new System_Logic();
-		$hoursRepresentationForView = $system_Logic->getHoursRepresentationForView();
-		$daysRepresentation = $system_Logic->getDaysRepresentation();
-		$hoursRepresentation = $system_Logic->gethoursRepresentation();
+		$hoursForView = array();
+		$schedulesForView = array();
+		
+		foreach ($schedules as $schedule) 
+		{
+			$number = $schedule->numberSchedule;
+
+			if(($number-1) % 6 == 0)
+			{
+				$hoursForView[] = $schedule->description;
+			}
+
+			$dataSchedule['id'] = $schedule->idSchedule;
+			$dataSchedule['state'] = $schedule->state;
+			$dataSchedule['numberSchedule'] = $number;
+			$schedulesForView[] = $dataSchedule;
+		}
+		$data['hours'] = $hoursForView;
+		$data['schedules'] = $schedulesForView;
+
+		return $data;
 	
-		$scheduleCounter = 0;
+		/*$scheduleCounter = 0;
 		foreach ($schedules as $schedule) {
 			$hour = $hoursRepresentation[$schedule['initialTime']]; 
 			$day = $daysRepresentation[$schedule['dayName']];
@@ -600,13 +617,13 @@ class Form_controller extends CI_Controller {
 
 			$scheduleCounter += 1;
 		}
-		// That varible is used to count the number of schedules in BD
+		// This variable is used to count the number of schedules in BD
 		$this->session->set_userdata('scheduleCounter' , $scheduleCounter);
 		$data['hours'] = $hoursRepresentationForView;
 		$data['days'] = $dataToView;
 		$data['schedules'] = $schedules;
 
-		return $data;
+		return $data;*/
 		//$this->callView("SchedulePage", $data);
 	}
 

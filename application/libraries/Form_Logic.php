@@ -61,10 +61,11 @@ class Form_Logic{
 	*	-$workload: Integer, possible work- *
 	*	load of professor. 					*
 	*****************************************/
-	public function validateWorkload($idProfessor, $workload)
+	public function validateWorkload($idProfessor, $workload, $extension)
 	{
 		$form = new FormDAO_model();
 		$form->updateWorkload($idProfessor, $workload);
+		$form->updateExtension($idProfessor, $extension);
 	}
 
 
@@ -357,21 +358,13 @@ class Form_Logic{
 	}
 
 	/**************************************************************
-	This function returns all the schedules registered in the system
+	This function returns all the schedules regitered in the sistem
  	***************************************************************/
- 	function getAllSchedules()
+ 	public function getAllSchedules()
  	{
  		$schedules = new ScheduleDAO_model(); 
  		$allSchedules = $schedules->getAllSchedules(); 	
- 		foreach ($allSchedules->result() as $schedule) {
- 			$arr['id'] = $schedule->idSchedule;
- 			$arr['dayName'] = $schedule->dayName;
- 			$arr['initialTime'] = $schedule->initialTime;
- 			$arr['finishTime'] = $schedule->finishTime;
- 			$arr['state'] = $schedule->state;
-  			$res[] = $arr;
- 		}
- 		return $res;
+ 		return $allSchedules;
  	}
 
  	function insertScheduleForm($data)
@@ -398,7 +391,7 @@ class Form_Logic{
  		$schedules = array();
  		foreach ($query as $schedule) 
  		{
- 			$schedules[] = $schedule['idSchedule'];
+ 			$schedules[] = $schedule['numberSchedule'];
  		}
 
  		return $schedules;

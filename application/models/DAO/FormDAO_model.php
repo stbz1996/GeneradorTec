@@ -206,8 +206,9 @@ class FormDAO_model extends CI_Model
 	public function showScheduleForm($idForm)
 	{
 		$this->db->select('*');
-		$this->db->from('FormXSchedule');
-		$this->db->where('idForm', $idForm);
+		$this->db->from('Schedule');
+		$this->db->join('FormXSchedule', 'FormXSchedule.idSchedule = Schedule.idSchedule');
+		$this->db->where('FormXSchedule.idForm', $idForm);
 
 		$query = $this->db->get();
 		if($query->num_rows() > 0)
@@ -247,6 +248,14 @@ class FormDAO_model extends CI_Model
 		{
 			return false;
 		}
+	}
+
+	public function updateExtension($idProfessor, $extension)
+	{
+		$this->db->join('Professor', 'Professor.idProfessor = Form.idProfessor');
+		$this->db->set('Form.extension', (string)$extension);
+		$this->db->where('Form.idProfessor', $idProfessor);
+		$this->db->update('Form');
 	}
 }
 

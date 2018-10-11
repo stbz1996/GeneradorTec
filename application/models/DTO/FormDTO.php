@@ -10,6 +10,7 @@ class FormDTO{
 	private $dueDate;
 	private $idProfessor;
 	private $idPeriod;
+	private $extension;
 
 	function __construct()
 	{
@@ -62,6 +63,10 @@ class FormDTO{
 		$this->idProfessor = $pIdProfessor;
 	}
 
+	public function setExtension($pExtension)
+	{
+		$this->extension = $pExtension;
+	}
 
 	public function getIdPeriod()
 	{
@@ -96,6 +101,11 @@ class FormDTO{
 	public function getIdProfessor()
 	{
 		return $this->idProfessor;
+	}
+
+	public function getExtension()
+	{
+		return $this->extension;
 	}
 	/* Finish the setters and getters */
 }
