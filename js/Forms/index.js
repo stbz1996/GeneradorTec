@@ -3,7 +3,7 @@
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
-var doc = new jsPDF();
+var doc = new jsPDF('l', 'mm', [297, 210]);;
 
 var specialElementHandlers = {
 	'#editor': function(element, renderer){
@@ -193,6 +193,7 @@ $('.submit-save').click(function(){
 		return false;
 	}
 	var workloadSelect = document.getElementById("workload_options");
+	var workloadExtension = $('.cbox_extension').prop('checked') ? 1 : 0;
 	var activitiesDescription = $('input[name^="activityDescription"]');
 	var activitiesWorkPorcent = $('input[name^="workPorcent"]');
 	var idCourses = $('input[name^="idCourses"]');
@@ -210,9 +211,13 @@ $('.submit-save').click(function(){
 	for(i = 0; i < schedules.length; i++)
 	{
 		if(schedules[i].value == 1){
-			var id = schedules[i].id.split("-")[1];
-			id = parseInt(id, 10);
-			newSchedules.push(id);
+			/*var id = schedules[i].id.split("-")[1];
+			id = parseInt(id, 10);*/
+
+			var id = "Id"+schedules[i].id;
+
+			var value = document.getElementById(id).value;
+			newSchedules.push(value);
 		}
 	}
 
@@ -247,6 +252,7 @@ $('.submit-save').click(function(){
 		data:{
 			saveState: saveState,
 			workload: workloadValue,
+			extension: workloadExtension,
 			activitiesDescription: JSON.stringify(newActivitiesDescription),
 			activitiesWorkPorcent: JSON.stringify(newActivitiesWorkPorcent),
 			idCourses: JSON.stringify(newIdCourses),
@@ -273,6 +279,8 @@ $('.submit-save').click(function(){
 		},
 		error: function ()
         {
+        	document.getElementById("loader").style.display = "none";
+			document.getElementById("msform").style.opacity = 1;
             swal('Lo sentimos', 'No sé pudieron guardar los datos correctamente', 'error');
         }
 	});

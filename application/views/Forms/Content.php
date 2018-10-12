@@ -64,6 +64,14 @@
         <?php }?>
       </select>
     </div>
+
+    <div class="tableColumnCheckExtension">
+      <p class="extension-txt">¿Ampliación?</p>
+      <label class="container">
+        <input type="checkbox" class="cbox_extension" id="cbox_extension" name="cbox_extension" value="first_checkbox" <?= $extension ? 'checked' : '' ?> />
+        <span class="checkmark"></span>
+      </label>
+    </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior"/>
     <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">
     <input type="button" name="next" id="next-workload" class="next action-button" value="Siguiente" />
@@ -204,26 +212,28 @@
         </div>
 
         <?php 
-        for ($i=1; $i < 15; $i++) { ?>
+        $countSchedules = 0;
+        for ($i=0; $i < 15; $i++) { ?>
           <div class="fileone">
           <!-- It is the hour -->
           <div class="itemCol1"> <?= $hours[$i] ?> </div>
           <?php 
           for ($k=1; $k < 7; $k++) { ?>
             <!-- It is a normal space in schedule -->
-            <?php 
-              $baseId = $days[$i][$k]['id'];
-              $baseState = $days[$i][$k]['state'];
+            <?php
+              $idSchedule = $schedules[$countSchedules]['id'];
+              $baseId = $schedules[$countSchedules]['numberSchedule'];
+              $baseState = $schedules[$countSchedules]['state'];
               $Did = 'Div-'.$baseId;
               $Mid = 'Inp-'.$baseId;
+              $countSchedules++;
             ?>
             <div id="<?= $Did ?>" <?php if($baseState) {?>
               onclick="changeState('<?= $Mid ?>', '<?= $Did ?>')" <?php }?> 
             class="item">.
               <input class="hiddenItem" id="<?= $Mid ?>" value="<?= $baseState ?>" type="hidden" name="<?= $Mid ?>">
-              <input type="hidden" id="day-<?= $baseId ?>" value="<?=$days[$i][$k]['day']?>">
-              <input type="hidden" id="initialTime-<?= $baseId ?>" value="<?=$days[$i][$k]['initialTime']?>">
-              <input type="hidden" id="finalTime-<?= $baseId ?>" value="<?=$days[$i][$k]['finishTime']?>">
+              <input type="hidden" id="Id<?= $Mid ?>" value="<?=$idSchedule?>">
+              
             </div>
           <?php } ?>            
           </div>
