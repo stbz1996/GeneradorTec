@@ -12,14 +12,14 @@ class Administrator_Logic{
 	/******************************************************************
 	Insert a new administrator in the database.
 	******************************************************************/
-	public function insertAdmin($username, $password)
+	public function insertAdmin($username, $password, $idCareer)
 	{
 		$administratorDAO_model = new AdministratorDAO_model();
 		$administrator = new AdministratorDTO();
 		$administrator->setUser($username);
 		$administrator->setPassword($password);
 
-		$administratorDAO_model->insert($administrator);
+		$administratorDAO_model->insert($administrator, $idCareer);
 	}
 
 
@@ -108,7 +108,7 @@ class Administrator_Logic{
 
 		// If there are not admins.
 		if (!$query){
-			printMessage("Hay un problema con su solicitud");
+			echo 'false';
 			return false;
 		}
 
@@ -117,44 +117,11 @@ class Administrator_Logic{
 
 		/* If the new admin username is registered in the database*/
 		if (!$state){
-			printMessage("El usuario ya está registrado en el sistema.");
+			echo 'false';
 			return false;
 		}
 
 		return true;
-	}
-
-	/****************************************
-	- Compare the data from the form to insert an admin.
-	****************************************/
-	public function validAdminData($username, $password, $autentification)
-	{
-		if ($password != $autentification)
-		{
-			printMessage("Las contraseñas no coinciden");
-			return false;
-		}
-
-		if ($username == null || $username = "")
-		{
-			printMessage("El nombre de usuario no puede estar vacío");
-			return false;
-		}
-
-		if ($password == null || $password = "")
-		{
-			printMessage("Debe escribir una contraseña.");
-			return false;
-		}
-
-		if ($autentification == null || $autentification = "")
-		{
-			printMessage("Debe escribir una verificación de la contraseña");
-			return false;
-		}
-
-		return true; // Data is valid.
-
 	}
 
 

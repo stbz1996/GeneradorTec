@@ -76,6 +76,13 @@ function add(message)
     $('.modal-title').text(message);
 }
 
+function addAdmin()
+{
+    var message = "Agregar Admin";
+    save_method = 'add';
+    saveAdmin();
+}
+
 function addPlan()
 {
     var message = "Agregar Plan";
@@ -202,8 +209,6 @@ function editBlock(url, id)
     save_method = 'update';
     $('#form')[0].reset();
 
-    console.log(url + id);
-
     //Ajax Load data from ajax
     $.ajax({
         url : url + id,
@@ -234,11 +239,8 @@ function editBlock(url, id)
 ****************************************/
 function editCourse(url, id)
 {
-    console.log(url + id);
     save_method = 'update';
     $('#form')[0].reset();
-
-    console.log(url + id);
 
     //Ajax Load data from ajax
     $.ajax({
@@ -250,7 +252,6 @@ function editCourse(url, id)
         },
         success: function(data)
         {
-            console.log(url + id);
             $('[name="inputIdCourse"]').val(data.idCourse);
             $('[name="inputCode"]').val(data.code);
             $('[name="inputName"]').val(data.name);
@@ -263,7 +264,6 @@ function editCourse(url, id)
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
-            console.log("El error está aquí");
             showErrors(jqXHR, textStatus, errorThrown);
         }
     });
@@ -378,6 +378,43 @@ function save(url, message)
     });
 }
 
+
+function saveFormAdmin(url, message)
+{
+    // ajax adding data to database
+    $.ajax({
+        url : url,
+        type: "POST",
+        data: $('#Login').serialize(),
+        dataType: "JSON",
+        beforeSend: function(){
+            showLoader();
+        },
+        success: function(response)
+        {
+            if (response == true)
+            {
+                hideLoader();
+                swal({title: "Listo", 
+                text: message[0],
+                icon: "success"}).then(function(){
+                    location.reload();
+                });
+            }
+            else
+            {
+                hideLoader();
+                swal({title: "Error", text: message[1], icon: "warning"});
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
+
 function savePlan()
 {
     var url;
@@ -456,7 +493,6 @@ function saveBlock()
 function loadBlocks(id)
 {
     var url = base_url + "Administrator_controller/loadBlocks/";
-    console.log(url + id);
     $.ajax({
         url: url + id,
         type: "GET",
@@ -466,7 +502,6 @@ function loadBlocks(id)
         },
         success: function(blocks)
         {
-            console.log(blocks);
             var count = 0;
 
             blocks.forEach(function(block){
@@ -479,7 +514,6 @@ function loadBlocks(id)
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
-            console.log("Error a la hora de cargar los datos.")
             showErrors(jqXHR, textStatus, errorThrown);
         }
     });
@@ -608,6 +642,45 @@ function savePeriod()
     save(url, message);
 }
 
+function saveAdmin()
+{
+    var url;
+
+    if (save_method == "add")
+    {
+        url = base_url + "Administrator_controller/getAdminData";
+        var message = [
+            "Se ha agregado el administrador",
+            "El administrador ya está registrado",
+            "No se ha agregado el administrador. Verifique los datos."
+        ];
+    }
+    username = $('[name="inputUsername"]').val();
+    password = $('[name="inputPassword"]').val();
+    verifyPassword = $('[name="inputPasswordAgain"]').val();
+
+    if (username && password && verifyPassword)
+    {   
+        if (password == verifyPassword)
+        {
+            saveFormAdmin(url, message);  
+        }
+         else
+        {
+        swal({title: "Error", 
+            text: "Contraseñas no coinciden.", 
+            icon: "error"});
+        }
+    }
+    else
+    {
+        swal({title: "Error", 
+            text: "Datos incompletos.", 
+            icon: "error"});
+
+    }
+}
+
 /************************************************
 - If the user press delete for whatever.        *
 - This is the main delete function for          *
@@ -634,7 +707,6 @@ function deleteAll(url, id, message)
             },
             success: function(response)
             {
-                console.log(response);
                 if (response == true)
                 {
                     $('#modal_form').modal('hide');

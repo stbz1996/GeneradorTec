@@ -1,4 +1,4 @@
-<?= form_open("/Administrator_controller/getAdminData") ?>
+<script>var base_url = '<?php echo base_url() ?>';</script>
 
 <?php
 	$user = array(
@@ -31,7 +31,8 @@
 	$button = array(
 		'name' =>  'submitButton',
 		'value' => 'Agregar administrador',
-		'class' => "btn btn-primary"
+		'class' => "btn btn-primary",
+		'onclick' => "addAdmin()"
 	);
 ?>
 
@@ -55,3 +56,5 @@
 		<?= form_close() ?> 
 	</div>
 </div>
+
+  <div id="loader" style="left: 45%;"></div>
