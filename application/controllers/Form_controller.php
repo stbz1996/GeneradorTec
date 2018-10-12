@@ -14,7 +14,6 @@ class Form_controller extends CI_Controller {
 
 		$this->load->library('session');
 		$this->load->library('Form_Logic');
-		$this->load->library('System_Logic');
 
 		$this->load->model("DAO/FormDAO_model");
 		$this->load->model("DTO/FormDTO");

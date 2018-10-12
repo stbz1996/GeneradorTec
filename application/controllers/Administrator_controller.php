@@ -9,7 +9,6 @@ class Administrator_controller extends CI_Controller
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('Administrator_Logic');
-		$this->load->library('System_Logic');
 		$this->load->helper("functions_helper");
 		$this->load->helper("form");
 		$this->load->library('Form_Logic');

@@ -9,7 +9,6 @@ class GenerateLinks_controller extends CI_Controller
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('Administrator_Logic');
-		$this->load->library('System_Logic');
 		$this->load->library('Form_Logic');
 		$this->load->model("DAO/ProfessorDAO_model");
 		$this->load->model("DAO/PeriodDAO_model");
