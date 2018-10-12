@@ -9,7 +9,6 @@ class Administrator_controller extends CI_Controller
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('Administrator_Logic');
-		$this->load->library('System_Logic');
 		$this->load->helper("functions_helper");
 		$this->load->helper("form");
 		$this->load->library('Form_Logic');
@@ -573,11 +572,8 @@ class Administrator_controller extends CI_Controller
 	public function AddAdmin()
 	{
 		$data['pageName'] = "Add a new admin";
-		$this->load->view("HomePage/Header");
-		$this->load->view("HomePage/Admin/addAdmin", $data);
-		$this->load->view("HomePage/Footer");
+		$this->callView("Admin/addAdmin", $data);
 	}
-
 
 	/*********************************************************************
 	- Get the data of the new administrator and compare with the database.
@@ -590,30 +586,17 @@ class Administrator_controller extends CI_Controller
 		$username = $this->input->post('inputUsername');
 		$password = $this->input->post('inputPassword');
 		$autentification = $this->input->post('inputPasswordAgain');
-
-		// Verify if the username, password and autentification fields were filled.
-		$state = $this->administrator_logic->validAdminData($username, $password, $autentification);
-
-		if (!$state)
-		{
-			redirect('Administrator_controller/addAdmin', 'refresh');
-			return;
-		}
+		$idCareer = 1;
 
 		// Verify if the user is registered in the database.
 		$stateUsername = $this->administrator_logic->isUserInDatabase($username);
 
-		if (!$stateUsername)
+		// If the user is not registered.
+		if ($stateUsername)
 		{
-			redirect('Administrator_controller/addAdmin', 'refresh');
-			return;
+			// Insert the new administrator.
+			$this->administrator_logic->insertAdmin($username, $password, $idCareer);
 		}
-
-		// Insert the new administrator.
-		$this->administrator_logic->insertAdmin($username, $password);
-
-		printMessage("Se ha agregado a la base de datos");
-		redirect('Administrator_controller/index/');
 	}
 
 	public function AdvanceDays()

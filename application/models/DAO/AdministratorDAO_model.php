@@ -3,6 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class AdministratorDAO_model extends CI_Model
 {
+	var $table = 'Administrator';
+    var $tableForAdmin = 'AdminXCareer';
+
 	function __construct()
 	{
 		parent::__construct();
@@ -46,10 +49,19 @@ class AdministratorDAO_model extends CI_Model
 	- Insert an Admin to the database
 	- It just need the username and a password.
 	****************************************/
-	public function insert($Admin)
+	public function insert($Admin, $idCareer)
 	{
 		$newAdmin = array('userName' => $Admin->getUser(), 'password' => $Admin->getPassword());
-		$this->db->insert('Administrator', $newAdmin);
+		$this->db->insert($this->table, $newAdmin);
+
+        $AdminXCareer = array(
+            'idAdministrator' => $this->db->insert_id(),
+            'idCareer' => $idCareer
+        );
+
+        $this->db->insert($this->tableForAdmin, $AdminXCareer);
+        echo 'true';
+        return;
 	}
 
 	public function edit($Admin)
