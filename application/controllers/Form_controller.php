@@ -597,6 +597,7 @@ class Form_controller extends CI_Controller {
 			$dataSchedule['id'] = $schedule->idSchedule;
 			$dataSchedule['state'] = $schedule->state;
 			$dataSchedule['numberSchedule'] = $number;
+			$dataSchedule['description'] = $schedule->description;
 			$schedulesForView[] = $dataSchedule;
 		}
 		$data['hours'] = $hoursForView;

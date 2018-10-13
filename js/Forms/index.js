@@ -3,7 +3,9 @@
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
-var doc = new jsPDF('l', 'mm', [297, 210]);;
+var doc = new jsPDF('l', 'mm', [297, 210]);
+var days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+var totalDays = 6;
 
 var specialElementHandlers = {
 	'#editor': function(element, renderer){
@@ -131,13 +133,13 @@ $(document).on('click', '.cbox', function(){
 		$("#row-"+idCheck+"").append('<td id="id-'+idCheck+'"><input type="hidden" id="idCourse-'+idCheck+'" name="idCourses[]" value="'+
 			idCourse+'"/></td><td id="prior-'+idCheck+'"><input type="hidden" id="priority-'+idCheck+'" name="priorities[]" value="'+
 			priority+'"/></td>');
-		$("#select-"+idCheck+"").prop('disabled', 'disabled');
+		$("#select-"+idCheck+"").prop('disabled', false);
 	}
 	else
 	{
 		$("#id-"+idCheck+"").remove();
 		$("#priority-"+idCheck+"").remove();
-		$("#select-"+idCheck+"").prop('disabled', false);
+		$("#select-"+idCheck+"").prop('disabled', 'disabled');
 	}
 });
 
@@ -243,7 +245,8 @@ $('.submit-save').click(function(){
 	for(i = 0; i < idCourses.length; i++)
 	{
 		newIdCourses.push(idCourses[i].value);
-		newPriorities.push(priorities[i].value);
+		newPriorities.push(priorities[i].text);
+		alert(priorities[i]);
 	}
 
 	$.ajax({
@@ -354,13 +357,18 @@ function addSchedulesText()
 	for(i = 0; i < schedules.length; i++)
 	{
 		if(schedules[i].value == 1){
-			var id = schedules[i].id.split("-")[1];
-			id = parseInt(id, 10);
-			var day = $("#day-"+id+"").val();
-			var initialTime = $("#initialTime-"+id+"").val();
-			var finishTime = $("#finalTime-"+id+"").val();
 
-			$('#div-schedules').append("<div> - "+day+ " de "+initialTime+ " a "+ finishTime+"</div>");
+			var id = schedules[i].id.split("-")[1];
+
+			/* Get the hour of schedule*/
+			var hour = document.getElementById('Description-Inp-'+id).value;
+			
+			/* Get the day of schedule*/
+			id = parseInt(id, 10);
+			var remainder = (id-1) % totalDays;
+			var day = days[remainder];
+
+			$('#div-schedules').append("<div> - "+day+ ": "+ hour + "</div>");
 		}
 	}
 }
