@@ -415,6 +415,7 @@ function saveFormAdmin(url, message)
     });
 }
 
+
 function savePlan()
 {
     var url;
@@ -536,7 +537,7 @@ function saveCourse()
 
     if (save_method == "add")
     {
-        url = base_url + "Administrator_controller/addCourse";
+        url = base_url + "Administration/Courses_controller/addCourse";
         var message = [
             "Se ha agregado el curso",
             "Error al agregar el curso. Verifique los datos e inténtelo de nuevo."
@@ -545,7 +546,7 @@ function saveCourse()
 
     else
     {
-        url = base_url + "Administrator_controller/editCourse";
+        url = base_url + "Administration/Courses_controller/editCourse";
         var message = [
             "Se ha editado el curso",
             "Error al editar el curso. Verifique los datos e inténtelo de nuevo."

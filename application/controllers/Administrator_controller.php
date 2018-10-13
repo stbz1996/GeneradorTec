@@ -260,63 +260,7 @@ class Administrator_controller extends CI_Controller
 	}
 
 
-	/****************************************
-	- Get all courses. Show the view.
-	****************************************/
-    public function Courses($pId = null, $pName = null)
-    {
-    	// Take all the plans from the database.
-		$data['plans'] = $this->administrator_logic->getArrayPlans(null);
-
-    	// if there is not a idPlan and idBlock previous selected.
-		if ($pId == null)
-		{
-			$data['courses'] = $this->administrator_logic->getArrayCourses(null);
-			$data['idParent'] = null;
-			$data['actual'] = "Todos los bloques";
-			// Obtenga el primer plan que se cargó la base de datos.
-			$idPlan = $data['plans'][0]->idPlan;
-			$namePlan = $data['plans'][0]->name; 
-		}
-		else
-		{
-			$data['courses'] = $this->administrator_logic->getArrayCourses($pId);
-			$data['idParent'] = $pId; // Id of the plan that the block belongs.
-			$data['actual'] = urldecode($pName);   // Actual position
-			$plan = $this->administrator_logic->getPlanFromBlock($pId);
-			$idPlan = $plan->idPlan;
-			$namePlan = $plan->name;
-		}
-
-		/* These are data that the interface is going to need.*/
-		$data['iters'] = getBreadCrumbBlock(); // Relative position
-		$data['ADD'] = getAddressCourses();    // Get address of a block position
-		$data['idParentPlan'] = $idPlan;
-		$data['nameParentPlan'] = $namePlan;
-		$data['blocks'] = $this->administrator_logic->getArrayBlocks($idPlan);
-		
-		$this->callViewBreadCrumb("Admin/Course", $data);
-    }
-
-
-    /****************************************
-	- Add a new course. 
-		The data is received by javascript.
-	****************************************/
-    public function addCourse()
-    {
-        $data = array(
-            'code' => $this->input->post('inputCode'),
-            'name' => $this->input->post('inputName'),
-            'state' => false,
-            'isCareer' => $this->input->post('inputCareer'),
-            'lessonNumber' => $this->input->post('inputLessons'),
-            'idBlock' => $this->input->post('selectBlock'),
-        );
-
-        $insert = $this->administrator_logic->insertCourse($data);
-		return $insert;
-	}
+   
 
     /****************************************
 	- Load all the blocks that belong a plan.
@@ -328,59 +272,7 @@ class Administrator_controller extends CI_Controller
     	validateArrayModal($blocks);
     }
 
-    /****************************************
-	- Edit the curse.
-		The data is received by javascript.
-	****************************************/
-	public function editCourse()
-	{
-		$data = array(
-			'idCourse' => $this->input->post('inputIdCourse'),
-            'code' => $this->input->post('inputCode'),
-            'name' => $this->input->post('inputName'),
-            'state' => $this->input->post('inputState'),
-            'isCareer' => $this->input->post('inputCareer'),
-            'lessonNumber' => $this->input->post('inputLessons'),
-            'idBlock' => $this->input->post('selectBlock'),
-        );
-		$result = $this->administrator_logic->editCourse($data);
-		return $result;
-	}
-
-
-	/****************************************
-	- Get the information of a course.
-	****************************************/	
-	public function getCourse($pId)
-    {
-    	$data = $this->administrator_logic->getUniqueCourse($pId);
-    	validateArrayModal($data);
-    }
-
-
-    /****************************************
-	- Delete the course selected.
-	****************************************/	
-    public function deleteCourse($pId)
-    {
-    	$result = $this->administrator_logic->deleteCourse($pId);
-        return $result;
-    }
-
-
-    /****************************************
-	- Change the state of a course.
-	****************************************/
-	public function changeStateCourse()
-	{
-		$data = array(
-			'idCourse' => $this->input->post('id'),
-			'state' => $this->input->post('state')
-		);
-		$this->administrator_logic->changeStateCourse($data);
-		validateModal();
-	}
-
+ 
 	/****************************************
 	- Get all the professors. Show the view.
 	****************************************/

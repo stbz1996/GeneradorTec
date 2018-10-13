@@ -1,31 +1,4 @@
 <?php
-/******************************************************************************
-	This helper has:
-
-		- The BreadCrumb information.
-			* Home
-			* Home / Careers
-			* Home / Careers / Plans
-			* Home / Careers / Plans / Courses
-			* Home / Professors
-
-		- Address of all the pages in CRUD operations.
-			* Get all elements
-			* Change the state
-			* Edit the information
-			* Get only a instance
-			* Add a new one
-
-		- The state of valid operations. (Probably dropped in the future).
-			* Valid (Insert, Drop, Get, Select) - No Valid (Move)
-			* Valid (Get) - No Valid (Insert, Drop, Select, Move)
-			* Valid (Insert, Drop, Get, Select, Move) - No valid ()
-
-		- The confirmation of javascript operations in the modal.
-			* validate Modal -> no need extra information.
-			* validate Modal Array -> need extra information.
-			
-******************************************************************************/
 
 function getBreadCrumbHome()
 {
@@ -38,6 +11,7 @@ function getBreadCrumbHome()
 	return $breadCrumb;
 }
 
+
 function getBreadCrumbProfessors()
 {
 	$breadCrumb = array(
@@ -49,6 +23,7 @@ function getBreadCrumbProfessors()
 	return $breadCrumb;
 }
 
+
 function getBreadCrumbCareer()
 {
 	$breadCrumb = array(
@@ -59,6 +34,7 @@ function getBreadCrumbCareer()
 	);
 	return $breadCrumb;
 }
+
 
 function getBreadCrumbPlan()
 {
@@ -74,6 +50,7 @@ function getBreadCrumbPlan()
 	);
 	return $breadCrumb;
 }
+
 
 function getBreadCrumbBlock()
 {
@@ -93,6 +70,7 @@ function getBreadCrumbBlock()
 	);
 	return $breadCrumb;
 }
+
 
 function getBreadCrumbCourse()
 {
@@ -133,6 +111,7 @@ function getBreadCrumbAssignCourses()
 	return $breadCrumb;
 }
 
+
 function getAddressPlans()
 {
 	$address = array(
@@ -144,6 +123,7 @@ function getAddressPlans()
 	);
 	return $address;
 }
+
 
 function getAddressBlocks()
 {
@@ -157,14 +137,15 @@ function getAddressBlocks()
 	return $address;
 }
 
+
 function getAddressCourses()
 {
 	$address = array(
 		'ADDRESS_1' => "Administrator_controller/Groups",
-		'ADDRESS_2' => "Administrator_controller/changeStateCourse",
-		'ADDRESS_3' => "Administrator_controller/getCourse/",
-		'ADDRESS_4' => "Administrator_controller/deleteCourse/",
-		'ADDRESS_5' => "Administrator_controller/addCourse"
+		'ADDRESS_2' => "Administration/Courses_controller/changeStateCourse",
+		'ADDRESS_3' => "Administration/Courses_controller/getCourse/",
+		'ADDRESS_4' => "Administration/Courses_controller/deleteCourse/",
+		'ADDRESS_5' => "Administration/Courses_controller/addCourse"
 	);
 	return $address;
 }

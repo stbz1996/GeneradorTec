@@ -14,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $linkToAssignCourses = base_url()."Administrator_controller/AssignmentCourses";
     $linkToAssignAdvanceDays = base_url()."Administrator_controller/AdvanceDays";
     $linkToBlocks = base_url()."Administrator_controller/Blocks";
-    $linkToCourses = base_url()."Administrator_controller/Courses";
+    $linkToCourses = base_url()."/Administration/Courses_controller/loadCourses";
 ?>
 
 
@@ -30,10 +30,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?=base_url()?>css/datatables/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/jquery.mCustomScrollbar.min.css" />
-    <link rel="stylesheet" href="<?=base_url()?>css/HomePage/custom.css">
+    <link rel="stylesheet" href="<?=base_url()?>css/HomePage/custom.css">      
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/custom-themes.css">
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/homePage.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/selectHours.css" />
+    <link rel="stylesheet" href="<?=base_url()?>css/HomePage/Courses.css" />
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/table.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/admin.css" />
