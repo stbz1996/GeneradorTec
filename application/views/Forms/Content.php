@@ -141,11 +141,20 @@
               $nameIdCourse = 'course-'.$totalCourses;
               $idCourse = $courses[$i][$j]->getId(); ?>
               <div class="tablerow" id=<?=$nameRow ?> >
+
                 <div><input type="hidden" id=<?= $nameIdCourse ?> value=<?=$idCourse?> /></div>
+
+                <div class="tableColumCheck">
+                  <label class="container">
+                    <input type="checkbox" class="cbox" id=<?= $nameCheckBox ?> value="first_checkbox" <?= in_array($idCourse, $idCourses) ? 'checked' : '' ?> />
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+                
                 <div class="tableColumCode" id=<?= $divCode ?>><?= $courses[$i][$j]->getCode() ?> </div>
                 <div class="tableColumName" id=<?= $divName ?>><?= $courses[$i][$j]->getName() ?> </div>
                 <div class="tableColumPriority">
-                  <select id=<?=$nameSelect ?> <?= in_array($idCourse, $idCourses) ? 'disabled' : '' ?>>
+                  <select id=<?=$nameSelect ?> <?= in_array($idCourse, $idCourses) ? '' : 'disabled' ?>>
                     <?php 
                     if(in_array($idCourse, $idCourses))
                     {
@@ -164,13 +173,6 @@
                     }
                     ?>
                   </select>
-                </div>
-
-                <div class="tableColumCheck">
-                  <label class="container">
-                    <input type="checkbox" class="cbox" id=<?= $nameCheckBox ?> value="first_checkbox" <?= in_array($idCourse, $idCourses) ? 'checked' : '' ?> />
-                    <span class="checkmark"></span>
-                  </label>
                 </div>
 
                 <?php 
@@ -222,6 +224,7 @@
             <!-- It is a normal space in schedule -->
             <?php
               $idSchedule = $schedules[$countSchedules]['id'];
+              $description = $schedules[$countSchedules]['description'];
               $baseId = $schedules[$countSchedules]['numberSchedule'];
               $baseState = $schedules[$countSchedules]['state'];
               $Did = 'Div-'.$baseId;
@@ -233,6 +236,7 @@
             class="item">.
               <input class="hiddenItem" id="<?= $Mid ?>" value="<?= $baseState ?>" type="hidden" name="<?= $Mid ?>">
               <input type="hidden" id="Id<?= $Mid ?>" value="<?=$idSchedule?>">
+              <input type="hidden" id="Description-<?=$Mid ?>" value="<?= $description?>">
               
             </div>
           <?php } ?>            
