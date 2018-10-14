@@ -8,6 +8,10 @@ class Plan
 	function __construct()
 	{}
 
+
+	/**********************************
+	Setters 
+	**********************************/
 	public function setId($pId)
 	{
 		$this->id = $pId;
@@ -18,6 +22,10 @@ class Plan
 		$this->name = $pName;
 	}
 
+
+	/**********************************
+	Getters
+	**********************************/
 	public function getId()
 	{
 		return $this->id;

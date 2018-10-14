@@ -11,6 +11,10 @@ class Activity
 		
 	}
 
+
+	/**********************************
+	Setters 
+	**********************************/
 	public function setId($pid)
 	{
 		$this->id = $pid;
@@ -26,6 +30,9 @@ class Activity
 		$this->workPorcent = $pWorkPorcent;
 	}
 
+	/**********************************
+	Getters 
+	**********************************/
 	public function getId()
 	{
 		return $this->id;
@@ -40,7 +47,6 @@ class Activity
 	{
 		return $this->workPorcent;
 	}
-
 }
 
 ?>

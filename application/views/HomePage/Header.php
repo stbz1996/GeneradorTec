@@ -4,6 +4,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 <?php
+
+    $generateSchedules = base_url()."/Administration/Generator_controller/index";
+
     // Here we can define the links to the controlles
     $link_to_generateLinks = base_url()."/Administration/GenerateLinks_controller/LoadGenerateLinksView";
     $linkToScheduleHours = base_url()."/Administration/Schedules_controller/showScheduleSelector";
@@ -59,6 +62,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <ul>
                         <li class="header-menu">
                             <span>Administrar Información</span>
+                        </li>
+                        <li>
+                            <a href="<?= $generateSchedules ?>">
+                                <i class="fa fa-bookmark"></i>
+                                <span>Generador TEST</span>
+                            </a>
                         </li>
                         <li>
                             <a href="<?= $linkToPlans ?>">

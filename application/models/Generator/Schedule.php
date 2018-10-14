@@ -2,41 +2,59 @@
 
 class Schedule
 {
-	private $day;
-	private $initialHour;
-	private $finalHour;
+	private $id;
+	private $state;
+	private $numSchedule;
+	private $description;
 
 	function __construct()
 	{}
 
-	public function setDay($pDay)
+	/**********************************
+	Setters 
+	**********************************/
+	public function setId($pId)
 	{
-		$this->day = $pDay;
+		$this->id = $pId;
 	}
 
-	public function setInitialHour($pInitialHour)
+	public function setState($pState)
 	{
-		$this->initialHour = $pInitialHour;
+		$this->state = $pState;
 	}
 
-	public function setFinalHour($pFinalHour)
+	public function setNumSchedule($pNumSchedule)
 	{
-		$this->finalHour = $pFinalHour;
+		$this->numSchedule = $pNumSchedule;
 	}
 
-	public function getDay()
+	public function setDescription($pDescription)
 	{
-		return $this->day;
+		$this->description = $pDescription;
 	}
 
-	public function getInitialHour()
+
+	/**********************************
+	Getters 
+	**********************************/
+	public function getId()
 	{
-		return $this->initialHour;
+		return $this->id;
 	}
 
-	public function getFinalHour()
+	public function getState()
 	{
-		return $this->finalHour;
+		return $this->state;
+	}
+
+	public function getNumSchedule()
+	{
+		return $this->numSchedule;
+	}
+
+	public function getDescription()
+	{
+		return $this->description;
 	}
 
 }

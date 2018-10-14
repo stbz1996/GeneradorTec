@@ -4,7 +4,7 @@ class SemesterDisponibility {
 	/****************************************
 	Variables
 	****************************************/
-	private $listOfEmailSent;
+	private $listOfSchedules;
 	private $numBlocks;
 	private $numSchedules;
 	private $numDays;
@@ -16,23 +16,42 @@ class SemesterDisponibility {
 	/**********************************************
 	Fill the matrix [$pBlocks][$pSchedules][$pDays]
 	***********************************************/
-	function fillInformation($pBlocks, $pSchedules, $pDays)
+	function fillInformation($pBlocks, $pSchedules)
 	{
 		$this->numBlocks    = $pBlocks;
 		$this->numSchedules = $pSchedules;
-		$this->numDays      = $pDays;
-
 		for ($i = 1; $i <= $this->numBlocks; $i++) 
 		{
 			for ($j = 1; $j <= $this->numSchedules; $j++) 
 			{ 
-			 	for ($k = 1; $k <= $this->numDays; $k++) 
-			 	{ 
-			 		$data[$i][$j][$k] = 1;
-			 	}
-			 } 
+			 	$data[$i][$j] = 0;
+			} 
 		}
-		$this->listOfEmailSent = $data;
+		$this->listOfSchedules = $data;
+	}
+
+
+	/**********************************************************
+	If the space is available, put in 1 the schedule 
+	**********************************************************/
+	function activeSchedule($pBlocks, $pSchedules)
+	{
+		if ($this->listOfSchedules[$pBlocks][$pSchedules] == 0) 
+		{
+			$this->listOfSchedules[$pBlocks][$pSchedules] = 1;
+		}
+	}
+
+
+	/**********************************************************
+	If the space is available, put in 1 the schedule 
+	**********************************************************/
+	function desactivateSchedule($pBlocks, $pSchedules)
+	{
+		if ($this->listOfSchedules[$pBlocks][$pSchedules] == 1) 
+		{
+			$this->listOfSchedules[$pBlocks][$pSchedules] = 0;
+		}
 	}
 
 
@@ -40,39 +59,25 @@ class SemesterDisponibility {
 	Insert an element in the matrix if the field is empty(0) 
 	and return 1 or return 0 if the fiel is not empty
 	**********************************************************/
-	function insertInMatrix($pBlocks, $pSchedules, $pDays, $pVal){
-		$this->listOfEmailSent[$pBlocks][$pSchedules][$pDays] = $pVal;
+	function changeElementInMatrix($pBlocks, $pSchedules, $pVal)
+	{
+		$this->listOfSchedules[$pBlocks][$pSchedules] = $pVal;
 	}
 
 
 	/**********************************************************
-	Returns 1 if the field was empty and was selected. 
-	Returns 0 if the field is not empty and cant be blocked
+	Returns 0 if the field is empty. 
+	Returns 1 if the field is not empty.
 	**********************************************************/
-	function selectSchedule($pBlocks, $pSchedules, $pDays){
-		if ($this->listOfEmailSent[$pBlocks][$pSchedules][$pDays] == 0) {
-			$this->listOfEmailSent[$pBlocks][$pSchedules][$pDays] = 1;
-			return 1;
-		}
-		else{
+	function verifyScheduleState($pBlocks, $pSchedules)
+	{
+		if ($this->listOfSchedules[$pBlocks][$pSchedules] == 0) 
+		{
 			return 0;
 		}
-	}
-
-
-	/**********************************************************
-	Put a Schedule empty (with 0) 
-	**********************************************************/
-	function unSelectSchedule($pBlocks, $pSchedules, $pDays){
-		$this->listOfEmailSent[$pBlocks][$pSchedules][$pDays] = 0;
-	}
-
-
-	/******************************
-	Get an element in the matrix
-	*******************************/
-	function getElement($pBlocks, $pSchedules, $pDays){
-		return $this->listOfEmailSent[$pBlocks][$pSchedules][$pDays];
+		else{
+			return 1;
+		}
 	}
 
 
@@ -85,15 +90,10 @@ class SemesterDisponibility {
 		{
 			for ($j = 1; $j <= $this->numSchedules; $j++) 
 			{ 
-			 	for ($k = 1; $k <= $this->numDays; $k++) 
-			 	{ 
-			 		echo $this->listOfEmailSent[$i][$j][$k].'-';
-			 	}
-			 	echo " Fin de fila ";
+			 	echo $this->listOfSchedules[$i][$j].'-';
 			}
 			echo " Fin de bloque "; 
 		}
-		echo '########################';
 	}
 }
 ?>

@@ -2,14 +2,24 @@
 
 class Professor
 {
+	private $id;
+
 	private $workload;
 	private $name;
-    private $activities;
-    private $courses;
-    private $schedules;
+    private $activities; // It is a list
+    private $courses;    // It is a list
+    private $schedules;  // It is a list
 
 	function __construct()
 	{}
+
+	/**********************************
+	Setters 
+	**********************************/
+	public function setId($pId)
+	{
+		$this->id = $pId;
+	}
 
 	public function setWorkload($pWorkload)
 	{
@@ -36,9 +46,18 @@ class Professor
 		$this->schedules = $pSchedules;
 	}
 
+
+	/**********************************
+	Getters
+	**********************************/
+	public function getId()
+	{
+		return $this->id;
+	}
+
 	public function getWorkload()
 	{
-		return $this->workLoad;
+		return $this->workload;
     }
     
 	public function getName()

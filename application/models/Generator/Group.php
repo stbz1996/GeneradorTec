@@ -8,6 +8,10 @@ class Group
 	function __construct()
 	{}
 
+
+	/**********************************
+	Setters 
+	**********************************/
 	public function setId($pId)
 	{
 		$this->id = $pId;
@@ -18,6 +22,10 @@ class Group
 		$this->number = $pNumber;
 	}
 
+
+	/**********************************
+	Getters
+	**********************************/
 	public function getId()
 	{
 		return $this->id;

@@ -11,6 +11,9 @@ class Course
 	function __construct()
 	{}
 
+	/**********************************
+	Setters 
+	**********************************/
 	public function setId($pId)
 	{
 		$this->id = $pId;
@@ -36,6 +39,10 @@ class Course
 		$this->block = $pBlock;
 	}
 
+
+	/**********************************
+	Getters
+	**********************************/
 	public function getId()
 	{
 		return $this->id;

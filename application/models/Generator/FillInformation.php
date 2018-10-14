@@ -4,16 +4,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class FillInformation{
 
 	function __construct()
-	{}
+	{
+	}
 
-	/********************************************
-	*Function that returns an activity by his id*
-	*Input: 									*
-	*	-$idActivity: Integer, id of an activity*
-	*											*
-	*Output: 									*
-	*	Returns an Activity 					*
-	*********************************************/
+	/*********************************************
+	*Function that returns an activity by his id *
+	*Input: 									 *
+	*	-$idActivity: Integer, id of an activity *
+	*											 *
+	*Output: 									 *
+	*	Returns an Activity 					 *
+	**********************************************/
 	function fillActivity($idActivity)
 	{
 		$activityDAO = new ActivityDAO_model();
@@ -49,15 +50,16 @@ class FillInformation{
 		{
 			/* Create new Schedule and returns it*/
 			$schedule = new Schedule();
-			$schedule->setDay($scheduleQuery->dayName);
-			$schedule->setInitialHour($scheduleQuery->initialTime);
-			$schedule->setFinalHour($scheduleQuery->finishTime);
-			
+			$schedule->setId($idSchedule);
+			$schedule->setState($scheduleQuery->state);
+			$schedule->setNumSchedule($scheduleQuery->numberSchedule);
+			$schedule->setDescription($scheduleQuery->description);
 			return $schedule;
 		}
 
 		return false;
 	}
+
 
 	/********************************************
 	*Function that returns a plan by his id 	*
@@ -71,7 +73,6 @@ class FillInformation{
 	{
 		$planDAO = new PlanDAO_model();
 		$planQuery = $planDAO->get($idPlan);
-
 		if($planQuery)
 		{
 			/* Create new plan and returns it*/
@@ -80,9 +81,9 @@ class FillInformation{
 			$plan->setName($planQuery->name);
 			return $plan;
 		}
-
 		return false;
 	}
+
 
 	/********************************************
 	*Function that returns a group by his id 	*
@@ -96,7 +97,6 @@ class FillInformation{
 	{
 		$groupDAO = new GroupDAO_model();
 		$groupQuery = $groupDAO->getGroup($idGroup);
-
 		if($groupQuery)
 		{
 			/* Create new group and returns it*/
@@ -105,9 +105,9 @@ class FillInformation{
 			$group->setNumber($groupQuery->number);
 			return $group;
 		}
-
 		return false;
 	}
+
 
 	/********************************************
 	*Function that returns a block by his id 	*
@@ -145,6 +145,7 @@ class FillInformation{
 		return false;
 	}
 
+
 	/********************************************
 	*Function that returns a course by his id 	*
 	*Input: 									*
@@ -157,29 +158,26 @@ class FillInformation{
 	{
 		$courseDAO = new CourseDAO_model();
 		$blockDAO = new BlockDAO_model();
-
 		$courseQuery = $courseDAO->get($idCourse);
 
 		/* Get information of block */
 		$blockQuery = $blockDAO->getBlockByCourse($idCourse);
-
 		if($courseQuery && $blockQuery)
 		{
 			/* Create block */
 			$block = $this->fillBlock($blockQuery->idBlock);
-
 			/* Create new Course and returns it*/
 			$course = new Course();
 			$course->setId($courseQuery->idCourse);
-			$course->setName($courseQuery->code);
-			$course->setCode($courseQuery->name);
+			$course->setCode($courseQuery->code);
+			$course->setName($courseQuery->name);
 			$course->setTotalLessons($courseQuery->lessonNumber);
 			$course->setBlock($block);
-
 			return $course;
 		}
 		return false;
 	}
+
 
 	/********************************************
 	*Function that returns a professor by his id*
@@ -196,26 +194,21 @@ class FillInformation{
 		$activityDAO = new ActivityDAO_model();
 		$coursesDAO = new CourseDAO_model();
 		$scheduleDAO = new ScheduleDAO_model();
-
-
 		$professorQuery = $professorDAO->get($idProfessor);
-
+		
 		/*Get information of form, activities, courses and schedules */
 		$idForm = $formDAO->getFormByProfessor($idProfessor)->idForm;
-		
 		$activitiesQuery = $activityDAO->getActivities($idForm)->result_array();
 		$coursesQuery = $coursesDAO->getFormCourses($idForm)->result_array();
 		$schedulesQuery = $scheduleDAO->getSchedulesByForm($idForm)->result_array();
-
+		
 		if($professorQuery && $coursesQuery && $schedulesQuery)
 		{
 			$professor = new Professor();
 			$professor->setWorkload($professorQuery->workLoad);
 			$professor->setName($professorQuery->name);
-
-
+			
 			//Activities
-
 			/*Verify if they are activities*/
 			if(!$activitiesQuery)
 			{
@@ -224,7 +217,6 @@ class FillInformation{
 			else
 			{
 				$activities = array();
-
 				/* Add activities in professor class */
 				foreach ($activitiesQuery as $row)
 				{
@@ -233,12 +225,9 @@ class FillInformation{
 				}
 				$professor->setActivities($activities);
 			}
-
-
+			
 			//Courses
-
 			$courses = array();
-
 			/* Add courses in professor class */
 			foreach ($coursesQuery as $row) 
 			{
@@ -247,25 +236,18 @@ class FillInformation{
 			}
 			$professor->setCourses($courses);
 
-
 			//Schedules
-
 			$schedules = array();
-
 			/* Add schedules in professor class */
 			foreach ($schedulesQuery as $row) {
 				$schedule = $this->fillSchedule($row['idSchedule']);
 				$schedules[] = $schedule;
 			}
 			$professor->setSchedules($schedules);
-
-
 			return $professor;
-
 		}
-
 		return false;
 	}
-}
 
+}
 ?>

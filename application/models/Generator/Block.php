@@ -10,6 +10,10 @@ class Block
 	{
 	}
 
+
+	/**********************************
+	Setters 
+	**********************************/
 	public function setId($pId)
 	{
 		$this->id = $pId;
@@ -25,6 +29,10 @@ class Block
 		$this->plan = $pPlan;
 	}
 
+
+	/**********************************
+	Getters 
+	**********************************/
 	public function getId()
 	{
 		return $this->id;
