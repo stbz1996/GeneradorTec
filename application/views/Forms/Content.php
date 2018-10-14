@@ -21,8 +21,6 @@
     <li> Enviar </li>
   </ul>
   
-
-
   <fieldset>
     <h2 class="fs-title">Información</h2>
     <h3 class="fs-subtitle">El formulario debe ser enviado antes del <?= $dueDate ?></h3>
@@ -67,10 +65,12 @@
 
     <div class="tableColumnCheckExtension">
       <p class="extension-txt">¿Ampliación?</p>
+      
       <label class="container">
         <input type="checkbox" class="cbox_extension" id="cbox_extension" name="cbox_extension" value="first_checkbox" <?= $extension ? 'checked' : '' ?> />
         <span class="checkmark"></span>
       </label>
+
     </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior"/>
     <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">

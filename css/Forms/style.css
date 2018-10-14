@@ -271,7 +271,7 @@ body {
 /*   Style of checkbox  */
 /* //////////////////////////// */
 .tableColumCheck{
-	width: 5%;
+	width: 4.2%;
 	margin-left: 2%;
 	float: left;
 }
@@ -280,7 +280,7 @@ body {
 	width: 2.5%;
     text-align: center;
     margin: auto;
-    margin-bottom: 2%;
+    margin-bottom: 3%;
 }
 
 .tableColumnCheckExtension .extension-txt{
@@ -306,16 +306,18 @@ body {
     cursor: pointer;
 }
 
+
+
+
 /* Create a custom checkbox */
 .checkmark {
     position: absolute;
     left: 0;
     height: 25px;
-    width: 85%;
-    margin: 0%;
+    width: 100%;
     margin-top: -10%;
     background-color: #ccc;
-    border-radius: 60px;
+    border-radius: 250px;
 }
 
 /* On mouse-over, add a grey background color */
