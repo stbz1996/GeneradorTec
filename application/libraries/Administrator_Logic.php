@@ -64,7 +64,6 @@ class Administrator_Logic{
  		return $periodDAO_model->show();
  	}
 
-
  	/*********************************************************************
 	That function returns the list of profesors in DB
  	*********************************************************************/
@@ -533,6 +532,11 @@ class Administrator_Logic{
 		$activityDAO_model = new ActivityDAO_model();
 		$professors = $professorDAO_model->getProfessorsXForms($idPeriod);
 
+		if (!$professors)
+		{
+			return array();
+		}
+		
 		// For each professor look for the respective activities.
 		foreach ($professors as $professor) {
 			$idForm = $professor->idForm;
@@ -543,7 +547,15 @@ class Administrator_Logic{
 				$professor->available = $professor->workLoad;
 			}else
 			{
-				$professor->workPorcent = $result[0]->activityPorcent; // Porcent the activities assigned.
+				if(!$result[0]->activityPorcent)
+				{
+					$professor->workPorcent = 0;
+				}
+				else
+				{
+					$professor->workPorcent = $result[0]->activityPorcent; // Porcent the activities assigned.
+				}
+
 				$professor->available = $professor->workLoad - $professor->workPorcent;
 
 				// If professor doesn't have the enough time.
