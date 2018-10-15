@@ -10,7 +10,6 @@ class Schedules_controller extends CI_Controller
 		$this->load->library('Administrator_Logic');
 		$this->load->model("DTO/ScheduleDTO");		
 		$this->load->model("DAO/ScheduleDAO_model");
-		$this->load->library('System_Logic');
 		$this->load->library('session');
 		$this->load->helper("form");
 	}	

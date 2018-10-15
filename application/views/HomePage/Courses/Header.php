@@ -21,16 +21,17 @@
 
 <!-- Todo el contenido -->
 <div id="allcontent">
-    <button class="btn btn-primary" onclick="addCourse()">
-        <i class="glyphicon glyphicon-plus"></i> 
-        Crear Curso
-    </button>
-
     <div class="filterCoursesContainer">
-        <div class="filterCoursesButton" onclick='callCourses("<?= $carrerCourses ?>")'>
-            Cursos de carrera
-        </div>
-        <div class="filterCoursesButton" onclick='callCourses("<?= $noCarrerCourses ?>")'>
-            Otros cursos
-        </div>
+        <button class="btn btn-primary" onclick="addCourse()">
+            <i class="glyphicon glyphicon-plus"></i> 
+            Crear Curso
+        </button>
+        <button class="btn btn-primary" onclick='callCourses("<?= $carrerCourses ?>")'>
+            <i class="glyphicon glyphicon-book"></i> 
+            Ver cursos de carrera
+        </button>
+        <button class="btn btn-primary" onclick='callCourses("<?= $noCarrerCourses ?>")'>
+            <i class="glyphicon glyphicon-book"></i> 
+            Ver otros cursos
+        </button>
     </div>

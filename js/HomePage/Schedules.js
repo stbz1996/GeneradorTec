@@ -15,18 +15,21 @@ function fillSchedulesStates()
 That function is only for view, it change the stile of the items in view
 *************************************************************************************/
 function changeStateOnView(id, idDiv) {
-	if (document.getElementById(id).value != 0) 
-	{
-		document.getElementById(idDiv).style.background="green";
-		document.getElementById(idDiv).style.opacity="0.8";
-		document.getElementById(idDiv).style.color="green";
+	try{
+		if (document.getElementById(id).value != 0) 
+		{
+			document.getElementById(idDiv).style.background="green";
+			document.getElementById(idDiv).style.opacity="0.8";
+			document.getElementById(idDiv).style.color="green";
+		}
+		else
+		{
+			document.getElementById(idDiv).style.background="white";
+			document.getElementById(idDiv).style.opacity="1";
+			document.getElementById(idDiv).style.color="white";
+		}
 	}
-	else
-	{
-		document.getElementById(idDiv).style.background="white";
-		document.getElementById(idDiv).style.opacity="1";
-		document.getElementById(idDiv).style.color="white";
-	}
+	catch(err){}
 }
 
 

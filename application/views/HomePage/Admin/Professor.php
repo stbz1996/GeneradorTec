@@ -12,20 +12,21 @@
     <button class="btn btn-primary" onclick="addProfessor()"><i class="glyphicon glyphicon-plus"></i> Crear Profesor</button>
     <br/><br/>
         
-    <table id="table_id" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <table id="table_id" class="table table-bordered table-hover table-condensed table-striped" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>Nombre</th>
-                <th>Estado</th>
-                <th></th>
+                <th class="col-sm-7" id="textCenter">Nombre</th>
+                <th class="col-sm-1" id="textCenter">Estado</th>
+                <th class="col-sm-2" id="textCenter">Opciones</th>
             </tr>
         </thead>
 
         <tbody>
             <?php foreach($professors as $professor){?>
             <tr>
-                <td><?php echo $professor->lastName, "\t", $professor->name;?></td>
-                <td>
+                <td id="textInRowName">
+                    <?php echo $professor->lastName, "\t", $professor->name;?></td>
+                <td id="textCenter">
                     <div class="btn-group" data-toggle="buttons">
                     <?php if($professor->state): ?>
                         <label class="btn btn-success active" onclick='activateState("<?=base_url($ADD['ADDRESS_2']) ?>", <?= $professor->idProfessor ?>)'>
@@ -48,7 +49,7 @@
                     <?php endif; ?>
                     </div>
                 </td>
-                <td>
+                <td id="textCenter">
                     <button class="btn btn-primary" onclick='editProfessor("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $professor->idProfessor ?>)'><i class="glyphicon glyphicon-pencil"></i> Editar</button>
                     <button class="btn btn-danger" onclick='deleteProfessor("<?=base_url().$ADD['ADDRESS_4']?>", <?= $professor->idProfessor ?>)'><i class="glyphicon glyphicon-trash"></i> Borrar</button>
                 </td>
