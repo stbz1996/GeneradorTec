@@ -374,22 +374,28 @@ class Administrator_controller extends CI_Controller
 	****************************************/
 	public function AssignmentCourses()
 	{
-		$idPeriod = 1; // Period to the courses belongs.
 		$data['iters'] = getBreadCrumbAssignCourses(); // Relative position
-		$data['actual'] = "Período 2018";   /* Se asigna con respecto al session*/
-		$data['professors'] = $this->administrator_logic->getProfessorWithForms($idPeriod);
 		$data['courses'] = $this->administrator_logic->getActiveCourses();
 		$data['groups'] = $this->administrator_logic->getAllGroups();
+		$data['periods'] = $this->administrator_logic->getArrayPeriods();
 
-		$this->callViewBreadCrumb("Admin/AssignCourses", $data);
+		$this->callView("Admin/AssignCourses", $data);
+	}
+
+	/****************************************
+	- Load the professors selected by the actual period.
+	****************************************/
+	public function loadFormProfessor($idPeriod)
+	{
+		$professors = $this->administrator_logic->getProfessorWithForms($idPeriod);
+		validateArrayModal($professors); // Send to Javascript the result of the operation.
 	}
 
 	/****************************************
 	- Load the courses selected by the user.
 	****************************************/
-	public function loadSelectCourses($idProfessor)
+	public function loadSelectCourses($idProfessor, $idPeriod)
 	{
-		$idPeriod = 1; // This period is selected by 'sessions->userdata(idPeriod)'
 		$result = $this->administrator_logic->loadSelectCourses($idProfessor, $idPeriod);
 		validateArrayModal($result); // Send to Javascript the result of the operation.
 	}
