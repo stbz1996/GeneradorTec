@@ -6,6 +6,8 @@ var animating; //flag to prevent quick multi-click glitches
 var doc = new jsPDF('l', 'mm', [297, 210]);
 var days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 var totalDays = 6;
+var allFieldsets = $("fieldset").toArray();
+var allListElement = $("li").toArray();
 
 var specialElementHandlers = {
 	'#editor': function(element, renderer){
@@ -19,27 +21,79 @@ if(document.getElementById("dynamic_field").rows.length)
 	count_activities = document.getElementById("dynamic_field").getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
 }
 
+$("li").click(function(){
+
+	source = $('.active').toArray().length-1;
+	destination = $(this).attr('id')-1;
+	fieldset = $(this).parent('ul').siblings('fieldset');
+
+	if($(this).attr('id') == 6)
+	{
+		//Add text to pdf
+		addWorkloadText();
+		addActivitiesText();
+		addCoursesText();
+		addSchedulesText();
+	}
+
+	if(source < destination)
+	{
+		for(i = source; i < destination; i++)
+		{
+			$("#progressbar li").eq(i).addClass("active");
+		}
+		nextAction(fieldset.eq(source), fieldset.eq(destination), false);
+	}
+	else if(source > destination)
+	{
+		for(i = source; i > destination; i--)
+		{
+			$("#progressbar li").eq(i).removeClass("active");
+		}
+		prevAction(fieldset.eq(source), fieldset.eq(destination));
+	}
+	
+	/*source = $(".active").toArray().length-1;
+	destination = $(this).attr('id')-1;
+
+	fieldset = $(this).parent('ul').siblings('fieldset');
+	for(i = source+1; i < destination)
+	nextAction(fieldset.eq(source), fieldset.eq(destination));*/
+
+
+	
+});
+
 $(".next").click(function(){
+	current_fs = $(this).parent();
+	next_fs = $(this).parent().next();
+
+	nextAction(current_fs, next_fs, $(this).attr('id'));
+});
+
+function nextAction(cur, next, idNext){
 
 	var areActivitiesIncorrect;	
 
 	//Adding text for form
-	if($(this).attr("id") == 'next-workload')addWorkloadText();
-	if($(this).attr("id") == 'next-activity') 
+	if(idNext)
 	{
-		areActivitiesIncorrect = verifyActivities();
-		if(areActivitiesIncorrect)return false;
-		addActivitiesText();
+		if(idNext == 'next-workload')addWorkloadText();
+		if(idNext == 'next-activity') 
+		{
+			areActivitiesIncorrect = verifyActivities();
+			if(areActivitiesIncorrect)return false;
+			addActivitiesText();
+		}
+		if(idNext == 'next-courses')addCoursesText();
+		if(idNext == 'next-schedules')addSchedulesText();
 	}
-	if($(this).attr("id") == 'next-courses')addCoursesText();
-	if($(this).attr("id") == 'next-schedules')addSchedulesText();
 
 	if(animating) return false;
 	animating = true;
 	
-	current_fs = $(this).parent();
-	next_fs = $(this).parent().next();
-	
+	current_fs = cur;
+	next_fs = next;
 	//activate next step on progressbar using the index of next_fs
 	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 	
@@ -70,15 +124,22 @@ $(".next").click(function(){
 		//this comes from the custom easing plugin
 		easing: 'easeInOutBack'
 	});
-});
+}
 
 
 $(".previous").click(function(){
+	current_fs = $(this).parent();
+	previous_fs = $(this).parent().prev();
+
+	prevAction(current_fs, previous_fs);
+});
+
+function prevAction(cur, prev){
 	if(animating) return false;
 	animating = true;
 	
-	current_fs = $(this).parent();
-	previous_fs = $(this).parent().prev();
+	current_fs = cur;
+	previous_fs = prev;
 	
 	//de-activate current step on progressbar
 	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
@@ -95,18 +156,36 @@ $(".previous").click(function(){
 			left = ((1-now) * 50)+"%";
 			//3. increase opacity of previous_fs to 1 as it moves in
 			opacity = 1 - now;
+			
+			/*if(previous_fs.attr('position') === 'relative')
+			{
+				alert('hola');
+				//previous_fs.css({'display': 'none', 'left': '50%', 'opacity': 1});
+			}*/
+
 			current_fs.css({'left': left});
+
 			previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
+
+			if(current_fs.css('left') != '0px')
+			{
+				previous_fs.css({'left': '0%'});
+			}
+			current_fs.hide();
+
+			
 		}, 
 		duration: 800, 
 		complete: function(){
+
+			//alert(previous_fs.css('left')); 
 			current_fs.hide();
 			animating = false;
 		}, 
 		//this comes from the custom easing plugin
 		easing: 'easeInOutBack'
 	});
-});
+}
 
 
 $(document).on('click', '.btn_add', function(){
@@ -132,7 +211,7 @@ $(document).on('click', '.cbox', function(){
 		var priority = $("#select-"+idCheck+"").val();
 		$("#row-"+idCheck+"").append('<td id="id-'+idCheck+'"><input type="hidden" id="idCourse-'+idCheck+'" name="idCourses[]" value="'+
 			idCourse+'"/></td><td id="prior-'+idCheck+'"><input type="hidden" id="priority-'+idCheck+'" name="priorities[]" value="'+
-			priority+'"/></td>');
+			idCheck+'"/></td>');
 		$("#select-"+idCheck+"").prop('disabled', false);
 	}
 	else
@@ -186,14 +265,12 @@ function verifyActivities(){
 
 $('.submit-save').click(function(){
 
-	//Get data from view
-	var areActivitiesIncorrect;
 	areActivitiesIncorrect = verifyActivities();
-
 	if(areActivitiesIncorrect)
 	{
 		return false;
 	}
+
 	var workloadSelect = document.getElementById("workload_options");
 	var workloadExtension = $('.cbox_extension').prop('checked') ? 1 : 0;
 	var activitiesDescription = $('input[name^="activityDescription"]');
@@ -245,8 +322,12 @@ $('.submit-save').click(function(){
 	for(i = 0; i < idCourses.length; i++)
 	{
 		newIdCourses.push(idCourses[i].value);
-		newPriorities.push(priorities[i].text);
-		alert(priorities[i]);
+
+		idCourse = idCourses[i].id.split("-")[1];
+		
+		prioritySelect = document.getElementById("select-"+idCourse);
+		priorityValue = prioritySelect.options[prioritySelect.selectedIndex].value;
+		newPriorities.push(priorityValue);
 	}
 
 	$.ajax({
@@ -333,7 +414,7 @@ function addActivitiesText()
 function addCoursesText()
 {
 	var idCourses = $('input[name^="idCourses"]');
-	var priorities = $('input[name^="priorities"]');
+	//var priorities = $('input[name^="priorities"]');
 	$('#div-courses').empty();
 	$('#div-courses').append("<h4>Cursos seleccionados:</h4>");
 	for(i = 0; i < idCourses.length; i++)
@@ -341,8 +422,9 @@ function addCoursesText()
 		var idCourse = idCourses[i].id.split("-")[1];
 		var code = $("#div-code-"+idCourse).text();
 		var name = $("#div-name-"+idCourse).text();
-		var priority = priorities[i].value;
-		$('#div-courses').append('<div> - '+code+'\t'+name+' con prioridad '+priority+'</div>');
+		prioritySelect = document.getElementById("select-"+idCourse);
+		priorityValue = prioritySelect.options[prioritySelect.selectedIndex].value;
+		$('#div-courses').append('<div> - '+code+'\t'+name+' con prioridad '+priorityValue+'</div>');
 		//$("#element td:nth-child(2)").text('ChangedText');
 
 	}

@@ -30,6 +30,9 @@ class Form_controller extends CI_Controller {
 		$this->load->model("DTO/ScheduleDTO");		
 		$this->load->model("DAO/ScheduleDAO_model");
 
+		$this->load->model("DTO/BlockDTO");		
+		$this->load->model("DAO/BlockDAO_model");
+
 
 		date_default_timezone_set("America/Costa_Rica");
 		$this->Form = new FormDTO();
@@ -186,6 +189,29 @@ class Form_controller extends CI_Controller {
 	function getSavedInformation($idCareer)
 	{
 		$plans = $this->showCareerPlans($idCareer);
+		$blocks = $this->showPlansBlocks($plans);
+		$courses = $this->showBlocksCourses($blocks);
+
+		$coursesBlock = $this->getFilledBlocks($blocks, $courses);
+		$plansBlock = $this->getFilledPlans($plans, $coursesBlock['blocks']);
+		$coursesForm = $this->getFormCourses();
+
+		$data = $plansBlock;
+		$data['courses'] = $coursesBlock['courses'];
+		$data = array_merge($data, $coursesForm);
+
+
+		return $data;
+		/*
+		return $data;*/
+		/*$coursesPlan = $this->showPlanCourses($plans);
+
+		$data = $this->getFilledPlans($plans, $coursesPlan);*/
+
+	}
+	/*function getSavedInformation($idCareer)
+	{
+		$plans = $this->showCareerPlans($idCareer);
 		$coursesPlan = $this->showPlanCourses($plans);
 
 		$data = $this->getFilledPlans($plans, $coursesPlan);
@@ -194,7 +220,7 @@ class Form_controller extends CI_Controller {
 		$data = array_merge($data, $coursesForm);
 	
 		return $data;
-	}
+	}*/
 
 	/****************************************
 	*Function that returns an array of plans*
@@ -207,7 +233,7 @@ class Form_controller extends CI_Controller {
 	*Result: 								*
 	*	Array of plans and courses.			*
 	*****************************************/
-	function getFilledPlans($plans, $coursesPlan)
+	/*function getFilledPlans($plans, $coursesPlan)
 	{
 		for ($i=0; $i < count($coursesPlan) ; $i++) { 
 
@@ -222,6 +248,57 @@ class Form_controller extends CI_Controller {
 		$data['plans'] = array_values($plans);
 		$data['courses'] = array_values($coursesPlan);
 		return $data;
+	}*/
+
+	function getFilledBlocks($blocks, $courses)
+	{
+		$newBlocks = array();
+		$newCourses = array();
+		$totalCourses = 0;
+		$totalActiveCourses = 0;
+		for($i = 0; $i < count($blocks); $i++)
+		{
+			$totalBlocks = 0;
+			$newBlocks[] = array();
+			for($j = 0; $j < count($blocks[$i]); $j++)
+			{
+				if(count($courses[$totalCourses]))
+				{
+					$newBlocks[$i][$totalBlocks] = $blocks[$i][$j];
+					$newCourses[$totalActiveCourses] = $courses[$totalCourses];
+					$totalBlocks++;
+					$totalActiveCourses++;
+				}
+				$totalCourses++;
+			}
+		}
+
+		$data['courses'] = $newCourses;
+		$data['blocks'] = $newBlocks;
+		return $data;
+
+	}
+
+	function getFilledPlans($plans, $blocks)
+	{
+		$newPlans = array();
+		$newBlocks = array();
+		$totalPlans = 0;
+		for($i = 0; $i < count($blocks); $i++)
+		{
+			if(count($blocks[$i]))
+			{
+				$newPlans[$totalPlans] = $plans[$i];
+				$newBlocks[$totalPlans] = $blocks[$i];
+				$totalPlans ++;
+			}
+		}
+
+		$data['blocks'] = $newBlocks;
+		$data['plans'] = $newPlans;
+
+		return $data;
+
 	}
 
 	/****************************************
@@ -522,6 +599,16 @@ class Form_controller extends CI_Controller {
 	function showCareerPlans($idCareer)
 	{
 		return $this->Form_Logic->getCareerPlans($idCareer);
+	}
+
+	function showPlansBlocks($plans)
+	{
+		return $this->Form_Logic->getPlansBlocks($plans);
+	}
+
+	function showBlocksCourses($blocks)
+	{
+		return $this->Form_Logic->getBlocksCourses($blocks);
 	}
 
 	function insertCoursesByForm($courses)
