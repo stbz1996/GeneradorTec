@@ -1,12 +1,21 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+
+// Verify the credential
+$username = $this->session->userdata('userName');
+$idAdmin  = $this->session->userdata('idAdmin');
+$idCarrer = $this->session->userdata('idCareer');
+if ($username == '' || $idAdmin == '' || $idCarrer == '') 
+{
+    redirect('System_controller/index/'); 
+}
 ?>
 
 
 <?php
+    $login = base_url()."/System_controller/index";
 
     $generateSchedules = base_url()."/Administration/Generator_controller/index";
-
     // Here we can define the links to the controlles
     $link_to_generateLinks = base_url()."/Administration/GenerateLinks_controller/LoadGenerateLinksView";
     $linkToScheduleHours = base_url()."/Administration/Schedules_controller/showScheduleSelector";
@@ -130,6 +139,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <a href="<?= $linkToAssignCourses ?>">
                                 <i class="fa fa-columns"></i>
                                 <span>2. Asignar Cursos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= $login ?>">
+                                <i class="fa fa-columns"></i>
+                                <span>Cerrar Sesión</span>
                             </a>
                         </li>
                         

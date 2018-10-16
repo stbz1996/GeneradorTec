@@ -7,6 +7,7 @@ class Generator_controller extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->library('session');
 
 		// Clases
 		$this->load->model("Generator/SemesterDisponibility");
@@ -71,6 +72,14 @@ class Generator_controller extends CI_Controller
 		// ***************************************************************************
 	}
 }
+
+
+
+
+
+
+
+
 
 		/*
 		$fillInformation = new FillInformation();
