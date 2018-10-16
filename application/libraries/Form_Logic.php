@@ -158,6 +158,66 @@ class Form_Logic{
 		}
 		return $data;
 	}
+
+	public function getPlansBlocks($plans)
+	{
+		$blockDAO = new BlockDAO_model();
+		$data = array();
+
+		foreach ($plans as $plan)
+		{
+
+			$query = $blockDAO->show($plan->getId())->result_array();
+			$blocksPlan = array();
+			
+			//Get all active blocks
+			foreach ($query as $row) {
+				if($row['state'])
+				{
+					$newBlock = new BlockDTO();
+					$newBlock->setIdBlock($row['idBlock']);
+					$newBlock->setName($row['name']);
+
+					$blocksPlan[] = $newBlock;
+				}
+			}
+			$data[] = $blocksPlan;
+		}
+
+		return $data;
+	}
+
+	public function getBlocksCourses($blocks)
+	{
+		$courseDAO = new CourseDAO_model();
+		$data = array();
+
+		for($i = 0; $i < count($blocks); $i++)
+		{
+			foreach ($blocks[$i] as $block)
+			{
+				$query = $courseDAO->getBlockCourses($block->getId())->result_array();
+				$coursesBlock = array();
+
+				//Get all active Courses
+				foreach ($query as $row)
+				{
+					if($row['state'])
+					{
+						$newCourse = new CourseDTO();
+						$newCourse->setIdCourse($row['idCourse']);
+						$newCourse->setCode($row['code']);
+						$newCourse->setName($row['name']);
+						$newCourse->setState($row['state']);
+
+						$coursesBlock[] = $newCourse;
+					}
+				}
+				$data[] = $coursesBlock;
+			}
+		}
+		return $data;
+	}
 	/****************************************
 	*Function that get all courses of a plan*
 	*										*

@@ -204,6 +204,20 @@ class CourseDAO_model extends CI_Model
         return $query;
     }
 
+    public function getBlockCourses($idBlock)
+    {
+        $this->db->select('Course.idCourse');
+        $this->db->select('code');
+        $this->db->select('name');
+        $this->db->select('state');
+        $this->db->select('lessonNumber');
+        $this->db->from('Course');
+        $this->db->join('CourseXBlock', 'Course.idCourse = CourseXBlock.idCourse');
+        $this->db->where('CourseXBlock.idBlock', $idBlock);
+        $this->db->where('Course.isCareer', 1);
+        $query = $this->db->get();
+        return $query;
+    }
     /****************************************
     *Function that returns query of courses *
     *assigned by professor.                 *
