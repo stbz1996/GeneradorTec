@@ -17,6 +17,9 @@ class System_controller extends CI_Controller {
 	***************************************************/
 	function index()
 	{
+		$this->session->set_userdata('idAdmin' , '');
+		$this->session->set_userdata('idCareer', '');
+		$this->session->set_userdata('userName', '');
 		$this->call_login("Login", "");
 	}
 
