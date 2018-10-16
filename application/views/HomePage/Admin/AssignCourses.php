@@ -40,7 +40,7 @@
 						  	<div class="form-group">
 			                  <label class="control-label col-md-3"></label>
 			                  <div class="col-md-12">
-				                  <select class="form-control" id="selectGroup" name='selectValGroup'>
+				                  <select class="selectBox" id="selectGroup" name='selectValGroup'>
 				                  <option>Grupos</option>
 				                  <?php 
 	       							foreach($groups as $group) { ?>
