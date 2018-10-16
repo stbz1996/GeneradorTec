@@ -189,11 +189,11 @@ class FillInformation{
 	*********************************************/
 	function fillProfessor($idProfessor)
 	{
-		$professorDAO = new ProfessorDAO_model();
-		$formDAO = new FormDAO_model();
-		$activityDAO = new ActivityDAO_model();
-		$coursesDAO = new CourseDAO_model();
-		$scheduleDAO = new ScheduleDAO_model();
+		$professorDAO   = new ProfessorDAO_model();
+		$formDAO        = new FormDAO_model();
+		$activityDAO    = new ActivityDAO_model();
+		$coursesDAO     = new CourseDAO_model();
+		$scheduleDAO    = new ScheduleDAO_model();
 		$professorQuery = $professorDAO->get($idProfessor);
 		
 		/*Get information of form, activities, courses and schedules */
@@ -248,6 +248,5 @@ class FillInformation{
 		}
 		return false;
 	}
-
 }
 ?>

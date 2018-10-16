@@ -3,7 +3,6 @@
 class Professor
 {
 	private $id;
-
 	private $workload;
 	private $name;
     private $activities; // It is a list
@@ -12,6 +11,7 @@ class Professor
 
 	function __construct()
 	{}
+
 
 	/**********************************
 	Setters 

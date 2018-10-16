@@ -5,7 +5,7 @@ class MagistralClass
 	private $professor;
     private $course;
 	private $group;
-    private $activities;
+	private $assignedSchedules;
 
 	function __construct($pProfessor, $pCourse, $pGroup, $pAssignedSchedules)
 	{
