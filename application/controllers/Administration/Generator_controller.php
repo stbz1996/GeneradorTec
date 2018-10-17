@@ -4,8 +4,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Generator_controller extends CI_Controller 
 {
-	private $idsOfMagistralClass = []; // Save the ids od information from assigment
-	private $magistralClassList = [];
+	// Variables
+	private $idsOfMagistralClass   = []; // Save the ids od information from assigment
+	private $magistralClassList    = []; // Save the list of magistral clases 
+	private $professors            = []; // List of all professors
+	private $semesterDisponibility = []; // The list of all the schedules
+	private $assigmentList         = []; // The list of the assigned magistral clases
+
 
 	function __construct()
 	{
@@ -22,6 +27,7 @@ class Generator_controller extends CI_Controller
 		$this->load->model("Generator/Block");
 		$this->load->model("Generator/Course");
 		$this->load->model("Generator/Professor");
+		$this->load->model("Generator/MagistralClass");
 		$this->load->model("Generator/PassInformation");
 
 		// DAO's
@@ -33,7 +39,6 @@ class Generator_controller extends CI_Controller
 		$this->load->model("DAO/CourseDAO_model");
 		$this->load->model("DAO/ProfessorDAO_model");
 		$this->load->model("DAO/FormDAO_model");
-		
 	}
 
 
@@ -46,7 +51,7 @@ class Generator_controller extends CI_Controller
 		$this->idsOfMagistralClass[] = $data;
 
 		$data = new PassInformation();
-		$data->setAtributes(2, 6, 1);
+		$data->setAtributes(2, 6, 2);
 		$this->idsOfMagistralClass[] = $data;
 
 		// carlos
@@ -55,24 +60,123 @@ class Generator_controller extends CI_Controller
 		$this->idsOfMagistralClass[] = $data;
 
 		$data = new PassInformation();
-		$data->setAtributes(3, 10, 1);
+		$data->setAtributes(3, 10, 2);
 		$this->idsOfMagistralClass[] = $data;
 
 		$data = new PassInformation();
-		$data->setAtributes(3, 11, 1);
+		$data->setAtributes(3, 11, 3);
 		$this->idsOfMagistralClass[] = $data;
 
 		$data = new PassInformation();
-		$data->setAtributes(3, 15, 1);
+		$data->setAtributes(3, 15, 4);
 		$this->idsOfMagistralClass[] = $data;
+		
 		// chepe
-		//$data = new PassInformation();
+		$data = new PassInformation();
 		$data->setAtributes(4, 4, 1);
-		$this->idsOfMagistralClass[] = $data;
+		$this->idsOfMagistralClass[] = $data;		
+	}
 
 
-		foreach ($this->idsOfMagistralClass as $x) {
-			echo $x->idProfessor.' - '.$x->idCourse.' - '.$x->idGroup.' @ ';
+	/****************************************************
+	*Function that fills the profesors list             *
+	*Input: 									        *
+	*	-$pList: It is the list of magistralClases id's *
+	*Output: 									        *
+	*	Fills the professors list                       *
+	****************************************************/
+	private function fillProfessors($pList)
+	{
+		$fillInformation = new FillInformation();
+		foreach ($pList as $class) 
+		{
+			$professor = $fillInformation->fillProfessor($class->idProfessor);
+			$this->professors[] = $professor;
+		}
+	}
+
+
+	/*************************************************
+	*Function that returns a profesor of the list of *
+	*professors                                      *
+	*Input: 									     *
+	*	-$pId: It is the id of the professor (DB)    *
+	*Output: 									     *
+	*	Returns a professor instance                 *
+	*************************************************/
+	private function getProfessorInstanceById($pId)
+	{
+		foreach ($this->professors as $p) 
+		{
+			if ($p->getId() == $pId) {
+				return $p;
+			}
+		}
+	}
+
+
+	/*************************************************
+	*Function that fiils the list of magistralClases *
+	*Input: 									     *
+	*	-idsOfMagistralClass: List with the the      *
+	*    information from view						 *
+	*Output: 									     *
+	*	Fills the magistralClassList   		         *
+	*************************************************/
+	private function fillMagistralClasses($pList)
+	{
+		$fillInformation = new FillInformation();
+		foreach ($pList as $class) 
+		{
+			// Find the information 
+			$professor = $this->getProfessorInstanceById($class->idProfessor);
+			$course    = $fillInformation->fillCourse($class->idCourse);
+			$group     = $fillInformation->fillGroup($class->idGroup);
+			
+			// Create the magistral class
+			$magistralClass = new MagistralClass();
+			$magistralClass->setProfessor($professor);
+			$magistralClass->setCourse($course);
+			$magistralClass->setGroup($group);
+			$this->magistralClassList[] = $magistralClass;
+		}
+	}
+
+
+	/********************************************************
+	*Function that fiils the list of schedules, taking      * 
+	*into account the blocked and the available             *
+	*schedules in the system                                *
+	*Input: 									            *
+	*	-pIdPlan: It is the id of the actual plan           *
+	*Output: 									            *
+	*	Fills the schedules         		                *
+	*   Use the next logic:                                 *
+	*		Put 0: If the schedule is blocked by the carrer *
+	*		Put 1: If is an available schedule              *
+	*		Put 2: If is not an available schedule          *
+	********************************************************/
+	public function createSemesterDisponibility($pIdPlan)
+	{
+		$fillInformation = new FillInformation();
+		// Find the blocks
+		$blocks    = $fillInformation->getBlocks($pIdPlan);
+		$numBlocks = count($blocks);
+		// Find the schedules 
+		$schedules    = $fillInformation->getSchedules();
+		$numSchedules = count($schedules);
+		// Create the complete schedule
+		$this->semesterDisponibility = new SemesterDisponibility();
+		$this->semesterDisponibility->fillInformation($numBlocks, $numSchedules);
+		// Bloks the schedules that the carrer wants
+		foreach ($schedules as $schedule) 
+		{
+			$index = $schedule->numberSchedule;
+			$state = $schedule->state;
+			for ($i = 1; $i <= $numBlocks; $i++) 
+			{ 
+				$this->semesterDisponibility->changeElementInMatrix($i, $index, $state);
+			}	
 		}
 	}
 
@@ -80,7 +184,7 @@ class Generator_controller extends CI_Controller
 
 
 
-
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
 
@@ -90,20 +194,21 @@ class Generator_controller extends CI_Controller
 	***********************************************/
 	public function index()
 	{
-		$this->readDataFromView(); // Esto se debe aliminar, solo carga datos de prueba 
-
-		// - - Se cargan los profesores y toda su información
- 		
-		// - - Se deben cargar todos los horarios
-		// Se debe bloquear los horarios que están inactivos en el sistema
-			// 0: Bloqueado
-			// 1: Seleccionado
-			// 2: No seleccionado 
+		// Esto se debe aliminar, solo carga datos de prueba 
+		$this->readDataFromView(); 
 		
-		// Se crean una lista de clases magistrales (profe, curso, grupo, periodo). La lista de clases magistrales son las que debemos acomodar 
-		
-		// Se crea la lista con los N bloques donde se van a colocar las clases magistrales(Es una matriz igual a la de horarios, pero esta va a guardar las clases magistrales)
 
+		// Load the professors information 
+		$this->fillProfessors($this->idsOfMagistralClass);
+		// Load the magistral clases information 
+		$this->fillMagistralClasses($this->idsOfMagistralClass);
+		// Create the list of N blocks with the schedules of the actual plan
+		$this->createSemesterDisponibility(1);
+
+
+
+		$this->semesterDisponibility->showMatrix();
+		
 		// Asignaciones de cursos obligatorios 
 			// Se crea la lista de clases magistrales de los cursos obligatorios 
 			// Se colocan los cursos obligatorios en la lista de los bloques 
@@ -112,6 +217,28 @@ class Generator_controller extends CI_Controller
 
 		// Verificación de INTRO y TALLER
 			// Se debe hacer la verificación de los cursos INTRO y TALLER, los cuales deben tener un mismo # de clases magistrales asignadas. 
+
+
+
+/*
+		foreach ($this->magistralClassList as $x) 
+		{
+			echo $x->getProfessor()->getName().' - ';
+			echo $x->getCourse()->getName().' - ';
+			echo $x->getGroup()->getNumber().' @@@ ';
+		}
+
+		echo '########################################################################';
+		$this->magistralClassList[2]->getProfessor()->setName('Pepe');
+		foreach ($this->magistralClassList as $x) 
+		{
+			echo $x->getProfessor()->getName().' - ';
+			echo $x->getCourse()->getName().' - ';
+			echo $x->getGroup()->getNumber().' @@@ ';
+		}
+		*/
+		
+
 
 
 

@@ -7,13 +7,7 @@ class MagistralClass
 	private $group;
 	private $assignedSchedules;
 
-	function __construct($pProfessor, $pCourse, $pGroup, $pAssignedSchedules)
-	{
-        $this->professor = $pProfessor;
-        $this->course = $pCourse;
-        $this->group = $pGroup;
-        $this->assignedSchedules = $pAssignedSchedules;
-	}
+	function __construct(){}
 
 	public function setProfessor($pProfessor)
 	{

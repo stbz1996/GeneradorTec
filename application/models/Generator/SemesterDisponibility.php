@@ -24,10 +24,9 @@ class SemesterDisponibility {
 		{
 			for ($j = 1; $j <= $this->numSchedules; $j++) 
 			{ 
-			 	$data[$i][$j] = 0;
+			 	$this->listOfSchedules[$i][$j] = 0;
 			} 
 		}
-		$this->listOfSchedules = $data;
 	}
 
 
@@ -59,9 +58,9 @@ class SemesterDisponibility {
 	Insert an element in the matrix if the field is empty(0) 
 	and return 1 or return 0 if the fiel is not empty
 	**********************************************************/
-	function changeElementInMatrix($pBlocks, $pSchedules, $pVal)
+	function changeElementInMatrix($pBlock, $pSchedule, $pVal)
 	{
-		$this->listOfSchedules[$pBlocks][$pSchedules] = $pVal;
+		$this->listOfSchedules[$pBlock][$pSchedule] = $pVal;
 	}
 
 
