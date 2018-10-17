@@ -130,6 +130,12 @@ class FillInformation{
  		return $data;
 	}
 
+
+	/********************************************
+	*Function that returns all schedules      	*
+	*Output: 									*
+	*	Returns a list of schedules 			*
+	*********************************************/
 	public function getSchedules()
 	{
 		$scheduleDAO_model = new ScheduleDAO_model();
@@ -140,9 +146,6 @@ class FillInformation{
  		}
  		return $query;
 	}
-
-
-
 
 
 	/********************************************

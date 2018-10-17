@@ -1,7 +1,6 @@
 <?php
 
-
-class PassInformation
+class assignedCarrerCourseOnView
 {
 	public $idProfessor;
     public $idCourse;
@@ -15,4 +14,6 @@ class PassInformation
         $this->idCourse    = $pCourse;
         $this->idGroup     = $pGroup;
     }
-}?>
+}
+
+?>

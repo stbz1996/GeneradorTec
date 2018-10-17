@@ -28,7 +28,7 @@ class Generator_controller extends CI_Controller
 		$this->load->model("Generator/Course");
 		$this->load->model("Generator/Professor");
 		$this->load->model("Generator/MagistralClass");
-		$this->load->model("Generator/PassInformation");
+		$this->load->model("Generator/assignedCarrerCourseOnView");
 
 		// DAO's
 		$this->load->model("DAO/ActivityDAO_model");
@@ -46,33 +46,33 @@ class Generator_controller extends CI_Controller
 	private function readDataFromView()
 	{
 		// Aviles
-		$data = new PassInformation();
+		$data = new assignedCarrerCourseOnView();
 		$data->setAtributes(2, 5, 1);
 		$this->idsOfMagistralClass[] = $data;
 
-		$data = new PassInformation();
+		$data = new assignedCarrerCourseOnView();
 		$data->setAtributes(2, 6, 2);
 		$this->idsOfMagistralClass[] = $data;
 
 		// carlos
-		$data = new PassInformation();
+		$data = new assignedCarrerCourseOnView();
 		$data->setAtributes(3, 9 , 1);
 		$this->idsOfMagistralClass[] = $data;
 
-		$data = new PassInformation();
+		$data = new assignedCarrerCourseOnView();
 		$data->setAtributes(3, 10, 2);
 		$this->idsOfMagistralClass[] = $data;
 
-		$data = new PassInformation();
+		$data = new assignedCarrerCourseOnView();
 		$data->setAtributes(3, 11, 3);
 		$this->idsOfMagistralClass[] = $data;
 
-		$data = new PassInformation();
+		$data = new assignedCarrerCourseOnView();
 		$data->setAtributes(3, 15, 4);
 		$this->idsOfMagistralClass[] = $data;
 		
 		// chepe
-		$data = new PassInformation();
+		$data = new assignedCarrerCourseOnView();
 		$data->setAtributes(4, 4, 1);
 		$this->idsOfMagistralClass[] = $data;		
 	}
@@ -184,7 +184,9 @@ class Generator_controller extends CI_Controller
 
 
 
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
 
@@ -196,8 +198,6 @@ class Generator_controller extends CI_Controller
 	{
 		// Esto se debe aliminar, solo carga datos de prueba 
 		$this->readDataFromView(); 
-		
-
 		// Load the professors information 
 		$this->fillProfessors($this->idsOfMagistralClass);
 		// Load the magistral clases information 
@@ -205,10 +205,6 @@ class Generator_controller extends CI_Controller
 		// Create the list of N blocks with the schedules of the actual plan
 		$this->createSemesterDisponibility(1);
 
-
-
-		$this->semesterDisponibility->showMatrix();
-		
 		// Asignaciones de cursos obligatorios 
 			// Se crea la lista de clases magistrales de los cursos obligatorios 
 			// Se colocan los cursos obligatorios en la lista de los bloques 
@@ -217,35 +213,6 @@ class Generator_controller extends CI_Controller
 
 		// Verificación de INTRO y TALLER
 			// Se debe hacer la verificación de los cursos INTRO y TALLER, los cuales deben tener un mismo # de clases magistrales asignadas. 
-
-
-
-/*
-		foreach ($this->magistralClassList as $x) 
-		{
-			echo $x->getProfessor()->getName().' - ';
-			echo $x->getCourse()->getName().' - ';
-			echo $x->getGroup()->getNumber().' @@@ ';
-		}
-
-		echo '########################################################################';
-		$this->magistralClassList[2]->getProfessor()->setName('Pepe');
-		foreach ($this->magistralClassList as $x) 
-		{
-			echo $x->getProfessor()->getName().' - ';
-			echo $x->getCourse()->getName().' - ';
-			echo $x->getGroup()->getNumber().' @@@ ';
-		}
-		*/
-		
-
-
-
-
-
-
-
-
 
 		// ***************************************************************************
 		// Generar los horarios  (AQUI ESTÁ LO DURO)
@@ -270,62 +237,3 @@ class Generator_controller extends CI_Controller
 		// ***************************************************************************
 	}
 }
-
-
-
-
-
-
-
-
-
-		/*
-		$fillInformation = new FillInformation();
-
-		$x = $fillInformation->fillActivity(1);
-		echo $x->getId().' ### ';
-		echo $x->getDescription().' ### ';
-		echo $x->getWorkPorcent().' ### ';
-
-		$x = $fillInformation->fillPlan(1);
-		echo $x->getId().' ### ';
-		echo $x->getName().' ### ';
-
-		$x = $fillInformation->fillGroup(1);
-		echo $x->getId().' ### ';
-		echo $x->getNumber().' ### ';
-
-		$x = $fillInformation->fillBlock(1);
-		echo $x->getId().' ### ';
-		echo $x->getName().' ### ';
-		echo 'Plan: '.$x->getPlan()->getName().' ### ';
-
-		$x = $fillInformation->fillCourse(1);
-		echo $x->getId().' ### ';
-		echo $x->getName().' ### ';
-		echo $x->getCode().' ### ';
-		echo $x->getTotalLessons().' ### ';
-		echo "Bloque: ".$x->getBlock()->getName().' ### ';
-		echo "Plan: ".$x->getBlock()->getPlan()->getName();
-
-		$x = $fillInformation->fillSchedule(85);
-		echo $x->getId().' ### ';
-		echo $x->getState().' ### ';
-		echo $x->getNumSchedule().' ### ';
-		echo $x->getDescription().' ### ';
-
-		$x = $fillInformation->fillProfessor(4);
-		echo 'ID: '.$x->getId().' ### ';
-		echo $x->getWorkload().' ### ';
-		echo $x->getName().' ### ';
-		foreach ($x->getActivities() as $act) {
-			echo "Activity: ".$act->getDescription().' - ';
-		}
-		foreach ($x->getCourses() as $cur) {
-			echo "Course: ".$cur->getCode().' - ';
-		}
-		foreach ($x->getSchedules()  as $sch) {
-			echo 'Schedule: '.$sch->getDescription().' - ';
-		}
-
-		*/
