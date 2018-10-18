@@ -17,6 +17,9 @@ class System_controller extends CI_Controller {
 	***************************************************/
 	function index()
 	{
+		$this->session->set_userdata('idAdmin' , '');
+		$this->session->set_userdata('idCareer', '');
+		$this->session->set_userdata('userName', '');
 		$this->call_login("Login", "");
 	}
 
@@ -45,8 +48,8 @@ class System_controller extends CI_Controller {
 	{
 		$administrator_Logic = new Administrator_Logic();
 		// Get data from view
-		$user = $this->input->post('inputEmail');
-		$password = $this->input->post('inputPassword');
+		$user     = $_POST['username'];
+		$password = $_POST['password'];
 		// Check if the admin exist 
 		$idAdmin = $administrator_Logic->validCredentials($user, $password);
 		if ($idAdmin != false)

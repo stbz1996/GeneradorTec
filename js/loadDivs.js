@@ -1,11 +1,165 @@
 var idProfessor; //  is the id of the professor that is selected in the moment.
 var nameProfessor; // This is the name of the professor that is selected in the moment.
+var idPeriod;
 var grayBackground = "#3385ff";
 var whiteBackground = "#ffffff";
 var yellowBackground = "#ffff4d";
 
 var assigned = []; // Course - Professor.
 
+/****************************************
+- Load the information relevant... the progress bar, the text and the load in the beginning.
+****************************************/
+$(document).ready( function () {
+    document.getElementById("loader").style.display = "none";
+
+    var possibleURL = base_url + "Administrator_controller/AssignmentCourses";
+
+    if (document.URL == possibleURL)
+    {
+        showModalPeriodForm(); // Show the modal of periods.
+    }
+});
+
+/****************************************
+- Load the periods modal.
+****************************************/
+function showModalPeriodForm()
+{
+    $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
+    $('.modal-title').text('Seleccionar Período'); // Set title to Bootstrap modal title
+}
+
+/****************************************
+- Select the period that you want to upload the forms.
+****************************************/
+function choosePeriod()
+{
+    period = $('#selectPeriod option:selected').val();
+
+    /* If the period is not selected. */
+    if(period == '0' || period == '' || period == 'undefined' || period == null )
+    {
+        swal({title: "Error", 
+            text: "No se ha seleccionado ningún período", 
+            icon: "error"});
+        return;
+    }
+
+    idPeriod = period;
+
+    // Load all the divs assigned to a period.
+    verifyAssignedProfessors();
+    loadBlocksProfessors(period);
+}
+
+/****************************************
+Delete all the div assigned to a professor.
+****************************************/
+function verifyAssignedProfessors()
+{
+    var save;
+    var div = $(".professorDiv").toArray();
+
+    var template = $(".professorDiv").find("[data-value='']");
+
+    if (div.length > 1)
+    {
+        div.forEach(function(element)
+        {
+            if (element.getAttribute("data-value") != '')
+            {
+                // Drop the element.
+                element.parentNode.removeChild(element);
+                // Desasignar todo....
+            }
+        });
+    }
+}
+
+/****************************************
+List the professors that are going to be upload...
+****************************************/
+function loadBlocksProfessors(idPeriod)
+{
+    var url = base_url + "Administrator_controller/loadFormProfessor/";
+    $.ajax({
+        url: url + idPeriod,
+        type: "GET",
+        dataType: "JSON",
+        beforeSend: function(){
+            document.getElementById("loader").style.display = "block";
+            opaqueCourses(0.2);
+        },
+
+        success: function(professors)
+        {
+            // If there are not professors with forms.
+            if (professors.length <= 0)
+            {
+                swal({title: "Error", 
+                    text: "No hay profesores que hayan completado el formulario para ese período", 
+                    icon: "error"});
+            }
+            else
+            {
+                // Create a div for each professor.
+                professors.forEach(function(professor){
+                    createDivProfessor(professor);
+                });
+            }
+
+            document.getElementById("loader").style.display = "none";
+            desopaqueCourses(1);
+            $('#modal_form').modal('hide');
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
+
+/****************************************
+Create the div to the professor via Javascript...
+****************************************/
+function createDivProfessor(professor)
+{
+    var professorName = professor.name + " " + professor.lastName;
+    var textAssigned = "Solicitó un " + professor.workLoad + "% de carga";
+
+    /* Get the div to be used as a template. */
+    var divProfessor = document.getElementById("professorDiv");
+    var newDivProfessor = divProfessor.cloneNode(true); // Clone. Or Copy.
+    newDivProfessor.style.display = "block"; // Make visible.
+    
+    // Data-Value -> is the id of the div.
+    newDivProfessor.setAttribute('data-value', professor.idProfessor);
+    // Name the professor.
+    newDivProfessor.childNodes[2].previousSibling.innerHTML = professorName;
+    // The work porcent requested by the professor.
+    newDivProfessor.childNodes[3].textContent = textAssigned;
+
+    // Progress Bar ... 
+    var progressBar = newDivProfessor.childNodes[5].childNodes[1];
+    
+    progressBar.setAttribute('aria-valuenow', professor.workPorcent); // Activities requested.
+    progressBar.setAttribute('aria-valuemin', "0"); // 0 is the minus.
+    progressBar.setAttribute('aria-valuemax', professor.workLoad); // Work expected to be completed.
+
+    var posRelative = 0;
+    // Get the work completed by the professor.
+    var work = getWork(newDivProfessor);
+
+    // Get the amount of work completed to this moment.
+    posRelative = getRelativePosition(work[1], work[0]);
+
+    progressBar.style.width = posRelative.toString() + "%"; // Represent in blue in the bar.
+    newDivProfessor.childNodes[5].childNodes[1].childNodes[1].innerHTML = posRelative.toString();
+
+    // Add to the leftScreen the new Div to assign.
+    document.getElementById("leftScreen").appendChild(newDivProfessor);
+}
 
 /****************************************
  Get the work expect to complete and the assigned for the professor.
@@ -30,41 +184,6 @@ function getWork(div)
     var work = [workLoad, workPorcent];
     return work;
 }
-
-/****************************************
- This function initialize the divs... Load the information asociated with the professors..
-****************************************/
-function loadProfessors(divProfessors)
-{
-    var length = divProfessors.length;
-    for (var i = 0; i < length; i++)
-    {
-        var id = divProfessors[i].getAttribute('data-value'); // get the id.
-        var title = divProfessors[i].childNodes[2].previousSibling.innerHTML; // Name of the teacher.
-        var text = divProfessors[i].childNodes[3]; // Porcent of the work
-        var progressBar = divProfessors[i].childNodes[5].childNodes[1];
-        var textPorcentWork = divProfessors[i].childNodes[5].childNodes[1].childNodes[1]; // Text
-        var posRelative = 0;
-        var work = getWork(divProfessors[i]);
-
-        posRelative = getRelativePosition(work[1], work[0]);
-
-        progressBar.style.width = posRelative.toString() + "%";
-        textPorcentWork.innerHTML = posRelative.toString();
-    }
-}
-
-
-/****************************************
-- Load the information relevant... the progress bar, the text and the load in the beginning.
-****************************************/
-$(document).ready( function () {
-
-    document.getElementById("loader").style.display = "none";
-    var divProfessors = $(".professorDiv").toArray(); // Get all the divs of the program.
-    
-    loadProfessors(divProfessors); // Load all the information of the professors.
-} );
 
 /****************************************
 - Show the errors in the execution of a javascript operation.
@@ -187,7 +306,7 @@ function loadCoursesSelect(idProfessor)
 {
     //Ajax Load data from ajax
     $.ajax({
-        url : base_url + "Administrator_controller/loadSelectCourses/" + idProfessor,
+        url : base_url + "Administrator_controller/loadSelectCourses/" + idProfessor + "/" + idPeriod,
         type: "GET",
         dataType: "JSON",
         beforeSend: function(){
@@ -262,6 +381,124 @@ function increaseLoadProfessor(idProfessor)
 }
 
 /*********************************************
+Edit information about the professor.
+*********************************************/
+function decreaseLoadProfessor(idProfessor)
+{
+    var divProfessor = lookDivProfessor(idProfessor);
+    var progressBar = divProfessor.childNodes[5].childNodes[1]; // Progress Bar
+    var textPorcentWork = divProfessor.childNodes[5].childNodes[1].childNodes[1]; // Text of load.
+    var work = getWork(divProfessor); // Get the workAssigned and workPendient
+    var workPorcent = work[1] - 25; // new workPorcent.
+    var posRelative;
+
+    progressBar.className = "progress-bar progress-bar-info"; // You have your assigned work.
+    // If the div of the professor is desactivated.
+    if (divProfessor.style.opacity == 0.6)
+    {
+        divProfessor.style.opacity = 1; // Make visible
+        divProfessor.setAttribute('onclick', 'selectProfessor(this)'); // The professor doesn't have an event attached.
+    }
+    
+    posRelative = getRelativePosition(workPorcent, work[0]); // Get the porcentage relate to the actual load.
+    progressBar.setAttribute('aria-valuenow', workPorcent);
+    progressBar.style.width = posRelative.toString() + "%"; // Set the new load.
+    textPorcentWork.innerHTML = workPorcent.toString(); // set the data
+}
+
+/*********************************************
+Add a paragraph to a div.... so the div is completed.
+*********************************************/
+function addParagraphCourse(nameProf, numGroup, group)
+{
+    /* Create the paragraph. */
+    var div = document.createElement("div");
+    var par = document.createElement("P");                        // Create a <p> node
+    var text = document.createTextNode("Asignado a " + nameProf + " - Grupo # " + numGroup);
+    var btn = document.createElement("BUTTON");
+    var option = document.createElement("i");
+
+    btn.setAttribute('onclick','deleteParagraph(this.parentNode)'); // Action to the button.
+    div.classList.add("div_inline"); // Inline the elements of the div.
+    btn.classList.add("btn-danger"); // Add a red button.
+    btn.style.float = "right"; // Put on the right side.
+    option.classList.add("glyphicon");
+    option.classList.add("glyphicon-trash");
+    group.style.display = "none"; // Don't show the group to the user.
+
+    par.appendChild(text); 
+    btn.appendChild(option);
+    div.appendChild(btn);
+    div.appendChild(par);
+    div.appendChild(group);
+
+    return div;
+}
+
+function deleteParagraph(pDiv)
+{
+    var divCourse = pDiv.parentNode.parentNode; // Father of the divs.
+    var button = divCourse.childNodes[5];
+    var state = divCourse.childNodes[7];
+    var groupAssigned = divCourse.childNodes[5].childNodes[1].childNodes[1].childNodes[3].childNodes[1];
+    var numGroup = groupAssigned.value;
+    var idGroup = groupAssigned.value;
+    var parent = pDiv.parentNode.parentNode; 
+    var group = pDiv.childNodes[2];
+    var idProfessor = pDiv.getAttribute("data-value");
+    var idCourse = pDiv.id;
+    var idGroup = group.value;
+    group.style.display = "block";
+
+    pDiv.parentNode.removeChild(pDiv); // Delete the actual pDiv.
+    groupAssigned.appendChild(group);
+
+    /* If there are 6 groups assigned.*/
+    if (groupAssigned.length > 6)
+    {
+        var par = document.createElement("P");                        // Create a <p> node
+        var text = document.createTextNode("No ha sido asignado");
+        par.appendChild(text);
+        var divText = divCourse.childNodes[3]; // Get the div of the p values.
+        divText.appendChild(par);
+    }
+    
+    decreaseLoadProfessor(idProfessor);
+    dropElement(idProfessor, idCourse, idGroup);
+}
+
+function dropElement(pIdProfessor, pIdCourse, pIdGroup)
+{
+    var length = assigned.length;
+    console.log("Id Prof: " + pIdProfessor + " - IdCourse: " + pIdCourse + 
+        " - Id Group: " + pIdGroup);
+    for(var i = 0; i < length; i++)
+    {
+        if (assigned[i].idProfessor == pIdProfessor && 
+            assigned[i].idCourse == pIdCourse &&
+            assigned[i].idGroup == pIdGroup)
+        {
+            if (i == 0)
+            {
+                var rest = assigned.splice(i, i + 1); // Drops the element of the list.
+            }else{
+                var rest = assigned.splice(i, i); // Drops the element of the list.
+            }
+
+            if (i < length - 1)
+            {
+                //console.log(assigned);
+                //console.log(rest);
+                var dropRest = rest.splice(i + 1, i + 1);
+                //console.log(dropRest);
+                assigned = assigned.concat(dropRest);
+            }
+            return;
+        }
+    }
+}
+
+/*********************************************
 Registered professor and courses in the database
 *********************************************/
 function assignCourse(idCourse, idProf, nameCourse, nameProf)
@@ -273,11 +510,14 @@ function assignCourse(idCourse, idProf, nameCourse, nameProf)
     var numGroup = groupAssigned.value;
     var idGroup = groupAssigned.value;
 
+    var groupSelected = null;
     /* Remove the group that I choose.*/
     for(var i=0; i < groupAssigned.length; i++)
     {
         if (groupAssigned[i].value == groupAssigned.value)
         {
+            groupSelected = groupAssigned[i];
+            idGroup = groupSelected.value;
             numGroup = groupAssigned[i].text;
             groupAssigned.removeChild(groupAssigned[i]);
             break;
@@ -292,33 +532,47 @@ function assignCourse(idCourse, idProf, nameCourse, nameProf)
         state.value = "0"; // The state is disabled.
     } 
 
-    /* Creo el parrafo. */
-    var par = document.createElement("P");                        // Create a <p> node
-    var text = document.createTextNode("Asignado a " + nameProf + " - Group # " + numGroup);
-    par.appendChild(text); 
+    var div = addParagraphCourse(nameProf, numGroup, groupSelected); // Get the div with the values assigned;
 
     var text = divCourse.childNodes[3]; // Get the div of the p values.
 
-    console.log(groupAssigned.length);
-    console.log(text.childNodes[1].textContent);
-    if((groupAssigned.length >= 6) && (text.childNodes[1].textContent = "No ha sido asignado"))
+    // If there are 6 or more groups values able.
+    if((groupAssigned.length >= 6))
     {
-        text.removeChild(text.childNodes[1]); // Remove "no ha sido asignado"
+        var length = text.childNodes.length; // Number of text assigned to a course.
+        for(var i = 0; i < length; i++)
+        {
+            var childText = text.childNodes[i];
+            // If the text is a paragraph.
+            if (childText.tagName == "P")
+            {
+                text.removeChild(childText); // Remove the paragraph.
+                length -= 1;
+            }
+        }
     }
 
-    text.appendChild(par); // Add the assigned.
+    div.id = idCourse;
+    div.setAttribute("data-value", idProf);
+    text.appendChild(div); // Add the assigned.
 
     increaseLoadProfessor(idProf); // Assign the course.
+    var course = registerCourse(idCourse, idProf, nameCourse, nameProf, idGroup, numGroup); // Register the new course.
+}
 
+
+function registerCourse(pIdCourse, pIdProf, pNameCourse, pNameProf, pIdGroup, pNumGroup)
+{
     var courseRegistered = new Object();
-    courseRegistered.idCourse = idCourse;
-    courseRegistered.idProfessor = idProf;
-    courseRegistered.nameCourse = nameCourse;
-    courseRegistered.nameProfessor = nameProf;
-    courseRegistered.idGroup = idGroup;
-    courseRegistered.nameGroup = numGroup;
+    courseRegistered.idCourse = pIdCourse;
+    courseRegistered.idProfessor = pIdProf;
+    courseRegistered.nameCourse = pNameCourse;
+    courseRegistered.nameProfessor = pNameProf;
+    courseRegistered.idGroup = pIdGroup;
+    courseRegistered.nameGroup = pNumGroup;
 
     assigned.push(courseRegistered); // Registered the course
+    return courseRegistered;
 }
 
 
@@ -557,9 +811,11 @@ function selectProfessor(divSelected){
 
 function saveAssigned()
 {
+    console.log("Asignación: ");
     for (var i = 0; i < assigned.length; i++)
     {
         console.log("Elemento: " + assigned[i].idCourse + " - " + assigned[i].idProfessor + " - " + 
-            assigned[i].nameCourse + " - " + assigned[i].nameProfessor);
+            assigned[i].nameCourse + " - " + assigned[i].nameProfessor + " - " + assigned[i].idGroup +
+            " - " + assigned[i].nameGroup);
     }
 }

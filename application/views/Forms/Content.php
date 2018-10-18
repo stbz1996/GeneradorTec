@@ -13,12 +13,12 @@
 
   <!-- progressbar -->
   <ul id="progressbar">
-    <li class="active">Información</li>
-    <li> Carga </li>
-    <li> Actividades </li>
-    <li> Cursos </li>
-    <li> Horarios </li>
-    <li> Enviar </li>
+    <li class="active" id="1"><div class="text-menu">Información</div></li>
+    <li id="2"> <div class="text-menu">Carga</div> </li>
+    <li id="3"> <div class="text-menu">Actividades</div> </li>
+    <li id="4"> <div class="text-menu">Cursos</div> </li>
+    <li id="5"> <div class="text-menu">Horarios</div> </li>
+    <li id="6"> <div class="text-menu">Enviar</div> </li>
   </ul>
   
   <fieldset>
@@ -125,72 +125,82 @@
     </h3>
     <div class="listOfcourses">
       <?php 
-      $countPlans = count($plans);
-      $totalCourses = 1;
-      for($i = 0; $i < $countPlans; $i++) { ?>
-          <div class="coursesPlan"> Plan <?= $plans[$i]->getName() ?></div>
-          <div class="tablecourses">
-            <?php 
-            $countCourses = count($courses[$i]);
-            for($j = 0; $j < $countCourses; $j++) {
-              $nameRow = 'row-'.$totalCourses;
-              $divCode = 'div-code-'.$totalCourses;
-              $divName = 'div-name-'.$totalCourses;
-              $nameSelect = 'select-'.$totalCourses;
-              $nameCheckBox = 'cbox-'.$totalCourses;
-              $nameIdCourse = 'course-'.$totalCourses;
-              $idCourse = $courses[$i][$j]->getId(); ?>
-              <div class="tablerow" id=<?=$nameRow ?> >
-
-                <div><input type="hidden" id=<?= $nameIdCourse ?> value=<?=$idCourse?> /></div>
-
-                <div class="tableColumCheck">
-                  <label class="container">
-                    <input type="checkbox" class="cbox" id=<?= $nameCheckBox ?> value="first_checkbox" <?= in_array($idCourse, $idCourses) ? 'checked' : '' ?> />
-                    <span class="checkmark"></span>
-                  </label>
-                </div>
+          $countBlockCourses = 0;
+          $totalCourses = 1;
+          $countPlans = count($plans);    
+          for($i = 0; $i < $countPlans; $i++) { ?>
+              <div class="coursesPlan"> Plan <?= $plans[$i]->getName() ?></div>
+              
+              <?php
+              $countBlocks = count($blocks[$i]);
+              for($j = 0; $j < $countBlocks; $j++) { ?>
+                <div class="blockPlan"><?= $blocks[$i][$j]->getName() ?></div>
                 
-                <div class="tableColumCode" id=<?= $divCode ?>><?= $courses[$i][$j]->getCode() ?> </div>
-                <div class="tableColumName" id=<?= $divName ?>><?= $courses[$i][$j]->getName() ?> </div>
-                <div class="tableColumPriority">
-                  <select id=<?=$nameSelect ?> <?= in_array($idCourse, $idCourses) ? '' : 'disabled' ?>>
-                    <?php 
-                    if(in_array($idCourse, $idCourses))
-                    {
-                    ?>
-                      <option <?= $priorities[array_search($idCourse, $idCourses)] == 'A' ? 'selected="selected"' : '' ?> value="A">A</option>
-                      <option <?= $priorities[array_search($idCourse, $idCourses)] == 'B' ? 'selected="selected"' : '' ?> value="B">B</option>
-                      <option <?= $priorities[array_search($idCourse, $idCourses)] == 'C' ? 'selected="selected"' : '' ?> value="C">C</option>
-                    <?php }
-                    else
-                    {
-                    ?>
-                      <option value="A">A</option>
-                      <option value="B">B</option>
-                      <option value="C">C</option>
-                    <?php
-                    }
-                    ?>
-                  </select>
-                </div>
+                <div class="tablecourses">
+                  <?php 
+                  $countCourses = count($courses[$countBlockCourses]);
+                  for($k = 0; $k < $countCourses; $k++) { 
+                    $nameRow = 'row-'.$totalCourses;
+                    $divCode = 'div-code-'.$totalCourses;
+                    $divName = 'div-name-'.$totalCourses;
+                    $nameSelect = 'select-'.$totalCourses;
+                    $nameCheckBox = 'cbox-'.$totalCourses;
+                    $nameIdCourse = 'course-'.$totalCourses;
+                    $idCourse = $courses[$countBlockCourses][$k]->getId(); ?>
 
-                <?php 
-                if(in_array($idCourse, $idCourses)) {?>
-                <div id="id-<?= $totalCourses ?>">
-                  <input type="hidden" id="idCourse-<?= $totalCourses ?>" name="idCourses[]" value=<?= $idCourse?> />
-                </div>
-                <div id="priority-<?= $totalCourses ?>">
-                  <input type="hidden" id="prior-<?= $totalCourses ?>" name="priorities[]" value=<?= $priorities[array_search($idCourse,$idCourses)]?> />
-                </div>
-                <?php } ?>
+                    <div class="tablerow" id=<?=$nameRow ?> >
+                      <div><input type="hidden" id=<?= $nameIdCourse ?> value=<?=$idCourse?> /></div>
 
-              </div>
-            <?php 
-              $totalCourses++;
-            }?>
-          </div>
-      <?php }?>     
+                      <div class="tableColumCheck">
+                        <label class="container">
+                          <input type="checkbox" class="cbox" id=<?= $nameCheckBox ?> value="first_checkbox" <?= in_array($idCourse, $idCourses) ? 'checked' : '' ?> />
+                          <span class="checkmark"></span>
+                        </label>
+                      </div>
+                      
+                      <div class="tableColumCode" id=<?= $divCode ?>><?= $courses[$countBlockCourses][$k]->getCode() ?> </div>
+                      <div class="tableColumName" id=<?= $divName ?>><?= $courses[$countBlockCourses][$k]->getName() ?> </div>
+                      <div class="tableColumPriority">
+                        <select id=<?=$nameSelect ?> <?= in_array($idCourse, $idCourses) ? '' : 'disabled' ?>>
+                          <?php 
+                          if(in_array($idCourse, $idCourses))
+                          {
+                          ?>
+                            <option <?= $priorities[array_search($idCourse, $idCourses)] == 'A' ? 'selected="selected"' : '' ?> value="A">A</option>
+                            <option <?= $priorities[array_search($idCourse, $idCourses)] == 'B' ? 'selected="selected"' : '' ?> value="B">B</option>
+                            <option <?= $priorities[array_search($idCourse, $idCourses)] == 'C' ? 'selected="selected"' : '' ?> value="C">C</option>
+                          <?php }
+                          else
+                          {
+                          ?>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                          <?php
+                          }
+                          ?>
+                        </select>
+                      </div>
+                      <?php 
+                        if(in_array($idCourse, $idCourses)) {?>
+                        <div id="id-<?= $totalCourses ?>">
+                          <input type="hidden" id="idCourse-<?= $totalCourses ?>" name="idCourses[]" value=<?= $idCourse?> />
+                        </div>
+                        <div id="priority-<?= $totalCourses ?>">
+                          <input type="hidden" id="prior-<?= $totalCourses ?>" name="priorities[]" value=<?= $priorities[array_search($idCourse,$idCourses)]?> />
+                        </div>
+                        <?php } ?>          
+                    </div>
+                    <!--<div class="courseBlock"><?= $courses[$countBlockCourses][$k]->getName() ?></div>-->
+                  <?php 
+                    $totalCourses++;
+                  }?>
+                </div>
+              <?php 
+                $countBlockCourses++;
+              }?>
+
+      <?php }?>
     </div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input id="saveDataButton" type="button" name="Submit" class="submit submit-save action-button" value="Guardar">

@@ -141,12 +141,12 @@ class ProfessorDAO_model extends CI_Model {
         $this->db->join('Period', 'Form.idPeriod = Period.idPeriod');
 
         $this->db->where('Form.idPeriod', $idPeriod);
+        $this->db->where('Form.state', 0); // The form sent.
         $this->db->where('Professor.state', 1);
 
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
-            
             return $query->result();
         }
         else

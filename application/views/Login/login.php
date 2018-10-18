@@ -1,52 +1,32 @@
-<?php
-	$user = array(
-		'name' => 'inputEmail',
-		'placeholder' => 'Usuario',
-		'class' => 'form-control',
-		'type' => 'text',
-		'id' => 'inputEmail',
-		'minlength' => '4',
-		'required' => 'true',
-		'maxlength' => '10'
-	);
-
-	$password = array(
-		'name' => 'inputPassword',
-		'placeholder' => 'Contraseña',
-		'class' => 'form-control',
-		'type' => 'password',
-		'id' => 'inputPassword',
-		'minlength' => '4',
-		'required' => 'true',
-		'maxlength' => '10'
-	);	
-
-	$button = array(
-		'name' => 'submitButton',
-		'value' => 'Iniciar Sesión',
-		'class' => 'btn btn-primary',
-		'id' => 'buttonid'
-	);
+<?php 
+	$dir = base_url().'System_controller/validCredentials';
 ?>
+<section class="login-block">
+    <div class="container">
+		<div class="row">
+			<div class="col-md-4 login-sec">
+			    <h2 class="text-center">TEC</h2>
+			    
+				<form class="login-form" action="<?= $dir ?>" method="post">
+					<div class="form-group">
+				    	<label for="exampleInputEmail1" class="text-uppercase">Usuario</label>
+				    	<input name="username" type="text" class="form-control" placeholder="">
+				    </div>
+					<div class="form-group">
+					    <label for="exampleInputPassword1" class="text-uppercase">Contraseña</label>
+					    <input name="password" type="password" class="form-control" placeholder="">
+					</div>
+					<div class="form-check">
+					  	<button type="submit" class="btn btn-login">
+					  		Iniciar Sesión
+					  	</button>
+					</div>
+				</form>
+				<p class="messageText"> <?= $message ?> </p>
+			</div>
 
-
-<body id="LoginForm">
-	<div class="container">
-		<div class="login-form">
-			<div class="main-div">
-		    	<div class="panel">
-		   			<h2>Administración</h2>
-		   			<p>Por favor ingrese el usuario y la contraseña</p>
-		   		</div>
-		   		<?= form_open("/System_controller/validCredentials") ?>
-		    	<form id="Login">
-		        	<div class="form-group"> <?= form_input($user) ?> </div>
-		        	<div class="form-group"> <?= form_input($password) ?> </div>
-		        	<?= form_submit($button) ?>
-		   		</form>
-		   		<?= form_close() ?> 
-		   		<p class="botto-text"> <?= $message ?> </p>
-    		</div>
+			<div class="col-md-8 banner-sec">
+			</div>
 		</div>
 	</div>
-</body>
+</section>

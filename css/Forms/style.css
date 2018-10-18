@@ -22,9 +22,9 @@ body {
 
 /*form styles*/
 #msform {
-	width: 90%;
-	margin-left: 5%;
-	margin-right: 5%;
+	width: 93%;
+	margin-left: 3.5%;
+	margin-right: 2.5%;
 	margin-top: 2%;
 	text-align: center;
 	position: relative;
@@ -126,20 +126,27 @@ body {
 
 /*progressbar*/
 #progressbar {
-	margin-bottom: 30px;
-	overflow: hidden;
+	/*margin-bottom: 30px;*/
+	/*overflow: hidden;*/
 	counter-reset: step;
-	width: 55%;
-	margin-left: 22.5%;
+	margin-top: 25px;
+	width: 30px;
+	height: 400px;
+	float: left;
+	display: inline-block;
+	position: fixed;
+	left: 2.8%;
 }
 #progressbar li {
 	list-style-type: none;
 	color: white;
 	text-transform: uppercase;
 	font-size: 10px;
-	width: 16.66%;
-	float: left;
+	/*width: 16.66%;*/
+	height: 35px;
+	/*float: left;*/
 	position: relative;
+	margin-bottom: 50px;
 }
 #progressbar li:before {
 	content: counter(step);
@@ -153,15 +160,22 @@ body {
 	border-radius: 3px;
 	margin: 0 auto 5px auto;
 }
+
+#msform #progressbar li .text-menu{
+	text-align: center;
+	margin-left: -74%;
+	width: 77px;
+}
+
 /*progressbar connectors*/
 #progressbar li:after {
 	content: '';
-	width: 100%;
-	height: 2px;
+	width: 2px;
+	height: 50px;
 	background: white;
 	position: absolute;
-	left: -50%;
-	top: 9px;
+	left: 47%;
+	top: -45px;
 	z-index: -1; /*put it behind the numbers*/
 }
 #progressbar li:first-child:after {
@@ -175,7 +189,9 @@ body {
 	color: white;
 }
 
-
+#progressbar li:hover, #progressbar li:focus {
+	cursor: pointer;
+}
 
 /* Informacion */
 .infoTagBox{
@@ -314,7 +330,7 @@ body {
     position: absolute;
     left: 0;
     height: 25px;
-    width: 100%;
+    width: 80%;
     margin-top: -10%;
     background-color: #ccc;
     border-radius: 250px;

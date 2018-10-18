@@ -7,6 +7,7 @@ class Courses_controller extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->library('session');
 		$this->load->library('Administrator_Logic');
 		$this->load->helper("functions_helper");
 		$this->load->model("DAO/CourseDAO_model");
@@ -81,9 +82,9 @@ class Courses_controller extends CI_Controller
 	{
 		$this->load->view("HomePage/Header");
 		$this->load->view("HomePage/Admin/BreadCrumb", $data);
-		$this->load->view("HomePage/Courses/Header");
+		$this->load->view("HomePage/Courses/Buttons");
 		$this->load->view($viewName, $data);
-		$this->load->view("HomePage/Courses/footer");
+		$this->load->view("HomePage/Courses/Modals");
 		$this->load->view("HomePage/Footer");
 	}
 

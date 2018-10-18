@@ -89,11 +89,19 @@ h1#tituloPlanes {
 	margin-bottom: 4px;
 }
 
+
+
+
+
+
 .coursesDiv {
 	border-style: ridge;
 	border-width: 1px; 
-	margin-bottom: 4px;
+	margin-bottom: 2%;
 	margin-left: 5%;
+}
+.coursesDiv:hover{
+	background: #F1EDE6;
 }
 
 #titleSections {
@@ -101,6 +109,7 @@ h1#tituloPlanes {
 	margin-right: auto;
 	color: #045FB4;
 	display: inline-block;
+	font-size: 1.6vw;
 }
 
 #loader {
@@ -144,27 +153,55 @@ h1#tituloPlanes {
 	font-size: 1.2vw;
 	padding: 0.5%;
 	margin-bottom: 1%;
-
 }
 
 #buttonPositioner{
-	position: relative;
+	width: 100%;
 }
 
 #buttonLeftScreen { 
-	position: relative; 
-	width: 50%; 
-	top: 0; 
-	left: 10%;
+	margin-left: 29%;
+	width: 24%; 
 	float: left;
-	text-align: center;
+}
+
+.selectBox{
+	padding: 7%;
+	width: 100%;
+	border-radius: 5px;
+}
+
+.selectBox:hover{
+	background: #F1EDE6;
 }
 
 #buttonRightScreen { 
-	position: relative; 
-	width: 50%; 
-	top: 0; 
-	right: 25%;
-	float: right; 
+	margin-top: 1%;
+	width: 15%;
+	float: left; 
 	text-align: center;
+}
+
+
+/* Delete assigned course */
+.div_inline {
+	display: inline-block;
+	width: 94%;
+	margin-left:  3%;
+	margin-right: 3%;
+	padding-left: 3%; 
+	padding-right: 3%;
+	padding-top: 3%;
+	background: #F1EDE6;
+}
+
+.div_inline p{
+	width: 90%;
+	float: left;
+	font-size: 1vw;
+}
+.div_inline button{
+	width: 7%;
+	padding: 0.4%;
+	margin-top: -1.5%;
 }
