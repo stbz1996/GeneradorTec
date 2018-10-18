@@ -109,6 +109,45 @@ class FillInformation{
 	}
 
 
+	/************************************************
+	*Function that returns all the blocks of a plan *
+	*Input: 									    *
+	*	-$pIdPlan: Integer, id of a plan      	 	*
+	*										     	*
+	*Output: 									    *
+	*	Returns a list of blocks     			    *
+	************************************************/
+	public function getBlocks($pIdPlan)
+	{
+		$blockDAO_model = new BlockDAO_model();
+ 		$query = $blockDAO_model->show($pIdPlan);
+ 		$data = array();
+ 		if (!$query)
+ 		{
+ 			return array();
+ 		}
+ 		$data = $query->result();
+ 		return $data;
+	}
+
+
+	/********************************************
+	*Function that returns all schedules      	*
+	*Output: 									*
+	*	Returns a list of schedules 			*
+	*********************************************/
+	public function getSchedules()
+	{
+		$scheduleDAO_model = new ScheduleDAO_model();
+ 		$query = $scheduleDAO_model->getAllSchedules();
+ 		if (!$query)
+ 		{
+ 			return array();
+ 		}
+ 		return $query;
+	}
+
+
 	/********************************************
 	*Function that returns a block by his id 	*
 	*Input: 									*
@@ -121,27 +160,20 @@ class FillInformation{
 	{
 		$blockDAO = new BlockDAO_model();
 		$planDAO = new PlanDAO_model();
-
 		$blockQuery = $blockDAO->get($idBlock);
-
 		/* Get information of plan */
 		$planQuery = $planDAO->getPlanFromBlock($idBlock)->row();
-
-
 		if($blockQuery && $planQuery)
 		{
 			/* Create plan */
 			$plan = $this->fillPlan($planQuery->idPlan);
-
 			/* Create new block and returns it */
 			$block = new Block();
 			$block->setId($blockQuery->idBlock);
 			$block->setName($blockQuery->name);
 			$block->setPlan($plan);
-
 			return $block;
 		}
-
 		return false;
 	}
 
@@ -189,16 +221,16 @@ class FillInformation{
 	*********************************************/
 	function fillProfessor($idProfessor)
 	{
-		$professorDAO = new ProfessorDAO_model();
-		$formDAO = new FormDAO_model();
-		$activityDAO = new ActivityDAO_model();
-		$coursesDAO = new CourseDAO_model();
-		$scheduleDAO = new ScheduleDAO_model();
+		$professorDAO   = new ProfessorDAO_model();
+		$formDAO        = new FormDAO_model();
+		$activityDAO    = new ActivityDAO_model();
+		$coursesDAO     = new CourseDAO_model();
+		$scheduleDAO    = new ScheduleDAO_model();
 		$professorQuery = $professorDAO->get($idProfessor);
 		
 		/*Get information of form, activities, courses and schedules */
 		$idForm = $formDAO->getFormByProfessor($idProfessor)->idForm;
-		$activitiesQuery = $activityDAO->getActivities($idForm)->result_array();
+		$activitiesQuery = $activityDAO->getActivities($idForm);
 		$coursesQuery = $coursesDAO->getFormCourses($idForm)->result_array();
 		$schedulesQuery = $scheduleDAO->getSchedulesByForm($idForm)->result_array();
 		
@@ -207,10 +239,11 @@ class FillInformation{
 			$professor = new Professor();
 			$professor->setWorkload($professorQuery->workLoad);
 			$professor->setName($professorQuery->name);
+			$professor->setId($idProfessor);
 			
 			//Activities
 			/*Verify if they are activities*/
-			if(!$activitiesQuery)
+			if($activitiesQuery == false)
 			{
 				$professor->setActivities(array());
 			}
@@ -248,6 +281,5 @@ class FillInformation{
 		}
 		return false;
 	}
-
 }
 ?>

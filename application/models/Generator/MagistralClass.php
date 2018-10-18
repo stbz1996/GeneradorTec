@@ -5,15 +5,9 @@ class MagistralClass
 	private $professor;
     private $course;
 	private $group;
-    private $activities;
+	private $assignedSchedules;
 
-	function __construct($pProfessor, $pCourse, $pGroup, $pAssignedSchedules)
-	{
-        $this->professor = $pProfessor;
-        $this->course = $pCourse;
-        $this->group = $pGroup;
-        $this->assignedSchedules = $pAssignedSchedules;
-	}
+	function __construct(){}
 
 	public function setProfessor($pProfessor)
 	{
