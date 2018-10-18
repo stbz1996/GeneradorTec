@@ -279,6 +279,9 @@ function desopaqueCourses(value)
     }
 }
 
+/************************************************
+Force the div to be assigned.
+************************************************/
 function setForced(div, pValue)
 {
     var state = div.childNodes[6];
@@ -350,7 +353,7 @@ function desactivateDivProfessor(divProfessor, progressBar, stateFinished)
 
 
 /*********************************************
-Edit information about the professor.
+Edit information about the professor. Add.
 *********************************************/
 function increaseLoadProfessor(idProfessor)
 {
@@ -435,20 +438,24 @@ function addParagraphCourse(nameProf, numGroup, group)
     return div;
 }
 
+/*********************************************
+Delete a paragraph in the div.... 
+*********************************************/
 function deleteParagraph(pDiv)
 {
     var divCourse = pDiv.parentNode.parentNode; // Father of the divs.
-    var button = divCourse.childNodes[5];
-    var state = divCourse.childNodes[7];
+    var button = divCourse.childNodes[5]; // Button.
+    var state = divCourse.childNodes[7]; // State of the div.
+    // Select group.
     var groupAssigned = divCourse.childNodes[5].childNodes[1].childNodes[1].childNodes[3].childNodes[1];
-    var numGroup = groupAssigned.value;
-    var idGroup = groupAssigned.value;
-    var parent = pDiv.parentNode.parentNode; 
-    var group = pDiv.childNodes[2];
-    var idProfessor = pDiv.getAttribute("data-value");
-    var idCourse = pDiv.id;
-    var idGroup = group.value;
-    group.style.display = "block";
+    var numGroup = groupAssigned.value; // Number group selected.
+    var idGroup = groupAssigned.value; // Id of the group selected.
+    var parent = pDiv.parentNode.parentNode; // Node parent.
+    var group = pDiv.childNodes[2]; // Option of the group selected.
+    var idProfessor = pDiv.getAttribute("data-value"); // id Professor.
+    var idCourse = pDiv.id; // id Course.
+    var idGroup = group.value; // id Group.
+    group.style.display = "block"; // All the elements are place in a line.
 
     pDiv.parentNode.removeChild(pDiv); // Delete the actual pDiv.
     groupAssigned.appendChild(group);
@@ -463,43 +470,30 @@ function deleteParagraph(pDiv)
         divText.appendChild(par);
     }
     
-    decreaseLoadProfessor(idProfessor);
-    dropElement(idProfessor, idCourse, idGroup);
+    decreaseLoadProfessor(idProfessor); // Decrease the bar.
+    dropElement(idProfessor, idCourse, idGroup); // Drop the element selected.
 }
 
+/*********************************************
+Delete a paragraph in the div.... 
+*********************************************/
 function dropElement(pIdProfessor, pIdCourse, pIdGroup)
 {
     var length = assigned.length;
-    console.log("Id Prof: " + pIdProfessor + " - IdCourse: " + pIdCourse + 
-        " - Id Group: " + pIdGroup);
     for(var i = 0; i < length; i++)
     {
         if (assigned[i].idProfessor == pIdProfessor && 
             assigned[i].idCourse == pIdCourse &&
             assigned[i].idGroup == pIdGroup)
         {
-            if (i == 0)
-            {
-                var rest = assigned.splice(i, i + 1); // Drops the element of the list.
-            }else{
-                var rest = assigned.splice(i, i); // Drops the element of the list.
-            }
-
-            if (i < length - 1)
-            {
-                //console.log(assigned);
-                //console.log(rest);
-                var dropRest = rest.splice(i + 1, i + 1);
-                //console.log(dropRest);
-                assigned = assigned.concat(dropRest);
-            }
+            assigned.splice(i, 1); // Delete the element.
             return;
         }
     }
 }
 
 /*********************************************
-Registered professor and courses in the database
+Assign course to a professor.
 *********************************************/
 function assignCourse(idCourse, idProf, nameCourse, nameProf)
 {
@@ -511,15 +505,16 @@ function assignCourse(idCourse, idProf, nameCourse, nameProf)
     var idGroup = groupAssigned.value;
 
     var groupSelected = null;
+
     /* Remove the group that I choose.*/
     for(var i=0; i < groupAssigned.length; i++)
     {
         if (groupAssigned[i].value == groupAssigned.value)
         {
-            groupSelected = groupAssigned[i];
-            idGroup = groupSelected.value;
-            numGroup = groupAssigned[i].text;
-            groupAssigned.removeChild(groupAssigned[i]);
+            groupSelected = groupAssigned[i]; // Select the group.
+            idGroup = groupSelected.value; // id group
+            numGroup = groupAssigned[i].text; // number group.
+            groupAssigned.removeChild(groupAssigned[i]); // Delete the group of the html.
             break;
         }
     }
@@ -552,15 +547,17 @@ function assignCourse(idCourse, idProf, nameCourse, nameProf)
         }
     }
 
-    div.id = idCourse;
-    div.setAttribute("data-value", idProf);
-    text.appendChild(div); // Add the assigned.
+    div.id = idCourse; // Assign the idCourse.
+    div.setAttribute("data-value", idProf); // Assign the idProfessor.
+    text.appendChild(div); // Add the assigned to the html.
 
     increaseLoadProfessor(idProf); // Assign the course.
     var course = registerCourse(idCourse, idProf, nameCourse, nameProf, idGroup, numGroup); // Register the new course.
 }
 
-
+/*********************************************
+Registered the course, professor and group.
+*********************************************/
 function registerCourse(pIdCourse, pIdProf, pNameCourse, pNameProf, pIdGroup, pNumGroup)
 {
     var courseRegistered = new Object();
@@ -808,14 +805,58 @@ function selectProfessor(divSelected){
     loadCoursesSelect(idProfessor);
 }
 
-
+/************************************************
+- Save the courses and send to the generator.
+*************************************************/
 function saveAssigned()
 {
-    console.log("Asignación: ");
-    for (var i = 0; i < assigned.length; i++)
-    {
-        console.log("Elemento: " + assigned[i].idCourse + " - " + assigned[i].idProfessor + " - " + 
-            assigned[i].nameCourse + " - " + assigned[i].nameProfessor + " - " + assigned[i].idGroup +
-            " - " + assigned[i].nameGroup);
-    }
+    var url = base_url + "Administrator_controller/saveMagistralClasses";
+    var jsonArray = JSON.parse(JSON.stringify(assigned));
+
+    console.log(jsonArray);
+    saveMagistralClass(url, jsonArray);
+}
+
+/************************************************
+- Conexion between the class magistral class to the generator.
+- URL -> to look the function in the administrator.
+- JsonData -> data parse to an json to send.
+*************************************************/
+function saveMagistralClass(url, jsonData)
+{
+    // ajax adding data to database
+    $.ajax({
+        url : url,
+        type: "POST",
+        data: jsonData,
+        dataType: "JSON",
+        beforeSend: function(){
+            document.getElementById("loader").style.display = "block";
+            opaqueCourses(0.2);
+        },
+        success: function(response)
+        {
+            if (response == true)
+            {
+                swal({title: "Listo", 
+                text: "Se almacenaron los cursos, grupos y profesores seleccionados",
+                icon: "success"}).then(function(){
+                    location.reload();
+                });
+            }
+
+            else
+            {
+                swal({title: "Error", text: "Los datos no se almacenaron.", icon: "warning"});
+            }
+
+            document.getElementById("loader").style.display = "none";
+            desopaqueCourses(1);
+
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
 }

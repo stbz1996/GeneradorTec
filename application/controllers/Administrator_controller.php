@@ -512,4 +512,15 @@ class Administrator_controller extends CI_Controller
 		if($result)echo 1;
 		else echo 0;
 	}
+
+	/*********************************************************************
+	- Create the classes with the json received... and send to other controller.
+	**********************************************************************/
+	public function saveMagistralClasses()
+	{
+		$url = 'data.json';
+		$data = file_get_contents('php://input');
+		$classes = json_decode($data);
+		echo "true";
+	}
 }
