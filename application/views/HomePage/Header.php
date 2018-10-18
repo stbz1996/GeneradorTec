@@ -5,16 +5,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <?php
     // Here we can define the links to the controlles
-    $link_to_generateLinks = base_url()."/Administration/GenerateLinks_controller/LoadGenerateLinksView";
-    $linkToScheduleHours = base_url()."/Administration/Schedules_controller/showScheduleSelector";
-    $linkToAdd = base_url()."/Administrator_controller/AddAdmin";
+    $link_to_generateLinks = base_url()."Administration/GenerateLinks_controller/LoadGenerateLinksView";
+    $linkToScheduleHours = base_url()."Administration/Schedules_controller/showScheduleSelector";
+    $linkToAdd = base_url()."Administrator_controller/AddAdmin";
     $linkToPlans = base_url()."Administrator_controller/Plans";
     $linkToProfessors = base_url()."Administrator_controller/Professors";
     $linkToCurrentPeriod = base_url()."Administrator_controller/Period";
     $linkToAssignCourses = base_url()."Administrator_controller/AssignmentCourses";
     $linkToAssignAdvanceDays = base_url()."Administrator_controller/AdvanceDays";
     $linkToBlocks = base_url()."Administrator_controller/Blocks";
-    $linkToCourses = base_url()."/Administration/Courses_controller/loadCourses";
+    $linkToCourses = base_url()."Administration/Courses_controller/loadCourses";
+    $linkToServiceCourses = base_url()."Administration/Courses_controller/loadServiceCourses";
 ?>
 
 
@@ -118,9 +119,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </a>
                         </li>
                         <li>
+                            <a href="<?= $linkToServiceCourses ?>">
+                                <i class="fa fa-link"></i>
+                                <span>2. Cursos de Servicio</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="<?= $linkToAssignCourses ?>">
                                 <i class="fa fa-columns"></i>
-                                <span>2. Asignar Cursos</span>
+                                <span>3. Asignar Cursos</span>
                             </a>
                         </li>
                         

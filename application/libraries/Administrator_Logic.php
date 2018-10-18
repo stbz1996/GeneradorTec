@@ -681,6 +681,12 @@ class Administrator_Logic{
 		$careerDAO = new careerDAO_model();
 		return $careerDAO->assignAdvanceDays($data);
 	}
+
+	public function getServiceCourses()
+	{
+		$courseDAO = new courseDAO_model();
+		return $courseDAO->getServiceCourses();
+	}
 }
 
 ?>

@@ -240,4 +240,20 @@ class CourseDAO_model extends CI_Model
         $query = $this->db->get();
         return $query->result();
     }
+
+    /****************************************
+    *Function that get all active courses   *
+    *                                       *
+    *                                       *
+    *Result:                                *
+    *   Query with all plans' information   *
+    *****************************************/
+    public function getServiceCourses()
+    {
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $this->db->where('isCareer', 0);
+        $query = $this->db->get();
+        return $query->result();
+    }
 }

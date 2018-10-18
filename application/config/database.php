@@ -35,7 +35,7 @@ $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	'username' => 'root',
-	'password' => 'stbz1996',
+	'password' => '',
 	'database' => 'generadortec2018',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
@@ -53,8 +53,8 @@ $db['default'] = array(
 	'save_queries' => TRUE
 );
 
-/* Base de datos de desarrollo */
-/*
+/* Base de datos de desarrollo
+
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'db4free.net',

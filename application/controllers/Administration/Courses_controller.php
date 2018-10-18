@@ -12,6 +12,9 @@ class Courses_controller extends CI_Controller
 		$this->load->model("DAO/CourseDAO_model");
 		$this->load->model("DAO/PlanDAO_model");
 		$this->load->model("DAO/BlockDAO_model");
+		$this->load->model("DAO/PeriodDAO_model");
+		$this->load->model("DAO/GroupDAO_model");
+		$this->load->model("DAO/ScheduleDAO_model");
 		$this->administrator_logic = new Administrator_Logic();
 	}
 
@@ -156,9 +159,18 @@ class Courses_controller extends CI_Controller
     {
     	$result = $this->administrator_logic->deleteCourse($pId);
         return $result;
-    }
-
-
-
-
+	}
+	
+	public function loadServiceCourses(){
+		//$data = $this->FindCourses();
+		//$this->callView("HomePage/Courses/ServiceCourses", $data);
+		$data['ADD'] = getAddressCourses();    // Get address of a block position
+		$data['periods'] = $this->administrator_logic->getArrayPeriods();
+		$data['courses'] = $this->administrator_logic->getServiceCourses();
+		$data['groups'] = $this->administrator_logic->getAllGroups();
+		$data['schedules'] = $this->administrator_logic->getAllSchedules();
+		$this->load->view("HomePage/Header");
+		$this->load->view("HomePage/Courses/ServiceCourses", $data);
+		$this->load->view("HomePage/Footer");
+	}
 }

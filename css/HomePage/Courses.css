@@ -1,10 +1,12 @@
-.filterCoursesContainer{
+.filterCoursesContainer
+{
 	overflow: hidden;
 	width: 33%;
 	margin-left: 33.5%;
 }
 
-.filterCoursesButton{
+.filterCoursesButton
+{
 	width: 48%;
 	background: #337ab7;
 	color: white;
@@ -21,6 +23,45 @@
     border-left-color: rgb(46, 109, 164);
 }
 
-.filterCoursesButton:hover{
-	background: #335aa0;
+.filterCoursesButton:hover
+{
+    background: #335aa0;
+}
+
+
+.service-courses-options
+{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-left: -2.7%;
+    margin-bottom: 2%;
+    justify-content: center;
+}
+
+.service-course
+{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    margin-top: 2%;
+    border: #000 solid 1px;
+}
+
+.class1
+{
+    display: flex; 
+    flex-basis: calc(25% - 10px);
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+
+}
+
+.class1 > .form-control
+{
+    width: 90% !important;
+    margin: 0% auto;
 }

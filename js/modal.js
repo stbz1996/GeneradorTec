@@ -1,8 +1,11 @@
 var save_method; //for save method string
 var table;
+var period;
 
 $(document).ready(function() {
     table = $('#table_id').DataTable();
+    $('#modalPeriod').modal('show');
+    period = 0;
   });
 
 /*************************************************************
@@ -825,5 +828,14 @@ function assignAdvanceDays(url)
     });
 }
 
+function selectPeriod()
+{
+    period = $('[name="selectPeriod"]').val();
+    swal({title: "Periodo seleccionado", icon: "success"});
+    $('#modalPeriod').modal('hide');
+}
 
-
+function reselectPeriod()
+{
+    $('#modalPeriod').modal('show');
+}
