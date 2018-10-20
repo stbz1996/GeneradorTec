@@ -129,7 +129,7 @@ body {
 	/*margin-bottom: 30px;*/
 	/*overflow: hidden;*/
 	counter-reset: step;
-	margin-top: 25px;
+	margin-top: 50px;
 	width: 30px;
 	height: 400px;
 	float: left;
@@ -322,15 +322,12 @@ body {
     cursor: pointer;
 }
 
-
-
-
 /* Create a custom checkbox */
 .checkmark {
     position: absolute;
     left: 0;
-    height: 25px;
-    width: 80%;
+    height: 26px;
+    width: 95%;
     margin-top: -10%;
     background-color: #ccc;
     border-radius: 250px;

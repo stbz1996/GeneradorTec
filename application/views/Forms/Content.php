@@ -82,12 +82,21 @@
   <fieldset>
     <h2 class="fs-title">Actividades</h2>
     <h3 class="fs-subtitle"> 
-      Ingrese las actividades que considera le reducen la carga de trabajo, por lo que afectará la carga que brindó en la sección anterior. 
+      Estas actividades son extra a la docencia y afectan su carga de trabajo o bien son actividades que necesitan reconocimiento.
     </h3>
     <div>
       <input type="button" name="add" id="add" class="btn_add action-button" value="Agregar Actividad" /></input>
       <div>
         <table id="dynamic_field" name="dynamic_field" class="dynamic_table">
+          <tr id="textActivities" hidden="none">
+            <td>
+              Descripción
+            </td>
+             <td>
+              %
+            </td>
+          </tr>
+
         <?php 
         $totalActivities = count($activities);
         for($i = 0; $i < $totalActivities; $i++) {

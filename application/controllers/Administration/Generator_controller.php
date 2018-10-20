@@ -181,12 +181,46 @@ class Generator_controller extends CI_Controller
 	}
 
 
+	/********************************************************
+	*Function that order a list                             *
+	*Input: 									            *
+	*	-array: It is the array to order                    *
+	*Output: 									            *
+	*	-Returns the array sorted                           *
+	********************************************************/
+	public function quick_sort($array)
+	{
+		$length = count($array);
+		if($length <= 1){return $array;}
+		else{
+			$pivot = $array[0];
+			$left = $right = array();
+			for($i = 1; $i < count($array); $i++)
+			{
+				if($array[$i] < $pivot)
+				{
+					$left[] = $array[$i];
+				}
+				else
+				{
+					$right[] = $array[$i];
+				}
+			}
+
+			return array_merge($this->quick_sort($left), array($pivot), $this->quick_sort($right));
+		}	
+	}
+
 
 
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+
 
 
 
@@ -196,6 +230,7 @@ class Generator_controller extends CI_Controller
 	***********************************************/
 	public function index()
 	{
+		/*
 		// Esto se debe aliminar, solo carga datos de prueba 
 		$this->readDataFromView(); 
 		// Load the professors information 
@@ -204,6 +239,9 @@ class Generator_controller extends CI_Controller
 		$this->fillMagistralClasses($this->idsOfMagistralClass);
 		// Create the list of N blocks with the schedules of the actual plan
 		$this->createSemesterDisponibility(1);
+		*/
+
+		
 
 		// Asignaciones de cursos obligatorios 
 			// Se crea la lista de clases magistrales de los cursos obligatorios 
@@ -237,3 +275,10 @@ class Generator_controller extends CI_Controller
 		// ***************************************************************************
 	}
 }
+
+
+		/*
+		$unsorted = array(1, 43,21,2,1,9,24,2,99,23,8,7,114,92,5);
+		$sorted = $this->quick_sort($unsorted);
+		print_r($sorted);
+		*/

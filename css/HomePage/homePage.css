@@ -57,23 +57,67 @@ h1#tituloPlanes {
 
 #leftScreen { 
 	position: relative; 
-	width: 45%; 
+	width: 44%; 
+	padding: 1%;
 	top: 0; 
 	left: 0;  
 	float: left; 
 	text-align: center;
+	border: 1px solid #FFF;
+	border-radius: 0px 0px 5px 5px;
+	margin: 0 30 20 0;
+	box-shadow: 0px 5px 15px #333333;
+	-moz-box-shadow:0px 5px 15px #333333;
+
+	height:390px;
+    overflow:auto;
 }
 
 #rightScreen { 
 	position: relative; 
 	width: 52%; 
+	padding: 1%;
 	top: 0; 
 	right: 0; 
 	float: right; 
 	border-left:3px dotted black;
 	border-spacing: 15px;
 	text-align: center;
+	border: 1px solid #FFF;
+	border-radius: 0px 0px 5px 5px;
+	margin: 0 30 20 0;
+	box-shadow: 0px 5px 15px #333333;
+	-moz-box-shadow:0px 5px 15px #333333;
+
+	height:390px;
+    overflow:auto;
 }
+
+::-webkit-scrollbar {
+    background-color: #bdd9d5;
+	border-radius: 8px;
+    width: 5px;
+}
+::-webkit-scrollbar-track {
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+::-webkit-scrollbar-thumb {
+    border: 5px #eee solid;
+    border-radius: 12px;
+    background: #C4C3CA;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3) inset;
+    -webit-transition: all .3s ease-out;
+    transition: all .3s ease-out;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+    background: #bbb;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3) inset;
+}
+::-webkit-scrollbar-thumb:hover { 
+	background: #b7472A; 
+}	
+
+
 
 .esqinfder { 
 	position: absolute; 
@@ -101,7 +145,9 @@ h1#tituloPlanes {
 	margin-left: 5%;
 }
 .coursesDiv:hover{
-	background: #F1EDE6;
+	border-width: 2px;
+	border-style: dotted;
+	background-color: #b3e6ff;
 }
 
 #titleSections {
@@ -128,6 +174,8 @@ h1#tituloPlanes {
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
 }
+
+
 
 /* Safari */
 @-webkit-keyframes spin {
