@@ -810,7 +810,7 @@ function selectProfessor(divSelected){
 *************************************************/
 function saveAssigned()
 {
-    var url = base_url + "Administrator_controller/saveMagistralClasses";
+    var url = base_url + "Administrator_controller/saveClasses";
     var jsonArray = JSON.parse(JSON.stringify(assigned));
 
     console.log(jsonArray);
@@ -828,7 +828,7 @@ function saveMagistralClass(url, jsonData)
     $.ajax({
         url : url,
         type: "POST",
-        data: jsonData,
+        data: 'classes=' + jsonData,
         dataType: "JSON",
         beforeSend: function(){
             document.getElementById("loader").style.display = "block";

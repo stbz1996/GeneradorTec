@@ -693,6 +693,22 @@ class Administrator_Logic{
 		$careerDAO = new careerDAO_model();
 		return $careerDAO->assignAdvanceDays($data);
 	}
+
+	public function createClasses($data)
+	{
+		$classList = array();
+
+		foreach($class as $data)
+		{
+			$professor = $class->idProfessor;
+			$course = $class->idCourse;
+			$group = $class->idGroup;
+			$newClass = new assignedCarrerCourseOnView($professor, $course, $group);
+			array_push($classList, $newClass);
+		}
+
+		return $classList;
+	}
 }
 
 ?>

@@ -516,11 +516,11 @@ class Administrator_controller extends CI_Controller
 	/*********************************************************************
 	- Create the classes with the json received... and send to other controller.
 	**********************************************************************/
-	public function saveMagistralClasses()
+	public function saveClasses()
 	{
-		$url = 'data.json';
-		$data = file_get_contents('php://input');
-		$classes = json_decode($data);
+		$classesJSON = json_decode($_POST['classes']);
+		//$classes = $this->administrator_logic->createClasses($classesJSON);
 		echo "true";
+		// Send to other view...
 	}
 }

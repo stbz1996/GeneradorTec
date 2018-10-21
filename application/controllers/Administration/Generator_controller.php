@@ -16,7 +16,7 @@ class Generator_controller extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library('session');
-
+		$this->load->helper("functions_helper");
 		// Clases
 		$this->load->model("Generator/SemesterDisponibility");
 		$this->load->model("Generator/FillInformation");
@@ -28,7 +28,7 @@ class Generator_controller extends CI_Controller
 		$this->load->model("Generator/Course");
 		$this->load->model("Generator/Professor");
 		$this->load->model("Generator/MagistralClass");
-		$this->load->model("Generator/assignedCarrerCourseOnView");
+		//$this->load->model("Generator/assignedCarrerCourseOnView");
 
 		// DAO's
 		$this->load->model("DAO/ActivityDAO_model");
@@ -197,13 +197,34 @@ class Generator_controller extends CI_Controller
 	public function index()
 	{
 		// Esto se debe aliminar, solo carga datos de prueba 
-		$this->readDataFromView(); 
+		//$this->readDataFromView(); 
 		// Load the professors information 
-		$this->fillProfessors($this->idsOfMagistralClass);
+		//$this->fillProfessors($this->idsOfMagistralClass);
 		// Load the magistral clases information 
-		$this->fillMagistralClasses($this->idsOfMagistralClass);
+		//$this->fillMagistralClasses($this->idsOfMagistralClass);
 		// Create the list of N blocks with the schedules of the actual plan
-		$this->createSemesterDisponibility(1);
+		//$this->createSemesterDisponibility(1);
+
+		$list = array(2, 4, 5, 8, 10, 11, 14, 20, 22, 23, 29);
+		for($i = 0; $i < count($list); $i++)
+		{
+			echo $list[$i];
+			echo " - ";
+		}
+
+		$value = $this->getFourValidSchedules($list, 4);
+
+		for($i = 0; $i < count($value); $i++)
+		{
+			for ($o = 0; $o < count($value[$i]); $o++)
+			{
+				echo "*(";
+				echo $value[$i][$o];
+				echo ")*";
+			}
+		}
+		//printMessage($value);
+		//printReal($value);
 
 		// Asignaciones de cursos obligatorios 
 			// Se crea la lista de clases magistrales de los cursos obligatorios 
@@ -235,5 +256,75 @@ class Generator_controller extends CI_Controller
 					// Para que la clase anterior busque otro horario
 		*/
 		// ***************************************************************************
+	}
+
+	/********************************************************
+	*Function that get the next Schedule, compare if they   * 
+	*are follow each other.                                 *
+	*Input: 									            *
+	*	-compareValue: Schedule to compare.                 *
+	*   -list: List of Schedules.                           *
+	*   -index: actual position of evaluation schedules.    *
+	*Output: 									            *
+	*	- The value if is possible.                         *
+	********************************************************/
+	public function nextSchedule($compareValue, $list, $index)
+	{
+		for($i = $index; $i < count($list); $i++)
+		{
+			$value = $list[$i] - $compareValue;
+
+			// If the next value can be positioned.
+			if ($value == 6)
+			{
+				return $list[$i];
+			}
+		}
+		return false;
+	}
+
+	/********************************************************
+	*Function that sort all the possible n schedules that   *
+	*could be assigned.                                     *
+	*Input: 									            *
+	*	-list: List of elements.                            *
+	*Output: 									            *
+	*	- List of values ordered.                           *
+	********************************************************/
+	public function getFourValidSchedules($listSchedulesProfessor, $numLessons)
+	{
+		$len = count($listSchedulesProfessor) - $numLessons;
+		$listResult = array();
+		for($i = 0; $i <= $len; $i++)
+		{
+			$value = $listSchedulesProfessor[$i];
+			$possibleResult = array();
+			array_push($possibleResult, $value); // Insert the value.
+
+			for($k = 1; $k < $numLessons; $k++)
+			{
+				// Get the result if the next schedule is ordered.
+				$result = $this->nextSchedule($value, $listSchedulesProfessor, $i);
+
+				if ($result)
+				{
+					array_push($possibleResult, $result);
+					$value = $result;
+				}
+				else
+				{
+					break;
+				}
+
+				if (count($possibleResult) >= 4)
+				{
+					// Saved the solution.
+					array_push($listResult, $possibleResult);
+					break;
+				}
+			}
+		}
+
+		return $listResult; // Get all the possible elements.
 	}
 }
