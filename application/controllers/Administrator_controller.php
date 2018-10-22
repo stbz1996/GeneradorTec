@@ -518,9 +518,11 @@ class Administrator_controller extends CI_Controller
 	**********************************************************************/
 	public function saveClasses()
 	{
-		$classesJSON = json_decode($_POST['classes']);
-		//$classes = $this->administrator_logic->createClasses($classesJSON);
-		echo "true";
+		$jsonUTF8 = trim($_POST['classes'], "\x0");
+		$classesJSON = json_decode($jsonUTF8, true);
+
+		validateArrayModal($classesJSON);
 		// Send to other view...
 	}
+
 }

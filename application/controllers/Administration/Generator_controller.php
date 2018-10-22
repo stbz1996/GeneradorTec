@@ -17,6 +17,8 @@ class Generator_controller extends CI_Controller
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->helper("functions_helper");
+		$this->load->library('Generator_Logic');
+
 		// Clases
 		$this->load->model("Generator/SemesterDisponibility");
 		$this->load->model("Generator/FillInformation");
@@ -28,7 +30,7 @@ class Generator_controller extends CI_Controller
 		$this->load->model("Generator/Course");
 		$this->load->model("Generator/Professor");
 		$this->load->model("Generator/MagistralClass");
-		//$this->load->model("Generator/assignedCarrerCourseOnView");
+		$this->load->model("Generator/AssignedCourse");
 
 		// DAO's
 		$this->load->model("DAO/ActivityDAO_model");
@@ -39,42 +41,18 @@ class Generator_controller extends CI_Controller
 		$this->load->model("DAO/CourseDAO_model");
 		$this->load->model("DAO/ProfessorDAO_model");
 		$this->load->model("DAO/FormDAO_model");
+
+		$this->generator_logic = new Generator_Logic();
 	}
 
 
 	// Creates a list of data from asigment courses (idprofesor, idgrupo, etc) 
-	private function readDataFromView()
+	private function readDataFromView($assignedCourses)
 	{
-		// Aviles
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(2, 5, 1);
-		$this->idsOfMagistralClass[] = $data;
-
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(2, 6, 2);
-		$this->idsOfMagistralClass[] = $data;
-
-		// carlos
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(3, 9 , 1);
-		$this->idsOfMagistralClass[] = $data;
-
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(3, 10, 2);
-		$this->idsOfMagistralClass[] = $data;
-
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(3, 11, 3);
-		$this->idsOfMagistralClass[] = $data;
-
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(3, 15, 4);
-		$this->idsOfMagistralClass[] = $data;
-		
-		// chepe
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(4, 4, 1);
-		$this->idsOfMagistralClass[] = $data;		
+		for($i = 0; $i < count($assignedCourses); $i++)
+		{
+			$this->idsOfMagistralClass[] = $assignedCourses[$i];
+		}
 	}
 
 
@@ -181,14 +159,35 @@ class Generator_controller extends CI_Controller
 	}
 
 
+	/********************************************************
+	*Function that order a list                             *
+	*Input: 									            *
+	*	-array: It is the array to order                    *
+	*Output: 									            *
+	*	-Returns the array sorted                           *
+	********************************************************/
+	public function quick_sort($array)
+	{
+		$length = count($array);
+		if($length <= 1){return $array;}
+		else{
+			$pivot = $array[0];
+			$left = $right = array();
+			for($i = 1; $i < count($array); $i++)
+			{
+				if($array[$i] < $pivot)
+				{
+					$left[] = $array[$i];
+				}
+				else
+				{
+					$right[] = $array[$i];
+				}
+			}
 
-
-
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-
+			return array_merge($this->quick_sort($left), array($pivot), $this->quick_sort($right));
+		}	
+	}
 
 
 	/***********************************************
@@ -196,15 +195,33 @@ class Generator_controller extends CI_Controller
 	***********************************************/
 	public function index()
 	{
-		// Esto se debe aliminar, solo carga datos de prueba 
-		//$this->readDataFromView(); 
-		// Load the professors information 
-		//$this->fillProfessors($this->idsOfMagistralClass);
-		// Load the magistral clases information 
-		//$this->fillMagistralClasses($this->idsOfMagistralClass);
-		// Create the list of N blocks with the schedules of the actual plan
-		//$this->createSemesterDisponibility(1);
+		if (!isset($_GET['code']))
+		{
+			echo "No hay cursos cargados..."; // Esto hay que cambiarlo.
+			return;
+		}
 
+		$clasesEncoded = $_GET['code']; // Get the courses send by javascript.
+
+		// Decode the clases sent by javascript.
+		$classesDecoded = json_decode(
+			rawurldecode(
+				base64_decode(
+					rawurldecode($clasesEncoded))), true);
+
+		$classes = $this->generator_logic->createClasses($classesDecoded);
+
+		print_r($classes);
+
+		$this->readDataFromView($classes); 
+
+		// Load the professors information 
+		$this->fillProfessors($this->idsOfMagistralClass);
+		// Load the magistral clases information 
+		$this->fillMagistralClasses($this->idsOfMagistralClass);
+		// Create the list of N blocks with the schedules of the actual plan
+		$this->createSemesterDisponibility(1);
+		/*
 		$list = array(2, 4, 5, 8, 10, 11, 14, 20, 22, 23, 29);
 		for($i = 0; $i < count($list); $i++)
 		{
@@ -225,6 +242,13 @@ class Generator_controller extends CI_Controller
 		}
 		//printMessage($value);
 		//printReal($value);
+		$this->createSemesterDisponibility(1);
+		*/
+
+		$unsorted = array(1,6,7,8,4,16,10,5,15,14,2,12,3);
+		//$sorted = $this->quick_sort($unsorted);
+		//$value = $this->getFourValidSchedules($sorted, 2);
+		//print_r($value);
 
 		// Asignaciones de cursos obligatorios 
 			// Se crea la lista de clases magistrales de los cursos obligatorios 
@@ -305,7 +329,6 @@ class Generator_controller extends CI_Controller
 			{
 				// Get the result if the next schedule is ordered.
 				$result = $this->nextSchedule($value, $listSchedulesProfessor, $i);
-
 				if ($result)
 				{
 					array_push($possibleResult, $result);
@@ -316,7 +339,7 @@ class Generator_controller extends CI_Controller
 					break;
 				}
 
-				if (count($possibleResult) >= 4)
+				if (count($possibleResult) >= $numLessons)
 				{
 					// Saved the solution.
 					array_push($listResult, $possibleResult);

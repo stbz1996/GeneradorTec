@@ -3,7 +3,9 @@ var nameProfessor; // This is the name of the professor that is selected in the 
 var idPeriod;
 var grayBackground = "#3385ff";
 var whiteBackground = "#ffffff";
-var yellowBackground = "#ffff4d";
+var yellow = "ffC300";
+var red = "#c70039";
+var blue = "#008080";
 
 var assigned = []; // Course - Professor.
 
@@ -20,6 +22,40 @@ $(document).ready( function () {
         showModalPeriodForm(); // Show the modal of periods.
     }
 });
+
+/****************************************
+- Shows an error message.
+****************************************/
+function errorSwal(message)
+{
+    swal({title: "Error", 
+        text: message, 
+        icon: "error"});
+}
+
+/****************************************
+- Shows an success message.
+****************************************/
+function successSwal(message)
+{
+    swal({title: "Listo", 
+        text: message,
+        icon: "success"}).then(); 
+}
+
+/****************************************
+- Next page
+****************************************/
+function nextPageSwal(message, data)
+{
+    swal({title: "Listo", 
+        text: message,
+        timer: 10000,
+        button: 'OK',
+        icon: "success"}).then(() => {
+            loadGenerator(data);
+        });
+}
 
 /****************************************
 - Load the periods modal.
@@ -40,9 +76,7 @@ function choosePeriod()
     /* If the period is not selected. */
     if(period == '0' || period == '' || period == 'undefined' || period == null )
     {
-        swal({title: "Error", 
-            text: "No se ha seleccionado ningún período", 
-            icon: "error"});
+        errorSwal("No se ha seleccionado ningún período");
         return;
     }
 
@@ -97,9 +131,7 @@ function loadBlocksProfessors(idPeriod)
             // If there are not professors with forms.
             if (professors.length <= 0)
             {
-                swal({title: "Error", 
-                    text: "No hay profesores que hayan completado el formulario para ese período", 
-                    icon: "error"});
+                errorSwal("No hay profesores que hayan completado el formulario para ese período");
             }
             else
             {
@@ -225,19 +257,19 @@ Get the respective color of the priorities
 ************************************************/
 function getPriorityColor(priority)
 {
-    var priorityColor = yellowBackground;
+    var priorityColor = yellow;
 
     if (priority == "A")
     {
-        priorityColor = "#ff4d4d"; // Red
+        priorityColor = red; // Red
     }
     else if(priority == "B")
     {
-        priorityColor = "#ff8000"; // Orange
+        priorityColor = blue; // Orange
     }
     else
     {
-        priorityColor = "#ffff1a";  // Yellow
+        priorityColor = yellow;  // Yellow
     }
 
     return priorityColor;
@@ -632,7 +664,7 @@ function lookIfProfAssign(idProf, stateForced)
     var state = false;
 
     if (work[1] >= workLoad){
-        alert("Lo siento, el profesor tiene más carga de la solicitada.");
+        errorSwal("Lo siento, el profesor tiene más carga de la solicitada.");
         return false;
     }
 
@@ -747,13 +779,13 @@ function selectCourse(divSelected)
     var group = groupAssigned.value;
 
     if (idProfessor == null || idProfessor <= 0){
-        alert("No ha seleccionado ningún profesor para asignar el curso");
+        errorSwal("No ha seleccionado ningún profesor para asignar el curso");
         return;
     }
 
     if (group == "Grupos")
     {
-        alert("No ha seleccionado ningún grupo para asignar");
+        errorSwal("No ha seleccionado ningún grupo para asignar");
         return;
     }
 
@@ -811,10 +843,16 @@ function selectProfessor(divSelected){
 function saveAssigned()
 {
     var url = base_url + "Administrator_controller/saveClasses";
-    var jsonArray = JSON.parse(JSON.stringify(assigned));
 
-    console.log(jsonArray);
-    saveMagistralClass(url, jsonArray);
+    if (assigned.length > 0)
+    {
+        var jsonArray = JSON.parse(JSON.stringify(assigned));
+        saveMagistralClass(url, jsonArray);
+    }
+    else
+    {
+        errorSwal("No hay información asignada.");
+    }
 }
 
 /************************************************
@@ -825,38 +863,48 @@ function saveAssigned()
 function saveMagistralClass(url, jsonData)
 {
     // ajax adding data to database
+    console.log("URL: " + url);
+    console.log(jsonData);
+
+    var json = JSON.stringify(jsonData);
+
     $.ajax({
         url : url,
         type: "POST",
-        data: 'classes=' + jsonData,
+        data: 'classes=' + json,
         dataType: "JSON",
         beforeSend: function(){
             document.getElementById("loader").style.display = "block";
             opaqueCourses(0.2);
         },
-        success: function(response)
+        success: function(data)
         {
-            if (response == true)
-            {
-                swal({title: "Listo", 
-                text: "Se almacenaron los cursos, grupos y profesores seleccionados",
-                icon: "success"}).then(function(){
-                    location.reload();
-                });
-            }
-
-            else
-            {
-                swal({title: "Error", text: "Los datos no se almacenaron.", icon: "warning"});
-            }
-
+            console.log(data);
             document.getElementById("loader").style.display = "none";
-            desopaqueCourses(1);
+            opaqueCourses(1);
 
+            // Nothing todo...
+            // I have all the classes.
+            nextPageSwal("Se almacenaron los datos de las clases", data);
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
             showErrors(jqXHR, textStatus, errorThrown);
         }
     });
+}
+
+/************************************************
+- Conexion between the class magistral class to the generator.
+- URL -> send by url the parse data.
+- JsonData -> data parse to an json to send.
+*************************************************/
+function loadGenerator(data)
+{
+    var serial = JSON.stringify(data); // JSON data.
+    let dataToEncode = encodeURIComponent(window.btoa(encodeURIComponent(serial))); // Encode.
+    // URL data is send by url.
+    // "Code" means that is going to be encripted.
+    var url = base_url + "Administration/Generator_controller" + "?code=" + dataToEncode;
+    window.location.href = url;
 }

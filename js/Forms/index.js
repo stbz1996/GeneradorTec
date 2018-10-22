@@ -191,15 +191,21 @@ function prevAction(cur, prev){
 $(document).on('click', '.btn_add', function(){
 	count_activities ++;
 	$('#dynamic_field').append('<tr id="row'+count_activities+
-		'"><td><input type="text" name="activityDescription[]" maxlength="100" id="descriptionActivity" placeholder="Ingrese actividad" /></td><td><input type="number" name="workPorcent[]" min="0" max="100" value="0" class="textnum"></td><td><input type="button" name="remove" id="'+
+		'"><td><input type="text" name="activityDescription[]" maxlength="100" id="descriptionActivity" placeholder="Ingrese actividad" /></td><td><input type="number" name="workPorcent[]" min="0" max="100" value="0" class="textnum"></td><td> <input type="button" name="remove" id="'+
 		count_activities+'" class="btn_remove action-button" value="Eliminar" /></td></tr>');
-
+	document.getElementById("textActivities").removeAttribute("hidden"); 
 });
+
 
 $(document).on('click', '.btn_remove', function(){
 	var button_id = $(this).attr("id");
 	$("#row"+button_id+"").remove();
 	count_activities --;
+	if (($('#dynamic_field tr').length -1) == 0) 
+	{
+		document.getElementById("textActivities").setAttribute("hidden", "hidden"); 
+
+	}
 });
 
 $(document).on('click', '.cbox', function(){

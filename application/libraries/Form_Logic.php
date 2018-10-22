@@ -166,7 +166,6 @@ class Form_Logic{
 
 		foreach ($plans as $plan)
 		{
-
 			$query = $blockDAO->show($plan->getId())->result_array();
 			$blocksPlan = array();
 			
@@ -177,7 +176,6 @@ class Form_Logic{
 					$newBlock = new BlockDTO();
 					$newBlock->setIdBlock($row['idBlock']);
 					$newBlock->setName($row['name']);
-
 					$blocksPlan[] = $newBlock;
 				}
 			}
