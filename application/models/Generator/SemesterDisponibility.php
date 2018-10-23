@@ -64,19 +64,14 @@ class SemesterDisponibility {
 	}
 
 
-	/**********************************************************
-	Returns 0 if the field is empty. 
-	Returns 1 if the field is not empty.
-	**********************************************************/
-	function verifyScheduleState($pBlocks, $pSchedules)
+	/*****************************************************
+	*Returns 0: If the schedule is blocked by the carrer *
+	*Returns 1: If is an available schedule              *
+	*Returns 2: If is not an available schedule          *
+	*****************************************************/
+	public function verifyScheduleState($pBlocks, $pSchedules)
 	{
-		if ($this->listOfSchedules[$pBlocks][$pSchedules] == 0) 
-		{
-			return 0;
-		}
-		else{
-			return 1;
-		}
+		return $this->listOfSchedules[$pBlocks][$pSchedules];
 	}
 
 
