@@ -693,6 +693,7 @@ class Administrator_Logic{
 		$careerDAO = new careerDAO_model();
 		return $careerDAO->assignAdvanceDays($data);
 	}
+
 }
 
 ?>
