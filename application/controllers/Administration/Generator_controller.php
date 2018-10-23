@@ -46,33 +46,33 @@ class Generator_controller extends CI_Controller
 	private function readDataFromView()
 	{
 		// Aviles
-		$data = new assignedCarrerCourseOnView();
+		$data = new AssignedCourse();
 		$data->setAtributes(2, 5, 1);
 		$this->idsOfMagistralClass[] = $data;
 
-		$data = new assignedCarrerCourseOnView();
+		$data = new AssignedCourse();
 		$data->setAtributes(2, 6, 2);
 		$this->idsOfMagistralClass[] = $data;
 
 		// carlos
-		$data = new assignedCarrerCourseOnView();
+		$data = new AssignedCourse();
 		$data->setAtributes(3, 9 , 1);
 		$this->idsOfMagistralClass[] = $data;
 
-		$data = new assignedCarrerCourseOnView();
+		$data = new AssignedCourse();
 		$data->setAtributes(3, 10, 2);
 		$this->idsOfMagistralClass[] = $data;
 
-		$data = new assignedCarrerCourseOnView();
+		$data = new AssignedCourse();
 		$data->setAtributes(3, 11, 3);
 		$this->idsOfMagistralClass[] = $data;
 
-		$data = new assignedCarrerCourseOnView();
+		$data = new AssignedCourse();
 		$data->setAtributes(3, 15, 4);
 		$this->idsOfMagistralClass[] = $data;
 		
 		// chepe
-		$data = new assignedCarrerCourseOnView();
+		$data = new AssignedCourse();
 		$data->setAtributes(4, 4, 1);
 		$this->idsOfMagistralClass[] = $data;		
 	}
@@ -317,7 +317,7 @@ class Generator_controller extends CI_Controller
 	***********************************************/
 	public function index()
 	{
-		/*
+		
 		// Esto se debe aliminar, solo carga datos de prueba 
 		$this->readDataFromView(); 
 		// Load the professors information 
@@ -326,7 +326,7 @@ class Generator_controller extends CI_Controller
 		$this->fillMagistralClasses($this->idsOfMagistralClass);
 		// Create the list of N blocks with the schedules of the actual plan
 		$this->createSemesterDisponibility(1);
-		*/
+		
 
 		$unsorted = array(7,8,9,10,11,12,13,16,19,20,21,22,23,25,26,27,28,33, 34);
 		$sorted = $this->quick_sort($unsorted);
