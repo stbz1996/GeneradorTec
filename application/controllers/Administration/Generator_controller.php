@@ -28,7 +28,7 @@ class Generator_controller extends CI_Controller
 		$this->load->model("Generator/Course");
 		$this->load->model("Generator/Professor");
 		$this->load->model("Generator/MagistralClass");
-		$this->load->model("Generator/assignedCarrerCourseOnView");
+		$this->load->model("Generator/AssignedCourse");
 
 		// DAO's
 		$this->load->model("DAO/ActivityDAO_model");
