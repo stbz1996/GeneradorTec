@@ -246,7 +246,6 @@ class Generator_controller extends CI_Controller
 		$validSchedule = $this->generator_Logic->getValidSchedules($filteredSchedules, $lessons);
 		return $validSchedule;
 	}
-	
 
 
 
@@ -271,7 +270,7 @@ class Generator_controller extends CI_Controller
 	public function index()
 	{
 		// Esto se debe aliminar, solo carga datos de prueba 
-		$this->readDataFromView(); 
+		/*$this->readDataFromView(); 
 		// Load the professors information 
 		$this->fillProfessors($this->idsOfMagistralClass);
 		// Load the magistral clases information 
@@ -292,14 +291,23 @@ class Generator_controller extends CI_Controller
 		foreach ($this->magistralClassList as $x) {
 			$this->printTuples2($this->getValidSchedules($x));
 			echo '######################################################################################################################################################################### ';
-		}
+		}*/
 
 		// ##############################
 		// ###   Algoritmo generador  ###
 		// ##############################
 
-		
+		$arr2 = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20);
+		$arr1 = array();
 
+		foreach ($arr1 as $element) {
+			echo $element."</br>";
+		}
+		$arr1 = $this->deleteSchedulesProfessor($arr1, $arr2);
+		echo "</br>";
+		foreach ($arr1 as $element) {
+			echo $element."</br>";
+		}
 
 		// ***************************************************************************
 		// Generar los horarios  (AQUI ESTÁ LO DURO)

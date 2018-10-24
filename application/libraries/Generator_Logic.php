@@ -235,6 +235,24 @@ class Generator_Logic
 
 		return $classList;
 	}
+
+	public function deleteSchedulesProfessor($scheduleProfessor, $schedulesToDelete)
+	{
+		if(!count($scheduleProfessor))
+		{
+			return $scheduleProfessor;
+		}
+
+		foreach ($schedulesToDelete as $schedule) 
+		{
+			if(($key = array_search($schedule, $scheduleProfessor)))
+			{
+				unset($scheduleProfessor[$key]);
+			}
+		}
+
+		return $scheduleProfessor;
+	}
 	/* ###### */
 
 }
