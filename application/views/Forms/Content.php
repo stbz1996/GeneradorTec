@@ -25,16 +25,12 @@
     <h2 class="fs-title">Información</h2>
     <h3 class="fs-subtitle">El formulario debe ser enviado antes del <?= $dueDate ?></h3>
     <div class="infoTagBox">
-      <div class="infoTag">
-        <?= $professorFirstName?> <?= $professorLastName ?>
-      </div>
-      <div class="infoTag">
+      <div id="nameProfessor" class="infoTag"><?= $professorFirstName?> <?= $professorLastName ?></div>
+      <div id="nameCareer" class="infoTag">
         <?= $careerName ?>
       </div>
-      <div class="infoTag">
-        <?= $periodNumber ?> Semestre, <?= $periodYear ?>
-      </div>
-      <div class="infoTag">
+      <div id="namePeriod" class="infoTag"><?= $periodNumber ?> Semestre, <?= $periodYear ?></div>
+      <div id="nameDueDate" class="infoTag">
         Vence el <?= $dueDate ?>
       </div>
 
@@ -88,7 +84,9 @@
       <input type="button" name="add" id="add" class="btn_add action-button" value="Agregar Actividad" /></input>
       <div>
         <table id="dynamic_field" name="dynamic_field" class="dynamic_table">
-          <tr id="textActivities" hidden="none">
+          <?php 
+            $totalActivities = count($activities);?>
+          <tr id="textActivities" <?= $totalActivities ? '' : 'hidden' ?>>
             <td>
               Descripción
             </td>
@@ -97,8 +95,8 @@
             </td>
           </tr>
 
-        <?php 
-        $totalActivities = count($activities);
+        
+        <?php
         for($i = 0; $i < $totalActivities; $i++) {
           $description = $activities[$i]->getDescription();
           $workPorcent = $activities[$i]->getWorkPorcent();
@@ -152,12 +150,13 @@
                     $nameRow = 'row-'.$totalCourses;
                     $divCode = 'div-code-'.$totalCourses;
                     $divName = 'div-name-'.$totalCourses;
-                    $nameSelect = 'select-'.$totalCourses;
+                    $nameDivOptions = 'divOptions-'.$totalCourses;
+                    $nameOption = 'option-'.$totalCourses;
                     $nameCheckBox = 'cbox-'.$totalCourses;
                     $nameIdCourse = 'course-'.$totalCourses;
                     $idCourse = $courses[$countBlockCourses][$k]->getId(); ?>
 
-                    <div class="tablerow" id=<?=$nameRow ?> >
+                    <div class="tablerow" id=<?=$nameRow ?> <?= in_array($idCourse, $idCourses) ? 'style="background:#27AE60; color: white;"' : ''?> >
                       <div><input type="hidden" id=<?= $nameIdCourse ?> value=<?=$idCourse?> /></div>
 
                       <div class="tableColumCheck">
@@ -167,28 +166,28 @@
                         </label>
                       </div>
                       
-                      <div class="tableColumCode" id=<?= $divCode ?>><?= $courses[$countBlockCourses][$k]->getCode() ?> </div>
-                      <div class="tableColumName" id=<?= $divName ?>><?= $courses[$countBlockCourses][$k]->getName() ?> </div>
-                      <div class="tableColumPriority">
-                        <select id=<?=$nameSelect ?> <?= in_array($idCourse, $idCourses) ? '' : 'disabled' ?>>
-                          <?php 
-                          if(in_array($idCourse, $idCourses))
-                          {
-                          ?>
-                            <option <?= $priorities[array_search($idCourse, $idCourses)] == 'A' ? 'selected="selected"' : '' ?> value="A">A</option>
-                            <option <?= $priorities[array_search($idCourse, $idCourses)] == 'B' ? 'selected="selected"' : '' ?> value="B">B</option>
-                            <option <?= $priorities[array_search($idCourse, $idCourses)] == 'C' ? 'selected="selected"' : '' ?> value="C">C</option>
-                          <?php }
-                          else
-                          {
-                          ?>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                          <?php
-                          }
-                          ?>
-                        </select>
+                      <div class="tableColumCode" id=<?= $divCode ?>><?= $courses[$countBlockCourses][$k]->getCode() ?></div>
+                      <div class="tableColumName" id=<?= $divName ?>><?= $courses[$countBlockCourses][$k]->getName() ?></div>
+                      <div class="tableColumPriority" id="tableColumnPriority-<?=$totalCourses?>">
+
+                          <?php if(in_array($idCourse, $idCourses)){ ?>
+                            <div class="prioritiesOptions" id="<?=$nameDivOptions ?>" >
+                              
+                              <input type="radio" class="radio" id="<?= $nameOption?>-1" name="<?=$nameOption ?>" <?= $priorities[array_search($idCourse, $idCourses)] === 'A' ? 'checked' : '' ?> value="A">
+                              <label for="<?= $nameOption?>-1" >A</label>
+
+                              <input type="radio" class="radio" id="<?= $nameOption?>-2" name="<?=$nameOption ?>" <?= $priorities[array_search($idCourse, $idCourses)] === 'B' ? 'checked' : '' ?> value="B">
+                              <label for="<?= $nameOption?>-2" >B</label>
+                              
+                              <input type="radio" class="radio" id="<?= $nameOption?>-3" name="<?=$nameOption ?>" <?= $priorities[array_search($idCourse, $idCourses)] === 'C' ? 'checked' : '' ?> value="C">
+                              <label for="<?= $nameOption?>-3" >C</label>
+                            
+                            </div>
+                          <?php }?>
+
+
+
+                        
                       </div>
                       <?php 
                         if(in_array($idCourse, $idCourses)) {?>
@@ -200,7 +199,6 @@
                         </div>
                         <?php } ?>          
                     </div>
-                    <!--<div class="courseBlock"><?= $courses[$countBlockCourses][$k]->getName() ?></div>-->
                   <?php 
                     $totalCourses++;
                   }?>
@@ -291,6 +289,45 @@
       <div class="showInfo" id="div-courses"></div>
       <div class="showInfo" id="div-schedules"></div>
     </div>
+
+    <div id="content2" hidden>
+      <div id="div-information">
+        <div id="title-document">
+          <p><strong>INFORMACION PARA ASIGNACION DE CURSOS Y HORARIOS (I SEMESTRE) 2019-ING. EN COMPUTACIÓN-SAN JOSÉ</strong></p>
+        </div>
+
+        <div class="row-form">
+          <div class="column-short-info" style="float: left; width: 29.33%; margin-left: 2%; margin-right: 2%">
+            <table id="initialInfo" style="width: 100%; margin-top: 5%;" border="1">
+              <thead>
+                <tr>
+                  <th style="background-color: #0d39a0;" colspan="3"><span style="color: #ffffff;"><strong>Profesor(a): ADRIANA ALVAREZ FIGUEROA</strong></span></th>
+                </tr>
+                <tr>
+                  <th style="background-color: #0d39a0; text-align: center;" colspan="2"><span style="color: #ffffff;"><strong>Jornada laboral</strong></span></th>
+                  <th style="background-color: #0d39a0; text-align: center;"><span style="color: #ffffff;"><strong>Ampliación</strong></span></th>
+                </tr>
+              </thead>
+              <!--<tbody>
+                <tr>
+                  <td style="background-color: #0d39a0;" colspan="3"><span style="color: #ffffff;"><strong>Profesor(a): ADRIANA ALVAREZ FIGUEROA</strong></span></td>
+                </tr>
+                <tr>
+                  <td style="background-color: #0d39a0; text-align: center;" colspan="2"><span style="color: #ffffff;"><strong>Jornada laboral</strong></span></td>
+                  <td style="background-color: #0d39a0; text-align: center;"><span style="color: #ffffff;"><strong>Ampliación</strong></span></td>
+                </tr>
+                <tr>
+                  <td style="width: 83px; text-align: center;">I S 2019</td>
+                  <td style="width: 137px; text-align: center;">75%</td>
+                  <td style="width: 215px; text-align: center;">SI</td>
+                </tr>
+              </tbody>-->
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="editor"></div>
     <input type="button" name="previous" class="previous action-button" value="Anterior" />
     <input type="submit" name="submit" class="submit submit-save action-button" value="Enviar" />
