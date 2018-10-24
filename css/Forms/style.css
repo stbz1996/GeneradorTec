@@ -268,19 +268,24 @@ label {
 
 .blockPlan{
     margin-right: 4%;
+    text-align: left;
+    margin-left: 17.4%;
+    margin-top: 2%;
+    width: 20%;
 }
 
 .listOfcourses{
-	width: 100%;
+	width: 90%;
 	padding: 1%;
 	margin: 1%;
+	margin-left: 6%;
 }
 
 .tablerow{
 	margin: 0.5%;
 	padding: 0.5%;
-	width: 60%;
-	margin-left: 17.5%;
+	width: 70%;
+	margin-left: 12.5%;
 	font-size: 1.1vw;
 	border: 1px solid black; 
 	overflow: hidden;
@@ -295,7 +300,8 @@ label {
 .tableColumName{
 	width: 63%;
 	float: left;
-	margin-top: 0.2%;
+	text-align: left;
+	
 }
 /* //////////////////////////// */
 /*   Style of select box  */
@@ -473,3 +479,36 @@ label {
 		transform: rotate(360deg);
 	}
 }
+
+
+.showForm{
+	height:410px;
+    overflow:auto;
+    margin-bottom: 2%;
+    border: 1px #eee solid ;
+
+}
+
+::-webkit-scrollbar {
+    background-color: #bdd9d5;
+	border-radius: 8px;
+    width: 5px;
+}
+::-webkit-scrollbar-track {
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+::-webkit-scrollbar-thumb {
+    border: 5px #eee solid;
+    border-radius: 12px;
+    background: #C4C3CA;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3) inset;
+    -webit-transition: all .3s ease-out;
+    transition: all .3s ease-out;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+    background: #bbb;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3) inset;
+}
+::-webkit-scrollbar-thumb:hover { 
+	background: #b7472A; 
+}	
