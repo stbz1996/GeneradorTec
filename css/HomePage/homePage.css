@@ -223,10 +223,17 @@ h1#tituloPlanes {
 	background: #F1EDE6;
 }
 
-#buttonRightScreen { 
+#buttonLeftNext { 
 	margin-top: 1%;
 	width: 15%;
 	float: left; 
+	text-align: center;
+}
+
+#buttonRightScreen { 
+	margin-right: 3%;
+	width: 15%;
+	float: right; 
 	text-align: center;
 }
 
@@ -243,6 +250,7 @@ h1#tituloPlanes {
 	background: #F1EDE6;
 }
 
+
 .div_inline p{
 	width: 90%;
 	float: left;
@@ -253,3 +261,25 @@ h1#tituloPlanes {
 	padding: 0.4%;
 	margin-top: -1.5%;
 }
+
+.dotCircle {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  display: inline-block;
+  float: center;
+  vertical-align: middle;
+}
+
+.redCircle{
+	background-color: #C70039;
+}
+
+.yellowCircle{
+	background-color: #FFC300;
+}
+
+.blueCircle{
+	background-color: #008080;
+}
+
