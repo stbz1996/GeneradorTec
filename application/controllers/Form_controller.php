@@ -79,10 +79,10 @@ class Form_controller extends CI_Controller {
 		$initialInformation = $this->getInitialInformation($this->Form);
 
 		//This condition verify if due date already pass
-		/*if(strtotime(date("Y/m/d")) > strtotime($this->Form->getDueDate()) || !$this->Form->getState())
+		if(strtotime(date("Y/m/d")) > strtotime($this->Form->getDueDate()) || !$this->Form->getState())
 		{
 			return;
-		}*/
+		}
 		//Assign information to show it in form
 		$data = $this->assignInitialInformation($initialInformation);
 		$data['dueDate'] = $this->Form->getDueDate();
