@@ -236,6 +236,14 @@ class Generator_Logic
 		return $classList;
 	}
 
+	/***************************************************************************
+	*Function that returns a list of available schedules of professor. 		   *
+	*Input:          							                               *
+	*	-$scheduleProfessor: List of all available schedules of professor.     *
+	*   -$schedulesToDelete: List of schedules to delete.                      *
+	*Output: 									                               *
+	*	-Returns an array with available schedules of professor. 		       *
+	***************************************************************************/
 	public function deleteSchedulesProfessor($scheduleProfessor, $schedulesToDelete)
 	{
 		if(!count($scheduleProfessor))

@@ -9,7 +9,8 @@ class Generator_controller extends CI_Controller
 	private $magistralClassList    = []; // Save the list of magistral clases 
 	private $professors            = []; // List of all professors
 	private $semesterDisponibility = []; // The list of all the schedules
-	private $assigmentList         = []; // The list of the assigned magistral clases
+	private $assigmentList         = []; // The list of the assigned magistral classes
+	private $finalSolutions		   = [];
 	private $generator_Logic;
 
 	function __construct()
@@ -247,6 +248,25 @@ class Generator_controller extends CI_Controller
 		return $validSchedule;
 	}
 
+	/***************************************************************************
+	*Function that add an assignment list in the final solution. 			   *
+	***************************************************************************/
+	public function storeGeneratorResult()
+	{
+		if(!count($this->assigmentList))
+		{
+			return;
+		}
+
+		$data = array();
+
+		foreach ($this->assigmentList as $assignClasses) {
+			$data[] = clone $assignClasses;
+		}
+
+		$this->finalSolutions[] = $data;
+	}
+
 
 
 
@@ -297,17 +317,10 @@ class Generator_controller extends CI_Controller
 		// ###   Algoritmo generador  ###
 		// ##############################
 
-		$arr2 = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20);
-		$arr1 = array();
+		
 
-		foreach ($arr1 as $element) {
-			echo $element."</br>";
-		}
-		$arr1 = $this->deleteSchedulesProfessor($arr1, $arr2);
-		echo "</br>";
-		foreach ($arr1 as $element) {
-			echo $element."</br>";
-		}
+
+
 
 		// ***************************************************************************
 		// Generar los horarios  (AQUI ESTÁ LO DURO)
