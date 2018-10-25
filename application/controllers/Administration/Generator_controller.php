@@ -348,35 +348,6 @@ class Generator_controller extends CI_Controller
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Solo para ver resultados
 	public function printTuples($list){
 		foreach ($list as $l) {
