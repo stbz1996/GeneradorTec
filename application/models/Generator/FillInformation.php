@@ -45,18 +45,10 @@ class FillInformation{
 	{
 		$scheduleDAO = new ScheduleDAO_model();
 		$scheduleQuery = $scheduleDAO->getSchedule($idSchedule);
-
 		if($scheduleQuery)
 		{
-			/* Create new Schedule and returns it*/
-			$schedule = new Schedule();
-			$schedule->setId($idSchedule);
-			$schedule->setState($scheduleQuery->state);
-			$schedule->setNumSchedule($scheduleQuery->numberSchedule);
-			$schedule->setDescription($scheduleQuery->description);
-			return $schedule;
+			return $scheduleQuery->numberSchedule;
 		}
-
 		return false;
 	}
 
@@ -268,7 +260,7 @@ class FillInformation{
 				$courses[] = $course;
 			}
 			$professor->setCourses($courses);
-
+			
 			//Schedules
 			$schedules = array();
 			/* Add schedules in professor class */

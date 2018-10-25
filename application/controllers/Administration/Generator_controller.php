@@ -21,7 +21,6 @@ class Generator_controller extends CI_Controller
 		$this->load->model("Generator/SemesterDisponibility");
 		$this->load->model("Generator/FillInformation");
 		$this->load->model("Generator/Activity");
-		$this->load->model("Generator/Schedule");
 		$this->load->model("Generator/Plan");
 		$this->load->model("Generator/Group");
 		$this->load->model("Generator/Block");
@@ -182,8 +181,7 @@ class Generator_controller extends CI_Controller
 		$schedules = array(); 
 		foreach ($scheduleList as $schedule) 
 		{
-			$val = $schedule->getNumSchedule();
-			array_push($schedules, $val);
+			array_push($schedules, $schedule);
 		}
 		return $schedules;
 	}
