@@ -186,6 +186,54 @@ class Generator_Logic
 	}
 
 
+	/***************************************************************************
+	*Function that returns a list of available schedules of professor. 		   *
+	*Input:          							                               *
+	*	-$scheduleProfessor: List of all available schedules of professor.     *
+	*   -$schedulesToDelete: List of schedules to delete.                      *
+	*Output: 									                               *
+	*	-Returns an array with available schedules of professor. 		       *
+	***************************************************************************/
+	public function deleteSchedulesToList($schedules, $schedulesToDelete)
+	{
+		if(!count($schedules))
+		{
+			return $schedules;
+		}
+		foreach ($schedulesToDelete as $schedule) 
+		{
+			if(($key = array_search($schedule, $schedules)))
+			{
+				unset($schedules[$key]);
+			}
+		}
+		return $schedules;
+	}
+
+
+	/***************************************************************************
+	*Function that returns a list of available schedules of professor. 		   *
+	*Input:          							                               *
+	*	-$scheduleProfessor: List of all available schedules of professor.     *
+	*   -$schedulesToAdd: List of schedules to add.                            *
+	*Output: 									                               *
+	*	-Returns an array with available schedules of professor. 		       *
+	***************************************************************************/
+	public function addSchedulesToList($schedules, $schedulesToAdd)
+	{
+		if(!count($schedulesToAdd))
+		{
+			return $schedules;
+		}
+		foreach ($schedulesToAdd as $schedule) 
+		{
+			if(!array_search($schedule, $schedules))
+			{
+				array_push($schedules, $schedule);
+			}
+		}
+		return $schedules;
+	}
 
 
 
@@ -236,31 +284,7 @@ class Generator_Logic
 		return $classList;
 	}
 
-	/***************************************************************************
-	*Function that returns a list of available schedules of professor. 		   *
-	*Input:          							                               *
-	*	-$scheduleProfessor: List of all available schedules of professor.     *
-	*   -$schedulesToDelete: List of schedules to delete.                      *
-	*Output: 									                               *
-	*	-Returns an array with available schedules of professor. 		       *
-	***************************************************************************/
-	public function deleteSchedulesProfessor($scheduleProfessor, $schedulesToDelete)
-	{
-		if(!count($scheduleProfessor))
-		{
-			return $scheduleProfessor;
-		}
-
-		foreach ($schedulesToDelete as $schedule) 
-		{
-			if(($key = array_search($schedule, $scheduleProfessor)))
-			{
-				unset($scheduleProfessor[$key]);
-			}
-		}
-
-		return $scheduleProfessor;
-	}
+	
 	/* ###### */
 
 }

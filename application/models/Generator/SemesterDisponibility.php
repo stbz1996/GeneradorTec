@@ -14,7 +14,7 @@ class SemesterDisponibility {
 	}
 
 	/**********************************************
-	Fill the matrix [$pBlocks][$pSchedules][$pDays]
+	Fill the matrix [$pBlocks][$pSchedules]
 	***********************************************/
 	function fillInformation($pBlocks, $pSchedules)
 	{
@@ -24,18 +24,18 @@ class SemesterDisponibility {
 		{
 			for ($j = 1; $j <= $this->numSchedules; $j++) 
 			{ 
-			 	$this->listOfSchedules[$i][$j] = 0;
+			 	$this->listOfSchedules[$i][$j] = 1;
 			} 
 		}
 	}
 
 
 	/**********************************************************
-	If the space is available, put in 1 the schedule 
+	If the space is available, put in 2 the schedule 
 	**********************************************************/
 	function activeSchedule($pBlocks, $pSchedules)
 	{
-		if ($this->listOfSchedules[$pBlocks][$pSchedules] == 0) 
+		if ($this->listOfSchedules[$pBlocks][$pSchedules] == 2) 
 		{
 			$this->listOfSchedules[$pBlocks][$pSchedules] = 1;
 		}
@@ -49,7 +49,7 @@ class SemesterDisponibility {
 	{
 		if ($this->listOfSchedules[$pBlocks][$pSchedules] == 1) 
 		{
-			$this->listOfSchedules[$pBlocks][$pSchedules] = 0;
+			$this->listOfSchedules[$pBlocks][$pSchedules] = 2;
 		}
 	}
 

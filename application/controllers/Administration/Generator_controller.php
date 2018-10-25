@@ -9,7 +9,7 @@ class Generator_controller extends CI_Controller
 	private $magistralClassList    = []; // Save the list of magistral clases 
 	private $professors            = []; // List of all professors
 	private $semesterDisponibility = []; // The list of all the schedules
-	private $assigmentList         = []; // The list of the assigned magistral classes
+	private $assigmentList = array(); // The list of the assigned magistral classes
 	private $finalSolutions		   = [];
 	private $generator_Logic;
 
@@ -246,6 +246,7 @@ class Generator_controller extends CI_Controller
 		return $validSchedule;
 	}
 
+
 	/***************************************************************************
 	*Function that add an assignment list in the final solution. 			   *
 	***************************************************************************/
@@ -255,14 +256,31 @@ class Generator_controller extends CI_Controller
 		{
 			return;
 		}
-
 		$data = array();
-
 		foreach ($this->assigmentList as $assignClasses) {
 			$data[] = clone $assignClasses;
 		}
-
 		$this->finalSolutions[] = $data;
+	}
+
+
+	/***************************************************************************
+	*Function that save a magistral class in assigment list and blocks the     * 
+	*schedules in the semestres disponibility                                  *
+	*Input:          							                               *
+	*	-cm: It is the magistral class                                         *
+	***************************************************************************/
+	private function saveClassInAssigmentList($cm)
+	{
+		// Block the schedules in semester disponibility 
+		$block = $cm->getCourse()->getBlock()->getId();
+		foreach ($cm->getAssignedSchedules() as $schedule) 
+		{
+			$this->semesterDisponibility->desactivateSchedule($block, $schedule);
+		}
+
+		// Add the magistral class to the assigment list 
+		array_push($this->assigmentList, $cm);
 	}
 
 
@@ -288,13 +306,14 @@ class Generator_controller extends CI_Controller
 	public function index()
 	{
 		// Esto se debe aliminar, solo carga datos de prueba 
-		/*$this->readDataFromView(); 
+		$this->readDataFromView(); 
 		// Load the professors information 
 		$this->fillProfessors($this->idsOfMagistralClass);
 		// Load the magistral clases information 
 		$this->fillMagistralClasses($this->idsOfMagistralClass);
 		// Create the list of N blocks with the schedules of the actual plan
 		$this->createSemesterDisponibility(1);
+
 		
 		// Asignaciones de cursos obligatorios 
 			// Se crea la lista de clases magistrales de los cursos obligatorios 
@@ -306,43 +325,40 @@ class Generator_controller extends CI_Controller
 			// Se debe hacer la verificación de los cursos INTRO y TALLER, los cuales deben tener un mismo # de clases magistrales asignadas. 
 
 
-		foreach ($this->magistralClassList as $x) {
-			$this->printTuples2($this->getValidSchedules($x));
-			echo '######################################################################################################################################################################### ';
-		}*/
-
 		// ##############################
 		// ###   Algoritmo generador  ###
 		// ##############################
+		$cm = $this->magistralClassList[0];
+		$this->generador($cm, 0);
+	}
 
-		
 
 
 
 
-		// ***************************************************************************
-		// Generar los horarios  (AQUI ESTÁ LO DURO)
-		/*
-			Si la lista esta vacia
-				- creo la solucion correcta 
-				- me detengo: para que evalue ese mismo curso en otro hora a ver si hay más soluciones. 
+	private function generador($cm, $index)
+	{
+		//$schedules = array(1,2,3,4);
+		$schedules = array(3,4,5,6);
+		$cm->setAssignedSchedules($schedules);
+		$this->saveClassInAssigmentList($cm);
 
-			Dependiendo de las lecciones del curso, se seleccionan horas seguidas y se guardan en una lista temporal
-
-			Filtro la lista del profesor con el semestre para eliminar elementos desde ya  
-			Verifico si el horario está disponible. 
-
-				- Si: Meto el curso en la solucion
-					- Elimino el horario de la lista de la solucion
-					- Eliminar esas horas de la lista del profesor 
-					- Elimino la clase de la solucion 
-					- Llamo a generar de nuevo. 
-				- No: Voy a buscar otro horario. 
-					- se devuelve el horario al profesor 
-				- Si no tengo opcion:	Me detengo.
-					// Para que la clase anterior busque otro horario
-		*/
-		// ***************************************************************************
+		// $L = ista filtrada de horarios 
+		// if($l está vacia)
+			// return 
+		// foreach($l as $li)
+			// temphorario = li
+			// eliminar los horarios del profesor 
+			// asignar el curso a la lista de asignaciones 
+			// if (la lista de clases magistrales está vacia)
+				// Guardo la solucion 
+			// else 
+				//  generador($cm siguiente, $index+1)
+			// if (llegué al máximo de soluciones)
+				// return 
+			// hago pop de la lista de asignaciones 
+			// le devuelvo los horarios el profesor 
+		//
 	}
 
 
