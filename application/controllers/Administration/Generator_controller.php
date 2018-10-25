@@ -9,7 +9,8 @@ class Generator_controller extends CI_Controller
 	private $magistralClassList    = []; // Save the list of magistral clases 
 	private $professors            = []; // List of all professors
 	private $semesterDisponibility = []; // The list of all the schedules
-	private $assigmentList         = []; // The list of the assigned magistral clases
+	private $assigmentList         = []; // The list of the assigned magistral classes
+	private $finalSolutions		   = [];
 	private $generator_Logic;
 
 	function __construct()
@@ -244,7 +245,25 @@ class Generator_controller extends CI_Controller
 		$validSchedule = $this->generator_Logic->getValidSchedules($filteredSchedules, $lessons);
 		return $validSchedule;
 	}
-	
+
+	/***************************************************************************
+	*Function that add an assignment list in the final solution. 			   *
+	***************************************************************************/
+	public function storeGeneratorResult()
+	{
+		if(!count($this->assigmentList))
+		{
+			return;
+		}
+
+		$data = array();
+
+		foreach ($this->assigmentList as $assignClasses) {
+			$data[] = clone $assignClasses;
+		}
+
+		$this->finalSolutions[] = $data;
+	}
 
 
 
@@ -269,7 +288,7 @@ class Generator_controller extends CI_Controller
 	public function index()
 	{
 		// Esto se debe aliminar, solo carga datos de prueba 
-		$this->readDataFromView(); 
+		/*$this->readDataFromView(); 
 		// Load the professors information 
 		$this->fillProfessors($this->idsOfMagistralClass);
 		// Load the magistral clases information 
@@ -290,13 +309,15 @@ class Generator_controller extends CI_Controller
 		foreach ($this->magistralClassList as $x) {
 			$this->printTuples2($this->getValidSchedules($x));
 			echo '######################################################################################################################################################################### ';
-		}
+		}*/
 
 		// ##############################
 		// ###   Algoritmo generador  ###
 		// ##############################
 
 		
+
+
 
 
 		// ***************************************************************************
