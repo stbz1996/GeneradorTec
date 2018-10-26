@@ -277,8 +277,80 @@ class Generator_controller extends CI_Controller
 	}
 
 
+	/***************************************************************************
+	*Function that return to the semestres disponibility, the schedules of     * 
+	*the magistral class.                                                      *
+	*Input:          							                               *
+	*	-block: It is the number of the block                                  *
+	*	-list:  It is the list of schedules                                    *
+	***************************************************************************/
+	private function returnSchedulesToSemesterDisponibility($block, $list)
+	{
+		foreach ($list as $l) {
+			$this->semesterDisponibility->activeSchedule($block, $l);
+		}
+	}
 
 
+	/***************************************************************************
+	*Function that assigned a magistral class and generate a solution          *
+	*Input:          							                               *
+	*	-cm:    It is the magistral class                                      *
+	*	-index: It is the index of the magistral class                         *
+	***************************************************************************/
+	private function generator($cm, $index)
+	{
+		$filteredList = $this->getValidSchedules($cm);
+		if (!count($filteredList)) 
+		{
+			$cm->addRejectedCount();
+			return;
+		}
+		foreach ($filteredList as $schedule) 
+		{
+			// Save the temp schedule used for CM
+			$tempSchedule = $schedule;
+
+			// Delete the schedules of the professor
+			$professorSchedules = $cm->getProfessor()->getSchedules();
+			$finalListSchedules = $this->generator_Logic->deleteSchedulesToList($professorSchedules, $schedule);
+			$cm->getProfessor()->setSchedules($finalListSchedules);
+
+			// Assigned the CM to the assigmentList 
+			$cm->setAssignedSchedules($schedule);
+			$cm->addAvailableCount();
+			$this->saveClassInAssigmentList($cm);
+			if (count($this->magistralClassList) == ($index+1)) 
+			{
+				$this->storeGeneratorResult();
+			}
+			else{
+				$newIndex = $index + 1;
+				if ($newIndex < count($this->magistralClassList)) 
+				{
+					$this->generator($this->magistralClassList[$newIndex], $newIndex);
+				}
+				else{
+					return;
+				}
+			}
+
+			if (count($this->finalSolutions) == 10000000) 
+			{
+				return;
+			}
+
+			// saca el curso de la lista y pone como habilitados los horarios del semestre
+			$block = $cm->getCourse()->getBlock()->getId();	
+			$this->returnSchedulesToSemesterDisponibility($block, $tempSchedule);
+			array_pop($this->assigmentList);
+			
+			// le devuelvo los horarios el profesor 
+			$list = $cm->getProfessor()->getSchedules();
+			$returnedSchedules = $this->generator_Logic->addSchedulesToList($list, $tempSchedule);
+			$cm->getProfessor()->setSchedules($returnedSchedules);
+		}
+	}
 
 
 
@@ -349,12 +421,7 @@ class Generator_controller extends CI_Controller
 
 
 
-	private function returnSchedulesToSemesterDisponibility($block, $list)
-	{
-		foreach ($list as $l) {
-			$this->semesterDisponibility->activeSchedule($block, $l);
-		}
-	}
+	
 
 
 
@@ -362,60 +429,46 @@ class Generator_controller extends CI_Controller
 
 
 
-	private function generator($cm, $index)
-	{
-		$filteredList = $this->getValidSchedules($cm);
-		if (!count($filteredList)) 
-		{
-			$cm->addRejectedCount();
-			return;
-		}
+	
 
-		foreach ($filteredList as $schedule) 
-		{
-			// Save the temp schedule used for CM
-			$tempSchedule = $schedule;
 
-			// Delete the schedules of the professor
-			$professorSchedules = $cm->getProfessor()->getSchedules();
-			$finalListSchedules = $this->generator_Logic->deleteSchedulesToList($professorSchedules, $schedule);
-			$cm->getProfessor()->setSchedules($finalListSchedules);
 
-			// Assigned the CM to the assigmentList 
-			$cm->setAssignedSchedules($schedule);
-			$cm->addAvailableCount();
-			$this->saveClassInAssigmentList($cm);
-			if (count($this->magistralClassList) == ($index+1)) 
-			{
-				$this->storeGeneratorResult();
-			}
-			else{
-				$newIndex = $index + 1;
-				if ($newIndex < count($this->magistralClassList)) 
-				{
-					$this->generator($this->magistralClassList[$newIndex], $newIndex);
-				}
-				else{
-					return;
-				}
-			}
 
-			if (count($this->finalSolutions) == 10000000) 
-			{
-				return;
-			}
 
-			// saca el curso de la lista y pone como habilitados los horarios del semestre
-			$block = $cm->getCourse()->getBlock()->getId();	
-			$this->returnSchedulesToSemesterDisponibility($block, $tempSchedule);
-			array_pop($this->assigmentList);
-			
-			// le devuelvo los horarios el profesor 
-			$list = $cm->getProfessor()->getSchedules();
-			$returnedSchedules = $this->generator_Logic->addSchedulesToList($list, $tempSchedule);
-			$cm->getProfessor()->setSchedules($returnedSchedules);
-		}
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -434,6 +487,7 @@ class Generator_controller extends CI_Controller
 	}
 
 
+
 	private function printSolution($sol){
 		foreach ($sol as $x) 
 		{
@@ -448,24 +502,6 @@ class Generator_controller extends CI_Controller
 			echo '<br>';
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
