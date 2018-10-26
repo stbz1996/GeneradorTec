@@ -10,7 +10,7 @@ class Generator_controller extends CI_Controller
 	private $professors            = []; // List of all professors
 	private $semesterDisponibility = []; // The list of all the schedules
 	private $assigmentList = array(); // The list of the assigned magistral classes
-	private $finalSolutions		   = [];
+	private $finalSolutions	= [];
 	private $generator_Logic;
 
 	function __construct()
@@ -53,31 +53,24 @@ class Generator_controller extends CI_Controller
 		$data->setAtributes(2, 5, 1);
 		$this->idsOfMagistralClass[] = $data;
 
-		$data = new AssignedCourse();
-		$data->setAtributes(2, 6, 2);
-		$this->idsOfMagistralClass[] = $data;
-
-		// carlos
-		$data = new AssignedCourse();
-		$data->setAtributes(3, 9 , 1);
-		$this->idsOfMagistralClass[] = $data;
-
-		$data = new AssignedCourse();
-		$data->setAtributes(3, 10, 2);
-		$this->idsOfMagistralClass[] = $data;
-
-		$data = new AssignedCourse();
-		$data->setAtributes(3, 11, 3);
-		$this->idsOfMagistralClass[] = $data;
-
-		$data = new AssignedCourse();
-		$data->setAtributes(3, 15, 4);
+		// carlos 
+		$data = new AssignedCourse(); 
+		$data->setAtributes(3, 9 , 1); 
+		$this->idsOfMagistralClass[] = $data; 
+		$data = new AssignedCourse(); 
+		$data->setAtributes(3, 10, 2); 
+		$this->idsOfMagistralClass[] = $data; 
+		$data = new AssignedCourse(); 
+		$data->setAtributes(3, 11, 3); 
+		$this->idsOfMagistralClass[] = $data; 
+		$data = new AssignedCourse(); 
+		$data->setAtributes(3, 15, 4); 
 		$this->idsOfMagistralClass[] = $data;
 		
 		// chepe
 		$data = new AssignedCourse();
 		$data->setAtributes(4, 4, 1);
-		$this->idsOfMagistralClass[] = $data;		
+		$this->idsOfMagistralClass[] = $data;	
 	}
 
 
@@ -280,7 +273,7 @@ class Generator_controller extends CI_Controller
 		}
 
 		// Add the magistral class to the assigment list 
-		array_push($this->assigmentList, $cm);
+		array_push($this->assigmentList, clone $cm);
 	}
 
 
@@ -297,8 +290,6 @@ class Generator_controller extends CI_Controller
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
-
-	
 
 	/***********************************************
 	This is the beginning of the Generator algorithm 
@@ -329,36 +320,133 @@ class Generator_controller extends CI_Controller
 		// ###   Algoritmo generador  ###
 		// ##############################
 		$cm = $this->magistralClassList[0];
-		$this->generador($cm, 0);
+		$this->generator($cm, 0);
+		
+		$this->printResultList();
+
+		// If there is no a solution 
+		if (count($this->finalSolutions))
+		{ 
+			echo 'si encontré';
+		}
+		else
+		{
+			foreach ($this->magistralClassList as $x) 
+			{
+				if ($x->countOfAvailableSpaces == 0) {
+					echo "<br>";
+					echo "El curso de ".$x->getCourse()->getName();
+					echo " NO pudo ser asignado";
+				}	
+			}
+		}
+		
 	}
 
 
 
 
 
-	private function generador($cm, $index)
+
+
+	private function returnSchedulesToSemesterDisponibility($block, $list)
 	{
-		//$schedules = array(1,2,3,4);
-		$schedules = array(3,4,5,6);
-		$cm->setAssignedSchedules($schedules);
-		$this->saveClassInAssigmentList($cm);
+		foreach ($list as $l) {
+			$this->semesterDisponibility->activeSchedule($block, $l);
+		}
+	}
 
-		// $L = ista filtrada de horarios 
-		// if($l está vacia)
-			// return 
-		// foreach($l as $li)
-			// temphorario = li
-			// eliminar los horarios del profesor 
-			// asignar el curso a la lista de asignaciones 
-			// if (la lista de clases magistrales está vacia)
-				// Guardo la solucion 
-			// else 
-				//  generador($cm siguiente, $index+1)
-			// if (llegué al máximo de soluciones)
-				// return 
-			// hago pop de la lista de asignaciones 
+
+
+
+
+
+
+	private function generator($cm, $index)
+	{
+		$filteredList = $this->getValidSchedules($cm);
+		if (!count($filteredList)) 
+		{
+			$cm->addRejectedCount();
+			return;
+		}
+
+		foreach ($filteredList as $schedule) 
+		{
+			// Save the temp schedule used for CM
+			$tempSchedule = $schedule;
+
+			// Delete the schedules of the professor
+			$professorSchedules = $cm->getProfessor()->getSchedules();
+			$finalListSchedules = $this->generator_Logic->deleteSchedulesToList($professorSchedules, $schedule);
+			$cm->getProfessor()->setSchedules($finalListSchedules);
+
+			// Assigned the CM to the assigmentList 
+			$cm->setAssignedSchedules($schedule);
+			$cm->addAvailableCount();
+			$this->saveClassInAssigmentList($cm);
+			if (count($this->magistralClassList) == ($index+1)) 
+			{
+				$this->storeGeneratorResult();
+			}
+			else{
+				$newIndex = $index + 1;
+				if ($newIndex < count($this->magistralClassList)) 
+				{
+					$this->generator($this->magistralClassList[$newIndex], $newIndex);
+				}
+				else{
+					return;
+				}
+			}
+
+			if (count($this->finalSolutions) == 10000000) 
+			{
+				return;
+			}
+
+			// saca el curso de la lista y pone como habilitados los horarios del semestre
+			$block = $cm->getCourse()->getBlock()->getId();	
+			$this->returnSchedulesToSemesterDisponibility($block, $tempSchedule);
+			array_pop($this->assigmentList);
+			
 			// le devuelvo los horarios el profesor 
-		//
+			$list = $cm->getProfessor()->getSchedules();
+			$returnedSchedules = $this->generator_Logic->addSchedulesToList($list, $tempSchedule);
+			$cm->getProfessor()->setSchedules($returnedSchedules);
+		}
+	}
+
+
+
+
+
+	private function printResultList()
+	{
+		echo "<br><br> SOLUCIONES <br><br><br><br>";
+		$count = 1;
+		foreach ($this->finalSolutions as $sol) {
+			echo "Solucion: ".$count."<br>";
+			$this->printSolution($sol);
+			echo "<br><br><br><br>";
+			$count = $count + 1;
+		}
+	}
+
+
+	private function printSolution($sol){
+		foreach ($sol as $x) 
+		{
+			echo 'Profesor: '.$x->getProfessor()->getName().'<br>';
+			echo 'Curso: '.$x->getCourse()->getName().'<br>';
+			echo 'Grupo: '.$x->getGroup()->getNumber().'<br>';
+			echo 'Horarios: ';
+			foreach ($x->getAssignedSchedules() as $y) 
+			{
+				echo $y.' - ';
+			}
+			echo '<br>';
+		}
 	}
 
 
@@ -381,13 +469,11 @@ class Generator_controller extends CI_Controller
 
 
 
-
-
-
-
-
-
-
+	public function printmatrix($m){
+		foreach ($m as $x) {
+			echo $x.' - ';
+		}
+	}
 
 
 
@@ -404,7 +490,8 @@ class Generator_controller extends CI_Controller
 			{
 				echo $val.'-';
 			}
-			echo '  @@  ';
+			echo '<br>';
 		}
+		echo '<br>';
 	}
 }

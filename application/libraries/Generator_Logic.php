@@ -196,16 +196,9 @@ class Generator_Logic
 	***************************************************************************/
 	public function deleteSchedulesToList($schedules, $schedulesToDelete)
 	{
-		if(!count($schedules))
-		{
-			return $schedules;
-		}
 		foreach ($schedulesToDelete as $schedule) 
 		{
-			if(($key = array_search($schedule, $schedules)))
-			{
-				unset($schedules[$key]);
-			}
+			$schedules = array_diff($schedules, array($schedule));
 		}
 		return $schedules;
 	}

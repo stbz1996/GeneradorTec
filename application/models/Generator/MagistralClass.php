@@ -7,6 +7,14 @@ class MagistralClass
 	private $group;
 	private $assignedSchedules;
 
+	public $countOfAvailableSpaces = 0;
+	public $countOfRejectedSpaces  = 0;
+
+
+	public function addAvailableCount(){$this->countOfAvailableSpaces += 1;}
+	public function addRejectedCount() {$this->countOfRejectedSpaces += 1;}
+
+
 	function __construct(){}
 
 	public function setProfessor($pProfessor)
