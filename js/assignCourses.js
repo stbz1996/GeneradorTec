@@ -3,7 +3,7 @@ var nameProfessor; // This is the name of the professor that is selected in the 
 var idPeriod;
 var grayBackground = "#3385ff";
 var whiteBackground = "#ffffff";
-var yellow = "ffC300";
+var yellow = "#ffC300";
 var red = "#c70039";
 var blue = "#008080";
 
@@ -55,6 +55,51 @@ function nextPageSwal(message, data)
         icon: "success"}).then(() => {
             loadGenerator(data);
         });
+}
+
+/****************************************
+- Swal that forces the asignation of a course.
+****************************************/
+function confirmSwalForce(idCourse, idProfessor, nameProfessor, nameCourse)
+{
+    swal({
+          title: "¿Desea forzar la asignación del curso?",
+          text: "El curso no fue seleccionado previamente por el profesor.",
+          icon: "warning",
+          buttons: [
+            '¡No!',
+            '¡Si, claro!'
+          ],
+          dangerMode: true,
+        }).then(function(isConfirm) {
+          if (isConfirm) 
+          {
+            assignCourse(idCourse, idProfessor, nameCourse, nameProfessor);
+          }
+    });
+}
+
+
+/****************************************
+- Swal that confirms if the user has enough variables.
+****************************************/
+function confirmSwalLoad(idCourse, idProfessor, nameProfessor, nameCourse, stateForced)
+{
+    swal({
+          title: "¿Está seguro?",
+          text: "Sobrepasará el máximo de la carga del profesor.",
+          icon: "warning",
+          buttons: [
+            '¡No!',
+            '¡Si, claro!'
+          ],
+          dangerMode: true,
+        }).then(function(isConfirm) {
+          if (isConfirm) 
+          {
+            callSwalForceAssignment(idCourse, idProfessor, nameProfessor, nameCourse, stateForced);
+          }
+    });
 }
 
 /****************************************
@@ -276,6 +321,15 @@ function getPriorityColor(priority)
 }
 
 /************************************************
+Reserve the course. 
+************************************************/
+function setReserved(div, pValue)
+{
+    var state = div.childNodes[9];
+    state.value = pValue;
+}
+
+/************************************************
 Make the courses opaque. 
 ************************************************/
 function opaqueCourses(value)
@@ -329,6 +383,7 @@ function loadInformation(idProfessor, idCourse, priority)
     becomeDivYellow(idCourse, priorityColor); // paint the actual course.
     var div = lookDivCourses(idCourse);
     setForced(div, "1");
+    setReserved(div, "1");
     // Get all the information related to the professor and course..
     // historic information... like how many times the professor has given the course.
 }
@@ -655,7 +710,7 @@ function lookDivCourses(idDivSource)
 /****************************************
 - Review if the professor could assign courses.
 ****************************************/
-function lookIfProfAssign(idProf, stateForced)
+function assignedProcess(idCourse, nameCourse, idProf, nameProf, stateForced)
 {
     var divProfessor = lookDivProfessor(idProf);
     var work = getWork(divProfessor);
@@ -665,31 +720,32 @@ function lookIfProfAssign(idProf, stateForced)
 
     if (work[1] >= workLoad){
         errorSwal("Lo siento, el profesor tiene más carga de la solicitada.");
-        return false;
+        return;
     }
 
     if (workLoad < newWorkPorcent)
     {
-        state = confirm("Sobrepasará el máximo de la carga del profesor. ¿Está seguro?");
-
-        // The user doesn't want to save.
-        if (!state){
-            return false;
-        }
+        confirmSwalLoad(idCourse, idProf, nameProf, nameCourse, stateForced);
+        return;
     }
+
+    callSwalForceAssignment(idCourse, idProf, nameProf, nameCourse, stateForced);
+}
+
+/****************************************
+- Call a swal that forces the assignment of a course.
+****************************************/
+function callSwalForceAssignment(idCourse, idProf, nameProf, nameCourse, stateForced)
+{
     // Forced the assignment of the course
     if (stateForced == "0")
     {
-        var message = "El curso no fue seleccionado previamente por el profesor. ";
-        var question = "¿Desea forzar la asignación del curso?"; 
-        state = confirm(message + question);
-
-        if (!state){
-            return false;
-        }
+        confirmSwalForce(idCourse, idProf, nameProf, nameCourse);
+        return;
     }
 
-    return true;
+    // Assign the respective course.
+    assignCourse(idCourse, idProf, nameCourse, nameProf);
 }
 
 /****************************************
@@ -747,7 +803,6 @@ function becomeDivNormal(divSelected){
 function becomeDivYellow(idCoursePreferred, priorityColor)
 {
     var divToChoose = lookDivCourses(idCoursePreferred); // Get the specific Div.
-
     if (divToChoose){
         divToChoose.style.background = priorityColor;
     }
@@ -764,6 +819,7 @@ function deselectCourses()
     {
         var course = divCourses[i];
         becomeDivNormal(course);
+        setReserved(course, "0");
     }
 }
 
@@ -774,7 +830,7 @@ function selectCourse(divSelected)
 {
     var idCourse;
     var nameCourse;
-    var stateForced = divSelected.childNodes[7].value; // Input state...
+    var stateForced = divSelected.childNodes[9].value; // Input state...
     var groupAssigned = divSelected.childNodes[5].childNodes[1].childNodes[1].childNodes[3].childNodes[1];
     var group = groupAssigned.value;
 
@@ -793,13 +849,7 @@ function selectCourse(divSelected)
     nameCourse = divSelected.childNodes[2].previousSibling.innerHTML;
 
     // Review if the workLoad of the professor is correct.
-    var state = lookIfProfAssign(idProfessor, stateForced);
-
-    if (state)
-    {
-        // Register the course and professor.
-        assignCourse(idCourse, idProfessor, nameCourse, nameProfessor);
-    }
+    assignedProcess(idCourse, nameCourse, idProfessor, nameProfessor, stateForced);
 }
 
 
@@ -844,6 +894,7 @@ function saveAssigned()
 {
     var url = base_url + "Administrator_controller/saveClasses";
 
+    // If there are courses assigned.
     if (assigned.length > 0)
     {
         var jsonArray = JSON.parse(JSON.stringify(assigned));
@@ -851,7 +902,7 @@ function saveAssigned()
     }
     else
     {
-        errorSwal("No hay información asignada.");
+        errorSwal("No hay información asignada."); 
     }
 }
 
@@ -863,8 +914,6 @@ function saveAssigned()
 function saveMagistralClass(url, jsonData)
 {
     // ajax adding data to database
-    console.log("URL: " + url);
-    console.log(jsonData);
 
     var json = JSON.stringify(jsonData);
 
@@ -879,7 +928,6 @@ function saveMagistralClass(url, jsonData)
         },
         success: function(data)
         {
-            console.log(data);
             document.getElementById("loader").style.display = "none";
             opaqueCourses(1);
 
