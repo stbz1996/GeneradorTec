@@ -46,31 +46,47 @@ class Generator_controller extends CI_Controller
 
 
 	// Creates a list of data from asigment courses (idprofesor, idgrupo, etc) 
-	private function readDataFromView()
+	private function readDataFromView($classes, $thereIsAnExample)
 	{
-		// Aviles
-		$data = new AssignedCourse();
-		$data->setAtributes(2, 5, 1);
-		$this->idsOfMagistralClass[] = $data;
+		// If you receive the data by URL.
+		if (!$thereIsAnExample)
+		{
+			for($i = 0; $i < count($classes); $i++)
+			{
+				$idProf = $classes[$i]->idProfessor;
+				$idCourse = $classes[$i]->idCourse;
+				$idGroup = $classes[$i]->idGroup;
+				$data = new AssignedCourse();
+				$data->setAtributes($idProf, $idCourse, $idGroup);
+				$this->idsOfMagistralClass[] = $data;
+			}
+		}
+		else
+		{
+			// Aviles
+			$data = new AssignedCourse();
+			$data->setAtributes(2, 5, 1);
+			$this->idsOfMagistralClass[] = $data;
 
-		// carlos 
-		$data = new AssignedCourse(); 
-		$data->setAtributes(3, 9 , 1); 
-		$this->idsOfMagistralClass[] = $data; 
-		$data = new AssignedCourse(); 
-		$data->setAtributes(3, 10, 2); 
-		$this->idsOfMagistralClass[] = $data; 
-		$data = new AssignedCourse(); 
-		$data->setAtributes(3, 11, 3); 
-		$this->idsOfMagistralClass[] = $data; 
-		$data = new AssignedCourse(); 
-		$data->setAtributes(3, 15, 4); 
-		$this->idsOfMagistralClass[] = $data;
-		
-		// chepe
-		$data = new AssignedCourse();
-		$data->setAtributes(4, 4, 1);
-		$this->idsOfMagistralClass[] = $data;	
+			// carlos 
+			$data = new AssignedCourse(); 
+			$data->setAtributes(3, 9 , 1); 
+			$this->idsOfMagistralClass[] = $data; 
+			$data = new AssignedCourse(); 
+			$data->setAtributes(3, 10, 2); 
+			$this->idsOfMagistralClass[] = $data; 
+			$data = new AssignedCourse(); 
+			$data->setAtributes(3, 11, 3); 
+			$this->idsOfMagistralClass[] = $data; 
+			$data = new AssignedCourse(); 
+			$data->setAtributes(3, 15, 4); 
+			$this->idsOfMagistralClass[] = $data;
+			
+			// chepe
+			$data = new AssignedCourse();
+			$data->setAtributes(4, 4, 1);
+			$this->idsOfMagistralClass[] = $data;
+		}
 	}
 
 
@@ -368,8 +384,21 @@ class Generator_controller extends CI_Controller
 	***********************************************/
 	public function index()
 	{
-		// Esto se debe aliminar, solo carga datos de prueba 
-		$this->readDataFromView(); 
+
+		//Verify if code value exist
+		if(isset($_GET['code']))
+		{
+			$classAssigned = $_GET['code'];
+			$classes = json_decode(rawurldecode(base64_decode(rawurldecode($classAssigned))));
+			$this->readDataFromView($classes, false); 
+		}
+		else
+		{
+			$this->readDataFromView(null, true);
+		}
+
+		print_r($this->idsOfMagistralClass);
+
 		// Load the professors information 
 		$this->fillProfessors($this->idsOfMagistralClass);
 		// Load the magistral clases information 
