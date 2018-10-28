@@ -553,7 +553,7 @@ function createPDF(workload, extension, activitiesDescription, activitiesWorkPor
 	});
 
 	/* Table schedules */
-	doc.text("Schedules", 195, 43);
+	doc.text("Horarios", 195, 43);
 	doc.autoTable(getColumns(5), getDataSchedules(), {
 		theme: 'grid',
 		startY: 45,
