@@ -61,18 +61,32 @@ class Generator_Logic
 	 	{
 	 		foreach ($validTuples as $tv2) 
 	 		{
-	 			if ($tv1 != $tv2) 
-	 			{
-	 				if ((($tv1[1] - $tv2[0]) != 0) && ($tv1[0] != $tv2[1])) 
-	 				{
-	 					$validSchedule = $this->quick_sort(array($tv1[0], $tv1[1], $tv2[0], $tv2[1]));
-	 					if ($this->findElemtInArray($validSchedule, $result) == false) 
-	 					{
-	 						array_push($result, $validSchedule);
-	 					}
-
-	 				}
-	 			}
+	 			$validSchedule = $this->quick_sort(array($tv1[0],$tv1[1],$tv2[0],$tv2[1]));
+				$tries = 6 - ($tv1[0] % 6);
+				if ($tries < 6)
+				{
+					$val1 = $tv1[0];
+				    $val2 = $tv1[1];
+					for ($i = 1; $i <= $tries; $i++) 
+					{ 
+						$val1 += 1;
+				    	$val2 += 1;
+						if (($tv2[0] == $val1) && ($tv2[1] == $val2)) 
+						{
+							if ($this->findElemtInArray($validSchedule, $result) == false) 
+				 			{
+				 				if(!((($validSchedule[0] <= 30) && 
+				 					  ($validSchedule[2] > 30)) 
+				 					  ||
+									  (($validSchedule[1] <= 30)  && 
+									  ($validSchedule[3] > 30))))
+								{
+									array_push($result, $validSchedule);
+								}
+				 			}
+						}
+					}
+				}
 	 		}
 	 	}
 	 	return $result;
@@ -108,7 +122,8 @@ class Generator_Logic
 					break;
 				}
 			}
-			if (count($tempResult) == $numLessons) {
+			if (count($tempResult) == $numLessons) 
+			{
 				array_push($result, $tempResult);
 			}
 		}
@@ -172,9 +187,11 @@ class Generator_Logic
 	***************************************************************/
 	public function getValidSchedules($pProfessorScheduleList, $numLessons)
 	{
-		$result     = array();
-		$tuples     = $this->getValidSchedulesTuples($pProfessorScheduleList);
-		$nContinuos = $this->getValidSchedulesNcontinuos($pProfessorScheduleList, $numLessons);
+		$tuples = $this->getValidSchedulesTuples($pProfessorScheduleList);
+		$temp   = $this->getValidSchedulesNcontinuos($pProfessorScheduleList, $numLessons);
+		$nContinuos = $this->deleteInvalidSchedules($temp);
+
+		$result = array();
 		foreach ($tuples as $t) 
 		{
 			if ($this->findElemtInArray($t, $nContinuos) == false)
@@ -182,7 +199,31 @@ class Generator_Logic
 				array_push($result, $t);
 			}
 		}		
-		return array_merge($result, $nContinuos);
+		$merge = array_merge($result, $nContinuos);
+		return $merge;
+	}
+
+
+	/***************************************************************************
+	*Function that returns a list of available schedules according with the    *
+	* valid schedules of TEC                                                   *
+	*Input:          							                               *
+	*	-$pList: List of all schedules to filter.                              *
+	*Output: 									                               *
+	*	-Returns an array with available schedules             . 		       *
+	***************************************************************************/
+	private function deleteInvalidSchedules($pList)
+	{
+		$result = array();
+		foreach ($pList as $schedule)
+		{
+			if(!((($schedule[0] <= 30) && ($schedule[1] > 30)) ||
+				(($schedule[2] <= 30)  && ($schedule[3] > 30))))
+			{
+				array_push($result, $schedule);
+			}
+		}
+		return $result;
 	}
 
 
