@@ -33,6 +33,7 @@ class GenerateLinks_controller extends CI_Controller
 		$this->load->view("HomePage/Footer");
 	}
 
+
 	/*************************************************** 
 	This functions is equal to callView.. but needs to load the breadCrumb.
 	***************************************************/
@@ -90,19 +91,21 @@ class GenerateLinks_controller extends CI_Controller
 		// Find active professors
 		$data['profesors'] = $this->administrator_logic->findProfessors($idCareer);
 		$listOfEmailSent = [];
+
 		// Check if the forms are registered or not
 		if ($data['profesors'] != false)
 		{
 			foreach ($data['profesors'] as $p)
 			{ 
 				$isForRegistered = $this->form_Logic->lookForSpecificForm($p->idProfessor, $period);
+				
 				// If the form is not registered 
 				if ($isForRegistered == false) 
 				{
 					$hashCode = $this->form_Logic->createForm($period, $sendDate, $p->idProfessor);
 					// send the email if the form was created
 					if ($hashCode != false) {
-						$professorName = $p->name." ".$p->lastName;
+						$professorName = 'Creado: '.$p->name." ".$p->lastName;
 						$email = $p->email;
 						$hash = $hashCode;
 						$this->sendMailToProfessor($professorName, $email, $hash, $dateForEmail);
@@ -110,6 +113,16 @@ class GenerateLinks_controller extends CI_Controller
 						$listOfEmailSent[] = $professorName;
 					}
 				}
+				else
+				{
+					$hashCode = $this->form_Logic->updateForm($period, $sendDate, $p->idProfessor);
+					$professorName = 'Actualizado: '.$p->name." ".$p->lastName;
+					$email = $p->email;
+					$hash = $hashCode;
+					$this->sendMailToProfessor($professorName, $email, $hash, $dateForEmail);
+					$listOfEmailSent[] = $professorName;
+				}
+
 			}
 		}
 		// Send data to Ajax

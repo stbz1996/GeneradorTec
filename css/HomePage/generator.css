@@ -1,0 +1,55 @@
+.solutionContainer{
+	width: 100%;
+	font-family: Verdana;
+    box-shadow: 17px 20px 19px -5px black;
+    border-radius: 35px;
+    margin-bottom: 3%;
+    overflow: hidden;
+}
+
+.itemSpace{
+	float: left;
+	width: 100%;
+	overflow: hidden;
+	background: #2B3A75;
+	border: 0.05px black solid;
+}
+
+.solutionContainer div div{
+	float: left;
+	
+	width: 14.28%;
+	overflow: hidden;
+	text-align: center;
+}
+
+.textBlock{
+	font-weight: bold;
+	font-size: 1.3vw;
+}
+
+.itemDay{
+	background: #2B3A42;
+	color: white;
+	font-weight: bold;
+	font-size: 15px;
+	font-size: 1.25vw;
+}
+
+.itemHour{
+	background: #2B3A75;
+	color: white;
+	font-size: 0.8vw;
+	height: auto;
+	margin-top: 3.2%;
+	overflow: hidden;
+}
+
+.itemCourse{
+	background: white;
+	color: black;
+	font-size: 0.7vw;
+	padding: 0.5%;
+	height: auto;
+	border: 0.03px black solid;
+}

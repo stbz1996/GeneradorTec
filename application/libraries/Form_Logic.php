@@ -103,6 +103,25 @@ class Form_Logic{
 	}
 
 
+	public function updateForm($pIdPeriod, $pDueDate, $pIdProfessor)
+	{
+		$form = new FormDTO();
+		$form->setHashCode($this->getHash());
+		$form->setPeriod($pIdPeriod);
+		$form->setState(1);
+		$form->setDueDate($pDueDate);
+		$form->setIdProfessor($pIdProfessor);
+		$formDAO_model = new FormDAO_model();
+		
+		if ($formDAO_model->updateForm($form) == true) {
+			return $form->getHashCode();
+		}
+		else{
+			return false;
+		} 
+	}
+
+
 	/************************************************
 	That function check if there is a form with the 
 	respective idProfesor and IdPeriod

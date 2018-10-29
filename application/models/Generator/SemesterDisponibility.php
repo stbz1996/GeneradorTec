@@ -6,12 +6,18 @@ class SemesterDisponibility {
 	****************************************/
 	private $listOfSchedules;
 	private $numBlocks;
+	private $ListOfBlocks;
 	private $numSchedules;
 	private $numDays;
 
 	function __construct()
 	{
 	}
+
+	public function getNumBlocks(){
+		return $this->numBlocks;
+	}
+
 
 	/**********************************************
 	Fill the matrix [$pBlocks][$pSchedules]
@@ -73,6 +79,28 @@ class SemesterDisponibility {
 	{
 		return $this->listOfSchedules[$pBlocks][$pSchedules];
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	/***************
