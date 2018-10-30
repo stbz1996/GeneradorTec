@@ -461,11 +461,11 @@ class Generator_controller extends CI_Controller
 			echo '<br><br><br>'.$error;
 		}
 
-		/*
+		
 		$data['solutions'] = $this->finalSolutions;
 		$this->callView('Generator/Generator', $data);
-		*/
-		$this->printResultList(); // must be deleted
+		
+		//$this->printResultList(); // must be deleted
 	}
 
 
