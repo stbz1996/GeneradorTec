@@ -13,6 +13,15 @@ class MagistralClass
 
 	function __construct(){}
 
+
+	public function getCountOfRejectedSpaces(){
+		return $this->countOfRejectedSpaces;
+	}
+
+	public function getCountOfAvailableSpaces(){
+		return $this->countOfAvailableSpaces;
+	}
+
 	public function addAvailableCount()
 	{
 		$this->countOfAvailableSpaces += 1;

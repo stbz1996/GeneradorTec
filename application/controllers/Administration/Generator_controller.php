@@ -9,10 +9,11 @@ class Generator_controller extends CI_Controller
 	private $magistralClassList    = []; // Save the list of magistral clases 
 	private $professors            = []; // List of all professors
 	private $semesterDisponibility = []; // The list of all the schedules
-	private $assigmentList = array(); // The list of the assigned magistral classes
+	private $assigmentList  = array(); // The list of the assigned magistral classes
 	private $finalSolutions	= [];
-	private $generator_Logic;
+	private $errorList      = array();
 	private $limitOfresults = 100;
+	private $generator_Logic;
 
 	function __construct()
 	{
@@ -50,19 +51,22 @@ class Generator_controller extends CI_Controller
 	// Creates a list of data from asigment courses (idprofesor, idgrupo, etc) 
 	private function readDataFromView($classes)
 	{
-		/*
-		// If you receive the data by URL.
-			for($i = 0; $i < count($classes); $i++)
-			{
-				$idProf = $classes[$i]->idProfessor;
-				$idCourse = $classes[$i]->idCourse;
-				$idGroup = $classes[$i]->idGroup;
-				$data = new AssignedCourse();
-				$data->setAtributes($idProf, $idCourse, $idGroup);
-				$this->idsOfMagistralClass[] = $data;
-			}
 		
+		// If you receive the data by URL.
+		/*
+		for($i = 0; $i < count($classes); $i++)
+		{
+			$idProf = $classes[$i]->idProfessor;
+			$idCourse = $classes[$i]->idCourse;
+			$idGroup = $classes[$i]->idGroup;
+			$data = new AssignedCourse();
+			$data->setAtributes($idProf, $idCourse, $idGroup);
+			$this->idsOfMagistralClass[] = $data;
+		}
 		*/
+		
+		
+			
 		// Adriana
 		$data = new AssignedCourse();
 		$data->setAtributes(1, 4, 1);
@@ -79,8 +83,10 @@ class Generator_controller extends CI_Controller
 		$this->idsOfMagistralClass[] = $data;
 
 		$data = new AssignedCourse();
-		$data->setAtributes(3, 16, 3);
+		$data->setAtributes(3, 16, 1);
 		$this->idsOfMagistralClass[] = $data;
+
+		
 	}
 
 
@@ -374,25 +380,51 @@ class Generator_controller extends CI_Controller
 	}
 
 
+	/****************************************************************************
+	* Function that fills a list with error about the magistral class assigment *
+	****************************************************************************/
+	private function findErrorsInAssigment($list)
+	{
+		foreach ($list as $cm) 
+		{
+			if ($cm->getCountOfAvailableSpaces() == 0) 
+			{
+				$error =  "Curso: ".$cm->getCourse()->getCode()." - ".$cm->getCourse()->getName().' - Grupo '.$cm->getGroup()->getNumber()."<br>";
+				$error .= "Profesor: ".$cm->getProfessor()->getName()."<br>";
+				$error .= "Error: NO pudo ser asignado, "; 
+				if (count($cm->getProfessor()->getSchedules()) == 0) 
+				{
+					$error .= "el profesor no cuenta con horarios suficientes para la asignación de este curso.";
+					$error .= "Solución: Habilite el formulario del profesor para que pueda agregar más horarios y luego continúe con la generación <br>";
+				}
+				else
+				{
+					$error .= "no se logró colocar en ninguna opción de horario válida <br>";
+					$error .= "Solución: Asigne el curso a otro profesor para poder continuar<br>";
+				}
+				array_push($this->errorList, $error);
+			}	
+		}
+	}
+
+
 	/***********************************************
 	This is the beginning of the Generator algorithm 
 	***********************************************/
 	public function index()
 	{
-
 		//Verify if code value exist
 		if(isset($_GET['code']))
 		{
 			$classAssigned = $_GET['code'];
 			$classes = json_decode(rawurldecode(base64_decode(rawurldecode($classAssigned))));
-			$this->readDataFromView($classes, false); 
+			$this->readDataFromView($classes); 
 		}
-		else
-		{
-			$this->readDataFromView(null);
+		else{
+			$this->readDataFromView(null); 
 		}
 
-		print_r($this->idsOfMagistralClass);
+		//print_r($this->idsOfMagistralClass);
 
 		// Load the professors information 
 		$this->fillProfessors($this->idsOfMagistralClass);
@@ -401,7 +433,6 @@ class Generator_controller extends CI_Controller
 		// Create the list of N blocks with the schedules of the actual plan
 		$this->createSemesterDisponibility(1);
 
-		
 		// Asignaciones de cursos obligatorios 
 			// Se crea la lista de clases magistrales de los cursos obligatorios 
 			// Se colocan los cursos obligatorios en la lista de los bloques 
@@ -411,18 +442,21 @@ class Generator_controller extends CI_Controller
 		// Verificación de INTRO y TALLER
 			// Se debe hacer la verificación de los cursos INTRO y TALLER, los cuales deben tener un mismo # de clases magistrales asignadas. 
 
-
-		// ##############################
-		// ###   Algoritmo generador  ###
-		// ##############################
+		// Call the generator algorithm 
 		$cm = $this->magistralClassList[0];
 		$this->generator($cm, 0);
-		
-		$this->printResultList();
 
 		//$data['solutions'] = $this->finalSolutions;
 		//$this->callView('Generator/Generator', $data);
+
+		$this->printResultList();
+
 	}
+
+
+
+
+	
 
 
 

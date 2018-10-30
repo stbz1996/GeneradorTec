@@ -18,7 +18,6 @@ class Administrator_Logic{
 		$administrator = new AdministratorDTO();
 		$administrator->setUser($username);
 		$administrator->setPassword($password);
-
 		$administratorDAO_model->insert($administrator, $idCareer);
 	}
 

@@ -934,6 +934,7 @@ function saveMagistralClass(url, jsonData)
             // Nothing todo...
             // I have all the classes.
             nextPageSwal("Se almacenaron los datos de las clases", data);
+
         },
         error: function (jqXHR, textStatus, errorThrown)
         {

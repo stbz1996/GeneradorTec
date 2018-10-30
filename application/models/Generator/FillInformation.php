@@ -226,7 +226,7 @@ class FillInformation{
 		{
 			$professor = new Professor();
 			$professor->setWorkload($professorQuery->workLoad);
-			$professor->setName($professorQuery->name);
+			$professor->setName($professorQuery->name.' '.$professorQuery->lastName);
 			$professor->setId($idProfessor);
 			
 			//Activities
