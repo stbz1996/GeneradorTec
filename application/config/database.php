@@ -29,6 +29,7 @@ $db['default'] = array(
 );
 
 /* Base de datos de Steven */
+
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',

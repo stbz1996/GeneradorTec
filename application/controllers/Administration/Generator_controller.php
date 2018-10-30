@@ -418,26 +418,10 @@ class Generator_controller extends CI_Controller
 		$cm = $this->magistralClassList[0];
 		$this->generator($cm, 0);
 		
-		// If there is no a solution 
-		if (count($this->finalSolutions))
-		{ 
-			//$this->printResultList();
-		}
-		else
-		{
-			foreach ($this->magistralClassList as $x) 
-			{
-				if ($x->countOfAvailableSpaces == 0) 
-				{
-					echo "<br>";
-					echo "El curso de ".$x->getCourse()->getName();
-					echo " NO pudo ser asignado";
-				}	
-			}
-		}
+		$this->printResultList();
 
-		$data['solutions'] = $this->finalSolutions;
-		$this->callView('Generator/Generator', $data);
+		//$data['solutions'] = $this->finalSolutions;
+		//$this->callView('Generator/Generator', $data);
 	}
 
 
