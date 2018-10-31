@@ -7,34 +7,86 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    margin-left: -2.7%;
     margin-bottom: 2%;
+    justify-content: left;
+}
+
+.service-courses-option
+{
+    display: flex; 
+    flex-basis: calc(33% - 5px);
     justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.form-control
+{
+    width: 90% !important;
+    margin: 3% auto;
+}
+
+
+.courses
+{
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .service-course
 {
+    flex-grow: 1;
+    flex-basis: 25%;
+    margin: 5px;
+    height: 300px;
+    background-color: cornflowerblue;
+    text-align: center;
+    justify-content: center;
+}
+
+.card-schedules
+{
     display: flex;
     flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: center;
-    text-align: center;
-    margin-top: 2%;
-    border: #000 solid 1px;
-}
-
-.class1
-{
-    display: flex; 
-    flex-basis: calc(25% - 10px);
-    justify-content: center;
     flex-direction: column;
-    text-align: center;
-
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0 auto;
+    justify-content: center;
 }
 
-.class1 > .form-control
+.course-schedule
 {
-    width: 90% !important;
-    margin: 0% auto;
+    display: flex;
+    border: 1px black solid;
+    width: 100%;
+    height: 32px;
+    background-color: crimson;
+    padding: 1%;
+    align-items: center;
+}
+
+.course-schedule p
+{
+    width: 80%;
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+.course-schedule button
+{
+    float: right;
+}
+
+.cardFooter
+{
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height: 90px;
+    background-color:#666;
+    color:#fff;
 }

@@ -53,6 +53,7 @@ if ($username == '' || $idAdmin == '' || $idCarrer == '')
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/admin.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/GenerateLinks.css">
     <link rel="shortcut icon" type="image/png" href="<?=base_url()?>img/favicon.png" />
+      
 </head>
 
 
