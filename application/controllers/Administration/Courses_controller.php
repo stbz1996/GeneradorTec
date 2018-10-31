@@ -38,7 +38,7 @@ class Courses_controller extends CI_Controller
 		{
 			$data['courses'] = $this->administrator_logic->getArrayCourses(null);
 			$data['idParent'] = null;
-			$data['actual'] = "Todos los bloques";
+			$data['actual'] = "Todos los cursos";
 			// Obtenga el primer plan que se cargó la base de datos.
 			$idPlan = $data['plans'][0]->idPlan;
 			$namePlan = $data['plans'][0]->name; 

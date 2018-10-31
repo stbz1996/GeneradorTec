@@ -15,6 +15,7 @@ class GenerateLinks_controller extends CI_Controller
 		$this->load->model("DAO/FormDAO_model");
 		$this->load->model("DTO/FormDTO");
 		$this->load->helper("form");
+		$this->load->helper("functions_helper");
 		$this->load->library('email');
 		$this->administrator_logic = new Administrator_Logic();
 		$this->form_Logic          = new Form_Logic();
@@ -28,6 +29,19 @@ class GenerateLinks_controller extends CI_Controller
 	{
 		$route = $viewName;
 		$this->load->view("HomePage/Header");
+		$this->load->view($route, $data);
+		$this->load->view("HomePage/Footer");
+	}
+
+
+	/*************************************************** 
+	This functions is equal to callView.. but needs to load the breadCrumb.
+	***************************************************/
+	function callViewBreadCrumb($viewName, $data)
+	{
+		$route = "HomePage/".$viewName;
+		$this->load->view("HomePage/Header");
+		$this->load->view("HomePage/BreadCrumb", $data);
 		$this->load->view($route, $data);
 		$this->load->view("HomePage/Footer");
 	}
@@ -51,8 +65,10 @@ class GenerateLinks_controller extends CI_Controller
 	{
 		$idCareer = $_SESSION['idCareer'];
 		$data['profesors'] = $this->administrator_logic->findProfessors($idCareer);
-		$data['periods']   = $this->administrator_logic->findPeriods(); 
-		$this->callView("HomePage/GenerateForms/GenerateLinks", $data);
+		$data['periods']   = $this->administrator_logic->findPeriods();
+		$data['iters'] = getBreadCrumbGenerateLinks(); // Relative position
+		$data['actual'] = "Generador"; 
+		$this->callViewBreadCrumb("GenerateForms/GenerateLinks", $data);
 	}
 
 
@@ -75,19 +91,21 @@ class GenerateLinks_controller extends CI_Controller
 		// Find active professors
 		$data['profesors'] = $this->administrator_logic->findProfessors($idCareer);
 		$listOfEmailSent = [];
+
 		// Check if the forms are registered or not
 		if ($data['profesors'] != false)
 		{
 			foreach ($data['profesors'] as $p)
 			{ 
 				$isForRegistered = $this->form_Logic->lookForSpecificForm($p->idProfessor, $period);
+				
 				// If the form is not registered 
 				if ($isForRegistered == false) 
 				{
 					$hashCode = $this->form_Logic->createForm($period, $sendDate, $p->idProfessor);
 					// send the email if the form was created
 					if ($hashCode != false) {
-						$professorName = $p->name." ".$p->lastName;
+						$professorName = 'Creado: '.$p->name." ".$p->lastName;
 						$email = $p->email;
 						$hash = $hashCode;
 						$this->sendMailToProfessor($professorName, $email, $hash, $dateForEmail);
@@ -95,6 +113,16 @@ class GenerateLinks_controller extends CI_Controller
 						$listOfEmailSent[] = $professorName;
 					}
 				}
+				else
+				{
+					$hashCode = $this->form_Logic->updateForm($period, $sendDate, $p->idProfessor);
+					$professorName = 'Actualizado: '.$p->name." ".$p->lastName;
+					$email = $p->email;
+					$hash = $hashCode;
+					$this->sendMailToProfessor($professorName, $email, $hash, $dateForEmail);
+					$listOfEmailSent[] = $professorName;
+				}
+
 			}
 		}
 		// Send data to Ajax

@@ -3,6 +3,7 @@
 class Block
 {
 	private $id;
+	private $number;
     private $name;
     private $plan;
 
@@ -17,6 +18,11 @@ class Block
 	public function setId($pId)
 	{
 		$this->id = $pId;
+	}
+
+	public function setNumber($pNum)
+	{
+		$this->number = $pNum;
 	}
 
 	public function setName($pName)
@@ -36,6 +42,11 @@ class Block
 	public function getId()
 	{
 		return $this->id;
+	}
+
+	public function getNumber()
+	{
+		return $this->number;
 	}
 
 	public function getName()

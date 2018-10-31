@@ -12,6 +12,7 @@ class Schedules_controller extends CI_Controller
 		$this->load->model("DAO/ScheduleDAO_model");
 		$this->load->library('session');
 		$this->load->helper("form");
+		$this->load->helper("functions_helper");
 	}	
 
 
@@ -22,6 +23,18 @@ class Schedules_controller extends CI_Controller
 	{
 		$this->load->view("HomePage/Header");
 		$this->load->view("HomePage/".$viewName, $data);
+		$this->load->view("HomePage/Footer");
+	}
+
+	/*************************************************** 
+	This functions is equal to callView.. but needs to load the breadCrumb.
+	***************************************************/
+	function callViewBreadCrumb($viewName, $data)
+	{
+		$route = "HomePage/".$viewName;
+		$this->load->view("HomePage/Header");
+		$this->load->view("HomePage/BreadCrumb", $data);
+		$this->load->view($route, $data);
 		$this->load->view("HomePage/Footer");
 	}
 
@@ -42,7 +55,9 @@ class Schedules_controller extends CI_Controller
  		}
 		// That varible is used to count the number of schedules in BD
 		$data['schedules'] = $result;
-		$this->callView("Schedules/SchedulePage", $data);
+		$data['iters'] = getBreadCrumbSchedules(); // Relative position
+		$data['actual'] = "Todos los horarios";
+		$this->callViewBreadCrumb("Schedules/SchedulePage", $data);
 	}
 
 

@@ -110,6 +110,7 @@ class CourseDAO_model extends CI_Model
         }
     }
 
+
     /* Try to insert in the database. */
     public function addCourseXBlock($CourseXBlock)
     {

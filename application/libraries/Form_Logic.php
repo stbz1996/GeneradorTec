@@ -103,6 +103,25 @@ class Form_Logic{
 	}
 
 
+	public function updateForm($pIdPeriod, $pDueDate, $pIdProfessor)
+	{
+		$form = new FormDTO();
+		$form->setHashCode($this->getHash());
+		$form->setPeriod($pIdPeriod);
+		$form->setState(1);
+		$form->setDueDate($pDueDate);
+		$form->setIdProfessor($pIdProfessor);
+		$formDAO_model = new FormDAO_model();
+		
+		if ($formDAO_model->updateForm($form) == true) {
+			return $form->getHashCode();
+		}
+		else{
+			return false;
+		} 
+	}
+
+
 	/************************************************
 	That function check if there is a form with the 
 	respective idProfesor and IdPeriod
@@ -141,8 +160,13 @@ class Form_Logic{
 	public function getCareerPlans($pIdCareer)
 	{
 		$planDAO = new PlanDAO_model();
-		$query = $planDAO->show($pIdCareer)->result_array();
+		$query = $planDAO->show($pIdCareer);
 
+		if(!$query)
+		{
+			return false;
+		}
+		$query = $query->result_array();
 		$data = array();
 
 		//Get all active plans
@@ -166,19 +190,21 @@ class Form_Logic{
 
 		foreach ($plans as $plan)
 		{
-
-			$query = $blockDAO->show($plan->getId())->result_array();
+			$query = $blockDAO->show($plan->getId());
 			$blocksPlan = array();
 			
-			//Get all active blocks
-			foreach ($query as $row) {
-				if($row['state'])
-				{
-					$newBlock = new BlockDTO();
-					$newBlock->setIdBlock($row['idBlock']);
-					$newBlock->setName($row['name']);
-
-					$blocksPlan[] = $newBlock;
+			if($query)
+			{
+				$query = $query->result_array();
+				//Get all active blocks
+				foreach ($query as $row) {
+					if($row['state'])
+					{
+						$newBlock = new BlockDTO();
+						$newBlock->setIdBlock($row['idBlock']);
+						$newBlock->setName($row['name']);
+						$blocksPlan[] = $newBlock;
+					}
 				}
 			}
 			$data[] = $blocksPlan;
@@ -196,21 +222,27 @@ class Form_Logic{
 		{
 			foreach ($blocks[$i] as $block)
 			{
-				$query = $courseDAO->getBlockCourses($block->getId())->result_array();
-				$coursesBlock = array();
+				$query = $courseDAO->getBlockCourses($block->getId());
 
-				//Get all active Courses
-				foreach ($query as $row)
+				if($query)
 				{
-					if($row['state'])
-					{
-						$newCourse = new CourseDTO();
-						$newCourse->setIdCourse($row['idCourse']);
-						$newCourse->setCode($row['code']);
-						$newCourse->setName($row['name']);
-						$newCourse->setState($row['state']);
+					$coursesBlock = array();
 
-						$coursesBlock[] = $newCourse;
+					$query = $query->result_array();
+
+					//Get all active Courses
+					foreach ($query as $row)
+					{
+						if($row['state'])
+						{
+							$newCourse = new CourseDTO();
+							$newCourse->setIdCourse($row['idCourse']);
+							$newCourse->setCode($row['code']);
+							$newCourse->setName($row['name']);
+							$newCourse->setState($row['state']);
+
+							$coursesBlock[] = $newCourse;
+						}
 					}
 				}
 				$data[] = $coursesBlock;
@@ -278,7 +310,6 @@ class Form_Logic{
 		//Verify if return rows
 		if($query)
 		{
-			$query = $query->result_array();
 			$data = array();
 
 			//Get all activities from form

@@ -2,9 +2,34 @@
 <script>var base_url = '<?php echo base_url() ?>';</script>
 <div>
     <h1>Asignación de Cursos</h1>
-    <p>Prioridades  (Rojo - A), (Naranja - B), (Amarillo - C)</p>
-    <div id="buttonRightEnd">
-		<button class="btn btn-warning" onclick="showModalPeriodForm()">Seleccionar Período</button>
+    <p>Prioridades: </p> 
+
+    <div class="row">
+    	<div class="control-label col-md-3">
+		    <p>Rojo - Prioridad Máxima</p>
+		    <span class="dotCircle redCircle"></span>
+		</div>
+		<div class="control-label col-md-3">
+		    <p>Azul - Prioridad Media </p>
+		    <span class="dotCircle blueCircle"></span>
+		</div>
+		<div class="control-label col-md-3">
+	    	<p>Amarillo - Prioridad Mínima</p>
+	    	<span class="dotCircle yellowCircle"></span>
+	    </div>
+    </div>
+    
+    <hr></hr>
+
+    <div class="row">
+	    <div class="control-label col-md-3">
+			<button class="btn btn-primary" onclick="showModalPeriodForm()">Seleccionar Período</button>
+		</div>
+		<div class="control-label col-md-4">
+		</div>
+		<div id="buttonRightScreen">
+		   	<button type="button" id="btnSave" onclick="saveAssigned()" class="btn btn-primary">Finalizar Asignación</button>
+		</div>
 	</div>
 </div>
 
@@ -53,8 +78,8 @@
 			              </div>
 						</div> 
 
-						<div id="buttonRightScreen">
-							<button class="btn btn-warning" onclick="selectCourse(this.parentElement.parentElement.parentElement)">Asignar</button>
+						<div id="buttonLeftNext">
+							<button class="btn btn-success" onclick="selectCourse(this.parentElement.parentElement.parentElement)">Asignar</button>
 						</div>
 						<div style="clear:both"></div>
 
@@ -67,13 +92,6 @@
 			<?php  } ?>
 		</div> 
 	</section>
-</div>
-
-
-<!-- Los botones -->
-<div class="modal-footer" id="divFooter">
-    Aqui los botones
-    <button type="button" id="btnSave" onclick="saveAssigned()" class="btn btn-primary">Guardar</button>
 </div>
 
 <!-- Bootstrap modal -->

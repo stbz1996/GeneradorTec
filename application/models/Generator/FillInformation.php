@@ -45,18 +45,10 @@ class FillInformation{
 	{
 		$scheduleDAO = new ScheduleDAO_model();
 		$scheduleQuery = $scheduleDAO->getSchedule($idSchedule);
-
 		if($scheduleQuery)
 		{
-			/* Create new Schedule and returns it*/
-			$schedule = new Schedule();
-			$schedule->setId($idSchedule);
-			$schedule->setState($scheduleQuery->state);
-			$schedule->setNumSchedule($scheduleQuery->numberSchedule);
-			$schedule->setDescription($scheduleQuery->description);
-			return $schedule;
+			return $scheduleQuery->numberSchedule;
 		}
-
 		return false;
 	}
 
@@ -117,17 +109,12 @@ class FillInformation{
 	*Output: 									    *
 	*	Returns a list of blocks     			    *
 	************************************************/
-	public function getBlocks($pIdPlan)
+	public function getNumBlocks($pIdPlan)
 	{
+		$result = array();
 		$blockDAO_model = new BlockDAO_model();
  		$query = $blockDAO_model->show($pIdPlan);
- 		$data = array();
- 		if (!$query)
- 		{
- 			return array();
- 		}
- 		$data = $query->result();
- 		return $data;
+ 		return count($query->result());
 	}
 
 
@@ -158,8 +145,8 @@ class FillInformation{
 	*********************************************/
 	function fillBlock($idBlock)
 	{
-		$blockDAO = new BlockDAO_model();
-		$planDAO = new PlanDAO_model();
+		$blockDAO   = new BlockDAO_model();
+		$planDAO    = new PlanDAO_model();
 		$blockQuery = $blockDAO->get($idBlock);
 		/* Get information of plan */
 		$planQuery = $planDAO->getPlanFromBlock($idBlock)->row();
@@ -171,6 +158,7 @@ class FillInformation{
 			$block = new Block();
 			$block->setId($blockQuery->idBlock);
 			$block->setName($blockQuery->name);
+			$block->setNumber($blockQuery->number);
 			$block->setPlan($plan);
 			return $block;
 		}
@@ -238,7 +226,7 @@ class FillInformation{
 		{
 			$professor = new Professor();
 			$professor->setWorkload($professorQuery->workLoad);
-			$professor->setName($professorQuery->name);
+			$professor->setName($professorQuery->name.' '.$professorQuery->lastName);
 			$professor->setId($idProfessor);
 			
 			//Activities
@@ -268,7 +256,7 @@ class FillInformation{
 				$courses[] = $course;
 			}
 			$professor->setCourses($courses);
-
+			
 			//Schedules
 			$schedules = array();
 			/* Add schedules in professor class */

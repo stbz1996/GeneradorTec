@@ -3,7 +3,9 @@ var nameProfessor; // This is the name of the professor that is selected in the 
 var idPeriod;
 var grayBackground = "#3385ff";
 var whiteBackground = "#ffffff";
-var yellowBackground = "#ffff4d";
+var yellow = "#ffC300";
+var red = "#c70039";
+var blue = "#008080";
 
 var assigned = []; // Course - Professor.
 
@@ -20,6 +22,85 @@ $(document).ready( function () {
         showModalPeriodForm(); // Show the modal of periods.
     }
 });
+
+/****************************************
+- Shows an error message.
+****************************************/
+function errorSwal(message)
+{
+    swal({title: "Error", 
+        text: message, 
+        icon: "error"});
+}
+
+/****************************************
+- Shows an success message.
+****************************************/
+function successSwal(message)
+{
+    swal({title: "Listo", 
+        text: message,
+        icon: "success"}).then(); 
+}
+
+/****************************************
+- Next page
+****************************************/
+function nextPageSwal(message, data)
+{
+    swal({title: "Listo", 
+        text: message,
+        timer: 10000,
+        button: 'OK',
+        icon: "success"}).then(() => {
+            loadGenerator(data);
+        });
+}
+
+/****************************************
+- Swal that forces the asignation of a course.
+****************************************/
+function confirmSwalForce(idCourse, idProfessor, nameProfessor, nameCourse)
+{
+    swal({
+          title: "¿Desea forzar la asignación del curso?",
+          text: "El curso no fue seleccionado previamente por el profesor.",
+          icon: "warning",
+          buttons: [
+            '¡No!',
+            '¡Si, claro!'
+          ],
+          dangerMode: true,
+        }).then(function(isConfirm) {
+          if (isConfirm) 
+          {
+            assignCourse(idCourse, idProfessor, nameCourse, nameProfessor);
+          }
+    });
+}
+
+
+/****************************************
+- Swal that confirms if the user has enough variables.
+****************************************/
+function confirmSwalLoad(idCourse, idProfessor, nameProfessor, nameCourse, stateForced)
+{
+    swal({
+          title: "¿Está seguro?",
+          text: "Sobrepasará el máximo de la carga del profesor.",
+          icon: "warning",
+          buttons: [
+            '¡No!',
+            '¡Si, claro!'
+          ],
+          dangerMode: true,
+        }).then(function(isConfirm) {
+          if (isConfirm) 
+          {
+            callSwalForceAssignment(idCourse, idProfessor, nameProfessor, nameCourse, stateForced);
+          }
+    });
+}
 
 /****************************************
 - Load the periods modal.
@@ -40,9 +121,7 @@ function choosePeriod()
     /* If the period is not selected. */
     if(period == '0' || period == '' || period == 'undefined' || period == null )
     {
-        swal({title: "Error", 
-            text: "No se ha seleccionado ningún período", 
-            icon: "error"});
+        errorSwal("No se ha seleccionado ningún período");
         return;
     }
 
@@ -97,9 +176,7 @@ function loadBlocksProfessors(idPeriod)
             // If there are not professors with forms.
             if (professors.length <= 0)
             {
-                swal({title: "Error", 
-                    text: "No hay profesores que hayan completado el formulario para ese período", 
-                    icon: "error"});
+                errorSwal("No hay profesores que hayan completado el formulario para ese período");
             }
             else
             {
@@ -225,22 +302,31 @@ Get the respective color of the priorities
 ************************************************/
 function getPriorityColor(priority)
 {
-    var priorityColor = yellowBackground;
+    var priorityColor = yellow;
 
     if (priority == "A")
     {
-        priorityColor = "#ff4d4d"; // Red
+        priorityColor = red; // Red
     }
     else if(priority == "B")
     {
-        priorityColor = "#ff8000"; // Orange
+        priorityColor = blue; // Orange
     }
     else
     {
-        priorityColor = "#ffff1a";  // Yellow
+        priorityColor = yellow;  // Yellow
     }
 
     return priorityColor;
+}
+
+/************************************************
+Reserve the course. 
+************************************************/
+function setReserved(div, pValue)
+{
+    var state = div.childNodes[9];
+    state.value = pValue;
 }
 
 /************************************************
@@ -279,6 +365,9 @@ function desopaqueCourses(value)
     }
 }
 
+/************************************************
+Force the div to be assigned.
+************************************************/
 function setForced(div, pValue)
 {
     var state = div.childNodes[6];
@@ -294,6 +383,7 @@ function loadInformation(idProfessor, idCourse, priority)
     becomeDivYellow(idCourse, priorityColor); // paint the actual course.
     var div = lookDivCourses(idCourse);
     setForced(div, "1");
+    setReserved(div, "1");
     // Get all the information related to the professor and course..
     // historic information... like how many times the professor has given the course.
 }
@@ -350,7 +440,7 @@ function desactivateDivProfessor(divProfessor, progressBar, stateFinished)
 
 
 /*********************************************
-Edit information about the professor.
+Edit information about the professor. Add.
 *********************************************/
 function increaseLoadProfessor(idProfessor)
 {
@@ -435,20 +525,24 @@ function addParagraphCourse(nameProf, numGroup, group)
     return div;
 }
 
+/*********************************************
+Delete a paragraph in the div.... 
+*********************************************/
 function deleteParagraph(pDiv)
 {
     var divCourse = pDiv.parentNode.parentNode; // Father of the divs.
-    var button = divCourse.childNodes[5];
-    var state = divCourse.childNodes[7];
+    var button = divCourse.childNodes[5]; // Button.
+    var state = divCourse.childNodes[7]; // State of the div.
+    // Select group.
     var groupAssigned = divCourse.childNodes[5].childNodes[1].childNodes[1].childNodes[3].childNodes[1];
-    var numGroup = groupAssigned.value;
-    var idGroup = groupAssigned.value;
-    var parent = pDiv.parentNode.parentNode; 
-    var group = pDiv.childNodes[2];
-    var idProfessor = pDiv.getAttribute("data-value");
-    var idCourse = pDiv.id;
-    var idGroup = group.value;
-    group.style.display = "block";
+    var numGroup = groupAssigned.value; // Number group selected.
+    var idGroup = groupAssigned.value; // Id of the group selected.
+    var parent = pDiv.parentNode.parentNode; // Node parent.
+    var group = pDiv.childNodes[2]; // Option of the group selected.
+    var idProfessor = pDiv.getAttribute("data-value"); // id Professor.
+    var idCourse = pDiv.id; // id Course.
+    var idGroup = group.value; // id Group.
+    group.style.display = "block"; // All the elements are place in a line.
 
     pDiv.parentNode.removeChild(pDiv); // Delete the actual pDiv.
     groupAssigned.appendChild(group);
@@ -463,43 +557,30 @@ function deleteParagraph(pDiv)
         divText.appendChild(par);
     }
     
-    decreaseLoadProfessor(idProfessor);
-    dropElement(idProfessor, idCourse, idGroup);
+    decreaseLoadProfessor(idProfessor); // Decrease the bar.
+    dropElement(idProfessor, idCourse, idGroup); // Drop the element selected.
 }
 
+/*********************************************
+Delete a paragraph in the div.... 
+*********************************************/
 function dropElement(pIdProfessor, pIdCourse, pIdGroup)
 {
     var length = assigned.length;
-    console.log("Id Prof: " + pIdProfessor + " - IdCourse: " + pIdCourse + 
-        " - Id Group: " + pIdGroup);
     for(var i = 0; i < length; i++)
     {
         if (assigned[i].idProfessor == pIdProfessor && 
             assigned[i].idCourse == pIdCourse &&
             assigned[i].idGroup == pIdGroup)
         {
-            if (i == 0)
-            {
-                var rest = assigned.splice(i, i + 1); // Drops the element of the list.
-            }else{
-                var rest = assigned.splice(i, i); // Drops the element of the list.
-            }
-
-            if (i < length - 1)
-            {
-                //console.log(assigned);
-                //console.log(rest);
-                var dropRest = rest.splice(i + 1, i + 1);
-                //console.log(dropRest);
-                assigned = assigned.concat(dropRest);
-            }
+            assigned.splice(i, 1); // Delete the element.
             return;
         }
     }
 }
 
 /*********************************************
-Registered professor and courses in the database
+Assign course to a professor.
 *********************************************/
 function assignCourse(idCourse, idProf, nameCourse, nameProf)
 {
@@ -511,15 +592,16 @@ function assignCourse(idCourse, idProf, nameCourse, nameProf)
     var idGroup = groupAssigned.value;
 
     var groupSelected = null;
+
     /* Remove the group that I choose.*/
     for(var i=0; i < groupAssigned.length; i++)
     {
         if (groupAssigned[i].value == groupAssigned.value)
         {
-            groupSelected = groupAssigned[i];
-            idGroup = groupSelected.value;
-            numGroup = groupAssigned[i].text;
-            groupAssigned.removeChild(groupAssigned[i]);
+            groupSelected = groupAssigned[i]; // Select the group.
+            idGroup = groupSelected.value; // id group
+            numGroup = groupAssigned[i].text; // number group.
+            groupAssigned.removeChild(groupAssigned[i]); // Delete the group of the html.
             break;
         }
     }
@@ -552,15 +634,17 @@ function assignCourse(idCourse, idProf, nameCourse, nameProf)
         }
     }
 
-    div.id = idCourse;
-    div.setAttribute("data-value", idProf);
-    text.appendChild(div); // Add the assigned.
+    div.id = idCourse; // Assign the idCourse.
+    div.setAttribute("data-value", idProf); // Assign the idProfessor.
+    text.appendChild(div); // Add the assigned to the html.
 
     increaseLoadProfessor(idProf); // Assign the course.
     var course = registerCourse(idCourse, idProf, nameCourse, nameProf, idGroup, numGroup); // Register the new course.
 }
 
-
+/*********************************************
+Registered the course, professor and group.
+*********************************************/
 function registerCourse(pIdCourse, pIdProf, pNameCourse, pNameProf, pIdGroup, pNumGroup)
 {
     var courseRegistered = new Object();
@@ -626,7 +710,7 @@ function lookDivCourses(idDivSource)
 /****************************************
 - Review if the professor could assign courses.
 ****************************************/
-function lookIfProfAssign(idProf, stateForced)
+function assignedProcess(idCourse, nameCourse, idProf, nameProf, stateForced)
 {
     var divProfessor = lookDivProfessor(idProf);
     var work = getWork(divProfessor);
@@ -635,32 +719,33 @@ function lookIfProfAssign(idProf, stateForced)
     var state = false;
 
     if (work[1] >= workLoad){
-        alert("Lo siento, el profesor tiene más carga de la solicitada.");
-        return false;
+        errorSwal("Lo siento, el profesor tiene más carga de la solicitada.");
+        return;
     }
 
     if (workLoad < newWorkPorcent)
     {
-        state = confirm("Sobrepasará el máximo de la carga del profesor. ¿Está seguro?");
-
-        // The user doesn't want to save.
-        if (!state){
-            return false;
-        }
+        confirmSwalLoad(idCourse, idProf, nameProf, nameCourse, stateForced);
+        return;
     }
+
+    callSwalForceAssignment(idCourse, idProf, nameProf, nameCourse, stateForced);
+}
+
+/****************************************
+- Call a swal that forces the assignment of a course.
+****************************************/
+function callSwalForceAssignment(idCourse, idProf, nameProf, nameCourse, stateForced)
+{
     // Forced the assignment of the course
     if (stateForced == "0")
     {
-        var message = "El curso no fue seleccionado previamente por el profesor. ";
-        var question = "¿Desea forzar la asignación del curso?"; 
-        state = confirm(message + question);
-
-        if (!state){
-            return false;
-        }
+        confirmSwalForce(idCourse, idProf, nameProf, nameCourse);
+        return;
     }
 
-    return true;
+    // Assign the respective course.
+    assignCourse(idCourse, idProf, nameCourse, nameProf);
 }
 
 /****************************************
@@ -718,7 +803,6 @@ function becomeDivNormal(divSelected){
 function becomeDivYellow(idCoursePreferred, priorityColor)
 {
     var divToChoose = lookDivCourses(idCoursePreferred); // Get the specific Div.
-
     if (divToChoose){
         divToChoose.style.background = priorityColor;
     }
@@ -735,6 +819,7 @@ function deselectCourses()
     {
         var course = divCourses[i];
         becomeDivNormal(course);
+        setReserved(course, "0");
     }
 }
 
@@ -745,18 +830,18 @@ function selectCourse(divSelected)
 {
     var idCourse;
     var nameCourse;
-    var stateForced = divSelected.childNodes[7].value; // Input state...
+    var stateForced = divSelected.childNodes[9].value; // Input state...
     var groupAssigned = divSelected.childNodes[5].childNodes[1].childNodes[1].childNodes[3].childNodes[1];
     var group = groupAssigned.value;
 
     if (idProfessor == null || idProfessor <= 0){
-        alert("No ha seleccionado ningún profesor para asignar el curso");
+        errorSwal("No ha seleccionado ningún profesor para asignar el curso");
         return;
     }
 
     if (group == "Grupos")
     {
-        alert("No ha seleccionado ningún grupo para asignar");
+        errorSwal("No ha seleccionado ningún grupo para asignar");
         return;
     }
 
@@ -764,13 +849,7 @@ function selectCourse(divSelected)
     nameCourse = divSelected.childNodes[2].previousSibling.innerHTML;
 
     // Review if the workLoad of the professor is correct.
-    var state = lookIfProfAssign(idProfessor, stateForced);
-
-    if (state)
-    {
-        // Register the course and professor.
-        assignCourse(idCourse, idProfessor, nameCourse, nameProfessor);
-    }
+    assignedProcess(idCourse, nameCourse, idProfessor, nameProfessor, stateForced);
 }
 
 
@@ -808,14 +887,73 @@ function selectProfessor(divSelected){
     loadCoursesSelect(idProfessor);
 }
 
-
+/************************************************
+- Save the courses and send to the generator.
+*************************************************/
 function saveAssigned()
 {
-    console.log("Asignación: ");
-    for (var i = 0; i < assigned.length; i++)
+    var url = base_url + "Administrator_controller/saveClasses";
+
+    // If there are courses assigned.
+    if (assigned.length > 0)
     {
-        console.log("Elemento: " + assigned[i].idCourse + " - " + assigned[i].idProfessor + " - " + 
-            assigned[i].nameCourse + " - " + assigned[i].nameProfessor + " - " + assigned[i].idGroup +
-            " - " + assigned[i].nameGroup);
+        var jsonArray = JSON.parse(JSON.stringify(assigned));
+        saveMagistralClass(url, jsonArray);
     }
+    else
+    {
+        errorSwal("No hay información asignada."); 
+    }
+}
+
+/************************************************
+- Conexion between the class magistral class to the generator.
+- URL -> to look the function in the administrator.
+- JsonData -> data parse to an json to send.
+*************************************************/
+function saveMagistralClass(url, jsonData)
+{
+    // ajax adding data to database
+
+    var json = JSON.stringify(jsonData);
+
+    $.ajax({
+        url : url,
+        type: "POST",
+        data: 'classes=' + json,
+        dataType: "JSON",
+        beforeSend: function(){
+            document.getElementById("loader").style.display = "block";
+            opaqueCourses(0.2);
+        },
+        success: function(data)
+        {
+            document.getElementById("loader").style.display = "none";
+            opaqueCourses(1);
+
+            // Nothing todo...
+            // I have all the classes.
+            nextPageSwal("Se almacenaron los datos de las clases", data);
+
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
+
+/************************************************
+- Conexion between the class magistral class to the generator.
+- URL -> send by url the parse data.
+- JsonData -> data parse to an json to send.
+*************************************************/
+function loadGenerator(data)
+{
+    var serial = JSON.stringify(data); // JSON data.
+    let dataToEncode = encodeURIComponent(window.btoa(encodeURIComponent(serial))); // Encode.
+    // URL data is send by url.
+    // "Code" means that is going to be encripted.
+    var url = base_url + "Administration/Generator_controller" + "?code=" + dataToEncode;
+    window.location.href = url;
 }

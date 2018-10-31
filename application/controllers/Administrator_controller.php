@@ -30,8 +30,6 @@ class Administrator_controller extends CI_Controller
 		$this->load->model("DTO/PlanDTO");
 		$this->load->model("DTO/GroupDTO_model");
 		$this->load->model("DAO/CareerDAO_model");
-		
-
 		$this->administrator_logic = new Administrator_Logic();
 		$this->form_Logic = new Form_Logic();
 	}
@@ -52,7 +50,7 @@ class Administrator_controller extends CI_Controller
 	{
 		$route = "HomePage/".$viewName;
 		$this->load->view("HomePage/Header");
-		$this->load->view("HomePage/Admin/BreadCrumb", $data);
+		$this->load->view("HomePage/BreadCrumb", $data);
 		$this->load->view($route, $data);
 		$this->load->view("HomePage/Footer");
 	}
@@ -65,7 +63,9 @@ class Administrator_controller extends CI_Controller
 	function index()
 	{
 		$this->session->set_userdata('LinksState', " ");
-		$this->callView("homePage", null);
+		$data['iters'] = getBreadCrumbHome(); // Relative position
+		$data['actual'] = "Ventana Principal";
+		$this->callViewBreadCrumb("homePage", $data);
 	}
 
 	/****************************************
@@ -292,7 +292,7 @@ class Administrator_controller extends CI_Controller
 		/* These are data that the interface is going to need.*/
 		$data['iters'] = getBreadCrumbProfessors(); // Relative position
 		$data['idParent'] = $pId; // Id of the plan
-		$data['actual'] = urldecode($pName);   // Actual position
+		$data['actual'] = "Todos los profesores";   // Actual position
 		$data['ADD'] = getAddressProfessors();
 		$data['professors'] = $this->administrator_logic->getArrayProfessors(); //id parametro
 
@@ -375,11 +375,12 @@ class Administrator_controller extends CI_Controller
 	public function AssignmentCourses()
 	{
 		$data['iters'] = getBreadCrumbAssignCourses(); // Relative position
+		$data['actual'] = "Asignación";
 		$data['courses'] = $this->administrator_logic->getActiveCourses();
 		$data['groups'] = $this->administrator_logic->getAllGroups();
 		$data['periods'] = $this->administrator_logic->getArrayPeriods();
 
-		$this->callView("Admin/AssignCourses", $data);
+		$this->callViewBreadCrumb("Admin/AssignCourses", $data);
 	}
 
 	/****************************************
@@ -407,10 +408,10 @@ class Administrator_controller extends CI_Controller
 	{
 		$data['ADD'] = getAddressPeriod();
 		$data['periods'] = $this->administrator_logic->getArrayPeriods();
+		$data['iters'] = getBreadCrumbPeriods(); // Relative position
+		$data['actual'] = "Todos los períodos";   // Actual position
 
-		$this->load->view('HomePage/Header');
-        $this->load->view('HomePage/Admin/Period', $data);
-        $this->load->view("HomePage/Footer");
+        $this->callViewBreadCrumb("Admin/Period", $data);
 	}
 
 	/****************************************
@@ -470,7 +471,9 @@ class Administrator_controller extends CI_Controller
 	public function AddAdmin()
 	{
 		$data['pageName'] = "Add a new admin";
-		$this->callView("Admin/addAdmin", $data);
+		$data['iters'] = getBreadCrumbAdministrator(); // Relative position
+		$data['actual'] = "Nuevo Admin";   // Actual position
+		$this->callViewBreadCrumb("Admin/addAdmin", $data);
 	}
 
 	/*********************************************************************
@@ -499,9 +502,9 @@ class Administrator_controller extends CI_Controller
 
 	public function AdvanceDays()
 	{
-		$this->load->view("HomePage/Header");
-		$this->load->view("HomePage/Admin/AdvanceDays");
-		$this->load->view("HomePage/Footer");
+		$data['iters'] = getBreadCrumbAdvance(); // Relative position
+		$data['actual'] = "Días";   // Actual position
+		$this->callViewBreadCrumb("Admin/AdvanceDays", $data);
 	}
 
 	public function assignAdvanceDays()
@@ -512,4 +515,17 @@ class Administrator_controller extends CI_Controller
 		if($result)echo 1;
 		else echo 0;
 	}
+
+	/*********************************************************************
+	- Create the classes with the json received... and send to other controller.
+	**********************************************************************/
+	public function saveClasses()
+	{
+		$jsonUTF8 = trim($_POST['classes'], "\x0");
+		$classesJSON = json_decode($jsonUTF8, true);
+
+		validateArrayModal($classesJSON);
+		// Send to other view...
+	}
+
 }

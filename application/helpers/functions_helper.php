@@ -16,6 +16,10 @@ function getBreadCrumbProfessors()
 {
 	$breadCrumb = array(
 		array ( 
+			'NAME' => "Inicio",
+			'HTML' => "Administrator_controller"
+		),
+		array ( 
 			'NAME' => "Profesores",
 			'HTML' => "Administrator_controller/Professors"
 		)
@@ -23,6 +27,20 @@ function getBreadCrumbProfessors()
 	return $breadCrumb;
 }
 
+function getBreadCrumbPeriods()
+{
+	$breadCrumb = array(
+		array ( 
+			'NAME' => "Inicio",
+			'HTML' => "Administrator_controller"
+		),
+		array (
+			'NAME' => "Períodos",
+			'HTML' => "Administrator_controller/Period"
+		)
+	);
+	return $breadCrumb;
+}
 
 function getBreadCrumbCareer()
 {
@@ -104,13 +122,76 @@ function getBreadCrumbAssignCourses()
 			'HTML' => "Administrator_controller"
 		),
 		array (
-			'NAME' => "Periodos",
-			'HTML' => "Administrator_controller/Period"
+			'NAME' => "Generar Links",
+			'HTML' => "Administration/GenerateLinks_controller/LoadGenerateLinksView"
+		),
+		array (
+			'NAME' => "Asignación de Cursos",
+			'HTML' => "Administrator_controller/AssignmentCourses"
 		)
 	);
 	return $breadCrumb;
 }
 
+function getBreadCrumbSchedules()
+{
+	$breadCrumb = array(
+		array ( 
+			'NAME' => "Inicio",
+			'HTML' => "Administrator_controller"
+		),
+		array (
+			'NAME' => "Horarios",
+			'HTML' => "Administration/Schedules_controller/showScheduleSelector"
+		)
+	);
+	return $breadCrumb;
+}
+
+function getBreadCrumbAdvance()
+{
+	$breadCrumb = array(
+		array ( 
+			'NAME' => "Inicio",
+			'HTML' => "Administrator_controller"
+		),
+		array (
+			'NAME' => "Días de antelación",
+			'HTML' => "Administrator_controller/AdvanceDays"
+		)
+	);
+	return $breadCrumb;
+}
+
+function getBreadCrumbAdministrator()
+{
+	$breadCrumb = array(
+		array ( 
+			'NAME' => "Inicio",
+			'HTML' => "Administrator_controller"
+		),
+		array (
+			'NAME' => "Agregar Administrador",
+			'HTML' => "Administrator_controller/AddAdmin"
+		)
+	);
+	return $breadCrumb;
+}
+
+function getBreadCrumbGenerateLinks()
+{
+	$breadCrumb = array(
+		array ( 
+			'NAME' => "Inicio",
+			'HTML' => "Administrator_controller"
+		),
+		array (
+			'NAME' => "Generador de Links",
+			'HTML' => "Administration/GenerateLinks_controller/LoadGenerateLinksView"
+		)
+	);
+	return $breadCrumb;
+}
 
 function getAddressPlans()
 {

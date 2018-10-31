@@ -9,8 +9,11 @@ class Generator_controller extends CI_Controller
 	private $magistralClassList    = []; // Save the list of magistral clases 
 	private $professors            = []; // List of all professors
 	private $semesterDisponibility = []; // The list of all the schedules
-	private $assigmentList         = []; // The list of the assigned magistral clases
-
+	private $assigmentList  = array(); // The list of the assigned magistral classes
+	private $finalSolutions	= [];
+	private $errorList      = array();
+	private $limitOfresults = 100;
+	private $generator_Logic;
 
 	function __construct()
 	{
@@ -21,14 +24,14 @@ class Generator_controller extends CI_Controller
 		$this->load->model("Generator/SemesterDisponibility");
 		$this->load->model("Generator/FillInformation");
 		$this->load->model("Generator/Activity");
-		$this->load->model("Generator/Schedule");
 		$this->load->model("Generator/Plan");
 		$this->load->model("Generator/Group");
+		$this->load->model("Generator/Solution");
 		$this->load->model("Generator/Block");
 		$this->load->model("Generator/Course");
 		$this->load->model("Generator/Professor");
 		$this->load->model("Generator/MagistralClass");
-		$this->load->model("Generator/assignedCarrerCourseOnView");
+		$this->load->model("Generator/AssignedCourse");
 
 		// DAO's
 		$this->load->model("DAO/ActivityDAO_model");
@@ -39,42 +42,60 @@ class Generator_controller extends CI_Controller
 		$this->load->model("DAO/CourseDAO_model");
 		$this->load->model("DAO/ProfessorDAO_model");
 		$this->load->model("DAO/FormDAO_model");
+
+		$this->load->library('Generator_Logic');
+		$this->generator_Logic = new Generator_Logic();
 	}
 
 
 	// Creates a list of data from asigment courses (idprofesor, idgrupo, etc) 
-	private function readDataFromView()
+	private function readDataFromView($classes)
 	{
-		// Aviles
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(2, 5, 1);
-		$this->idsOfMagistralClass[] = $data;
-
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(2, 6, 2);
-		$this->idsOfMagistralClass[] = $data;
-
-		// carlos
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(3, 9 , 1);
-		$this->idsOfMagistralClass[] = $data;
-
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(3, 10, 2);
-		$this->idsOfMagistralClass[] = $data;
-
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(3, 11, 3);
-		$this->idsOfMagistralClass[] = $data;
-
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(3, 15, 4);
-		$this->idsOfMagistralClass[] = $data;
 		
-		// chepe
-		$data = new assignedCarrerCourseOnView();
-		$data->setAtributes(4, 4, 1);
-		$this->idsOfMagistralClass[] = $data;		
+		// If you receive the data by URL.
+		/*
+		for($i = 0; $i < count($classes); $i++)
+		{
+			$idProf = $classes[$i]->idProfessor;
+			$idCourse = $classes[$i]->idCourse;
+			$idGroup = $classes[$i]->idGroup;
+			$data = new AssignedCourse();
+			$data->setAtributes($idProf, $idCourse, $idGroup);
+			$this->idsOfMagistralClass[] = $data;
+		}
+		*/
+		
+		
+			
+		// Adriana
+		$data = new AssignedCourse();
+		$data->setAtributes(1, 4, 1);
+		$this->idsOfMagistralClass[] = $data;
+
+		// Aviles
+		$data = new AssignedCourse();
+		$data->setAtributes(2, 5, 2);
+		$this->idsOfMagistralClass[] = $data;
+
+		// Carlos
+		$data = new AssignedCourse();
+		$data->setAtributes(3, 6, 3);
+		$this->idsOfMagistralClass[] = $data;
+
+		$data = new AssignedCourse();
+		$data->setAtributes(3, 16, 1);
+		$this->idsOfMagistralClass[] = $data;
+
+		
+	}
+
+
+	function callView($viewName, $data)
+	{
+		$route = "HomePage/".$viewName;
+		$this->load->view("HomePage/Header");
+		$this->load->view($route, $data);
+		$this->load->view("HomePage/Footer");
 	}
 
 
@@ -143,6 +164,48 @@ class Generator_controller extends CI_Controller
 	}
 
 
+	/***************************************************************
+	*Function that returns a list of filtered schedules with state *
+	*1 in the semestresDisponibility                               *
+	*Input:          							                   *
+	*	-block: It is the numer of the block                       *
+	*   -scheduleList: It is the list of schedules to filter       *
+	*Output: 									                   *
+	*	-Returns an array with filtered schedules                  *
+	***************************************************************/
+	private function filterSchedules($block, $scheduleList)
+	{
+		$validSchedules = array();
+		foreach ($scheduleList as $numSchedule) 
+		{
+			$val = $this->semesterDisponibility->verifyScheduleState($block, $numSchedule);
+			if ($val == 1) 
+			{
+				array_push($validSchedules, $numSchedule);
+			}			
+		}
+		return $validSchedules;
+	}
+
+
+	/***************************************************************
+	*Function that returns a list of schedules numbers             *
+	*Input:          							                   *
+	*   -scheduleList: It is the list of schedules to get numbers  *
+	*Output: 									                   *
+	*	-Returns an array with schedule numbers                    *
+	***************************************************************/
+	private function loadSchedulesNumbers($scheduleList)
+	{
+		$schedules = array(); 
+		foreach ($scheduleList as $schedule) 
+		{
+			array_push($schedules, $schedule);
+		}
+		return $schedules;
+	}
+
+
 	/********************************************************
 	*Function that fiils the list of schedules, taking      * 
 	*into account the blocked and the available             *
@@ -159,15 +222,18 @@ class Generator_controller extends CI_Controller
 	public function createSemesterDisponibility($pIdPlan)
 	{
 		$fillInformation = new FillInformation();
+
 		// Find the blocks
-		$blocks    = $fillInformation->getBlocks($pIdPlan);
-		$numBlocks = count($blocks);
+		$numBlocks = $fillInformation->getNumBlocks($pIdPlan);
+
 		// Find the schedules 
 		$schedules    = $fillInformation->getSchedules();
 		$numSchedules = count($schedules);
+
 		// Create the complete schedule
 		$this->semesterDisponibility = new SemesterDisponibility();
 		$this->semesterDisponibility->fillInformation($numBlocks, $numSchedules);
+		
 		// Bloks the schedules that the carrer wants
 		foreach ($schedules as $schedule) 
 		{
@@ -181,14 +247,165 @@ class Generator_controller extends CI_Controller
 	}
 
 
+	/***************************************************************************
+	*Function that returns a list of valid schedules for a magistral class     *
+	*Input:          							                               *
+	*	-pProfessorScheduleList: It is the array that we have to use to get    *
+	*    the schedules                                                         *
+	*Output: 									                               *
+	*	-Returns an array with valid schedules for that magistral class        *
+	***************************************************************************/
+	public function getValidSchedules($pMagistralClass)
+	{
+		$professor = $pMagistralClass->getProfessor();
+		$schedules = $this->loadSchedulesNumbers($professor->getSchedules()); 
+		$course    = $pMagistralClass->getCourse();
+		$lessons   = $course->getTotalLessons();
+		$numBlock  = $course->getBlock()->getNumber();
+		$filteredSchedules = $this->filterSchedules($numBlock, $schedules);
+		$validSchedule = $this->generator_Logic->getValidSchedules($filteredSchedules, $lessons);
+		return $validSchedule;
+	}
 
 
+	/***************************************************************************
+	*Function that add an assignment list in the final solution. 			   *
+	***************************************************************************/
+	public function storeGeneratorResult()
+	{
+		// Clone the list of assigments
+		$solution = new Solution();
+		$data = array();
+		foreach ($this->assigmentList as $assignClasses) {
+			$data[] = clone $assignClasses;
+		}
+		$solution->setMagistralClassesList($data, clone $this->semesterDisponibility);
+		$this->finalSolutions[] = $solution;
+	}
 
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+	/***************************************************************************
+	*Function that save a magistral class in assigment list and blocks the     * 
+	*schedules in the semestres disponibility                                  *
+	*Input:          							                               *
+	*	-cm: It is the magistral class                                         *
+	***************************************************************************/
+	private function saveClassInAssigmentList($cm)
+	{
+		// Block the schedules in semester disponibility 
+		$block = $cm->getCourse()->getBlock()->getNumber();
+		foreach ($cm->getAssignedSchedules() as $schedule) 
+		{
+			$this->semesterDisponibility->desactivateSchedule($block, $schedule);
+		}
+
+		// Add the magistral class to the assigment list 
+		array_push($this->assigmentList, clone $cm);
+	}
 
 
+	/***************************************************************************
+	*Function that return to the semestres disponibility, the schedules of     * 
+	*the magistral class.                                                      *
+	*Input:          							                               *
+	*	-block: It is the number of the block                                  *
+	*	-list:  It is the list of schedules                                    *
+	***************************************************************************/
+	private function returnSchedulesToSemesterDisponibility($block, $list)
+	{
+		foreach ($list as $l) {
+			$this->semesterDisponibility->activeSchedule($block, $l);
+		}
+	}
+
+
+	/***************************************************************************
+	*Function that assigned a magistral class and generate a solution          *
+	*Input:          							                               *
+	*	-cm:    It is the magistral class                                      *
+	*	-index: It is the index of the magistral class                         *
+	***************************************************************************/
+	private function generator($cm, $index)
+	{
+		$filteredList = $this->getValidSchedules($cm);
+		if (!count($filteredList)) 
+		{
+			$cm->addRejectedCount();
+			return;
+		}
+		foreach ($filteredList as $schedule) 
+		{
+			// Save the temp schedule used for CM
+			$tempSchedule = $schedule;
+
+			// Delete the schedules of the professor
+			$professorSchedules = $cm->getProfessor()->getSchedules();
+			$finalListSchedules = $this->generator_Logic->deleteSchedulesToList($professorSchedules, $schedule);
+			$cm->getProfessor()->setSchedules($finalListSchedules);
+
+			// Assigned the CM to the assigmentList 
+			$cm->setAssignedSchedules($schedule);
+			$cm->addAvailableCount();
+			$this->saveClassInAssigmentList($cm);
+			if (count($this->magistralClassList) == ($index+1)) 
+			{
+				$this->storeGeneratorResult();
+			}
+			else{
+				$newIndex = $index + 1;
+				if ($newIndex < count($this->magistralClassList)) 
+				{
+					$this->generator($this->magistralClassList[$newIndex], $newIndex);
+				}
+				else{
+					return;
+				}
+			}
+
+			if (count($this->finalSolutions) == $this->limitOfresults) 
+			{
+				return;
+			}
+
+			// saca el curso de la lista y pone como habilitados los horarios del semestre
+			$block = $cm->getCourse()->getBlock()->getNumber();	
+			$this->returnSchedulesToSemesterDisponibility($block, $tempSchedule);
+			array_pop($this->assigmentList);
+			
+			// le devuelvo los horarios el profesor 
+			$list = $cm->getProfessor()->getSchedules();
+			$returnedSchedules = $this->generator_Logic->addSchedulesToList($list, $tempSchedule);
+			$cm->getProfessor()->setSchedules($returnedSchedules);
+		}
+	}
+
+
+	/****************************************************************************
+	* Function that fills a list with error about the magistral class assigment *
+	****************************************************************************/
+	private function findErrorsInAssigment($list)
+	{
+		foreach ($list as $cm) 
+		{
+			if ($cm->getCountOfAvailableSpaces() == 0) 
+			{
+				$error =  "Curso: ".$cm->getCourse()->getCode()." - ".$cm->getCourse()->getName().' - Grupo '.$cm->getGroup()->getNumber()."<br>";
+				$error .= "Profesor: ".$cm->getProfessor()->getName()."<br>";
+				$error .= "Error: NO pudo ser asignado, "; 
+				if (count($cm->getProfessor()->getSchedules()) == 0) 
+				{
+					$error .= "el profesor no cuenta con horarios suficientes para la asignación de este curso.";
+					$error .= "Solución: Habilite el formulario del profesor para que pueda agregar más horarios y luego continúe con la generación <br>";
+				}
+				else
+				{
+					$error .= "no se logró colocar en ninguna opción de horario válida <br>";
+					$error .= "Solución: Asigne el curso a otro profesor para poder continuar<br>";
+				}
+				array_push($this->errorList, $error);
+			}	
+		}
+	}
 
 
 	/***********************************************
@@ -196,8 +413,19 @@ class Generator_controller extends CI_Controller
 	***********************************************/
 	public function index()
 	{
-		// Esto se debe aliminar, solo carga datos de prueba 
-		$this->readDataFromView(); 
+		//Verify if code value exist
+		if(isset($_GET['code']))
+		{
+			$classAssigned = $_GET['code'];
+			$classes = json_decode(rawurldecode(base64_decode(rawurldecode($classAssigned))));
+			$this->readDataFromView($classes); 
+		}
+		else{
+			$this->readDataFromView(null); 
+		}
+
+		//print_r($this->idsOfMagistralClass);
+
 		// Load the professors information 
 		$this->fillProfessors($this->idsOfMagistralClass);
 		// Load the magistral clases information 
@@ -214,26 +442,139 @@ class Generator_controller extends CI_Controller
 		// Verificación de INTRO y TALLER
 			// Se debe hacer la verificación de los cursos INTRO y TALLER, los cuales deben tener un mismo # de clases magistrales asignadas. 
 
-		// ***************************************************************************
-		// Generar los horarios  (AQUI ESTÁ LO DURO)
-		/*
-			Si la lista esta vacia
-				- creo la solucion correcta 
-				- me detengo: para que evalue ese mismo curso en otro hora a ver si hay más soluciones. 
+		// Call the generator algorithm 
+		$cm = $this->magistralClassList[0];
+		$this->generator($cm, 0);
 
-			Dependiendo de las lecciones del curso, se seleccionan horas seguidas y se guardan en una lista temporal
+		//$data['solutions'] = $this->finalSolutions;
+		//$this->callView('Generator/Generator', $data);
 
-			Verifico si el horario está disponible. 
-				- Si: Meto el curso en la solucion
-					- Elimino el horario de la lista de la solucion
-					- Eliminar esas horas de la lista del profesor 
-					- Elimino la clase de la solucion 
-					- Llamo a generar de nuevo. 
-				- No: Voy a buscar otro horario. 
-					- se devuelve el horario al profesor 
-				- Si no tengo opcion:	Me detengo.
-					// Para que la clase anterior busque otro horario
-		*/
-		// ***************************************************************************
+		$this->printResultList();
+
+	}
+
+
+
+
+	
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	private function printResultList()
+	{
+		echo "<br><br> SOLUCIONES <br><br><br><br>";
+		$count = 1;
+		foreach ($this->finalSolutions as $sol) {
+			echo "Solucion: ".$count."<br>";
+			$this->printSolution($sol->getMagistralClassesList());
+			echo "### Puntage de la solución: ".$sol->getPoints().' ###';
+			echo "<br><br><br><br>";
+			$count = $count + 1;
+		}
+	}
+
+
+
+	private function printSolution($sol){
+		$points = 0;
+		foreach ($sol as $x) 
+		{
+			echo 'Profesor: '.$x->getProfessor()->getName().'<br>';
+			echo 'Curso: '.$x->getCourse()->getName().'<br>';
+			echo 'Grupo: '.$x->getGroup()->getNumber().'<br>';
+			echo 'Horarios: ';
+			foreach ($x->getAssignedSchedules() as $y) 
+			{
+				echo $y.' - ';
+			}
+			echo '<br>';
+			$points += $x->getEvaluation();
+		}
+		return $points;
+	}
+
+
+
+	public function printmatrix($m){
+		foreach ($m as $x) {
+			echo $x.' - ';
+		}
+	}
+
+
+
+// Solo para ver resultados
+	public function printTuples($list){
+		foreach ($list as $l) {
+			echo $l[0].' - '.$l[1].' --@@-- ';
+		}
+	}
+
+	public function printTuples2($list){
+		foreach ($list as $row) {
+			foreach ($row as $val) 
+			{
+				echo $val.'-';
+			}
+			echo '<br>';
+		}
+		echo '<br>';
 	}
 }

@@ -6,6 +6,7 @@ class SemesterDisponibility {
 	****************************************/
 	private $listOfSchedules;
 	private $numBlocks;
+	private $ListOfBlocks;
 	private $numSchedules;
 	private $numDays;
 
@@ -13,8 +14,13 @@ class SemesterDisponibility {
 	{
 	}
 
+	public function getNumBlocks(){
+		return $this->numBlocks;
+	}
+
+
 	/**********************************************
-	Fill the matrix [$pBlocks][$pSchedules][$pDays]
+	Fill the matrix [$pBlocks][$pSchedules]
 	***********************************************/
 	function fillInformation($pBlocks, $pSchedules)
 	{
@@ -24,18 +30,18 @@ class SemesterDisponibility {
 		{
 			for ($j = 1; $j <= $this->numSchedules; $j++) 
 			{ 
-			 	$this->listOfSchedules[$i][$j] = 0;
+			 	$this->listOfSchedules[$i][$j] = 1;
 			} 
 		}
 	}
 
 
 	/**********************************************************
-	If the space is available, put in 1 the schedule 
+	If the space is available, put in 2 the schedule 
 	**********************************************************/
 	function activeSchedule($pBlocks, $pSchedules)
 	{
-		if ($this->listOfSchedules[$pBlocks][$pSchedules] == 0) 
+		if ($this->listOfSchedules[$pBlocks][$pSchedules] == 2) 
 		{
 			$this->listOfSchedules[$pBlocks][$pSchedules] = 1;
 		}
@@ -49,7 +55,7 @@ class SemesterDisponibility {
 	{
 		if ($this->listOfSchedules[$pBlocks][$pSchedules] == 1) 
 		{
-			$this->listOfSchedules[$pBlocks][$pSchedules] = 0;
+			$this->listOfSchedules[$pBlocks][$pSchedules] = 2;
 		}
 	}
 
@@ -64,20 +70,37 @@ class SemesterDisponibility {
 	}
 
 
-	/**********************************************************
-	Returns 0 if the field is empty. 
-	Returns 1 if the field is not empty.
-	**********************************************************/
-	function verifyScheduleState($pBlocks, $pSchedules)
+	/*****************************************************
+	*Returns 0: If the schedule is blocked by the carrer *
+	*Returns 1: If is an available schedule              *
+	*Returns 2: If is not an available schedule          *
+	*****************************************************/
+	public function verifyScheduleState($pBlocks, $pSchedules)
 	{
-		if ($this->listOfSchedules[$pBlocks][$pSchedules] == 0) 
-		{
-			return 0;
-		}
-		else{
-			return 1;
-		}
+		return $this->listOfSchedules[$pBlocks][$pSchedules];
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	/***************

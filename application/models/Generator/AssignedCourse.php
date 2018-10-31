@@ -1,13 +1,12 @@
 <?php
-
-class assignedCarrerCourseOnView
+class AssignedCourse
 {
 	public $idProfessor;
     public $idCourse;
 	public $idGroup;
 
 	function __construct(){}
-
+    
     function setAtributes($pProfessor, $pCourse, $pGroup)
     {
         $this->idProfessor = $pProfessor;
@@ -15,5 +14,4 @@ class assignedCarrerCourseOnView
         $this->idGroup     = $pGroup;
     }
 }
-
 ?>
