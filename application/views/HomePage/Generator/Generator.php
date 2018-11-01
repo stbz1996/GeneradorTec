@@ -1,7 +1,7 @@
 <?php	
 
 	// Asigna los colores 
-	$colors = array('#B381CB', '#C8BA30', '#25A575', '#3EFA06', '#06FA9E', '#A0B2AB', '#167ECA', '#6EC1FD', '#2D0DCD', '#900DCD', '#CB81BE', '#EE18C9', '#EE1859', '#53C830');
+	$colors = array('#F45D8B', '#F4B45D', '#F4DF5D', '#9BF45D', '#5DF4C9', '#5DBDF4', '#5D6BF4', '#9F5DF4', '#EB5DF4', '#F45DBB', '#F45D7F', '#C8D3C8', '#FE736A', '#EAFE6A');
 	shuffle($colors);
 
 
@@ -49,13 +49,13 @@
 	);
 	
 	// number of total solutions 
-	$numSolutions = 5;//count($solutions);
+	$numSolutions = count($solutions);
 ?>
 
 <?php 
 for ($r = 0; $r < $numSolutions; $r++) { ?>
 	<div class="titles">
-	  	<h1>Soluciones de horarios #<?= $r + 1 ?></h1>
+	  	<h1>Recomendación de Horario #<?= $r + 1 ?></h1>
 	</div>
 
 	<div class="totalContainer">
@@ -118,7 +118,7 @@ for ($r = 0; $r < $numSolutions; $r++) { ?>
 					$color      = $cm->colorRepresentationForView;
 					?>
 					<div style="background: <?= $color ?>;">
-						<?= $code.' '.$courseName.' '.$group ?>
+						<?= $code.' '.$courseName.' Grupo '.$group ?>
 					</div>
 				<?php } ?>
 			</div>

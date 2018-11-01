@@ -68,8 +68,6 @@ class Generator_controller extends CI_Controller
 		}
 		*/
 		
-		
-			
 		// Adriana
 		$data = new AssignedCourse();
 		$data->setAtributes(1, 4, 1);
@@ -270,13 +268,9 @@ class Generator_controller extends CI_Controller
 		return $validSchedule;
 	}
 
-	public function cmp($elem1, $elem2)
-	{
-	    if ($elem1->getPoints() == $elem2->getPoints()) {
-	        return 0;
-	    }
-	    return ($elem1->getPoints() < $elem2->getPoints()) ? 1 : -1;
-	}
+
+
+	
 
 
 	/***************************************************************************
@@ -324,6 +318,21 @@ class Generator_controller extends CI_Controller
 			//Elimina el ultimo elemento de la lista
 
 		//$this->finalSolutions[] = $solution;
+	}
+
+
+	/***********************************
+	*Compare two elements and returns: *
+	* 0  if are equals                 *
+	* 1  if the first one is lower     *
+	* -1 if the first one is bigger    *
+	***********************************/
+	public function cmp($elem1, $elem2)
+	{
+	    if ($elem1->getPoints() == $elem2->getPoints()) {
+	        return 0;
+	    }
+	    return ($elem1->getPoints() < $elem2->getPoints()) ? 1 : -1;
 	}
 
 
