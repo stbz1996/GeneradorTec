@@ -59,7 +59,7 @@
       </select>
     </div>
 
-    <div class="tableColumnCheckExtension">
+    <div class="tableColumnCheckExtension" <?= $workload == 100 ? "style='display: block;'" : "style='display: none;'"  ?>>
       <p class="extension-txt">¿Ampliación?</p>
       
       <label class="container">
