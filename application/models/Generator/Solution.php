@@ -64,7 +64,7 @@ class Solution
 				}
 
 				/* Assign points */
-				$lostPoints += 2*$points;
+				$lostPoints += 3*$points;
 			}
 
 			/* Go through each group */
@@ -76,7 +76,7 @@ class Solution
 				/* Case there's space between schedules */
 				if($points)
 				{
-					$lostPoints += 2*$points;
+					$lostPoints += 3*$points;
 				}
 			}
 		}
