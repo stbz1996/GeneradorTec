@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+ini_set('max_execution_time', 0); 
+ini_set('memory_limit','2048M');
 
 class Generator_controller extends CI_Controller 
 {
@@ -12,8 +14,9 @@ class Generator_controller extends CI_Controller
 	private $assigmentList  = array(); // The list of the assigned magistral classes
 	private $finalSolutions	= [];
 	private $errorList      = array();
-	private $limitOfresults = 100;
+	private $limitOfresults = 25000;
 	private $generator_Logic;
+	private $totalSolutions = 0;
 
 	function __construct()
 	{
@@ -267,6 +270,14 @@ class Generator_controller extends CI_Controller
 		return $validSchedule;
 	}
 
+	public function cmp($elem1, $elem2)
+	{
+	    if ($elem1->getPoints() == $elem2->getPoints()) {
+	        return 0;
+	    }
+	    return ($elem1->getPoints() < $elem2->getPoints()) ? 1 : -1;
+	}
+
 
 	/***************************************************************************
 	*Function that add an assignment list in the final solution. 			   *
@@ -276,11 +287,43 @@ class Generator_controller extends CI_Controller
 		// Clone the list of assigments
 		$solution = new Solution();
 		$data = array();
+		$this->totalSolutions ++;
 		foreach ($this->assigmentList as $assignClasses) {
 			$data[] = clone $assignClasses;
 		}
 		$solution->setMagistralClassesList($data, clone $this->semesterDisponibility);
-		$this->finalSolutions[] = $solution;
+
+		if(count($this->finalSolutions) < 5)
+		{
+			$this->finalSolutions[] = $solution;
+			usort($this->finalSolutions, array($this, 'cmp'));
+		}
+		else
+		{
+			$worstScore = $this->finalSolutions[0]->getPoints();
+			foreach ($this->finalSolutions as $finalSolution)
+			{
+				$solutionScore = $finalSolution->getPoints();
+				if($solutionScore < $worstScore)
+				{
+					$worstScore = $solutionScore;
+				}
+			}
+
+			if($worstScore < $solution->getPoints())
+			{
+				$this->finalSolutions[] = $solution;
+				usort($this->finalSolutions, array($this, 'cmp'));
+				array_pop($this->finalSolutions);
+			}
+		}
+		//Obtengo la solucion mas mala
+		//Si solution tiene mas puntos que la mala
+			//Se agrega la lista
+			//Se ordena la lista
+			//Elimina el ultimo elemento de la lista
+
+		//$this->finalSolutions[] = $solution;
 	}
 
 
@@ -317,6 +360,7 @@ class Generator_controller extends CI_Controller
 			$this->semesterDisponibility->activeSchedule($block, $l);
 		}
 	}
+
 
 
 	/***************************************************************************
@@ -362,7 +406,7 @@ class Generator_controller extends CI_Controller
 				}
 			}
 
-			if (count($this->finalSolutions) == $this->limitOfresults) 
+			if ($this->totalSolutions == $this->limitOfresults) 
 			{
 				return;
 			}
@@ -536,6 +580,7 @@ class Generator_controller extends CI_Controller
 			echo "<br><br><br><br>";
 			$count = $count + 1;
 		}
+		echo $this->totalSolutions;
 	}
 
 

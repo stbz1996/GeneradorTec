@@ -562,7 +562,12 @@ function createPDF(workload, extension, activitiesDescription, activitiesWorkPor
 			fillColor: '#0d39a0'
 		}
 	});
-	doc.save('formulario.pdf');
+
+	/* Name of form */
+	var namePDF = $("#nameProfessor").text();
+	var namePDF = namePDF + "_" + $("#namePeriod").text().replace(/,/g, "");
+	namePDF = namePDF.replace(/ /g, "_");
+	doc.save(namePDF+'.pdf');
 }
 
 
