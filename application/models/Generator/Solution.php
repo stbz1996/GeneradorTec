@@ -6,15 +6,99 @@ class Solution
 	private $semDisp;
 	private $points = 0;
 	
+	
 	function __construct(){}
 
 	
-	/* JORGEEEEEEEEEEEEEEEEEEEEEEEEEEE */
-	private function filterBySpacesBetweenSchedules()
+	/***************************************************************
+	*Function that apply a filter to assign points to the solution *
+	*by spaces between schedules. 								   *
+	***************************************************************/
+	private function filterBySpacesBetweenSchedules($pList)
 	{
+		$schedulesBlock = array();
+		$actualBlock = 1;
+		foreach ($pList as $cm) 
+		{
+			$newBlock = $cm->getCourse()->getBlock()->getNumber();
 
+			/* Check if there's new block*/
+			if($actualBlock != $newBlock)
+			{
+				$this->points -= $this->assignPointSpaces($schedulesBlock);
+				$actualBlock = $newBlock;
+				$schedulesBlock = array();
+			}
+
+			/* Get assigned schedules and store in schedulesBlock*/
+			$schedulesCM = $cm->getAssignedSchedules();
+			$schedulesBlock = array_merge($schedulesBlock, $schedulesCM);
+		}
+
+		/* Assign points of the last block */
+		$this->points -= $this->assignPointSpaces($schedulesBlock);
 	}
 
+	/***************************************************************
+	*Function that get points of schedules between spaces 		   *
+	***************************************************************/
+	private function assignPointSpaces($schedules)
+	{
+		$lostPoints = 0;
+
+		/* Get and go through group of schedules by day */
+		sort($schedules);
+		$groupSchedules = $this->getGroupSchedules($schedules);		
+		foreach ($groupSchedules as $group)
+		{
+
+			/* If first element doesn't correspond the first schedules*/
+			if($group[0] > 6)
+			{
+				//There's available space before the first schedule
+				$points = ($group[0] - ($group[0] % 6)) / 6;
+
+				/* Case last day*/
+				if(!($group[0] % 6))
+				{
+					$points -= 1;
+				}
+
+				/* Assign points */
+				$lostPoints += 2*$points;
+			}
+
+			/* Go through each group */
+			for($i = 1; $i < count($group); $i++)
+			{
+				/* Get points */
+				$points = (($group[$i] - $group[$i - 1]) / 6) - 1;
+
+				/* Case there's space between schedules */
+				if($points)
+				{
+					$lostPoints += 2*$points;
+				}
+			}
+		}
+		return $lostPoints;
+	}
+
+	/***************************************************************
+	*Function that get group of schedules by day.		 		   *
+	***************************************************************/
+	private function getGroupSchedules($schedules)
+	{
+		$groupSchedules = array();
+
+		foreach ($schedules as $schedule)
+		{
+			$pos = ($schedule - 1) % 6;
+			$groupSchedules[$pos][] = $schedule;
+		}
+
+		return $groupSchedules;
+	}
 
 
 	/***************************************************************
@@ -54,6 +138,10 @@ class Solution
 				{
 					$this->points += 1;
 				}
+				else
+				{
+					$this->points -= 1;
+				}
 
 				$val = (($schedule-1) % 6);
 				$days[$val] += 1;
@@ -76,7 +164,7 @@ class Solution
 		$this->magistralClassesList = $pList;
 		$this->semDisp = $pSem;
 		$this->filterByCM($pList);
-		$this->filterBySpacesBetweenSchedules();
+		$this->filterBySpacesBetweenSchedules($pList);
 	}
 
 

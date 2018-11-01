@@ -85,14 +85,14 @@ class Generator_controller extends CI_Controller
 		$data = new AssignedCourse();
 		$data->setAtributes(3, 16, 1);
 		$this->idsOfMagistralClass[] = $data;
-
-		
 	}
 
 
-	function callView($viewName, $data)
+	function callResultPage()
 	{
-		$route = "HomePage/".$viewName;
+		$route = "HomePage/Generator/Generator";
+		$data['solutions'] = $this->session->userdata('solutions');
+		$data['numBlocks'] = $this->semesterDisponibility->getNumBlocks();
 		$this->load->view("HomePage/Header");
 		$this->load->view($route, $data);
 		$this->load->view("HomePage/Footer");
@@ -445,27 +445,20 @@ class Generator_controller extends CI_Controller
 		// Call the generator algorithm 
 		$cm = $this->magistralClassList[0];
 		$this->generator($cm, 0);
-		
-		// #######################################
-		// ### Check if there are no solutions ###
-		// ###     Find the errors en list     ###
-		// #######################################
+
 		if (!count($this->finalSolutions)){
 			$this->findErrorsInAssigment($this->magistralClassList);
+			foreach ($this->errorList as $error) 
+			{
+				echo '<br><br><br>'.$error;
+			}
 		}
 
 
-
-		foreach ($this->errorList as $error) 
-		{
-			echo '<br><br><br>'.$error;
-		}
-
 		
-		$data['solutions'] = $this->finalSolutions;
-		$this->callView('Generator/Generator', $data);
-		
+		$this->session->set_userdata('solutions' , $this->finalSolutions);
 		//$this->printResultList(); // must be deleted
+		$this->callResultPage();
 	}
 
 

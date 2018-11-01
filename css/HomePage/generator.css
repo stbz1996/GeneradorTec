@@ -1,23 +1,54 @@
-.solutionContainer{
-	width: 100%;
-	font-family: Verdana;
-    box-shadow: 17px 20px 19px -5px black;
-    border-radius: 35px;
-    margin-bottom: 3%;
-    overflow: hidden;
+
+.totalContainer{
+	width: 106%;
+	overflow: hidden;
+	margin-left: -1%;
 }
+
+.solutionContainer{
+	width: 62%;
+	font-family: Verdana;
+    margin-bottom: 2%;
+    margin-top: 1%;
+    overflow: hidden;
+    float: left;
+    box-shadow: 15px 20px 25px;
+}
+
+.InfoContainer
+{
+	overflow: hidden;
+	width: 33%; 
+	float: left;
+	margin: 1% 0.5% 0% 0.5%;
+}
+
+.InfoContainer p{
+	font-size: 1em;
+	color: black;
+	margin: 1%;
+	font-weight: bold;
+}
+
+.InfoContainer div{
+	text-align: center;
+	margin: 1%;
+	padding-top: 1%;
+	font-size: 0.8em;
+	border-radius: 10px;
+}
+
 
 .itemSpace{
 	float: left;
 	width: 100%;
 	overflow: hidden;
 	background: #2B3A75;
-	border: 0.05px black solid;
+	border: 1px black solid;
 }
 
 .solutionContainer div div{
 	float: left;
-	
 	width: 14.28%;
 	overflow: hidden;
 	text-align: center;
@@ -25,31 +56,30 @@
 
 .textBlock{
 	font-weight: bold;
-	font-size: 1.3vw;
+	font-size: 0.9em;
+	width: 100%;
 }
 
 .itemDay{
 	background: #2B3A42;
 	color: white;
 	font-weight: bold;
-	font-size: 15px;
-	font-size: 1.25vw;
+	font-size: 0.8em;
 }
 
 .itemHour{
 	background: #2B3A75;
 	color: white;
-	font-size: 0.8vw;
-	height: auto;
-	margin-top: 3.2%;
-	overflow: hidden;
+	font-size: 0.65em;
+	height: 18px;
+	padding-top: 3px;
 }
 
 .itemCourse{
 	background: white;
 	color: black;
-	font-size: 0.7vw;
+	font-size: 0.7em;
 	padding: 0.5%;
-	height: auto;
-	border: 0.03px black solid;
+	height: 18px;
+	border-left: 1px black solid;
 }

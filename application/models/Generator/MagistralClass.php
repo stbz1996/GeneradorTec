@@ -6,13 +6,12 @@ class MagistralClass
     private $course;
 	private $group;
 	private $assignedSchedules;
-
 	private $countOfAvailableSpaces = 0;
 	private $countOfRejectedSpaces  = 0;
-	private $evaluation = 0; // This is calculed baed in the schedules 
+	private $evaluation             = 0;
+	public  $colorRepresentationForView;
 
 	function __construct(){}
-
 
 	public function getCountOfRejectedSpaces(){
 		return $this->countOfRejectedSpaces;
