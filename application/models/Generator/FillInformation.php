@@ -7,6 +7,24 @@ class FillInformation{
 	{
 	}
 
+
+	function serviceLessonAssigned($pIdPeriod)
+	{
+		$result = array();
+		$courses       = new CourseDAO_model();
+		$servieLessons = $courses->serviceLessonAssigned($pIdPeriod);
+		foreach ($servieLessons as $sl) 
+		{
+			$temp = array();
+			array_push($temp, $this->fillGroup($sl->idGroup));
+			array_push($temp, $this->fillCourse($sl->idCourse));
+			array_push($temp, $sl->numberSchedule);
+			array_push($result, $temp);
+		}
+		return $result;
+	}
+
+
 	/*********************************************
 	*Function that returns an activity by his id *
 	*Input: 									 *

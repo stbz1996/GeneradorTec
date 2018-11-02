@@ -138,7 +138,7 @@ class FormDAO_model extends CI_Model
 
 	public function updateForm($form)
 	{
-		$changes = array('dueDate' => $form->getDueDate());
+		$changes = array('dueDate' => $form->getDueDate(), 'state' => 1);
 		$this->db->where('idProfessor', $form->getIdProfessor());
 		$this->db->where('idPeriod', $form->getIdPeriod());
 		$this->db->update('Form', $changes);

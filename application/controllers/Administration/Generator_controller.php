@@ -14,9 +14,11 @@ class Generator_controller extends CI_Controller
 	private $assigmentList  = array(); // The list of the assigned magistral classes
 	private $finalSolutions	= [];
 	private $errorList      = array();
-	private $limitOfresults = 25000;
+	private $limitOfresults = 100000;
 	private $generator_Logic;
 	private $totalSolutions = 0;
+	private $serviceLessons = array();
+	private $period = 1;
 
 	function __construct()
 	{
@@ -56,7 +58,7 @@ class Generator_controller extends CI_Controller
 	{
 		
 		// If you receive the data by URL.
-		/*
+		
 		for($i = 0; $i < count($classes); $i++)
 		{
 			$idProf = $classes[$i]->idProfessor;
@@ -66,8 +68,8 @@ class Generator_controller extends CI_Controller
 			$data->setAtributes($idProf, $idCourse, $idGroup);
 			$this->idsOfMagistralClass[] = $data;
 		}
-		*/
 		
+		/*
 		// Adriana
 		$data = new AssignedCourse();
 		$data->setAtributes(1, 4, 1);
@@ -86,6 +88,7 @@ class Generator_controller extends CI_Controller
 		$data = new AssignedCourse();
 		$data->setAtributes(3, 16, 1);
 		$this->idsOfMagistralClass[] = $data;
+		*/
 	}
 
 
@@ -97,6 +100,28 @@ class Generator_controller extends CI_Controller
 		$this->load->view("HomePage/Header");
 		$this->load->view($route, $data);
 		$this->load->view("HomePage/Footer");
+	}
+
+
+
+	private function fillServiceLessons($pIdPeriod)
+	{
+		$listOfServicesLessons = array();
+		$fillInformation = new FillInformation();
+		$this->serviceLessons = $fillInformation->serviceLessonAssigned($pIdPeriod);
+		foreach ($this->serviceLessons as $x) 
+		{
+			$professor = new Professor();
+			$professor->setName('');
+			// Create the magistral class
+			$magistralClass = new MagistralClass();
+			$magistralClass->setCourse($x[1]);
+			$magistralClass->setGroup($x[0]);
+			$magistralClass->setProfessor($professor);
+			$magistralClass->setAssignedSchedulesForNonCarrerCourses(array($x[2]));
+			array_push($listOfServicesLessons, $magistralClass);
+		}
+		$this->serviceLessons = $listOfServicesLessons;
 	}
 
 
@@ -269,10 +294,6 @@ class Generator_controller extends CI_Controller
 	}
 
 
-
-	
-
-
 	/***************************************************************************
 	*Function that add an assignment list in the final solution. 			   *
 	***************************************************************************/
@@ -282,42 +303,49 @@ class Generator_controller extends CI_Controller
 		$solution = new Solution();
 		$data = array();
 		$this->totalSolutions ++;
-		foreach ($this->assigmentList as $assignClasses) {
+		foreach ($this->assigmentList as $assignClasses)
+		{
 			$data[] = clone $assignClasses;
 		}
+
 		$solution->setMagistralClassesList($data, clone $this->semesterDisponibility);
 
-		if(count($this->finalSolutions) < 5)
-		{
-			$this->finalSolutions[] = $solution;
-			usort($this->finalSolutions, array($this, 'cmp'));
-		}
-		else
-		{
-			$worstScore = $this->finalSolutions[0]->getPoints();
-			foreach ($this->finalSolutions as $finalSolution)
-			{
-				$solutionScore = $finalSolution->getPoints();
-				if($solutionScore < $worstScore)
-				{
-					$worstScore = $solutionScore;
-				}
-			}
 
-			if($worstScore < $solution->getPoints())
+		$flag = false;
+		foreach ($this->finalSolutions as $sol) 
+		{
+			if ($sol->getPoints() == $solution->getPoints()) 
+			{
+				$flag = true;
+			}
+		}
+		if ($flag == false) 
+		{
+			if(count($this->finalSolutions) < 5)
 			{
 				$this->finalSolutions[] = $solution;
 				usort($this->finalSolutions, array($this, 'cmp'));
-				array_pop($this->finalSolutions);
+			}
+			else
+			{
+				$worstScore = $this->finalSolutions[0]->getPoints();
+				foreach ($this->finalSolutions as $finalSolution)
+				{
+					$solutionScore = $finalSolution->getPoints();
+					if($solutionScore < $worstScore)
+					{
+						$worstScore = $solutionScore;
+					}
+				}
+
+				if($worstScore < $solution->getPoints())
+				{
+					$this->finalSolutions[] = $solution;
+					usort($this->finalSolutions, array($this, 'cmp'));
+					array_pop($this->finalSolutions);
+				}
 			}
 		}
-		//Obtengo la solucion mas mala
-		//Si solution tiene mas puntos que la mala
-			//Se agrega la lista
-			//Se ordena la lista
-			//Elimina el ultimo elemento de la lista
-
-		//$this->finalSolutions[] = $solution;
 	}
 
 
@@ -461,6 +489,33 @@ class Generator_controller extends CI_Controller
 	}
 
 
+
+
+
+
+
+
+
+
+
+	public function assignServicesLessons()
+	{
+		// Se crea la lista de clases magistrales de los cursos obligatorios 
+		$this->fillServiceLessons($this->period);
+		// Se deben bloquear los horarios de esos cursos obligatorios 
+		foreach ($this->serviceLessons as $magistralClass) 
+		{
+			
+			$block    = $magistralClass->getCourse()->getBlock()->getNumber();
+			$schedule = $magistralClass->getAssignedSchedules()[0];
+			$this->semesterDisponibility->changeElementInMatrix($block, $schedule, 0);
+		}
+	}
+
+
+
+
+
 	/***********************************************
 	This is the beginning of the Generator algorithm 
 	***********************************************/
@@ -485,13 +540,9 @@ class Generator_controller extends CI_Controller
 		$this->fillMagistralClasses($this->idsOfMagistralClass);
 		// Create the list of N blocks with the schedules of the actual plan
 		$this->createSemesterDisponibility(1);
-
-		// Asignaciones de cursos obligatorios 
-			// Se crea la lista de clases magistrales de los cursos obligatorios 
-			// Se colocan los cursos obligatorios en la lista de los bloques 
-			// Se deben bloquear los horarios de esos cursos obligatorios 
-			// (Relación 1:1 entre la lista de horarios de un bloque y la lista de bloques donde están las clases magistrales ya asignadas)
-
+		// Assign the service lessons 
+		$this->assignServicesLessons();
+		
 		// Verificación de INTRO y TALLER
 			// Se debe hacer la verificación de los cursos INTRO y TALLER, los cuales deben tener un mismo # de clases magistrales asignadas. 
 

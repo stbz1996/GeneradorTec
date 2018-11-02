@@ -1,4 +1,18 @@
 
+::-webkit-scrollbar {
+    background-color: black;
+	border-radius: 8px;
+    width: 5px;
+}
+::-webkit-scrollbar-thumb {
+    border: 5px #bdd9d5 solid;
+    border-radius: 12px;
+    background: black;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3) inset;
+    -webit-transition: all .3s ease-out;
+    transition: all .3s ease-out;
+}
+	
 *{
 	font-family: Verdana;
 }
@@ -6,9 +20,9 @@
 	width: 98%;
 	height:380px;
     overflow:auto;
-    border: 2px solid black;
     padding: 1%;
 	margin-left: -1%;
+	border-bottom: 5px solid black;
 }
 
 .solutionContainer{

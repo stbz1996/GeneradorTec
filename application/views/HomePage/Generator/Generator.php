@@ -1,7 +1,7 @@
 <?php	
 
 	// Asigna los colores 
-	$colors = array('#F45D8B', '#F4B45D', '#F4DF5D', '#9BF45D', '#5DF4C9', '#5DBDF4', '#5D6BF4', '#9F5DF4', '#EB5DF4', '#F45DBB', '#F45D7F', '#C8D3C8', '#FE736A', '#EAFE6A');
+	$colors = array('#F45D8B', '#F4B45D', '#F4DF5D', '#9BF45D', '#5DF4C9', '#5DBDF4', '#5D6BF4', '#9F5DF4', '#EB5DF4', '#F45DBB', '#F45D7F', '#C8D3C8', '#FE736A', '#EAFE6A', '#F0FCA2', '#FCAEA2', '#A2BCFC', '#718AC6', '#77C671');
 	shuffle($colors);
 
 
@@ -11,7 +11,7 @@
 		$count = 0;
 		foreach ($sol->getMagistralClassesList() as $cm) 
 		{
-			$cm->colorRepresentationForView = $colors[$count];
+			$cm->colorRepresentationForView = $colors[$count % 19];
 			$count ++;
 		}
 	}
@@ -55,7 +55,7 @@
 <?php 
 for ($r = 0; $r < $numSolutions; $r++) { ?>
 	<div class="titles">
-	  	<h1>Recomendación de Horario #<?= $r + 1 ?></h1>
+	  	<h1>Recomendación de Horario #<?= $r + 1 ?> P:<?= $solutions[$r]->getPoints() ?>   </h1>
 	</div>
 
 	<div class="totalContainer">
@@ -86,11 +86,13 @@ for ($r = 0; $r < $numSolutions; $r++) { ?>
 							$numBlock    = $x + 1;
 							$schedule    = $counter; 
 							$cm = findClass($solutions, $numSolution, $numBlock, $schedule);
+							// if there is no a curse here 
 							if ($cm == false) 
 							{
 								$courseName = '';
 								$colorRep = 'white';
 							}
+							// if we have a course 
 							else
 							{
 								$courseName = $cm->getCourse()->getName();

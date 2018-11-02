@@ -65,7 +65,7 @@ class Solution
 				}
 
 				/* Assign points */
-				$lostPoints += 3*$points;
+				$lostPoints += 10*$points;
 			}
 
 			/* Go through each group */
@@ -77,7 +77,7 @@ class Solution
 				/* Case there's space between schedules */
 				if($points)
 				{
-					$lostPoints += 3*$points;
+					$lostPoints += 10*$points;
 				}
 			}
 		}
@@ -119,7 +119,7 @@ class Solution
 				// Save the points according with the free days in a block
 				foreach ($days as $day){
 					if ($day == 0) {
-						$this->points += 5;
+						$this->points += 40;
 					}
 				}
 				$block = $newBlock;
@@ -132,17 +132,16 @@ class Solution
 			{
 				if ($schedule <= 30) 
 				{
-					$this->points += 3;
+					$this->points += 30;
 				}
 				elseif ($schedule <= 60) 
 				{
-					$this->points += 1;
+					$this->points += 10;
 				}
 				else
 				{
-					$this->points -= 1;
+					$this->points -= 10;
 				}
-
 				$val = (($schedule-1) % 6);
 				$days[$val] += 1;
 			}
@@ -152,7 +151,7 @@ class Solution
 		// It is used for the last iteration
 		foreach ($days as $day){
 			if ($day == 0) {
-				$this->points += 5;
+				$this->points += 40;
 			}
 		}
 	}

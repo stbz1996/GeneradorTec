@@ -57,13 +57,23 @@ class MagistralClass
 		$valx = $pAssignedSchedules[1] - $pAssignedSchedules[0];
 		$valy = $pAssignedSchedules[3] - $pAssignedSchedules[2];
 		$valz = ($pAssignedSchedules[1] + 6) - $pAssignedSchedules[2];
-		if (($valx == $valy) && ($valz != 0)) 
+		
+		if(($valx >= 2) && ($valy >= 2) && ($valz != 0))
+		{
+			$this->evaluation = 60;
+		}
+		elseif (($valx == $valy) && ($valz != 0)) 
 		{
 			$this->evaluation = 10;
 		}
 		else{
-			$this->evaluation = 5;
+			$this->evaluation = -100;
 		}	
+	}
+
+	public function setAssignedSchedulesForNonCarrerCourses($pAssignedSchedules)
+	{
+		$this->assignedSchedules = $pAssignedSchedules;
 	}
 
 	public function getProfessor()
