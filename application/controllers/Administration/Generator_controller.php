@@ -58,7 +58,6 @@ class Generator_controller extends CI_Controller
 	{
 		
 		// If you receive the data by URL.
-		
 		for($i = 0; $i < count($classes); $i++)
 		{
 			$idProf = $classes[$i]->idProfessor;
