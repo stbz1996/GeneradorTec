@@ -67,7 +67,7 @@ class MagistralClass
 			$this->evaluation = 10;
 		}
 		else{
-			$this->evaluation = -100;
+			$this->evaluation = -500;
 		}	
 	}
 

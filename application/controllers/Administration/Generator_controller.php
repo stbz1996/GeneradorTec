@@ -11,10 +11,10 @@ class Generator_controller extends CI_Controller
 	private $magistralClassList    = []; // Save the list of magistral clases 
 	private $professors            = []; // List of all professors
 	private $semesterDisponibility = []; // The list of all the schedules
-	private $assigmentList  = array(); // The list of the assigned magistral classes
+	private $assigmentList  = array();   // The list of the assigned magistral classes
 	private $finalSolutions	= [];
 	private $errorList      = array();
-	private $limitOfresults = 100000;
+	private $limitOfresults = 150000;
 	private $generator_Logic;
 	private $totalSolutions = 0;
 	private $serviceLessons = array();
@@ -104,6 +104,13 @@ class Generator_controller extends CI_Controller
 
 
 
+	/****************************************************
+	*Function that fills the profesors list             *
+	*Input: 									        *
+	*	-$pList: It is the list of magistralClases id's *
+	*Output: 									        *
+	*	Fills the professors list                       *
+	****************************************************/
 	private function fillServiceLessons($pIdPeriod)
 	{
 		$listOfServicesLessons = array();
