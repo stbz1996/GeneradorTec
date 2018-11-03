@@ -19,7 +19,7 @@
   <table id="table_id" class="table table-bordered table-hover table-condensed table-striped" cellspacing="0" width="100%">
       <thead>
         <tr>
-          <th class="col-sm-4" id="textCenter">Nombre   </th>
+          <th class="col-sm-7" id="textCenter">Nombre   </th>
           <th class="col-sm-1" id="textCenter">Estado   </th>
           <th class="col-sm-1" id="textCenter">Opciones </th>
         </tr>

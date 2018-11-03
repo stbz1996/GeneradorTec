@@ -49,6 +49,7 @@ if ($username == '' || $idAdmin == '' || $idCarrer == '')
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/selectHours.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/Courses.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/generator.css" />
+    
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/table.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/admin.css" />

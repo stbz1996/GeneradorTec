@@ -44,20 +44,6 @@ function successSwal(message)
 }
 
 /****************************************
-- Next page
-****************************************/
-function nextPageSwal(message, data)
-{
-    swal({title: "Listo", 
-        text: message,
-        timer: 10000,
-        button: 'OK',
-        icon: "success"}).then(() => {
-            loadGenerator(data);
-        });
-}
-
-/****************************************
 - Swal that forces the asignation of a course.
 ****************************************/
 function confirmSwalForce(idCourse, idProfessor, nameProfessor, nameCourse)
@@ -262,6 +248,7 @@ function getWork(div)
     return work;
 }
 
+
 /****************************************
 - Show the errors in the execution of a javascript operation.
 ****************************************/
@@ -297,6 +284,7 @@ function showErrors(jqXHR, textStatus, errorThrown)
     }
 }
 
+
 /************************************************
 Get the respective color of the priorities
 ************************************************/
@@ -319,6 +307,7 @@ function getPriorityColor(priority)
 
     return priorityColor;
 }
+
 
 /************************************************
 Reserve the course. 
@@ -823,6 +812,7 @@ function deselectCourses()
     }
 }
 
+
 /****************************************
 - Action realized when I select a course to registered.
 ****************************************/
@@ -892,12 +882,12 @@ function selectProfessor(divSelected){
 *************************************************/
 function saveAssigned()
 {
-    var url = base_url + "Administrator_controller/saveClasses";
+    var url = base_url + "Administration/Generator_controller/index";
 
     // If there are courses assigned.
     if (assigned.length > 0)
     {
-        var jsonArray = JSON.parse(JSON.stringify(assigned));
+        var jsonArray = JSON.stringify(assigned);
         saveMagistralClass(url, jsonArray);
     }
     else
@@ -905,6 +895,7 @@ function saveAssigned()
         errorSwal("No hay información asignada."); 
     }
 }
+
 
 /************************************************
 - Conexion between the class magistral class to the generator.
@@ -915,12 +906,13 @@ function saveMagistralClass(url, jsonData)
 {
     // ajax adding data to database
 
-    var json = JSON.stringify(jsonData);
+    let dataToEncode = encodeURIComponent(window.btoa(encodeURIComponent(jsonData))); // Encode.
+    console.log(dataToEncode);
 
     $.ajax({
         url : url,
         type: "POST",
-        data: 'classes=' + json,
+        data: 'classes=' + dataToEncode,
         dataType: "JSON",
         beforeSend: function(){
             document.getElementById("loader").style.display = "block";
@@ -930,11 +922,14 @@ function saveMagistralClass(url, jsonData)
         {
             document.getElementById("loader").style.display = "none";
             opaqueCourses(1);
-
-            // Nothing todo...
-            // I have all the classes.
-            nextPageSwal("Se almacenaron los datos de las clases", data);
-
+            if (data == 1)
+            {
+                loadGenerator();
+            }
+            else
+            {
+                alert(data);
+            }
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
@@ -948,12 +943,8 @@ function saveMagistralClass(url, jsonData)
 - URL -> send by url the parse data.
 - JsonData -> data parse to an json to send.
 *************************************************/
-function loadGenerator(data)
+function loadGenerator()
 {
-    var serial = JSON.stringify(data); // JSON data.
-    let dataToEncode = encodeURIComponent(window.btoa(encodeURIComponent(serial))); // Encode.
-    // URL data is send by url.
-    // "Code" means that is going to be encripted.
-    var url = base_url + "Administration/Generator_controller" + "?code=" + dataToEncode;
+    var url = base_url + "Administration/Generator_controller/callResultPage";
     window.location.href = url;
 }

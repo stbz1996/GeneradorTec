@@ -516,16 +516,4 @@ class Administrator_controller extends CI_Controller
 		else echo 0;
 	}
 
-	/*********************************************************************
-	- Create the classes with the json received... and send to other controller.
-	**********************************************************************/
-	public function saveClasses()
-	{
-		$jsonUTF8 = trim($_POST['classes'], "\x0");
-		$classesJSON = json_decode($jsonUTF8, true);
-
-		validateArrayModal($classesJSON);
-		// Send to other view...
-	}
-
 }

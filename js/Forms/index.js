@@ -246,6 +246,20 @@ $(document).on('click', '.cbox', function(){
 	}
 });
 
+$("#workload_options").change(function(){
+	var workloadValue = $( "#workload_options option:selected").val();
+
+	if(workloadValue != 100)
+	{
+		$('.tableColumnCheckExtension').hide();
+		$('#cbox_extension').prop("checked", false);
+	}
+	else
+	{
+		$('.tableColumnCheckExtension').show();	
+	}
+});
+
 // We have to send or save the form here  
 $(".submit").click(function(){
 	return false;
@@ -310,6 +324,11 @@ $('.submit-save').click(function(){
 	var newPriorities = [];
 	var newSchedules = [];
 	var saveState = 0;
+
+	if(workloadValue != 100)
+	{
+		workloadExtension = 0;
+	}
 
 	for(i = 0; i < schedules.length; i++)
 	{
@@ -562,7 +581,12 @@ function createPDF(workload, extension, activitiesDescription, activitiesWorkPor
 			fillColor: '#0d39a0'
 		}
 	});
-	doc.save('formulario.pdf');
+
+	/* Name of form */
+	var namePDF = $("#nameProfessor").text();
+	var namePDF = namePDF + "_" + $("#namePeriod").text().replace(/,/g, "");
+	namePDF = namePDF.replace(/ /g, "_");
+	doc.save(namePDF+'.pdf');
 }
 
 

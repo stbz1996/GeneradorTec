@@ -16,7 +16,7 @@
     <thead>
       <tr>
         <th class="col-sm-1" id="textCenter">Nombre   </th>
-        <th class="col-sm-3" id="textCenter">Plan     </th>
+        <th class="col-sm-5" id="textCenter">Plan     </th>
         <th class="col-sm-1" id="textCenter">Estado   </th>
         <th class="col-sm-1" id="textCenter">Opciones </th>
       </tr>

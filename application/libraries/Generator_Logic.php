@@ -56,6 +56,7 @@ class Generator_Logic
 	private function getValidSchedulesTuples($pProfessorScheduleList)
 	{
 		$result = array();
+		$rest = array();
 		$validTuples = $this->getValidSchedulesNcontinuos($pProfessorScheduleList, 2);
 	 	foreach ($validTuples as $tv1) 
 	 	{
@@ -81,7 +82,13 @@ class Generator_Logic
 									  (($validSchedule[1] <= 30)  && 
 									  ($validSchedule[3] > 30))))
 								{
-									array_push($result, $validSchedule);
+									if (($validSchedule[1] - $validSchedule[0]) >= 2) {
+										array_push($result, $validSchedule);
+										
+									}
+									else{
+										array_push($rest, $validSchedule);
+									}
 								}
 				 			}
 						}
@@ -89,7 +96,8 @@ class Generator_Logic
 				}
 	 		}
 	 	}
-	 	return $result;
+	 	$merge = array_merge($result, $rest);
+	 	return $merge;
 	}
 
 

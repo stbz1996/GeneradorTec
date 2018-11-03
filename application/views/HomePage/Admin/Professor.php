@@ -17,7 +17,7 @@
             <tr>
                 <th class="col-sm-7" id="textCenter">Nombre</th>
                 <th class="col-sm-1" id="textCenter">Estado</th>
-                <th class="col-sm-2" id="textCenter">Opciones</th>
+                <th class="col-sm-1" id="textCenter">Opciones</th>
             </tr>
         </thead>
 
@@ -50,8 +50,8 @@
                     </div>
                 </td>
                 <td id="textCenter">
-                    <button class="btn btn-primary" onclick='editProfessor("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $professor->idProfessor ?>)'><i class="glyphicon glyphicon-pencil"></i> Editar</button>
-                    <button class="btn btn-danger" onclick='deleteProfessor("<?=base_url().$ADD['ADDRESS_4']?>", <?= $professor->idProfessor ?>)'><i class="glyphicon glyphicon-trash"></i> Borrar</button>
+                    <button class="btn btn-primary" onclick='editProfessor("<?=base_url($ADD['ADDRESS_3']) ?>", <?= $professor->idProfessor ?>)'><i class="glyphicon glyphicon-pencil"></i></button>
+                    <button class="btn btn-danger" onclick='deleteProfessor("<?=base_url().$ADD['ADDRESS_4']?>", <?= $professor->idProfessor ?>)'><i class="glyphicon glyphicon-trash"></i></button>
                 </td>
             </tr>
             <?php }?>
