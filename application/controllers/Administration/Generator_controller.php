@@ -24,6 +24,7 @@ class Generator_controller extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library('session');
+		$this->load->helper('functions_helper');
 
 		// Clases
 		$this->load->model("Generator/SemesterDisponibility");
@@ -528,6 +529,13 @@ class Generator_controller extends CI_Controller
 	public function index()
 	{
 		//Verify if code value exist
+
+		$classesJSON = $_POST['classes'];
+		$classes = json_decode(rawurldecode(base64_decode(rawurldecode($classesJSON))));
+
+		$this->readDataFromView($classes);
+
+		/*
 		if(isset($_GET['code']))
 		{
 			$classAssigned = $_GET['code'];
@@ -537,11 +545,16 @@ class Generator_controller extends CI_Controller
 		else{
 			$this->readDataFromView(null); 
 		}
+		*/
 
 		//print_r($this->idsOfMagistralClass);
 
 		// Load the professors information 
 		$this->fillProfessors($this->idsOfMagistralClass);
+
+		echo 1; //  ... success.
+		return;
+
 		// Load the magistral clases information 
 		$this->fillMagistralClasses($this->idsOfMagistralClass);
 		// Create the list of N blocks with the schedules of the actual plan
@@ -556,19 +569,18 @@ class Generator_controller extends CI_Controller
 		$cm = $this->magistralClassList[0];
 		$this->generator($cm, 0);
 
+
 		if (!count($this->finalSolutions)){
 			$this->findErrorsInAssigment($this->magistralClassList);
-			foreach ($this->errorList as $error) 
-			{
-				echo '<br><br><br>'.$error;
-			}
+			// echo array;
+			validateArrayModal($this->errorList);
 		}
-
-
 		
 		$this->session->set_userdata('solutions' , $this->finalSolutions);
+		echo 1; //  ... success.
+
 		//$this->printResultList(); // must be deleted
-		$this->callResultPage();
+		//$this->callResultPage();
 	}
 
 
