@@ -491,3 +491,16 @@ CREATE TABLE `Class` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
+-- Lo anterior debe quedar almacenado, se debe crear una tabla extra donde se tenga la referencia al 
+-- periodo seleccionado, los cursos que fueron asignados, los horarios que estos cursos ya poseen y el grupo. 
+
+CREATE TABLE `ServiceLesson` (
+  `id` int(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `numberSchedule` int(11) UNSIGNED NOT NULL,
+  `idPeriod` int(10) UNSIGNED NOT NULL,
+  `idCourse` int(10) UNSIGNED NOT NULL,
+  `idGroup` int(10) UNSIGNED NOT NULL,
+  FOREIGN KEY (`idPeriod`) REFERENCES `Period`(`idPeriod`),
+  FOREIGN KEY (`idCourse`) REFERENCES `Course`(`idCourse`),
+  FOREIGN KEY (`idGroup`) REFERENCES `ClassGroup`(`idGroup`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;

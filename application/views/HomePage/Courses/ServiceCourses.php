@@ -33,26 +33,18 @@
                 <?php }?>
             </select>
         </div>
-
-        <!-- <div class="service-courses-option">
-        <span>Hora</span>
-        <select class="form-control" id="selectSchedule" name='selectSchedule'>
-            <?php $index = 0; $i=0; $days=['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']; ?>
-            <?php foreach($schedules as $schedule){?>
-                <option value="<?php echo $schedule->numberSchedule;?>">
-                    <?php echo $days[$index].": ".$schedule->description;?>
-                    <?php $i++; $index=($i%6); ?>
-                </option> 
-            <?php }?>
-        </select>-->
         
-        <button class="btn btn-primary" onclick="creatediv()">
+        <button class="btn btn-primary" onclick="createServiceCourse()">
             <i class="glyphicon glyphicon-plus"></i> 
             Agregar Curso Servicio
         </button>
         
         <button type="button" id="btnSave" onclick="reselectPeriod()" class="btn btn-primary">
             Seleccionar Periodo
+        </button>
+        
+        <button type="button" id="btnSave" onclick="saveServiceCourses()" class="btn btn-primary">
+            Guardar Datos
         </button>
     </div>
     

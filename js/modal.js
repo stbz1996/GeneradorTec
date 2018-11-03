@@ -381,7 +381,6 @@ function save(url, message)
     });
 }
 
-
 function saveFormAdmin(url, message)
 {
     // ajax adding data to database
@@ -417,7 +416,6 @@ function saveFormAdmin(url, message)
         }
     });
 }
-
 
 function savePlan()
 {
@@ -826,16 +824,4 @@ function assignAdvanceDays(url)
             showErrors(jqXHR, textStatus, errorThrown);
         }
     });
-}
-
-function selectPeriod()
-{
-    period = $('[name="selectPeriod"]').val();
-    swal({title: "Periodo seleccionado", icon: "success"});
-    $('#modalPeriod').modal('hide');
-}
-
-function reselectPeriod()
-{
-    $('#modalPeriod').modal('show');
 }
