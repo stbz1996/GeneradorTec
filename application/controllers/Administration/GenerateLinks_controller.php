@@ -135,7 +135,7 @@ class GenerateLinks_controller extends CI_Controller
 	***********************************************************/
 	public function sendMailToProfessor($pProfessorName, $pEmail, $pHash, $pSendDate)
 	{
-		$from = 'Test@test.com';
+		$from = 'TEC@itcr.com';
 		$fromComplement = 'Administración';
 		$subject = $this->administrator_logic->getEmailsubject();
 		$message = $this->administrator_logic->getEmailMessage($pProfessorName, $pHash, $pSendDate);
