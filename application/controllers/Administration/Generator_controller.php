@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-ini_set('max_execution_time', 0); 
-ini_set('memory_limit','2048M');
+
+
 
 class Generator_controller extends CI_Controller 
 {
@@ -14,7 +14,7 @@ class Generator_controller extends CI_Controller
 	private $assigmentList  = array();   // The list of the assigned magistral classes
 	private $finalSolutions	= [];
 	private $errorList      = array();
-	private $limitOfresults = 150000;
+	private $limitOfresults = 10;
 	private $generator_Logic;
 	private $totalSolutions = 0;
 	private $serviceLessons = array();
@@ -69,6 +69,7 @@ class Generator_controller extends CI_Controller
 			$this->idsOfMagistralClass[] = $data;
 		}
 		
+		
 		/*
 		// Adriana
 		$data = new AssignedCourse();
@@ -84,24 +85,24 @@ class Generator_controller extends CI_Controller
 		$data = new AssignedCourse();
 		$data->setAtributes(3, 6, 3);
 		$this->idsOfMagistralClass[] = $data;
-
-		$data = new AssignedCourse();
-		$data->setAtributes(3, 16, 1);
-		$this->idsOfMagistralClass[] = $data;
 		*/
 	}
 
 
+	/**********************************
+	Function that shows the solutions *
+	**********************************/
 	function callResultPage()
-	{
+	{	
+		$solutions = $this->session->userdata('solutions');
+		$numBlocks = $this->session->userdata('numBlocks');		
 		$route = "HomePage/Generator/Generator";
-		$data['solutions'] = $this->session->userdata('solutions');
-		$data['numBlocks'] = $this->semesterDisponibility->getNumBlocks();
+		$data['solutions'] = $solutions;
+		$data['numBlocks'] = $numBlocks;
 		$this->load->view("HomePage/Header");
 		$this->load->view($route, $data);
 		$this->load->view("HomePage/Footer");
 	}
-
 
 
 	/****************************************************
@@ -406,7 +407,6 @@ class Generator_controller extends CI_Controller
 	}
 
 
-
 	/***************************************************************************
 	*Function that assigned a magistral class and generate a solution          *
 	*Input:          							                               *
@@ -496,15 +496,9 @@ class Generator_controller extends CI_Controller
 	}
 
 
-
-
-
-
-
-
-
-
-
+	/**********************************************************
+	function that blocks the schedules of the service courses *
+	**********************************************************/
 	public function assignServicesLessons()
 	{
 		// Se crea la lista de clases magistrales de los cursos obligatorios 
@@ -520,48 +514,28 @@ class Generator_controller extends CI_Controller
 	}
 
 
-
-
-
 	/***********************************************
 	This is the beginning of the Generator algorithm 
 	***********************************************/
 	public function index()
 	{
 		//Verify if code value exist
-
 		$classesJSON = $_POST['classes'];
 		$classes = json_decode(rawurldecode(base64_decode(rawurldecode($classesJSON))));
-
 		$this->readDataFromView($classes);
-
-		/*
-		if(isset($_GET['code']))
-		{
-			$classAssigned = $_GET['code'];
-			$classes = json_decode(rawurldecode(base64_decode(rawurldecode($classAssigned))));
-			$this->readDataFromView($classes); 
-		}
-		else{
-			$this->readDataFromView(null); 
-		}
-		*/
-
-		//print_r($this->idsOfMagistralClass);
-
+		
 		// Load the professors information 
 		$this->fillProfessors($this->idsOfMagistralClass);
-
-		echo 1; //  ... success.
-		return;
-
+		
 		// Load the magistral clases information 
 		$this->fillMagistralClasses($this->idsOfMagistralClass);
+		
 		// Create the list of N blocks with the schedules of the actual plan
 		$this->createSemesterDisponibility(1);
+		
 		// Assign the service lessons 
 		$this->assignServicesLessons();
-		
+
 		// Verificación de INTRO y TALLER
 			// Se debe hacer la verificación de los cursos INTRO y TALLER, los cuales deben tener un mismo # de clases magistrales asignadas. 
 
@@ -569,143 +543,65 @@ class Generator_controller extends CI_Controller
 		$cm = $this->magistralClassList[0];
 		$this->generator($cm, 0);
 
-
+		// Check if we found solutions
 		if (!count($this->finalSolutions)){
 			$this->findErrorsInAssigment($this->magistralClassList);
-			// echo array;
 			validateArrayModal($this->errorList);
+			return;
 		}
 		
-		$this->session->set_userdata('solutions' , $this->finalSolutions);
-		echo 1; //  ... success.
-
-		//$this->printResultList(); // must be deleted
-		//$this->callResultPage();
+		// Make a comvertion of data for view
+		$this->saveSolutionsForView();
+		echo 1;
+		return;
 	}
 
 
-
-
-	
-
-
-
-
-
-
-
-	
-
-
-
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	private function printResultList()
+	/******************************************** 
+	This functions takes the final solutions 
+	list and convert the data to be shown in 
+	view. Create an structure like thatone 
+	$x[0] solution
+	$x[0][0] a class
+	$x[0][1] a class 
+	$x[0][1][0] name of the professor
+	$x[0][1][1][0] name of the course 
+	$x[0][1][1][1] code of the course
+	$x[0][1][1][2] number of the block 
+	$x[0][1][2] number of group
+	$x[0][1][3][0] schedule
+	$x[0][1][3][.] schedule
+	$x[0][1][4] color
+	******************************************/
+	function saveSolutionsForView()
 	{
-		echo "<br><br> SOLUCIONES <br><br><br><br>";
-		$count = 1;
-		foreach ($this->finalSolutions as $sol) {
-			echo "Solucion: ".$count."<br>";
-			$this->printSolution($sol->getMagistralClassesList());
-			echo "### Puntage de la solución: ".$sol->getPoints().' ###';
-			echo "<br><br><br><br>";
-			$count = $count + 1;
-		}
-		echo $this->totalSolutions;
-	}
-
-
-
-	private function printSolution($sol){
-		$points = 0;
-		foreach ($sol as $x) 
+		$solutionsForView = array();
+		foreach ($this->finalSolutions as $sol) 
 		{
-			echo 'Profesor: '.$x->getProfessor()->getName().'<br>';
-			echo 'Curso: '.$x->getCourse()->getName().'<br>';
-			echo 'Grupo: '.$x->getGroup()->getNumber().'<br>';
-			echo 'Horarios: ';
-			foreach ($x->getAssignedSchedules() as $y) 
+			$tempSol = array();
+			foreach ($sol->getMagistralClassesList() as $cm) 
 			{
-				echo $y.' - ';
+				$class = array();
+				// profesor
+				array_push($class, $cm->getProfessor()->getName()); 
+				// curso
+				$course = array();
+				array_push($course, $cm->getCourse()->getName()); // nombre
+				array_push($course, $cm->getCourse()->getCode()); // codigo
+				array_push($course, $cm->getCourse()->getBlock()->getNumber()); // bloque
+				array_push($class, $course); 
+				// grupo
+				array_push($class, $cm->getGroup()->getNumber()); 
+				// Horarios
+				array_push($class, $cm->getAssignedSchedules()); 
+				// color
+				array_push($class, 4);   
+				array_push($tempSol, $class);
 			}
-			echo '<br>';
-			$points += $x->getEvaluation();
+			array_push($solutionsForView, $tempSol);
 		}
-		return $points;
-	}
-
-
-
-	public function printmatrix($m){
-		foreach ($m as $x) {
-			echo $x.' - ';
-		}
-	}
-
-
-
-// Solo para ver resultados
-	public function printTuples($list){
-		foreach ($list as $l) {
-			echo $l[0].' - '.$l[1].' --@@-- ';
-		}
-	}
-
-	public function printTuples2($list){
-		foreach ($list as $row) {
-			foreach ($row as $val) 
-			{
-				echo $val.'-';
-			}
-			echo '<br>';
-		}
-		echo '<br>';
+		$numBlocks = $this->semesterDisponibility->getNumBlocks();
+		$this->session->set_userdata('solutions', $solutionsForView);
+		$this->session->set_userdata('numBlocks', $numBlocks);
 	}
 }

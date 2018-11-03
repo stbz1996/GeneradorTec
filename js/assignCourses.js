@@ -248,6 +248,7 @@ function getWork(div)
     return work;
 }
 
+
 /****************************************
 - Show the errors in the execution of a javascript operation.
 ****************************************/
@@ -283,6 +284,7 @@ function showErrors(jqXHR, textStatus, errorThrown)
     }
 }
 
+
 /************************************************
 Get the respective color of the priorities
 ************************************************/
@@ -305,6 +307,7 @@ function getPriorityColor(priority)
 
     return priorityColor;
 }
+
 
 /************************************************
 Reserve the course. 
@@ -809,6 +812,7 @@ function deselectCourses()
     }
 }
 
+
 /****************************************
 - Action realized when I select a course to registered.
 ****************************************/
@@ -892,6 +896,7 @@ function saveAssigned()
     }
 }
 
+
 /************************************************
 - Conexion between the class magistral class to the generator.
 - URL -> to look the function in the administrator.
@@ -917,23 +922,17 @@ function saveMagistralClass(url, jsonData)
         {
             document.getElementById("loader").style.display = "none";
             opaqueCourses(1);
-
             if (data == 1)
             {
                 loadGenerator();
             }
             else
             {
-                // Error modal.
-                console.log(data);
-                alert("No funciona esta mierda");
+                alert(data);
             }
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
-            console.log(jqXHR);
-            console.log(textStatus);
-            console.log(errorThrown);
             showErrors(jqXHR, textStatus, errorThrown);
         }
     });

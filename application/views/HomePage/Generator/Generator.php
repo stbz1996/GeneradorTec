@@ -1,41 +1,34 @@
 <?php	
-
 	// Asigna los colores 
 	$colors = array('#F45D8B', '#F4B45D', '#F4DF5D', '#9BF45D', '#5DF4C9', '#5DBDF4', '#5D6BF4', '#9F5DF4', '#EB5DF4', '#F45DBB', '#F45D7F', '#C8D3C8', '#FE736A', '#EAFE6A', '#F0FCA2', '#FCAEA2', '#A2BCFC', '#718AC6', '#77C671');
 	shuffle($colors);
-
-
-	// Assign colors 
-	foreach ($solutions as $sol) 
+	for ($i = 0; $i < count($solutions); $i++) 
 	{
-		$count = 0;
-		foreach ($sol->getMagistralClassesList() as $cm) 
-		{
-			$cm->colorRepresentationForView = $colors[$count % 19];
-			$count ++;
+		for ($j = 0; $j < count($solutions[$i]); $j++) 
+		{ 
+			$solutions[$i][$j][4] = $colors[$j];
 		}
 	}
+
 
 	// Find the magistral class
 	function findClass($solutions, $numSolution, $numBlock, $schedule)
 	{
-		$magistralClases = $solutions[$numSolution]->getMagistralClassesList();
-		foreach ($magistralClases as $cm) 
-		{
-			$cmBlock   = $cm->getCourse()->getBlock()->getNumber();
-			$schedules = $cm->getAssignedSchedules();
+		for ($i = 0; $i < count($solutions[$numSolution]); $i ++) 
+		{ 
+			$cmBlock   = $solutions[$numSolution][$i][1][2];
+			$schedules = $solutions[$numSolution][$i][3];
 			if ($cmBlock == $numBlock) 
 			{
 				foreach ($schedules as $sch) 
 				{
 					if ($schedule == $sch) 
 					{
-						return $cm;
+						return $solutions[$numSolution][$i];
 					}
 				}
 			}
 		}
-		// Si no existe ninguna clase
 		return false;
 	}
 
@@ -52,17 +45,17 @@
 	$numSolutions = count($solutions);
 ?>
 
+
 <?php 
 for ($r = 0; $r < $numSolutions; $r++) { ?>
 	<div class="titles">
-	  	<h1>Recomendación de Horario #<?= $r + 1 ?> P:<?= $solutions[$r]->getPoints() ?>   </h1>
+	  	<h1>Recomendación de Horario #<?= $r + 1 ?></h1>
 	</div>
 
 	<div class="totalContainer">
 		<?php 
 		for ($x = 0; $x < $numBlocks; $x++) { 
-			$listOfmagistralClases = array();
-			?>
+			$listOfmagistralClases = array(); ?>
 			<div class="solutionContainer">
 				<div class="textBlock"> Bloque <?= $x + 1 ?> </div>
 				<div class="days">
@@ -95,8 +88,8 @@ for ($r = 0; $r < $numSolutions; $r++) { ?>
 							// if we have a course 
 							else
 							{
-								$courseName = $cm->getCourse()->getName();
-								$colorRep   = $cm->colorRepresentationForView;
+								$courseName = $cm[1][0];
+								$colorRep   = $cm[4];
 								if (!in_array($cm, $listOfmagistralClases)) {
 								    array_push($listOfmagistralClases, $cm);
 								}
@@ -110,14 +103,15 @@ for ($r = 0; $r < $numSolutions; $r++) { ?>
 				<?php } ?>
 			</div>
 
+
 			<div class="InfoContainer">
 				<p>Cursos</p>
 				<?php 
 				foreach ($listOfmagistralClases as $cm) {
-					$code       = $cm->getCourse()->getCode();
-					$courseName = $cm->getCourse()->getName();
-					$group      = $cm->getGroup()->getNumber();
-					$color      = $cm->colorRepresentationForView;
+					$code       = $cm[1][1];
+					$courseName = $cm[1][0];
+					$group      = $cm[2];
+					$color      = $cm[4];
 					?>
 					<div style="background: <?= $color ?>;">
 						<?= $code.' '.$courseName.' Grupo '.$group ?>
@@ -125,13 +119,14 @@ for ($r = 0; $r < $numSolutions; $r++) { ?>
 				<?php } ?>
 			</div>
 
+
 			<div class="InfoContainer">
 				<p>Profesores</p>
 
 				<?php 
 				foreach ($listOfmagistralClases as $cm) {
-					$professor  = $cm->getProfessor()->getName();
-					$color      = $cm->colorRepresentationForView;
+					$professor  = $cm[0];
+					$color      = $cm[4];
 					?>
 					<div style="background: <?= $color ?> ;"> <?= $professor ?> </div>
 				<?php } ?>
