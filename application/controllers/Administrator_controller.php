@@ -202,7 +202,8 @@ class Administrator_controller extends CI_Controller
 		$data = array(
 			'name' => $this->input->post('inputName'),
 			'state' => false,
-			'idPlan' => $this->input->post('select')
+			'idPlan' => $this->input->post('select'),
+			'number' => 0
 		);
 		$result = $this->administrator_logic->insertBlock($data);
         return $result;

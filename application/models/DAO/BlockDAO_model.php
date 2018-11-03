@@ -44,6 +44,7 @@ class BlockDAO_model extends CI_Model{
         }
 	}
 
+
 	/****************************************
 	- Get all the plan in the database
 	****************************************/
@@ -75,6 +76,7 @@ class BlockDAO_model extends CI_Model{
 		}
 	}
 
+
 	/****************************************
 	- Get a unique block from the database
 	****************************************/
@@ -86,6 +88,7 @@ class BlockDAO_model extends CI_Model{
         return $query->row();
 	}
 	
+
 	/****************************************
     - Check if there is a unique block associated with a course
     ****************************************/
@@ -119,6 +122,7 @@ class BlockDAO_model extends CI_Model{
         }
 	}
 
+
 	/****************************************
 	- Activate or desactivate the block.
 	****************************************/
@@ -130,6 +134,7 @@ class BlockDAO_model extends CI_Model{
 		$this->db->where('idBlock', $Block['idBlock']);
 		$this->db->update('Block', $changes);
 	}
+
 
 	/****************************************
 	- Get total of active blocks of a plan
@@ -145,6 +150,7 @@ class BlockDAO_model extends CI_Model{
 
 		return $query->num_rows();
 	}
+
 
 	public function getBlockByCourse($idCourse)
 	{

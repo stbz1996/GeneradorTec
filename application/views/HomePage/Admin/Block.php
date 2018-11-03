@@ -62,7 +62,7 @@
                 <button class="btn btn-primary" onclick='editBlock("<?=base_url($ADD['ADDRESS_3']) ?>",<?= $block->idBlock?>)'>
                     <i class="glyphicon glyphicon-pencil"></i>
                 </button>
-                <button class="btn btn-danger" onclick='deleteBlock("<?=base_url().$ADD['ADDRESS_4']?>", <?php echo $block->idBlock;?>)'><i class="glyphicon glyphicon-trash"></i>
+                <button class="btn btn-danger" onclick='deleteBlock("<?=base_url().$ADD['ADDRESS_4']?>", <?= $block->idBlock;?>)'><i class="glyphicon glyphicon-trash"></i>
                 </button>
             </td>
         </tr>
