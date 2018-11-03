@@ -8,6 +8,7 @@ class BlockDTO{
 	private $name;
 	private $state;
 	private $idPlan;
+	private $number;
 
 	function __construct()
 	{
@@ -15,9 +16,14 @@ class BlockDTO{
 		$this->name = "";
 		$this->state = false;
 		$this->idPlan = 0;
+		$this->number = 0;
 	}
 
 	/* Setters and Getters */
+	public function setNumber($pNumber)
+	{
+		$this->number = $pNumber;
+	}
 
 	public function setIdBlock($pIdBlock)
 	{
