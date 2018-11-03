@@ -54,7 +54,7 @@ function confirmSwalForce(idCourse, idProfessor, nameProfessor, nameCourse)
           icon: "warning",
           buttons: [
             '¡No!',
-            '¡Si, claro!'
+            '¡Si!'
           ],
           dangerMode: true,
         }).then(function(isConfirm) {
@@ -77,7 +77,7 @@ function confirmSwalLoad(idCourse, idProfessor, nameProfessor, nameCourse, state
           icon: "warning",
           buttons: [
             '¡No!',
-            '¡Si, claro!'
+            '¡Si!'
           ],
           dangerMode: true,
         }).then(function(isConfirm) {
@@ -96,6 +96,7 @@ function showModalPeriodForm()
     $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
     $('.modal-title').text('Seleccionar Período'); // Set title to Bootstrap modal title
 }
+
 
 /****************************************
 - Select the period that you want to upload the forms.
@@ -440,24 +441,12 @@ function increaseLoadProfessor(idProfessor)
     var workPorcent = work[1] + 25; // new workPorcent.
     var posRelative;
 
-    if (workPorcent > 100 || workPorcent > work[0])
-    {
-        if (workPorcent > 100) 
-        {
-            workPorcent = 100;
-        }
-        desactivateDivProfessor(divProfessor, progressBar, 1); // Bar red.
-    }
-    else if(workPorcent == 100 || workPorcent == work[0])
-    {
-        desactivateDivProfessor(divProfessor, progressBar, 0); // Bar green
-    }
-    
     posRelative = getRelativePosition(workPorcent, work[0]); // Get the porcentage relate to the actual load.
     progressBar.setAttribute('aria-valuenow', workPorcent);
     progressBar.style.width = posRelative.toString() + "%"; // Set the new load.
     textPorcentWork.innerHTML = workPorcent.toString(); // set the data
 }
+
 
 /*********************************************
 Edit information about the professor.
@@ -706,12 +695,12 @@ function assignedProcess(idCourse, nameCourse, idProf, nameProf, stateForced)
     var workLoad = work[0];
     var newWorkPorcent = work[1] + 25;
     var state = false;
-
+/*
     if (work[1] >= workLoad){
         errorSwal("Lo siento, el profesor tiene más carga de la solicitada.");
         return;
     }
-
+*/
     if (workLoad < newWorkPorcent)
     {
         confirmSwalLoad(idCourse, idProf, nameProf, nameCourse, stateForced);
