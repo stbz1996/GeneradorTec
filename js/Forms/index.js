@@ -523,7 +523,30 @@ function verifyPriorities(listPriorities, porcent, extension)
 
 	sumTotalPriorities = 2*totalPriorities[0] + totalPriorities[1];
 	sumMinimumPriorities = 2*minimumPriorities[0] + minimumPriorities[1];
-	if(((totalPriorities[0] < minimumPriorities[0]) || (totalPriorities[1] < minimumPriorities[1])) &&
+
+	/* Case total courses with priority A are less than minimum */
+	if(totalPriorities[0] < minimumPriorities[0])
+	{
+		showMessageErrorPriorities(minimumPriorities, porcent, extension);
+		return false;
+	}
+
+	var diffPrioritiesB = minimumPriorities[1] - totalPriorities[1];
+
+	/* Case total courses with priority B are less than minimum */
+	if(diffPrioritiesB > 0)
+	{
+		/* Check if there are more courses with priority A that fulfill requirements */
+		var diffPrioritiesA = totalPriorities[0] - minimumPriorities[0];
+
+		if(diffPrioritiesA < diffPrioritiesB)
+		{
+			showMessageErrorPriorities(minimumPriorities, porcent, extension);
+			return false;
+		}
+	}
+	/*
+	if(((totalPriorities[0] < minimumPriorities[0]) || (totalPriorities[1] < minimumPriorities[1])) ||
 		(sumTotalPriorities < sumMinimumPriorities))
 	{
 		message = "Con carga de " + porcent + "%";
@@ -544,9 +567,31 @@ function verifyPriorities(listPriorities, porcent, extension)
 		swal('Lo sentimos', message, "error");
 		return false;
 	}
+	*/
 
 	return true;
 }
+
+function showMessageErrorPriorities(minimumPriorities, porcent, extension)
+{
+	message = "Con carga de " + porcent + "%";
+
+	if(extension)
+	{
+		message += " (con ampliación)";
+	}
+
+	message += " debe seleccionar:\n- Al menos " + minimumPriorities[0] + " cursos con prioridad A";
+
+	if(minimumPriorities[1])
+	{
+		message += "\n- Al menos " + minimumPriorities[1] + " cursos con prioridad B";
+	}
+
+	//Con una carga de X% debe seleccionar al menos N cursos con prioridad A y W cursos con prioridad B
+	swal('Lo sentimos', message, "error");
+}
+
 
 function getTotalPriorities(listPriorities)
 {
