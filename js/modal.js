@@ -1,11 +1,8 @@
 var save_method; //for save method string
 var table;
-var period;
 
 $(document).ready(function() {
     table = $('#table_id').DataTable();
-    $('#modalPeriod').modal('show');
-    period = 0;
   });
 
 /*************************************************************

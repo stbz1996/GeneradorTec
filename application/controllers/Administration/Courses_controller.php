@@ -174,4 +174,31 @@ class Courses_controller extends CI_Controller
 		$this->load->view("HomePage/Courses/ServiceCourses", $data);
 		$this->load->view("HomePage/Footer");
 	}
+
+	public function getServiceLessonsByPeriod($pId)
+	{
+		$result = $this->administrator_logic->getServiceLessonsByPeriod($pId);
+		validateArrayModal($result);
+	}
+
+	public function addLesson()
+	{
+		$data = array(
+			'numberSchedule' => $_POST['numberSchedule'],
+			'idPeriod' => $_POST['idPeriod'],
+			'idCourse' => $_POST['courseName'],
+			'idGroup' => $_POST['courseGroup']
+		);
+		$insert = $this->administrator_logic->insertLesson($data);
+	}
+	public function deleteLesson()
+	{
+		$data = array(
+			'numberSchedule' => $_POST['numberSchedule'],
+			'idPeriod' => $_POST['idPeriod'],
+			'idCourse' => $_POST['courseName'],
+			'idGroup' => $_POST['courseGroup']
+		);
+		$insert = $this->administrator_logic->deleteLesson($data);
+	}
 }

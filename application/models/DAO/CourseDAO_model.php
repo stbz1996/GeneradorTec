@@ -5,6 +5,7 @@ class CourseDAO_model extends CI_Model
 {
     var $table = 'Course';
     var $tableForBlock = 'CourseXBlock';
+    var $tableServiceLesson = 'ServiceLesson';
 
     public function __construct()
     {
@@ -279,5 +280,159 @@ class CourseDAO_model extends CI_Model
         $this->db->from('servicelesson');
         $this->db->where('idPeriod', $pIdPeriod);
         return $this->db->get()->result();
+    }
+
+    public function getServiceLessonsByPeriod($pIdPeriod)
+    {
+        $this->db->select('Course.name');
+        $this->db->select('ClassGroup.number as group');
+        $this->db->select('Course.lessonNumber as numLessons');
+        $this->db->select('Course.idBlock as block');
+        $this->db->select('Schedule.description as lesson');
+        $this->db->select('Schedule.numberSchedule');
+        $this->db->from('servicelesson');
+        $this->db->join('Course', 'Course.idCourse = servicelesson.idCourse');
+        $this->db->join('ClassGroup', 'ClassGroup.idGroup = servicelesson.idGroup');
+        $this->db->join('Schedule', 'Schedule.numberSchedule = servicelesson.numberSchedule');
+        $this->db->where('servicelesson.idPeriod', $pIdPeriod);
+        
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0)
+        {
+            return $query->result();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function getIdCourse($pCourseName)
+    {
+        $this->db->select('idCourse');
+        $this->db->from('Course');
+        $this->db->where('name', $pCourseName);
+        
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0)
+        {
+            return $query->result();
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    public function getIdGroup($pCourseGroup)
+    {
+        $this->db->select('ClassGroup.idGroup');
+        $this->db->from('ClassGroup');
+        $this->db->where('ClassGroup.number', $pCourseGroup);
+        
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0)
+        {
+            return $query->result();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /****************************************
+    - Insert the new lesson in the database.
+    ****************************************/
+    public function insertLesson($lessonInfo)
+    {
+        $this->db->select('idCourse');
+        $this->db->from('Course');
+        $this->db->where('name', $lessonInfo['idCourse']);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0)
+        {
+            foreach($query->result_array()  as $row)
+            {
+                $lol = $row['idCourse'];
+            }
+        }
+
+        $this->db->select('idGroup');
+        $this->db->from('ClassGroup');
+        $this->db->where('number', $lessonInfo['idGroup']);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0)
+        {
+            foreach($query->result_array()  as $row)
+            {
+                $lol2 = $row['idGroup'];
+            }
+        }
+
+        $data = array(
+            'numberSchedule' => $lessonInfo['numberSchedule'],
+            'idPeriod' => $lessonInfo['idPeriod'],
+            'idCourse' => $lol,
+            'idGroup' => $lol2
+         );
+
+        $this->db->insert($this->tableServiceLesson, $data);
+
+        echo 'true';
+        return;
+    }
+    
+    /****************************************
+    - Delete a lesson in the database.
+    ****************************************/
+    public function deleteLesson($lessonInfo)
+    {
+        $this->db->select('idCourse');
+        $this->db->from('Course');
+        $this->db->where('name', $lessonInfo['idCourse']);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0)
+        {
+            foreach($query->result_array()  as $row)
+            {
+                $lol = $row['idCourse'];
+            }
+        }
+
+        $this->db->select('idGroup');
+        $this->db->from('ClassGroup');
+        $this->db->where('number', $lessonInfo['idGroup']);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0)
+        {
+            foreach($query->result_array()  as $row)
+            {
+                $lol2 = $row['idGroup'];
+            }
+        }
+
+        $data = array(
+            'numberSchedule' => $lessonInfo['numberSchedule'],
+            'idPeriod' => $lessonInfo['idPeriod'],
+            'idCourse' => $lol,
+            'idGroup' => $lol2
+         );
+
+        $this->db->where('numberSchedule', $data['numberSchedule']);
+        $this->db->where('idPeriod', $data['idPeriod']);
+        $this->db->where('idCourse', $data['idCourse']);
+        $this->db->where('idGroup', $data['idGroup']);
+        $this->db->delete($this->tableServiceLesson);
+
+        echo 'true';
+        return;
     }
 }

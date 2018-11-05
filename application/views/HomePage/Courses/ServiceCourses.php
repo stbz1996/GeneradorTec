@@ -1,4 +1,5 @@
 <script>var schedules = '';</script>
+<script>var base_url = '<?php echo base_url() ?>';</script>
 
 <div id="allcontent">
     <div class="service-courses-options">
@@ -34,18 +35,17 @@
             </select>
         </div>
         
-        <button class="btn btn-primary" onclick="createServiceCourse()">
-            <i class="glyphicon glyphicon-plus"></i> 
-            Agregar Curso Servicio
-        </button>
-        
-        <button type="button" id="btnSave" onclick="reselectPeriod()" class="btn btn-primary">
-            Seleccionar Periodo
-        </button>
-        
-        <button type="button" id="btnSave" onclick="saveServiceCourses()" class="btn btn-primary">
-            Guardar Datos
-        </button>
+        <div class="service-courses-option">
+            <button class="btn btn-primary" onclick="createServiceCourse()">
+                <i class="glyphicon glyphicon-plus"></i> 
+                Agregar Curso Servicio
+            </button>
+        </div>
+        <div class="service-courses-option">
+            <button type="button" id="btnSave" onclick="reselectPeriod()" class="btn btn-primary">
+                Seleccionar Periodo
+            </button>
+        </div>
     </div>
     
     <script> var jArray = <?php echo json_encode($schedules); ?>; </script>

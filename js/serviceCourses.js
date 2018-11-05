@@ -1,16 +1,117 @@
-var period;
+var period = 0;
 var cardNumber = 10000;
-var megacourses = [];
+var courses = [];
 var courseName;
 var courseGroup;
 var courseNumLessons;
+var coursesFromDB;
+var days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+var currentCard;
+var currentSelect;
+var currentAddButton;
 
+$(document).ready(function() {
+    $('#modalPeriod').modal('show');
+});
+
+function isPeriodAssigned()
+{
+    if(period != 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+//mostrar en pantalla los cursos y las lecciones almacenadas en BD para un curso
+function printCourses()
+{
+    var flag = false;
+
+    for(var i=0; i<coursesFromDB.length; i++)
+    {
+        //reviso que el curso no ha sido seleccionado
+        for(var j=0; j<courses.length; j++)
+        {
+            if(coursesFromDB[i].name == courses[j].name && 
+                coursesFromDB[i].group == courses[j].group)
+            {
+                //llamar a addScheduleToCourse
+                flag = true;
+                break;
+            }
+        }
+
+        if(!flag)
+        {     
+            createServiceCourse(coursesFromDB[i].name, coursesFromDB[i].group, 
+                                coursesFromDB[i].numLessons, coursesFromDB[i].block);
+
+            for(var k=0; k<courses.length; k++)
+            {
+                if(courses[k].name == coursesFromDB[i].name && courses[k].group == coursesFromDB[i].group)
+                {
+                    //agregar el curso al courses[k].id correspondiente
+                    addScheculeFromBDToCourse(courses[k].cardSchedulesId, coursesFromDB[i],
+                                                courses[k].addScheculeButton, courses[k].id);
+
+                    break;
+                }
+            }
+        }
+
+        else
+        {
+            for(var k=0; k<courses.length; k++)
+            {
+                if(courses[k].name == coursesFromDB[i].name && courses[k].group == coursesFromDB[i].group)
+                {
+                    //agregar el curso al courses[k].id correspondiente
+                    addScheculeFromBDToCourse(courses[k].cardSchedulesId, coursesFromDB[i],
+                                              courses[k].addScheculeButton, courses[k].id);
+
+                    flag = false;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+//cuando se selecciona un periodo, se obtienen los cursos en BD asociados a ese periodo
+function getServiceCourses()
+{
+    $.ajax({
+        url : base_url + "Administration/Courses_controller/getServiceLessonsByPeriod/" + period,
+        type: "GET",
+        dataType: "JSON",
+        beforeSend: function(){
+            showLoader();
+        },
+        success: function(data)
+        {
+            coursesFromDB = data;
+            printCourses();
+            hideLoader();
+
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            showErrors(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
 
 function selectPeriod()
 {
+    $('#serviceCourses').empty();
     period = $('[name="selectPeriod"]').val();
     swal({title: "Periodo seleccionado", icon: "success"});
     $('#modalPeriod').modal('hide');
+    getServiceCourses();
 }
 
 function reselectPeriod()
@@ -18,11 +119,12 @@ function reselectPeriod()
     $('#modalPeriod').modal('show');
 }
 
+//verifica si el curso ya fue creado
 function IsCourseAssigned(courseName, courseGroup)
 {
-    for(var i = 0; i < megacourses.length; i++)
+    for(var i = 0; i < courses.length; i++)
     { 
-        if(megacourses[i].name == courseName && megacourses[i].group == courseGroup)
+        if(courses[i].name == courseName && courses[i].group == courseGroup)
         {
             return true;
         }
@@ -30,12 +132,24 @@ function IsCourseAssigned(courseName, courseGroup)
     return false;
 }
 
-function createServiceCourse()
+//crea el curso y pinta el cuadro en pantalla
+function createServiceCourse(courseName = null, courseGroup = null, courseNumLessons = null, courseBlock = null)
 {
-    courseGroup = document.getElementById("selectGroup").value;
-    courseName = document.getElementById("selectCourse").value;
+    if(!isPeriodAssigned())
+    {
+        swal({title: "Error",
+        text: "No ha seleccionado el periodo",
+        icon: "error"});
+        return;
+    }
 
-    console.log(megacourses);
+    if(courseName == null && courseGroup == null && courseNumLessons == null && courseBlock == null)
+    {
+        courseGroup = document.getElementById("selectGroup").value;
+        courseName = document.getElementById("selectCourse").value;
+        courseNumLessons = document.getElementById("selectNumLessons").value;
+        courseBlock = $('#selectCourse :selected').attr('label');
+    }
 
     if(IsCourseAssigned(courseName, courseGroup))
     {
@@ -48,8 +162,6 @@ function createServiceCourse()
 
         return;
     }
-    
-    courseNumLessons = document.getElementById("selectNumLessons").value;
 
     var col = document.createElement('div');
     col.className = 'col-lg-3 service-course';
@@ -70,14 +182,13 @@ function createServiceCourse()
     cardSchedules.id = "cardSchedules-" + cardNumber;
 
     var cardFooter = document.createElement('div');
-    cardFooter.className = "cardFooter";
+    cardFooter.className = "cardFooter service-courses-options";
 
     var cardSchedulesSelect = document.createElement('select');
-    cardSchedulesSelect.className = "form-control";
+    cardSchedulesSelect.className = "form-control cardFooter-option";
     cardSchedulesSelect.id = "scheduleSelect-" + cardNumber;
 
     /*Create and append the options*/
-    var days=['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
     var i = 0;
     var index = 0;
     $.each(jArray, function(key, val) {
@@ -88,22 +199,23 @@ function createServiceCourse()
         cardSchedulesSelect.appendChild(option);
         i++;
         index = (i % 6);
-   });
+    });
 
-    var addScheculeButtton = document.createElement('a');
-    addScheculeButtton.id = "btn-" + cardNumber;
-    addScheculeButtton.className = 'btn btn-primary';
-    addScheculeButtton.innerHTML = "Agregar";
-    addScheculeButtton.setAttribute('onClick', "addScheculeToCourse('" + cardSchedules.id + "', '" + cardSchedulesSelect.id  + "', '" 
-                                                                    +  addScheculeButtton.id +  "', '" + col.id + "')");
+    var addScheduleButton = document.createElement('a');
+    addScheduleButton.id = "btn-" + cardNumber;
+    addScheduleButton.className = 'btn btn-primary cardFooter-option';
+    addScheduleButton.innerHTML = "Agregar";
+    addScheduleButton.setAttribute('onClick', 
+                                    "addScheculeToCourse('" + cardSchedules.id + "', '" + cardSchedulesSelect.id  + "', '" +
+                                    addScheduleButton.id +  "', '" + col.id + "', '" + courseName + "', '" + courseGroup + "')");
 
     var deleteCardButton = document.createElement('a');
-    deleteCardButton.className = 'btn btn-danger';
+    deleteCardButton.className = 'btn btn-danger cardFooter-option';
     deleteCardButton.innerHTML = "Borrar";
-    deleteCardButton.setAttribute('onClick', "deleteCard('" + col.id + "', " + ')');
+    deleteCardButton.setAttribute('onClick', "deleteCard('" + col.id  + "')");
 
     cardFooter.appendChild(cardSchedulesSelect);
-    cardFooter.appendChild(addScheculeButtton);
+    cardFooter.appendChild(addScheduleButton);
     cardFooter.appendChild(deleteCardButton);
 
     cardBody.appendChild(cardTitle);
@@ -113,39 +225,53 @@ function createServiceCourse()
     col.appendChild(card);
     document.getElementById("serviceCourses").appendChild(col);
 
-    var course= {} //object
+    var course= {}
     course.id = col.id;
-    course.name = document.getElementById("selectCourse").value;
-    course.group = document.getElementById("selectGroup").value;
-    course.numLessons = document.getElementById("selectNumLessons").value;
-    course.block = $('#selectCourse :selected').attr('label'); 
+    course.name = courseName;
+    course.group = courseGroup;
+    course.numLessons = courseNumLessons;
+    course.block = courseBlock;
     course.lessons = [];
-    megacourses.push(course);
-    //console.log(courses); //object of objects
-    //console.log(megacourses); //array of objects
+    course.cardSchedulesId = cardSchedules.id;
+    course.cardSchedulesSelectId =  cardSchedulesSelect.id;
+    course.addScheculeButton = addScheduleButton.id;
+    courses.push(course);
     cardNumber++;
 }
 
+//elimina el curso y elimina el cuadro en pantalla
 function deleteCard(id)
 {
     document.getElementById(id).remove();
 
-    for(var i = 0; i < megacourses.length; i++)
+    for(var i=0; i<courses.length; i++)
     { 
-        if (megacourses[i].id === id)
+        if (courses[i].id === id)
         {
-          megacourses.splice(i, 1);
-          return;
+            //borrar cada horario de la BD
+            for(var j=0; j<courses[i].lessons.length; j++)
+            {
+                deleteLesson(courses[i].name, courses[i].group, courses[i].lessons[j].numberSchedule);
+            }
+            courses.splice(i, 1);
+            return;
         }
     }
 }
 
-function addScheculeToCourse(cardSchedulesId, cardSchedulesSelectId, addScheculeButttonId, courseId)
+//agrega el horario en el curso (cuadro en pantalla)
+function addScheculeToCourse(cardSchedulesId, cardSchedulesSelectId, addScheculeButttonId, courseId, courseName, courseGroup)
 {
+    if(!isPeriodAssigned())
+    {
+        swal({title: "Error",
+        text: "No ha seleccionado el periodo",
+        icon: "error"});
+        return;
+    }
     var currentCard = document.getElementById(cardSchedulesId);
-    var currentSelect = document.getElementById(cardSchedulesSelectId);
     var currentAddButton = document.getElementById(addScheculeButttonId);
-
+    var currentSelect = document.getElementById(cardSchedulesSelectId);
     var string = currentSelect.options[currentSelect.selectedIndex].id;
     var fields = string.split('-');
     var id = currentCard.id + fields[1];
@@ -168,7 +294,6 @@ function addScheculeToCourse(cardSchedulesId, cardSchedulesSelectId, addSchecule
             icon: "warning",
             dangerMode: true,
         })
-
     }
     else
     {
@@ -196,12 +321,88 @@ function addScheculeToCourse(cardSchedulesId, cardSchedulesSelectId, addSchecule
         schedule1.name = currentSelect.value;
         schedule1.id = id;
         schedule1.numberSchedule = fields[1];
-
-        console.log(megacourses);
     
-        for(var i = 0; i < megacourses.length; i++)
+        for(var i = 0; i < courses.length; i++)
         {
-            var course = megacourses[i];
+            var course = courses[i];
+    
+            if (course.id === courseId)
+            {
+                course.lessons.push(schedule1);
+                saveLesson(courseName, courseGroup, fields[1]);
+    
+                if(course.lessons.length == course.numLessons)
+                {
+                    currentAddButton.classList.add("disabled");
+                }
+                break;
+            }
+        }
+    }
+}
+
+//agrega el horario en el curso (desde la BD al inicio de la pantalla)
+function addScheculeFromBDToCourse(cardSchedulesId, course, addScheculeButttonId, courseId)
+{
+    var currentCard = document.getElementById(cardSchedulesId);
+    var currentAddButton = document.getElementById(addScheculeButttonId);
+
+    var courseLesson = course.lesson;
+    var courseNumberSchedule = course.numberSchedule;
+    var id = currentCard.id + courseNumberSchedule;
+
+    //obtener dia de la semana
+    var day = days[(courseNumberSchedule - 1) % 6];
+
+    /* VALIDAR EL ID con el curso actual y con los cursos del mismo bloque*/
+    if(IsScheduleInCourse(id, courseId))
+    {
+        swal({
+            title: currentSelect.value,
+            text: "Este horario ya fue seleccionado para en el curso",
+            icon: "warning",
+            dangerMode: true,
+        })
+    }
+    else if (IsScheduleInBlock(courseLesson, courseId))
+    {
+        swal({
+            title: currentSelect.value,
+            text: "Este horario ya fue seleccionado para un curso del mismo bloque",
+            icon: "warning",
+            dangerMode: true,
+        })
+    }
+    else
+    {
+        var schedule = document.createElement("div");
+        schedule.classList.add("course-schedule");
+        schedule.id = id;
+    
+        var scheduleDescription = document.createElement('p');
+        scheduleDescription.innerHTML = day + ": " + courseLesson;
+        
+        var btn = document.createElement("button");
+        btn.classList.add("btn-danger");
+        btn.setAttribute('onclick', "deleteScheduleCourse('" + schedule.id + "', '" +  currentAddButton.id + "')");
+        
+        var glyphicon = document.createElement("i");
+        glyphicon.classList.add("glyphicon");
+        glyphicon.classList.add("glyphicon-trash");
+        
+        btn.appendChild(glyphicon);
+        schedule.appendChild(scheduleDescription);
+        schedule.appendChild(btn);
+        currentCard.appendChild(schedule);
+    
+        var schedule1 = {};
+        schedule1.name = courseLesson;
+        schedule1.id = id;
+        schedule1.numberSchedule = courseNumberSchedule;
+    
+        for(var i = 0; i < courses.length; i++)
+        {
+            var course = courses[i];
     
             if (course.id === courseId)
             {
@@ -211,12 +412,13 @@ function addScheculeToCourse(cardSchedulesId, cardSchedulesSelectId, addSchecule
                 {
                     currentAddButton.classList.add("disabled");
                 }
-                return;
+                break;
             }
         }
     }
 }
 
+//elimina el horario de la pantalla
 function deleteScheduleCourse(scheduleId, addScheculeButttonId)
 {
     var currentSchedule = document.getElementById(scheduleId);
@@ -225,29 +427,33 @@ function deleteScheduleCourse(scheduleId, addScheculeButttonId)
 
     currentAddButton.classList.remove("disabled");
 
-    for(var i = 0; i < megacourses.length; i++)
+    for(var i = 0; i < courses.length; i++)
     { 
-        for(var j = 0; j < megacourses[i].lessons.length; j++)
+        for(var j = 0; j < courses[i].lessons.length; j++)
         {
 
-            if (megacourses[i].lessons[j].id == scheduleId)
+            if (courses[i].lessons[j].id == scheduleId)
             {
-                megacourses[i].lessons.splice(j, 1);
+                //borrar en BD
+                deleteLesson(courses[i].name, courses[i].group, courses[i].lessons[j].numberSchedule)
+
+                courses[i].lessons.splice(j, 1);
                 return;
             }
         }
     }
 }
 
+//verifica si el horario ya fue asignado al curso
 function IsScheduleInCourse(scheduleId, courseId)
 {
-    for(var i = 0; i < megacourses.length; i++)
+    for(var i = 0; i < courses.length; i++)
     { 
-        if(megacourses[i].id == courseId)
+        if(courses[i].id == courseId)
         {
-            for(var j = 0; j < megacourses[i].lessons.length; j++)
+            for(var j = 0; j < courses[i].lessons.length; j++)
             {
-                if (megacourses[i].lessons[j].id == scheduleId)
+                if (courses[i].lessons[j].id == scheduleId)
                 {
                     return true;
                 }
@@ -258,13 +464,14 @@ function IsScheduleInCourse(scheduleId, courseId)
     return false;
 }
 
+//devuelve el bloque del curso
 function courseBlock(courseId)
 {
-    for(var i = 0; i < megacourses.length; i++)
+    for(var i = 0; i < courses.length; i++)
     { 
-        if(megacourses[i].id == courseId)
+        if(courses[i].id == courseId)
         {
-            return megacourses[i].block;
+            return courses[i].block;
         }
     }
 }
@@ -274,13 +481,13 @@ function IsScheduleInBlock(scheduleName, courseId)
 {
     var currentBlock = courseBlock(courseId);
 
-    for(var i = 0; i < megacourses.length; i++)
+    for(var i = 0; i < courses.length; i++)
     { 
-        if(megacourses[i].id != courseId && megacourses[i].block == currentBlock)
+        if(courses[i].id != courseId && courses[i].block == currentBlock)
         {
-            for(var j = 0; j < megacourses[i].lessons.length; j++)
+            for(var j = 0; j < courses[i].lessons.length; j++)
             {
-                if (megacourses[i].lessons[j].name == scheduleName)
+                if (courses[i].lessons[j].name == scheduleName)
                 {
                     return true;
                 }
@@ -291,19 +498,89 @@ function IsScheduleInBlock(scheduleName, courseId)
     return false;
 }
 
-
-/*
-    Faltan funciones para:
-    guardar a base de datos
-    obtener datos de base de datos y actualizar la pantalla/variables
-*/
-
-function saveServiceCourses()
+//guardar leccion en BD
+function saveLesson(courseName, courseGroup, numberSchedule)
 {
-    if(period == 0)
+    if(!isPeriodAssigned())
     {
         swal({title: "Error",
         text: "No ha seleccionado el periodo",
         icon: "error"});
+    }
+    else
+    {
+        $.ajax({
+            type: "POST",
+            url : base_url + "Administration/Courses_controller/addLesson/",
+            data: {courseName: courseName, 
+                   courseGroup: courseGroup,
+                   numberSchedule: numberSchedule,
+                   idPeriod: period},
+            dataType: "JSON",
+            beforeSend: function(){
+                showLoader();
+            },
+            success: function(data)
+            {
+                if(data)
+                {
+                    hideLoader();
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                showErrors(jqXHR, textStatus, errorThrown);
+            }
+        });
+    }
+}
+
+//borrar leccion en BD
+function deleteLesson(courseName, courseGroup, numberSchedule)
+{
+    if(!isPeriodAssigned())
+    {
+        swal({title: "Error",
+        text: "No ha seleccionado el periodo",
+        icon: "error"});
+    }
+    else
+    {
+        $.ajax({
+            url : base_url + "Administration/Courses_controller/deleteLesson/",
+            type: "POST",
+            dataType: "JSON",
+            data: {courseName: courseName, 
+                    courseGroup: courseGroup,
+                    numberSchedule: numberSchedule,
+                    idPeriod: period},
+            beforeSend: function(){
+                showLoader();
+            },
+            success: function(response)
+            {
+                if (response)
+                {
+                    $('#modal_form').modal('hide');
+                    hideLoader();
+                    swal({title: "Listo", 
+                        text: "Horario Eliminado", 
+                        icon: "success"});
+                }
+
+                else
+                {
+                    hideLoader();
+                    swal({title: "Error",
+                        text: "No se ha eliminado el horario",
+                        icon: "error"});
+                }
+
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                showErrors(jqXHR, textStatus, errorThrown);
+            }
+        });
     }
 }
