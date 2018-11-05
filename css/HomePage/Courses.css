@@ -39,7 +39,8 @@
     flex-basis: 25%;
     margin: 5px;
     height: 300px;
-    background-color: cornflowerblue;
+    background-color: rgb(51,51,51);
+    color: white;
     text-align: center;
     justify-content: center;
 }
@@ -59,11 +60,12 @@
 .course-schedule
 {
     display: flex;
-    border: 1px black solid;
+    border-radius: 2%;
     width: 100%;
     height: 32px;
-    background-color: crimson;
+    background-color: #BC4639;
     padding: 1%;
+    margin: 4px;
     align-items: center;
 }
 
@@ -82,11 +84,30 @@
 
 .cardFooter
 {
-    position:absolute;
-    bottom:0;
-    left:0;
-    width:100%;
-    height: 90px;
-    background-color:#666;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 75px;
+    /*background-color:#666;*/
     color:#fff;
+}
+
+.cardFooter select
+{
+    width: 70%;
+    margin: auto;
+    margin-top: 45px;
+}
+
+.cardFooter-option
+{
+    display: flex; 
+    flex-basis: calc(33% - 5px);
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    height: 30px;
+    margin: auto;
+    margin-top: 45px;
 }

@@ -698,6 +698,31 @@ class Administrator_Logic{
 		$courseDAO = new courseDAO_model();
 		return $courseDAO->getServiceCourses();
 	}
+
+	public function getServiceLessonsByPeriod($pId)
+	{
+		$courseDAO = new courseDAO_model();
+		$query = $courseDAO->getServiceLessonsByPeriod($pId);
+		
+		if (!$query)
+		{
+			return array();
+		}
+
+		return $query;
+	}
+
+	public function insertLesson($pData)
+	{
+		$courseDAO_model = new CourseDAO_model();
+		return $courseDAO_model->insertLesson($pData);
+	}
+
+	public function deleteLesson($pData)
+	{
+		$courseDAO_model = new CourseDAO_model();
+		return $courseDAO_model->deleteLesson($pData);
+	}
 }
 
 ?>
