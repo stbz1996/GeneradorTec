@@ -272,7 +272,7 @@ class CourseDAO_model extends CI_Model
         return $query->result();
     }
 
-    /* Try to insert in the database. */
+
     public function serviceLessonAssigned($pIdPeriod)
     {
         $this->db->select('*');

@@ -14,9 +14,6 @@ if ($username == '' || $idAdmin == '' || $idCarrer == '')
 
 <?php
     $login = base_url()."/System_controller/index";
-
-    $generateSchedules = base_url()."/Administration/Generator_controller/index";
-    // Here we can define the links to the controlles
     $link_to_generateLinks = base_url()."Administration/GenerateLinks_controller/LoadGenerateLinksView";
     $linkToScheduleHours = base_url()."Administration/Schedules_controller/showScheduleSelector";
     $linkToAdd = base_url()."Administrator_controller/AddAdmin";
@@ -75,12 +72,6 @@ if ($username == '' || $idAdmin == '' || $idCarrer == '')
                     <ul>
                         <li class="header-menu">
                             <span>Administrar Información</span>
-                        </li>
-                        <li>
-                            <a href="<?= $generateSchedules ?>">
-                                <i class="fa fa-bookmark"></i>
-                                <span>Generador TEST</span>
-                            </a>
                         </li>
                         <li>
                             <a href="<?= $linkToPlans ?>">

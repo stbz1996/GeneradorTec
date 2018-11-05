@@ -14,7 +14,7 @@ class Generator_controller extends CI_Controller
 	private $assigmentList  = array();   // The list of the assigned magistral classes
 	private $finalSolutions	= [];
 	private $errorList      = array();
-	private $limitOfresults = 10;
+	private $limitOfresults = 100000;
 	private $generator_Logic;
 	private $totalSolutions = 0;
 	private $serviceLessons = array();
@@ -68,24 +68,6 @@ class Generator_controller extends CI_Controller
 			$data->setAtributes($idProf, $idCourse, $idGroup);
 			$this->idsOfMagistralClass[] = $data;
 		}
-		
-		
-		/*
-		// Adriana
-		$data = new AssignedCourse();
-		$data->setAtributes(1, 4, 1);
-		$this->idsOfMagistralClass[] = $data;
-
-		// Aviles
-		$data = new AssignedCourse();
-		$data->setAtributes(2, 5, 2);
-		$this->idsOfMagistralClass[] = $data;
-
-		// Carlos
-		$data = new AssignedCourse();
-		$data->setAtributes(3, 6, 3);
-		$this->idsOfMagistralClass[] = $data;
-		*/
 	}
 
 
@@ -477,20 +459,21 @@ class Generator_controller extends CI_Controller
 		{
 			if ($cm->getCountOfAvailableSpaces() == 0) 
 			{
-				$error =  "Curso: ".$cm->getCourse()->getCode()." - ".$cm->getCourse()->getName().' - Grupo '.$cm->getGroup()->getNumber()."<br>";
-				$error .= "Profesor: ".$cm->getProfessor()->getName()."<br>";
-				$error .= "Error: NO pudo ser asignado, "; 
+				$error =  "El Curso ".$cm->getCourse()->getCode()."-".$cm->getCourse()->getName().', Grupo '.$cm->getGroup()->getNumber();
+				$error .= " con el profesor ".$cm->getProfessor()->getName();
+				$error .= ", no pudo ser asignado, "; 
 				if (count($cm->getProfessor()->getSchedules()) == 0) 
 				{
-					$error .= "el profesor no cuenta con horarios suficientes para la asignación de este curso.";
-					$error .= "Solución: Habilite el formulario del profesor para que pueda agregar más horarios y luego continúe con la generación <br>";
+					$error .= "el profesor no cuenta con horarios suficientes para la asignación de este curso. ";
+					$error .= "Habilite el formulario del profesor para que pueda agregar más horarios y luego continúe con la generación";
 				}
 				else
 				{
-					$error .= "no se logró colocar en ninguna opción de horario válida <br>";
-					$error .= "Solución: Asigne el curso a otro profesor para poder continuar<br>";
+					$error .= " no se logró colocar en ninguna opción de horario válida.";
+					$error .= " Asigne el curso a otro profesor para poder continuar";
 				}
 				array_push($this->errorList, $error);
+				break;
 			}	
 		}
 	}
