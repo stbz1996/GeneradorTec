@@ -18,7 +18,7 @@ class Generator_controller extends CI_Controller
 	private $generator_Logic;
 	private $totalSolutions = 0;
 	private $serviceLessons = array();
-	private $period = 1;
+	private $period;
 
 	function __construct()
 	{
@@ -517,9 +517,17 @@ class Generator_controller extends CI_Controller
 	/***********************************************
 	This is the beginning of the Generator algorithm 
 	***********************************************/
-	public function index()
+	public function index($idPeriod)
 	{
-		//Verify if code value exist
+		if ($idPeriod == null)
+		{
+			$this->period = 1;
+		}
+		else
+		{
+			$this->period = $idPeriod;
+		}
+
 		$classesJSON = $_POST['classes'];
 		$classes = json_decode(rawurldecode(base64_decode(rawurldecode($classesJSON))));
 		$this->readDataFromView($classes);
