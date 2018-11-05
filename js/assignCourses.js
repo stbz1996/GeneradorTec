@@ -871,7 +871,7 @@ function selectProfessor(divSelected){
 *************************************************/
 function saveAssigned()
 {
-    var url = base_url + "Administration/Generator_controller/index";
+    var url = base_url + "Administration/Generator_controller/index/";
 
     // If there are courses assigned.
     if (assigned.length > 0)
@@ -895,10 +895,10 @@ function saveMagistralClass(url, jsonData)
 {
     // ajax adding data to database
     let dataToEncode = encodeURIComponent(window.btoa(encodeURIComponent(jsonData))); // Encode.
-    console.log(dataToEncode);
+    console.log(url + idPeriod);
 
     $.ajax({
-        url : url,
+        url : url + idPeriod,
         type: "POST",
         data: 'classes=' + dataToEncode,
         dataType: "JSON",
