@@ -45,6 +45,9 @@ class Form_controller extends CI_Controller {
 		//Verify if p value exist
 		if(!isset($_GET['p']))
 		{
+			$data['msg'] = "enlace no válido";
+			$data['sendTitle'] = "Error";
+			$this->load->view("Forms/SendPage", $data);
 			return;
 		}
 		$this->session->set_userdata('hashCode', $_GET['p']);
@@ -66,6 +69,9 @@ class Form_controller extends CI_Controller {
 		//Verify if form doesn't exist
 		if(!$queryForm)
 		{
+			$data['msg'] = "enlace no válido";
+			$data['title'] = "Error";
+			$this->load->view("Forms/SendPage", $data);
 			return;
 		}
 		$newForm = $queryForm;
@@ -79,10 +85,21 @@ class Form_controller extends CI_Controller {
 		$initialInformation = $this->getInitialInformation($this->Form);
 
 		//This condition verify if due date already pass
-		/*if(strtotime(date("Y/m/d")) > strtotime($this->Form->getDueDate()) || !$this->Form->getState())
+		if(strtotime(date("Y/m/d")) > strtotime($this->Form->getDueDate()))
 		{
+			$data['msg'] = "cumplió con la fecha de vencimiento";
+			$data['title'] = "Error";
+			$this->load->view("Forms/SendPage", $data);
 			return;
-		}*/
+		}
+
+		if(!$this->Form->getState())
+		{
+			$data['msg'] = "ya fue enviado";
+			$data['title'] = "Formulario Enviado";
+			$this->load->view("Forms/SendPage", $data);
+			return;
+		}
 		//Assign information to show it in form
 		$data = $this->assignInitialInformation($initialInformation);
 		$data['dueDate'] = $this->Form->getDueDate();
@@ -202,53 +219,9 @@ class Form_controller extends CI_Controller {
 
 
 		return $data;
-		/*
-		return $data;*/
-		/*$coursesPlan = $this->showPlanCourses($plans);
-
-		$data = $this->getFilledPlans($plans, $coursesPlan);*/
+		
 
 	}
-	/*function getSavedInformation($idCareer)
-	{
-		$plans = $this->showCareerPlans($idCareer);
-		$coursesPlan = $this->showPlanCourses($plans);
-
-		$data = $this->getFilledPlans($plans, $coursesPlan);
-		$coursesForm = $this->getFormCourses();
-
-		$data = array_merge($data, $coursesForm);
-	
-		return $data;
-	}*/
-
-	/****************************************
-	*Function that returns an array of plans*
-	*that have courses.			 			*
-	*										*
-	*Input:									*
-	*	-$idCareer: Integer, id of the ca-	*
-	*	reer. 								*
-	*										*
-	*Result: 								*
-	*	Array of plans and courses.			*
-	*****************************************/
-	/*function getFilledPlans($plans, $coursesPlan)
-	{
-		for ($i=0; $i < count($coursesPlan) ; $i++) { 
-
-			//Verify if plan doesn't have courses
-			if(!count($coursesPlan[$i]))
-			{
-				unset($plans[$i]);
-				unset($coursesPlan[$i]);
-			}
-		}
-
-		$data['plans'] = array_values($plans);
-		$data['courses'] = array_values($coursesPlan);
-		return $data;
-	}*/
 
 	function getFilledBlocks($blocks, $courses)
 	{

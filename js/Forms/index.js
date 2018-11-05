@@ -266,40 +266,7 @@ $(".submit").click(function(){
 });
 
 
-function verifyActivities(){
-	
-	var activitiesDescription = $('input[name^="activityDescription"]');
-	var activitiesWorkPorcent = $('input[name^="workPorcent"]');
-	var workloadSelect = document.getElementById("workload_options");
-	var workloadValue = workloadSelect.options[workloadSelect.selectedIndex].value;
-	var totalWork = 0;
 
-	for(i = 0; i < activitiesDescription.length; i++)
-	{
-		var description = activitiesDescription[i].value;
-		var workPorcent = activitiesWorkPorcent[i].value;
-
-		if(description === "")
-		{
-			swal('Lo sentimos', 'Una o varias actividades no poseen descripción', 'error');
-			return true;
-		}
-
-		if(workPorcent < 0 || workPorcent === "")
-		{
-			swal('Lo sentimos', 'Uno o varios porcentajes no son válidos', 'error');
-			return true;
-		}
-
-		totalWork += parseInt(workPorcent, 10);
-	}
-	if(workloadValue < totalWork)
-	{
-		swal('Lo sentimos', 'Actividades sobrepasan la carga de trabajo asignado', 'error');
-		return true;
-	}
-	return false;
-}
 
 $('.submit-save').click(function(){
 
@@ -379,6 +346,13 @@ $('.submit-save').click(function(){
 		newPriorities.push(priorityOption);
 	}
 
+	var isPriorities = verifyPriorities(newPriorities, workloadValue, workloadExtension);
+
+	if(!isPriorities)
+	{
+		return false;
+	}
+
 	$.ajax({
 		url: '../Form_Controller/getDataFromView',
 		type: "POST",
@@ -408,10 +382,16 @@ $('.submit-save').click(function(){
 				createPDF(workloadValue, workloadExtension, 
 					newActivitiesDescription, newActivitiesWorkPorcent,
 					idCourses, newPriorities);
+				document.getElementById("loader").style.display = "none";
+				document.getElementById("msform").style.opacity = 1;
+				window.location.reload();
 			}
-			document.getElementById("loader").style.display = "none";
-			document.getElementById("msform").style.opacity = 1;
-			swal('Listo', 'Sus datos han sido guardados', 'success');
+			else
+			{
+				document.getElementById("loader").style.display = "none";
+				document.getElementById("msform").style.opacity = 1;
+				swal('Listo', 'Sus datos han sido guardados', 'success');
+			}
 		},
 		error: function ()
         {
@@ -421,6 +401,41 @@ $('.submit-save').click(function(){
         }
 	});
 });
+
+function verifyActivities(){
+	
+	var activitiesDescription = $('input[name^="activityDescription"]');
+	var activitiesWorkPorcent = $('input[name^="workPorcent"]');
+	var workloadSelect = document.getElementById("workload_options");
+	var workloadValue = workloadSelect.options[workloadSelect.selectedIndex].value;
+	var totalWork = 0;
+
+	for(i = 0; i < activitiesDescription.length; i++)
+	{
+		var description = activitiesDescription[i].value;
+		var workPorcent = activitiesWorkPorcent[i].value;
+
+		if(description === "")
+		{
+			swal('Lo sentimos', 'Una o varias actividades no poseen descripción', 'error');
+			return true;
+		}
+
+		if(workPorcent < 0 || workPorcent === "")
+		{
+			swal('Lo sentimos', 'Uno o varios porcentajes no son válidos', 'error');
+			return true;
+		}
+
+		totalWork += parseInt(workPorcent, 10);
+	}
+	if(workloadValue < totalWork)
+	{
+		swal('Lo sentimos', 'Actividades sobrepasan la carga de trabajo asignado', 'error');
+		return true;
+	}
+	return false;
+}
 
 function verifyCourses(workload, courses)
 {
@@ -505,6 +520,109 @@ function addSchedulesText()
 			$('#div-schedules').append("<div> - "+day+ ": "+ hour + "</div>");
 		}
 	}
+}
+
+function verifyPriorities(listPriorities, porcent, extension)
+{
+	totalPriorities = getTotalPriorities(listPriorities);
+	minimumPriorities = getMinimumCourses(porcent, extension);
+
+	sumTotalPriorities = 2*totalPriorities[0] + totalPriorities[1];
+	sumMinimumPriorities = 2*minimumPriorities[0] + minimumPriorities[1];
+
+	/* Case total courses with priority A are less than minimum */
+	if(totalPriorities[0] < minimumPriorities[0])
+	{
+		showMessageErrorPriorities(minimumPriorities, porcent, extension);
+		return false;
+	}
+
+	var diffPrioritiesB = minimumPriorities[1] - totalPriorities[1];
+
+	/* Case total courses with priority B are less than minimum */
+	if(diffPrioritiesB > 0)
+	{
+		/* Check if there are more courses with priority A that fulfill requirements */
+		var diffPrioritiesA = totalPriorities[0] - minimumPriorities[0];
+
+		if(diffPrioritiesA < diffPrioritiesB)
+		{
+			showMessageErrorPriorities(minimumPriorities, porcent, extension);
+			return false;
+		}
+	}
+
+	return true;
+}
+
+function showMessageErrorPriorities(minimumPriorities, porcent, extension)
+{
+	message = "Con carga de " + porcent + "%";
+
+	if(extension)
+	{
+		message += " (con ampliación)";
+	}
+
+	message += " debe seleccionar:\n- Al menos " + minimumPriorities[0] + " cursos con prioridad A";
+
+	if(minimumPriorities[1])
+	{
+		message += "\n- Al menos " + minimumPriorities[1] + " cursos con prioridad B";
+	}
+
+	//Con una carga de X% debe seleccionar al menos N cursos con prioridad A y W cursos con prioridad B
+	swal('Lo sentimos', message, "error");
+}
+
+
+function getTotalPriorities(listPriorities)
+{
+	totalPriorities = [0, 0];
+	for(i = 0; i < listPriorities.length; i++)
+	{
+		priority = listPriorities[i];
+
+		if(priority === 'A')
+		{
+			totalPriorities[0]++;
+		}
+		else if(priority === 'B')
+		{
+			totalPriorities[1]++;
+		}
+	}
+
+	return totalPriorities;
+}
+
+function getMinimumCourses(porcent, extension)
+{
+	/* Case workload is 100% (Minimum 3 courses with A and at least 1 with B) */
+	if(porcent == 100)
+	{
+		/* Case extension (Minimum 4 courses with A) */
+		if(extension)
+		{
+			return [4, 0];
+		}
+		return [3, 1];
+	}
+
+	/* Case workload is 75% (Minimum 3 courses with A) */
+	else if(porcent == 75)
+	{
+		return [3, 0];
+	}
+
+	/* Case workload is 50% (Minimum 2 courses with A and at least 1 with B) */
+	else if(porcent == 50)
+	{
+		return [2, 1];
+	}
+
+	/* Case workload is 25% (Minimum 1 course with A and at least 1 with B) */
+	return [1, 1];
 }
 
 

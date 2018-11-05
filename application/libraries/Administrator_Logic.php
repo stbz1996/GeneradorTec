@@ -273,6 +273,9 @@ class Administrator_Logic{
 	****************************************/
  	public function insertBlock($data)
  	{
+ 		$num = 1 + count($this->getArrayBlocks($data['idPlan']));
+ 		$data['number'] = $num;
+
  		$blockDAO_model = new BlockDAO_model();
  		return $blockDAO_model->insert($data);
  	}
@@ -314,7 +317,8 @@ class Administrator_Logic{
  	public function deleteBlock($data)
  	{
  		$blockDAO_model = new BlockDAO_model();
- 		return $blockDAO_model->delete($data);
+ 		$res = $blockDAO_model->delete($data);
+ 		return $res;
  	}
 
 
