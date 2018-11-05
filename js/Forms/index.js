@@ -382,10 +382,16 @@ $('.submit-save').click(function(){
 				createPDF(workloadValue, workloadExtension, 
 					newActivitiesDescription, newActivitiesWorkPorcent,
 					idCourses, newPriorities);
+				document.getElementById("loader").style.display = "none";
+				document.getElementById("msform").style.opacity = 1;
+				window.location.reload();
 			}
-			document.getElementById("loader").style.display = "none";
-			document.getElementById("msform").style.opacity = 1;
-			swal('Listo', 'Sus datos han sido guardados', 'success');
+			else
+			{
+				document.getElementById("loader").style.display = "none";
+				document.getElementById("msform").style.opacity = 1;
+				swal('Listo', 'Sus datos han sido guardados', 'success');
+			}
 		},
 		error: function ()
         {
@@ -545,29 +551,6 @@ function verifyPriorities(listPriorities, porcent, extension)
 			return false;
 		}
 	}
-	/*
-	if(((totalPriorities[0] < minimumPriorities[0]) || (totalPriorities[1] < minimumPriorities[1])) ||
-		(sumTotalPriorities < sumMinimumPriorities))
-	{
-		message = "Con carga de " + porcent + "%";
-
-		if(extension)
-		{
-			message += " (con ampliación)";
-		}
-
-		message += " debe seleccionar:\n- " + minimumPriorities[0] + " cursos con prioridad A";
-
-		if(minimumPriorities[1])
-		{
-			message += "\n- " + minimumPriorities[1] + " cursos con prioridad B";
-		}
-
-		//Con una carga de X% debe seleccionar al menos N cursos con prioridad A y W cursos con prioridad B
-		swal('Lo sentimos', message, "error");
-		return false;
-	}
-	*/
 
 	return true;
 }
