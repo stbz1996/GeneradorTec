@@ -894,7 +894,6 @@ function saveAssigned()
 function saveMagistralClass(url, jsonData)
 {
     // ajax adding data to database
-
     let dataToEncode = encodeURIComponent(window.btoa(encodeURIComponent(jsonData))); // Encode.
     console.log(url + idPeriod);
 
@@ -917,7 +916,7 @@ function saveMagistralClass(url, jsonData)
             }
             else
             {
-                alert(data);
+                errorSwal(data[0] + ""); 
             }
         },
         error: function (jqXHR, textStatus, errorThrown)

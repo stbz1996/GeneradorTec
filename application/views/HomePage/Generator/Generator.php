@@ -1,12 +1,12 @@
 <?php	
 	// Asigna los colores 
-	$colors = array('#F45D8B', '#F4B45D', '#F4DF5D', '#9BF45D', '#5DF4C9', '#5DBDF4', '#5D6BF4', '#9F5DF4', '#EB5DF4', '#F45DBB', '#F45D7F', '#C8D3C8', '#FE736A', '#EAFE6A', '#F0FCA2', '#FCAEA2', '#A2BCFC', '#718AC6', '#77C671');
+	$colors = array('#F4B45D', '#F4DF5D', '#9BF45D', '#5DF4C9', '#5DBDF4', '#5D6BF4', '#9F5DF4', '#EB5DF4', '#F45DBB', '#F45D7F', '#C8D3C8', '#FE736A', '#EAFE6A', '#F0FCA2', '#FCAEA2', '#A2BCFC', '#718AC6', '#77C671');
 	shuffle($colors);
 	for ($i = 0; $i < count($solutions); $i++) 
 	{
 		for ($j = 0; $j < count($solutions[$i]); $j++) 
 		{ 
-			$solutions[$i][$j][4] = $colors[$j];
+			$solutions[$i][$j][4] = $colors[$j % count($colors)];
 		}
 	}
 
