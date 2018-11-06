@@ -1,7 +1,7 @@
 <!-- Los tituloso -->
 <script>var base_url = '<?php echo base_url() ?>';</script>
 <div>
-    <h1>Asignación de Cursos</h1>
+    <h1 class="tittles">Asignación de Cursos</h1>
     <p>Prioridades: </p> 
 
     <div class="row">

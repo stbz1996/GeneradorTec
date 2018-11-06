@@ -36,13 +36,12 @@
 	);
 ?>
 
+<div>
+    <h1 class="tittles">Administración</h1>
+  	<p>Por favor ingrese la información del nuevo administrador: </p>
+</div>
 <div class="adminContainer" id="allcontent">
 	<div class="row">
-		<div>
-          	<h1>Administración</h1>
-	   		<p>Por favor ingrese la información del nuevo administrador: </p>
-        </div>
-        <hr>
         <div>
          	<form id="Login">
 	        	<div class="form-group"> <?= form_input($user) ?> </div>

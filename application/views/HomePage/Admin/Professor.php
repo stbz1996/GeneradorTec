@@ -1,7 +1,7 @@
 <script>var base_url = '<?php echo base_url() ?>';</script>
 <!-- Los titulos -->
 <div>
-    <h1>Profesores</h1>
+    <h1 class="tittles">Profesores</h1>
     <p>Explicacion de lo que hay en la página</p>
 </div>
 

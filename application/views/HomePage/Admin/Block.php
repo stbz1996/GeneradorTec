@@ -2,7 +2,7 @@
 
 <!-- Titles -->
 <div>
-    <h1>Bloques</h1>
+    <h1 class="tittles">Bloques</h1>
 </div>
 
 <hr>
