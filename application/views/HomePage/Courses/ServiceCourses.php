@@ -11,20 +11,10 @@ var base_url = '<?= base_url() ?>';
             <select class="form-control select" id="selectCourse" name='selectCourse'>
                 <?php foreach($courses as $course){?>
 
-                    <option value="<?= $course->name ?>" name="<?= $course->idBlock ?>">
+                    <option value="<?= $course->name ?>" name="<?= $course->idBlock . "-" . $course->lessonNumber?>">
                         <?= $course->name;?>
                     </option> 
                 <?php }?>
-            </select>
-        </div>
-        
-        <div class="selectBoxContainer">
-            <span>Numero de Lecciones</span>
-            <select class="form-control select" id="selectNumLessons" name='selectNumLessons'>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option selected value="4">4</option>
-                <option value="5">5</option>
             </select>
         </div>
 

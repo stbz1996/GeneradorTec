@@ -1,14 +1,8 @@
 var period = 0;
 var cardNumber = 10000;
 var courses = [];
-var courseName;
-var courseGroup;
-var courseNumLessons;
-var coursesFromDB;
+var coursesFromDB = [];
 var days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
-var currentCard;
-var currentSelect;
-var currentAddButton;
 
 $(document).ready(function() {
     $('#modalPeriod').modal('show');
@@ -93,8 +87,15 @@ function getServiceCourses()
         },
         success: function(data)
         {
-            coursesFromDB = data;
-            printCourses();
+            if(data.length == 0)
+            {
+                swal({title: "No hay cursos de servicio asociados a este periodo", icon: "success"});
+            }
+            else
+            {
+                coursesFromDB = data;
+                printCourses();
+            }
             hideLoader();
 
         },
@@ -109,7 +110,9 @@ function selectPeriod()
 {
     $('#serviceCourses').empty();
     period = $('[name="selectPeriod"]').val();
-    swal({title: "Periodo seleccionado", icon: "success"});
+    cardNumber = 10000;
+    courses = [];
+    coursesFromDB = [];
     $('#modalPeriod').modal('hide');
     getServiceCourses();
 }
@@ -145,10 +148,11 @@ function createServiceCourse(courseName = null, courseGroup = null, courseNumLes
 
     if(courseName == null && courseGroup == null && courseNumLessons == null && courseBlock == null)
     {
+        var selectName = $('#selectCourse :selected').attr('name').split('-');
         courseGroup = document.getElementById("selectGroup").value;
         courseName = document.getElementById("selectCourse").value;
-        courseNumLessons = document.getElementById("selectNumLessons").value;
-        courseBlock = $('#selectCourse :selected').attr('name');
+        courseBlock = selectName[0];
+        courseNumLessons = selectName[1];
     }
 
     if(IsCourseAssigned(courseName, courseGroup))
