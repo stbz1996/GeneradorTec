@@ -148,7 +148,7 @@ function createServiceCourse(courseName = null, courseGroup = null, courseNumLes
         courseGroup = document.getElementById("selectGroup").value;
         courseName = document.getElementById("selectCourse").value;
         courseNumLessons = document.getElementById("selectNumLessons").value;
-        courseBlock = $('#selectCourse :selected').attr('label');
+        courseBlock = $('#selectCourse :selected').attr('name');
     }
 
     if(IsCourseAssigned(courseName, courseGroup))
@@ -517,9 +517,6 @@ function saveLesson(courseName, courseGroup, numberSchedule)
                    numberSchedule: numberSchedule,
                    idPeriod: period},
             dataType: "JSON",
-            beforeSend: function(){
-                showLoader();
-            },
             success: function(data)
             {
                 if(data)
@@ -553,10 +550,8 @@ function deleteLesson(courseName, courseGroup, numberSchedule)
             data: {courseName: courseName, 
                     courseGroup: courseGroup,
                     numberSchedule: numberSchedule,
-                    idPeriod: period},
-            beforeSend: function(){
-                showLoader();
-            },
+                    idPeriod: period
+                },
             success: function(response)
             {
                 if (response)
