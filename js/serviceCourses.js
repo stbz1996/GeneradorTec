@@ -517,9 +517,6 @@ function saveLesson(courseName, courseGroup, numberSchedule)
                    numberSchedule: numberSchedule,
                    idPeriod: period},
             dataType: "JSON",
-            beforeSend: function(){
-                showLoader();
-            },
             success: function(data)
             {
                 if(data)
@@ -553,10 +550,8 @@ function deleteLesson(courseName, courseGroup, numberSchedule)
             data: {courseName: courseName, 
                     courseGroup: courseGroup,
                     numberSchedule: numberSchedule,
-                    idPeriod: period},
-            beforeSend: function(){
-                showLoader();
-            },
+                    idPeriod: period
+                },
             success: function(response)
             {
                 if (response)

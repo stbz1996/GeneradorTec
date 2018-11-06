@@ -1,48 +1,63 @@
+*{
+    font-family: Verdana;
+}
+
 .filterCoursesContainer{
 	margin-bottom: 2%;
 }
-
-.service-courses-options
-{
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    margin-bottom: 2%;
-    justify-content: left;
+.contInfo{
+    overflow: hidden;
+    width: 100%;
 }
-
-.service-courses-option
-{
-    display: flex; 
-    flex-basis: calc(33% - 5px);
-    justify-content: center;
-    flex-direction: column;
+.selectBoxContainer{
+    width: 33.33%;
     text-align: center;
+    float: left;
+}
+.selectBoxContainer span{
+    font-weight: bold;
+    font-size: 1.2em;
+}
+.bottonsService{
+    float: left;
+    width: 20%;
+    margin-left: 1.7%;
+    margin-bottom: 2%;
 }
 
-.form-control
+.select
 {
     width: 90% !important;
     margin: 3% auto;
 }
 
+.service-courses-options
+{
+    margin-bottom: 2%;
+    justify-content: left;
+    padding: 1%;
+}
 
 .courses
 {
+    width: 99%;
     display: flex;
     flex-wrap: wrap;
 }
 
+.card-title{
+    height: 35px;
+}
 .service-course
-{
-    flex-grow: 1;
-    flex-basis: 25%;
-    margin: 5px;
-    height: 300px;
+{    
     background-color: rgb(51,51,51);
     color: white;
     text-align: center;
-    justify-content: center;
+    width: 31.3%;
+    padding: 1%;
+    margin: 1%;
+    border-radius: 10px;
+    height: 350px;
 }
 
 .card-schedules
@@ -54,24 +69,26 @@
     height: auto;
     margin: 0;
     padding: 0 auto;
-    justify-content: center;
+    height: 190px;
 }
 
 .course-schedule
 {
     display: flex;
-    border-radius: 2%;
-    width: 100%;
+    align-items: center;
+    padding: 1%;
+    margin: 1%;
     height: 32px;
     background-color: #BC4639;
-    padding: 1%;
-    margin: 4px;
-    align-items: center;
+    text-align: left;
+    width: 98%;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 .course-schedule p
 {
-    width: 80%;
+    width: 100%;
     float: left;
     margin: 0;
     padding: 0;
@@ -82,32 +99,38 @@
     float: right;
 }
 
+
 .cardFooter
 {
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
-    height: 75px;
-    /*background-color:#666;*/
-    color:#fff;
+    overflow: hidden;
 }
 
 .cardFooter select
 {
-    width: 70%;
-    margin: auto;
-    margin-top: 45px;
+    width: 98%;
+    float: left;
 }
 
 .cardFooter-option
 {
-    display: flex; 
-    flex-basis: calc(33% - 5px);
-    justify-content: center;
-    flex-direction: column;
     text-align: center;
-    height: 30px;
-    margin: auto;
-    margin-top: 45px;
+    width: 48%;
+    margin: 1%;
+}
+
+
+
+::-webkit-scrollbar {
+    background-color: black;
+    border-radius: 8px;
+    width: 5px;
+}
+::-webkit-scrollbar-thumb {
+    border: 5px #bdd9d5 solid;
+    border-radius: 12px;
+    background: black;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3) inset;
+    -webit-transition: all .3s ease-out;
+    transition: all .3s ease-out;
 }

@@ -1,22 +1,26 @@
-<script>var schedules = '';</script>
-<script>var base_url = '<?php echo base_url() ?>';</script>
+<script>
+var schedules = '';
+var base_url = '<?= base_url() ?>';
+</script>
 
 <div id="allcontent">
-    <div class="service-courses-options">
-        <div class="service-courses-option">
+    <div class="contInfo">
+
+        <div class="selectBoxContainer">
             <span>Curso</span>
-            <select class="form-control" id="selectCourse" name='selectCourse'>
+            <select class="form-control select" id="selectCourse" name='selectCourse'>
                 <?php foreach($courses as $course){?>
-                    <option value="<?php echo $course->name;?>" name="<?php echo $course->idBlock;?>">
-                        <?php echo $course->name;?>
+
+                    <option value="<?= $course->name ?>" name="<?= $course->idBlock ?>">
+                        <?= $course->name;?>
                     </option> 
                 <?php }?>
             </select>
         </div>
         
-        <div class="service-courses-option">
+        <div class="selectBoxContainer">
             <span>Numero de Lecciones</span>
-            <select class="form-control" id="selectNumLessons" name='selectNumLessons'>
+            <select class="form-control select" id="selectNumLessons" name='selectNumLessons'>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option selected value="4">4</option>
@@ -24,34 +28,32 @@
             </select>
         </div>
 
-        <div class="service-courses-option">
+        <div class="selectBoxContainer">
             <span>Grupo</span>
-            <select class="form-control" id="selectGroup" name='selectGroup'>
+            <select class="form-control select" id="selectGroup" name='selectGroup'>
                 <?php foreach($groups as $group){?>
-                    <option value="<?php echo $group->number;?>">
-                        <?php echo $group->number;?>
+                    <option value="<?= $group->number ?>">
+                        <?= $group->number;?>
                     </option> 
                 <?php }?>
             </select>
         </div>
         
-        <div class="service-courses-option">
+        <div class="bottonsService">
             <button class="btn btn-primary" onclick="createServiceCourse()">
                 <i class="glyphicon glyphicon-plus"></i> 
                 Agregar Curso Servicio
             </button>
         </div>
-        <div class="service-courses-option">
+        <div class="bottonsService">
             <button type="button" id="btnSave" onclick="reselectPeriod()" class="btn btn-primary">
                 Seleccionar Periodo
             </button>
         </div>
     </div>
-    
-    <script> var jArray = <?php echo json_encode($schedules); ?>; </script>
-    
+
+    <script> var jArray = <?= json_encode($schedules) ?>; </script>
     <div class="row courses" id="serviceCourses"></div>
- 
     <br><br>
 </div>
 
