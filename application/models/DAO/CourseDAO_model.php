@@ -277,7 +277,7 @@ class CourseDAO_model extends CI_Model
     public function serviceLessonAssigned($pIdPeriod)
     {
         $this->db->select('*');
-        $this->db->from('servicelesson');
+        $this->db->from('ServiceLesson');
         $this->db->where('idPeriod', $pIdPeriod);
         return $this->db->get()->result();
     }
@@ -290,11 +290,11 @@ class CourseDAO_model extends CI_Model
         $this->db->select('Course.idBlock as block');
         $this->db->select('Schedule.description as lesson');
         $this->db->select('Schedule.numberSchedule');
-        $this->db->from('servicelesson');
-        $this->db->join('Course', 'Course.idCourse = servicelesson.idCourse');
-        $this->db->join('ClassGroup', 'ClassGroup.idGroup = servicelesson.idGroup');
-        $this->db->join('Schedule', 'Schedule.numberSchedule = servicelesson.numberSchedule');
-        $this->db->where('servicelesson.idPeriod', $pIdPeriod);
+        $this->db->from('ServiceLesson');
+        $this->db->join('Course', 'Course.idCourse = ServiceLesson.idCourse');
+        $this->db->join('ClassGroup', 'ClassGroup.idGroup = ServiceLesson.idGroup');
+        $this->db->join('Schedule', 'Schedule.numberSchedule = ServiceLesson.numberSchedule');
+        $this->db->where('ServiceLesson.idPeriod', $pIdPeriod);
         
         $query = $this->db->get();
 
