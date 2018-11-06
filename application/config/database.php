@@ -55,9 +55,9 @@ $db['default'] = array(
 /*
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'db4free.net',
-	'username' => 'usuarioroot',
-	'password' => 'Generador2018',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => '',
 	'database' => 'generadortec2018',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
