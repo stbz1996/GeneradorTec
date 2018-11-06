@@ -7,8 +7,8 @@
             <span>Curso</span>
             <select class="form-control" id="selectCourse" name='selectCourse'>
                 <?php foreach($courses as $course){?>
-                    <option value="<?php echo $course->name;?>" label="<?php echo $course->idBlock;?>">
-                        <?php echo $course->name;?>
+                    <option value="<?= $course->name ?>" label="<?= $course->idBlock ?>">
+                        <?= $course->name ?>
                     </option> 
                 <?php }?>
             </select>
@@ -28,8 +28,8 @@
             <span>Grupo</span>
             <select class="form-control" id="selectGroup" name='selectGroup'>
                 <?php foreach($groups as $group){?>
-                    <option value="<?php echo $group->number;?>">
-                        <?php echo $group->number;?>
+                    <option value="<?= $group->number;?>">
+                        <?= $group->number;?>
                     </option> 
                 <?php }?>
             </select>
@@ -48,7 +48,7 @@
         </div>
     </div>
     
-    <script> var jArray = <?php echo json_encode($schedules); ?>; </script>
+    <script> var jArray = <?= json_encode($schedules) ?>; </script>
     
     <div class="row courses" id="serviceCourses"></div>
  

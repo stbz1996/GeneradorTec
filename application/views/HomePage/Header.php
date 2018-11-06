@@ -37,7 +37,10 @@ if ($username == '' || $idAdmin == '' || $idCarrer == '')
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
     <title>Generador</title>
+    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <link rel="stylesheet" href="<?=base_url()?>css/datatables/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/jquery.mCustomScrollbar.min.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/custom.css">      
@@ -46,8 +49,6 @@ if ($username == '' || $idAdmin == '' || $idCarrer == '')
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/selectHours.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/Courses.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/generator.css" />
-    
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/table.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/admin.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/HomePage/GenerateLinks.css">
