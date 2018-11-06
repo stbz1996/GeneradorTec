@@ -7,7 +7,7 @@
 ?>
 
 <div class="titles">
-  	<h1>Horarios disponibles</h1>
+  	<h1 class="tittles">Horarios disponibles</h1>
     <ul>
 		<li type="disc"> 
 			Los espacios en verde serán los horarios que se habilitarán para ser seleccionados en el formulario de profesores. 

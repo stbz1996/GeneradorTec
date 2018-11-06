@@ -1,6 +1,6 @@
 <!-- Titles -->
 <div>
-    <h1>Días de antelación</h1>
+    <h1 class="tittles">Días de antelación</h1>
 </div>
 
 <hr>

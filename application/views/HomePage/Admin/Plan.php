@@ -2,7 +2,7 @@
 
 <!-- Los tituloso -->
 <div>
-    <h1>Planes</h1>
+    <h1 class="tittles">Planes</h1>
 </div>
 
 <hr>
