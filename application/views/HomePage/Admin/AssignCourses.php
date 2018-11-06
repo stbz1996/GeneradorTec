@@ -19,16 +19,14 @@
 	    </div>
     </div>
     
-    <hr></hr>
+    <hr>
 
-    <div class="row">
-	    <div class="control-label col-md-3">
+    <div class="row contButtons">
+	    <div class="buttonGenerator">
 			<button class="btn btn-primary" onclick="showModalPeriodForm()">Seleccionar Período</button>
 		</div>
-		<div class="control-label col-md-4">
-		</div>
-		<div id="buttonRightScreen">
-		   	<button type="button" id="btnSave" onclick="saveAssigned()" class="btn btn-primary">Finalizar Asignación</button>
+		<div class="buttonGenerator">
+		   	<button type="button" id="btnSave" onclick="saveAssigned()" class="btn btn-primary">Generar Horarios</button>
 		</div>
 	</div>
 </div>

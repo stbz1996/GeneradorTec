@@ -14,3 +14,14 @@
 .tittles{
 	text-align: left;
 }
+
+.contButtons{
+	width: 35%;
+	margin-left: 0.6%;
+}
+.buttonGenerator{
+	float: left;
+	margin: 1%;
+	width: 48%;
+	text-align: center;
+}

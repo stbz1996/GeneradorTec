@@ -558,22 +558,13 @@ function deleteLesson(courseName, courseGroup, numberSchedule)
                 },
             success: function(response)
             {
-                if (response)
+                if (!response)
                 {
-                    $('#modal_form').modal('hide');
-                    hideLoader();
-                    swal({title: "Listo", 
-                        text: "Horario Eliminado", 
-                        icon: "success"});
-                }
-
-                else
-                {
-                    hideLoader();
                     swal({title: "Error",
                         text: "No se ha eliminado el horario",
                         icon: "error"});
                 }
+                hideLoader();
 
             },
             error: function (jqXHR, textStatus, errorThrown)
