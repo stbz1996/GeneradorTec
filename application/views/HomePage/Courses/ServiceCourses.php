@@ -7,7 +7,7 @@
             <span>Curso</span>
             <select class="form-control" id="selectCourse" name='selectCourse'>
                 <?php foreach($courses as $course){?>
-                    <option value="<?php echo $course->name;?>" label="<?php echo $course->idBlock;?>">
+                    <option value="<?php echo $course->name;?>" name="<?php echo $course->idBlock;?>">
                         <?php echo $course->name;?>
                     </option> 
                 <?php }?>
