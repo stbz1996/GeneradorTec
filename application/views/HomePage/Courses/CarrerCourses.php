@@ -4,7 +4,7 @@
                   <th class="col-sm-1" id="textCenter">Codigo</th>
                   <th class="col-sm-2" id="textCenter">Nombre</th>
                   <th class="col-sm-1" id="textCenter">Bloque</th>
-                  <th class="col-sm-1" id="textCenter">Plan</th>
+                  <th class="col-sm-2" id="textCenter">Plan</th>
                   <th class="col-sm-1" id="textCenter">Estado</th>
                   <th class="col-sm-1" id="textCenter">Lecciones</th>
                   <th class="col-sm-1" id="textCenter">Opciones</th>
