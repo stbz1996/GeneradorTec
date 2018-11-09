@@ -14,7 +14,7 @@ class Generator_controller extends CI_Controller
 	private $assigmentList  = array();   // The list of the assigned magistral classes
 	private $finalSolutions	= [];
 	private $errorList      = array();
-	private $limitOfresults = 100000;
+	private $limitOfresults = 50000;
 	private $generator_Logic;
 	private $totalSolutions = 0;
 	private $serviceLessons = array();
