@@ -233,7 +233,7 @@
 
         <?php 
         $countSchedules = 0;
-        for ($i=0; $i < 15; $i++) { ?>
+        for ($i=0; $i < 14; $i++) { ?>
           <div class="fileone">
           <!-- It is the hour -->
           <div class="itemCol1"> <?= $hours[$i] ?> </div>

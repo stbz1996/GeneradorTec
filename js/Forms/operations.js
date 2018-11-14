@@ -3,7 +3,7 @@ That function is only for view, it takes up to 100 schedules and active or deact
 it state but this is only for view, does not change the value of the inputs
 *************************************************************************************/
 function fillSchedulesStates(){
-	for (var i=1; i < 91; i++) {
+	for (var i=1; i < 84; i++) {
 		changeStateOnView('Inp-'+i, 'Div-'+i);
 	}
 	var oldSchedules = $('input[name^="oldSchedules"]');
