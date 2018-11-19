@@ -29,6 +29,7 @@ $db['default'] = array(
 );
 
 /* Base de datos de Steven */
+/*
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
@@ -50,14 +51,15 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+*/
 
 // Base de datos de desarrollo
-/*
+
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
+	'hostname' => 'db4free.net',
+	'username' => 'usuarioroot',
+	'password' => 'Generador2018',
 	'database' => 'generadortec2018',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
@@ -74,4 +76,3 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
-*/

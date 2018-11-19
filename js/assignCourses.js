@@ -4,7 +4,7 @@ var idPeriod;
 var grayBackground = "#3385ff";
 var whiteBackground = "#ffffff";
 var yellow = "#ffC300";
-var red = "#c70039";
+var red = "#fe2e2e";
 var blue = "#008080";
 
 var assigned = []; // Course - Professor.
@@ -191,6 +191,7 @@ function createDivProfessor(professor)
 {
     var professorName = professor.name + " " + professor.lastName;
     var textAssigned = "Solicitó un " + professor.workLoad + "% de carga";
+    var assignTitle = "Cursos asignados: " + 0;
 
     /* Get the div to be used as a template. */
     var divProfessor = document.getElementById("professorDiv");
@@ -204,49 +205,11 @@ function createDivProfessor(professor)
     // The work porcent requested by the professor.
     newDivProfessor.childNodes[3].textContent = textAssigned;
 
-    // Progress Bar ... 
-    var progressBar = newDivProfessor.childNodes[5].childNodes[1];
-    
-    progressBar.setAttribute('aria-valuenow', professor.workPorcent); // Activities requested.
-    progressBar.setAttribute('aria-valuemin', "0"); // 0 is the minus.
-    progressBar.setAttribute('aria-valuemax', professor.workLoad); // Work expected to be completed.
-
-    var posRelative = 0;
-    // Get the work completed by the professor.
-    var work = getWork(newDivProfessor);
-
-    // Get the amount of work completed to this moment.
-    posRelative = getRelativePosition(work[1], work[0]);
-
-    progressBar.style.width = posRelative.toString() + "%"; // Represent in blue in the bar.
-    newDivProfessor.childNodes[5].childNodes[1].childNodes[1].innerHTML = posRelative.toString();
+    newDivProfessor.childNodes[5].textContent = assignTitle;
+    newDivProfessor.childNodes[5].setAttribute('data-value', 0);
 
     // Add to the leftScreen the new Div to assign.
     document.getElementById("leftScreen").appendChild(newDivProfessor);
-}
-
-/****************************************
- Get the work expect to complete and the assigned for the professor.
-****************************************/
-function getWork(div)
-{
-    var progressBar = div.childNodes[5].childNodes[1];
-    var workPorcent = progressBar.getAttribute('aria-valuenow');
-    var workLoad = progressBar.getAttribute('aria-valuemax');
-
-    if (workPorcent == null || workPorcent == ""){
-        workPorcent = 0;
-    }
-
-    if (workLoad == null || workLoad == ""){
-        workLoad = 0;
-    }
-
-    workPorcent = parseInt(workPorcent); // Parse the result.
-    workLoad = parseInt(workLoad); // Parse the result.
-
-    var work = [workLoad, workPorcent];
-    return work;
 }
 
 
@@ -434,17 +397,14 @@ Edit information about the professor. Add.
 *********************************************/
 function increaseLoadProfessor(idProfessor)
 {
+    var assignTitle = "";
     var divProfessor = lookDivProfessor(idProfessor);
-    var progressBar = divProfessor.childNodes[5].childNodes[1]; // Progress Bar
-    var textPorcentWork = divProfessor.childNodes[5].childNodes[1].childNodes[1]; // Text of load.
-    var work = getWork(divProfessor); // Get the workAssigned and workPendient
-    var workPorcent = work[1] + 25; // new workPorcent.
-    var posRelative;
+    var number = parseInt(divProfessor.childNodes[5].getAttribute('data-value'));
+    number = number + 1;
 
-    posRelative = getRelativePosition(workPorcent, work[0]); // Get the porcentage relate to the actual load.
-    progressBar.setAttribute('aria-valuenow', workPorcent);
-    progressBar.style.width = posRelative.toString() + "%"; // Set the new load.
-    textPorcentWork.innerHTML = workPorcent.toString(); // set the data
+    divProfessor.childNodes[5].setAttribute('data-value', number);
+    assignTitle = "Cursos asignados: " + number;
+    divProfessor.childNodes[5].textContent = assignTitle;
 }
 
 
@@ -453,25 +413,21 @@ Edit information about the professor.
 *********************************************/
 function decreaseLoadProfessor(idProfessor)
 {
+    var assignTitle = "";
     var divProfessor = lookDivProfessor(idProfessor);
-    var progressBar = divProfessor.childNodes[5].childNodes[1]; // Progress Bar
-    var textPorcentWork = divProfessor.childNodes[5].childNodes[1].childNodes[1]; // Text of load.
-    var work = getWork(divProfessor); // Get the workAssigned and workPendient
-    var workPorcent = work[1] - 25; // new workPorcent.
-    var posRelative;
+    var number = parseInt(divProfessor.childNodes[5].getAttribute('data-value'));
+    number = number - 1;
 
-    progressBar.className = "progress-bar progress-bar-info"; // You have your assigned work.
     // If the div of the professor is desactivated.
     if (divProfessor.style.opacity == 0.6)
     {
         divProfessor.style.opacity = 1; // Make visible
         divProfessor.setAttribute('onclick', 'selectProfessor(this)'); // The professor doesn't have an event attached.
     }
-    
-    posRelative = getRelativePosition(workPorcent, work[0]); // Get the porcentage relate to the actual load.
-    progressBar.setAttribute('aria-valuenow', workPorcent);
-    progressBar.style.width = posRelative.toString() + "%"; // Set the new load.
-    textPorcentWork.innerHTML = workPorcent.toString(); // set the data
+
+    divProfessor.childNodes[5].setAttribute('data-value', number);
+    assignTitle = "Cursos asignados: " + number;
+    divProfessor.childNodes[5].textContent = assignTitle;
 }
 
 /*********************************************
@@ -691,23 +647,8 @@ function lookDivCourses(idDivSource)
 function assignedProcess(idCourse, nameCourse, idProf, nameProf, stateForced)
 {
     var divProfessor = lookDivProfessor(idProf);
-    var work = getWork(divProfessor);
-    var workLoad = work[0];
-    var newWorkPorcent = work[1] + 25;
-    var state = false;
-/*
-    if (work[1] >= workLoad){
-        errorSwal("Lo siento, el profesor tiene más carga de la solicitada.");
-        return;
-    }
-*/
-    if (workLoad < newWorkPorcent)
-    {
-        confirmSwalLoad(idCourse, idProf, nameProf, nameCourse, stateForced);
-        return;
-    }
 
-    callSwalForceAssignment(idCourse, idProf, nameProf, nameCourse, stateForced);
+    callSwalForceAssignment(idCourse, idProfessor, nameProfessor, nameCourse, stateForced);
 }
 
 /****************************************
@@ -726,27 +667,6 @@ function callSwalForceAssignment(idCourse, idProf, nameProf, nameCourse, stateFo
     assignCourse(idCourse, idProf, nameCourse, nameProf);
 }
 
-/****************************************
-- Get the porcentage complete of a professor.
-****************************************/
-function getRelativePosition(workPorcent, workLoad)
-{
-	var posRelative = 0;
-
-	if (workLoad > 0)
-	{
-        /* (100 / x) <-> (workLoad / workPorcent) */
-		posRelative = (100 * workPorcent) / workLoad;
-    	posRelative = Math.trunc(posRelative); // Int
-
-    	// If professor has a lot of works to do
-		if (posRelative > 100){
-			posRelative = 100;
-		}
-	}
-	
-	return posRelative;
-}
 
 /****************************************
 - Become a div white when the Div is deselect.
@@ -895,7 +815,6 @@ function saveMagistralClass(url, jsonData)
 {
     // ajax adding data to database
     let dataToEncode = encodeURIComponent(window.btoa(encodeURIComponent(jsonData))); // Encode.
-    console.log(url + idPeriod);
 
     $.ajax({
         url : url + idPeriod,

@@ -540,34 +540,6 @@ class Administrator_Logic{
 			return array();
 		}
 		
-		// For each professor look for the respective activities.
-		foreach ($professors as $professor) {
-			$idForm = $professor->idForm;
-			$result = $activityDAO_model->getPorcentWork($idForm); // Get the activities of a form.
-			if (!$result)
-			{
-				$professor->workPorcent = 0; // Porcent the activities assigned.
-				$professor->available = $professor->workLoad;
-			}else
-			{
-				if(!$result[0]->activityPorcent)
-				{
-					$professor->workPorcent = 0;
-				}
-				else
-				{
-					$professor->workPorcent = $result[0]->activityPorcent; // Porcent the activities assigned.
-				}
-
-				$professor->available = $professor->workLoad - $professor->workPorcent;
-
-				// If professor doesn't have the enough time.
-				if ($professor->available < 0){
-					$professor->available = 0;
-				}
-			}
-		}
-
 		return $professors;
 	}
 

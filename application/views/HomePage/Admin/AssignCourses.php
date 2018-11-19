@@ -135,12 +135,7 @@
 <div class="professorDiv" id="professorDiv" data-value="" onclick="selectProfessor(this)" style="display: none">
 	<h4></h4>
 	<p></p>
-	<div class="progress">
-		<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow=""
-			aria-valuemin="0" aria-valuemax="" style="width:0%;">
-			<p></p>
-		</div>
-	</div>
+	<p data-value="" ></p>
 </div>
 
 <div id="loader"></div>
